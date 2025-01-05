@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -45,7 +46,7 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(0);
 
   // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+  // private final LoggedDashboardChooser<Command> autoChooser;
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
@@ -94,9 +95,9 @@ public class RobotContainer {
       null);
 
     // Set up auto routines
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    // autoChooser = new LoggedDashboardChooser<>("Auto Choices");
 
-    autoChooser.addOption("Test Auto", FullAutoRoutines.simplePathAuto(driveSubsystem, choreoAutoFactory));
+    // autoChooser.addOption("Test Auto", FullAutoRoutines.simplePathAuto(driveSubsystem, choreoAutoFactory));
   
     // Manual Sysid of drive train using AdvantageKit
     // autoChooser.addOption(
@@ -145,6 +146,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.get();
+    return new InstantCommand(() -> System.out.println("hi"));
   }
 }

@@ -13,6 +13,7 @@
 
 package frc.robot.subsystems.drive;
 
+import com.ctre.phoenix6.configs.ParentConfiguration;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -26,14 +27,14 @@ public class Module {
   private final ModuleIO io;
   private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
   private final int index;
-  private final SwerveModuleConstants constants;
+  private final SwerveModuleConstants<ParentConfiguration, ParentConfiguration, ParentConfiguration> constants;
 
   private final Alert driveDisconnectedAlert;
   private final Alert turnDisconnectedAlert;
   private final Alert turnEncoderDisconnectedAlert;
   private SwerveModulePosition[] odometryPositions = new SwerveModulePosition[] {};
 
-  public Module(ModuleIO io, int index, SwerveModuleConstants constants) {
+  public Module(ModuleIO io, int index, SwerveModuleConstants<ParentConfiguration, ParentConfiguration, ParentConfiguration> constants) {
     this.io = io;
     this.index = index;
     this.constants = constants;
