@@ -15,18 +15,14 @@ package frc.robot;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
-import choreo.auto.AutoFactory.AutoBindings;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.FullAutoRoutines;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
@@ -34,9 +30,6 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
-import com.pathplanner.lib.auto.AutoBuilder;
 
 public class RobotContainer {
   // Subsystems
@@ -46,7 +39,7 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(0);
 
   // Dashboard inputs
-  // private final LoggedDashboardChooser<Command> autoChooser;
+  private final AutoChooser autoChooser;
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
@@ -90,30 +83,20 @@ public class RobotContainer {
       driveSubsystem::resetOdometry,
       driveSubsystem::followTrajectory, 
       true, 
-      driveSubsystem,
-      new AutoBindings(),
-      null);
+      driveSubsystem
+      );
 
-    // Set up auto routines
-    // autoChooser = new LoggedDashboardChooser<>("Auto Choices");
+    autoChooser = new AutoChooser();
 
-    // autoChooser.addOption("Test Auto", FullAutoRoutines.simplePathAuto(driveSubsystem, choreoAutoFactory));
-  
-    // Manual Sysid of drive train using AdvantageKit
-    // autoChooser.addOption(
-    //     "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(driveSubsystem));
-    // autoChooser.addOption(
-    //     "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(driveSubsystem));
-    // autoChooser.addOption(
-    //     "Drive SysId (Quasistatic Forward)",
-    //     driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    // autoChooser.addOption(
-    //     "Drive SysId (Quasistatic Reverse)",
-    //     driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    // autoChooser.addOption(
-    //     "Drive SysId (Dynamic Forward)", driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    // autoChooser.addOption(
-    //     "Drive SysId (Dynamic Reverse)", driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+      // Add options to the chooser
+      // autoChooser.addRoutine("Example Routine", this::exampleRoutine);
+      // autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
+
+      // Put the auto chooser on the dashboard
+      SmartDashboard.putData(autoChooser);
+
+      // Schedule the selected auto during the autonomous period
+      RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
 
     // Configure the button bindings
     configureButtonBindings();
@@ -146,6 +129,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new InstantCommand(() -> System.out.println("hi"));
+    return autoChooser.selectedCommand();
   }
 }
