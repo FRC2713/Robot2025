@@ -26,7 +26,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FullAutoRoutines;
+import frc.robot.commands.KitbotDriveCmd;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.KitbotMotor;
+import frc.robot.subsystems.KitbotMotorSparks;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -40,6 +43,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 public class RobotContainer {
   // Subsystems
   private final Drivetrain driveSubsystem;
+
+  public final KitbotMotor Kitbot;
 
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
@@ -60,6 +65,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+        Kitbot = new KitbotMotor(new KitbotMotorSparks());
         break;
 
       case SIM:
@@ -70,6 +76,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        Kitbot = new KitbotMotor(new KitbotMotorSparks());
         break;
 
       default:
@@ -81,6 +88,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        Kitbot = new KitbotMotor(new KitbotMotorSparks());
         break;
     }
 
@@ -137,6 +145,8 @@ public class RobotContainer {
                             new Pose2d(driveSubsystem.getPose().getTranslation(), new Rotation2d())),
                     driveSubsystem)
                 .ignoringDisable(true));
+    driver.leftTrigger().onChange(new KitbotDriveCmd(driver.getLeftTriggerAxis(), Kitbot));
+    driver.rightTrigger().onChange(new KitbotDriveCmd(-driver.getRightTriggerAxis(), Kitbot));
   }
 
   /**
