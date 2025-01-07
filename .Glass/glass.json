@@ -1,0 +1,27 @@
+{
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "open": true
+      }
+    },
+    "types": {
+      "/AdvantageKit/RealOutputs/Alerts": "Alerts",
+      "/AdvantageKit/RealOutputs/Choreo Alerts": "Alerts",
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Alerts": "Alerts",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/Choreo Alerts": "Alerts"
+    }
+  },
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "visible": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "localhost"
+  }
+}

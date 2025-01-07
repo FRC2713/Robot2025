@@ -15,8 +15,8 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.ctre.phoenix6.CANBus;
 import choreo.trajectory.SwerveSample;
+import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -220,22 +220,24 @@ public class Drivetrain extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     this.setPose(pose);
   }
-  public void followTrajectory(SwerveSample sample) {
-        // Get the current pose of the robot
-        Pose2d pose = getPose();
 
-        // Generate the next speeds for the robot
-        ChassisSpeeds speeds = new ChassisSpeeds(
+  public void followTrajectory(SwerveSample sample) {
+    // Get the current pose of the robot
+    Pose2d pose = getPose();
+
+    // Generate the next speeds for the robot
+    ChassisSpeeds speeds =
+        new ChassisSpeeds(
             sample.vx + xTrajectoryController.calculate(pose.getX(), sample.x),
             sample.vy + yTrajectoryController.calculate(pose.getY(), sample.y),
-            sample.omega + headingTrajectoryController.calculate(pose.getRotation().getRadians(), sample.heading)
-        );
+            sample.omega
+                + headingTrajectoryController.calculate(
+                    pose.getRotation().getRadians(), sample.heading));
 
-        this.runVelocity(
-          ChassisSpeeds.fromFieldRelativeSpeeds(
-              speeds,
-              this.getRotation())); // TODO: test if we need to flip this for red
-    }
+    this.runVelocity(
+        ChassisSpeeds.fromFieldRelativeSpeeds(
+            speeds, this.getRotation())); // TODO: test if we need to flip this for red
+  }
 
   /***********************
    ** Charecterization ***
@@ -260,8 +262,8 @@ public class Drivetrain extends SubsystemBase {
     return run(() -> runCharacterization(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
   }
 
-   /** Returns the position of each module in radians. */
-   public double[] getWheelRadiusCharacterizationPositions() {
+  /** Returns the position of each module in radians. */
+  public double[] getWheelRadiusCharacterizationPositions() {
     double[] values = new double[4];
     for (int i = 0; i < 4; i++) {
       values[i] = modules[i].getWheelRadiusCharacterizationPosition();
@@ -283,7 +285,7 @@ public class Drivetrain extends SubsystemBase {
    *************************************************/
 
   /** Adds a new timestamped vision measurement. */
-    public void addVisionMeasurement(
+  public void addVisionMeasurement(
       Pose2d visionRobotPoseMeters,
       double timestampSeconds,
       Matrix<N3, N1> visionMeasurementStdDevs) {

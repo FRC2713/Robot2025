@@ -15,11 +15,13 @@ package frc.robot;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
+import choreo.auto.AutoTrajectory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.DriveCommands;
@@ -39,7 +41,7 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(0);
 
   // Dashboard inputs
-  private final AutoChooser autoChooser;
+  public final AutoChooser autoChooser;
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
@@ -78,25 +80,25 @@ public class RobotContainer {
         break;
     }
 
-    choreoAutoFactory = new AutoFactory(
-      driveSubsystem::getPose,
-      driveSubsystem::resetOdometry,
-      driveSubsystem::followTrajectory, 
-      true, 
-      driveSubsystem
-      );
+    choreoAutoFactory =
+        new AutoFactory(
+            driveSubsystem::getPose,
+            driveSubsystem::resetOdometry,
+            driveSubsystem::followTrajectory,
+            true,
+            driveSubsystem);
 
     autoChooser = new AutoChooser();
 
-      // Add options to the chooser
-      // autoChooser.addRoutine("Example Routine", this::exampleRoutine);
-      // autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
+    // Add options to the chooser
+    autoChooser.addCmd("None", () -> new InstantCommand(() -> System.out.println("Auto started")));
+    autoChooser.addRoutine("Example Auto Command", this::exampleAuto);
 
-      // Put the auto chooser on the dashboard
-      SmartDashboard.putData(autoChooser);
+    // Put the auto chooser on the dashboard
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
-      // Schedule the selected auto during the autonomous period
-      RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+    // Schedule the auto
+    RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
 
     // Configure the button bindings
     configureButtonBindings();
@@ -118,17 +120,39 @@ public class RobotContainer {
             Commands.runOnce(
                     () ->
                         driveSubsystem.setPose(
-                            new Pose2d(driveSubsystem.getPose().getTranslation(), new Rotation2d())),
+                            new Pose2d(
+                                driveSubsystem.getPose().getTranslation(), new Rotation2d())),
                     driveSubsystem)
                 .ignoringDisable(true));
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return autoChooser.selectedCommand();
+  public AutoRoutine exampleAuto() {
+    AutoRoutine routine = choreoAutoFactory.newRoutine("Example Auto");
+
+    // Load the routine's trajectories
+    AutoTrajectory exampleTraj = routine.trajectory("Example Auo");
+
+    // When the routine begins, reset odometry and start the first trajectory
+    routine
+        .active()
+        .onTrue(
+            Commands.sequence(
+                new InstantCommand(() -> System.out.println("Example Auto started")),
+                exampleTraj.resetOdometry(),
+                exampleTraj.cmd()));
+
+    // // Starting at the event marker named "intake", run the intake
+    // pickupTraj.atTime("intake").onTrue(intakeSubsystem.intake());
+
+    // // When the trajectory is done, start the next trajectory
+    // pickupTraj.done().onTrue(scoreTraj.cmd());
+
+    // // While the trajectory is active, prepare the scoring subsystem
+    // scoreTraj.active().whileTrue(scoringSubsystem.getReady());
+
+    // // When the trajectory is done, score
+    // scoreTraj.done().onTrue(scoringSubsystem.score());
+
+    return routine;
   }
 }

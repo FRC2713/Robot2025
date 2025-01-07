@@ -50,7 +50,9 @@ import java.util.Queue;
  * <p>Device configuration and other behaviors not exposed by TunerConstants can be customized here.
  */
 public class ModuleIOTalonFX implements ModuleIO {
-  private final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants;
+  private final SwerveModuleConstants<
+          TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+      constants;
 
   // Hardware objects
   private final TalonFX driveTalon;
@@ -92,7 +94,9 @@ public class ModuleIOTalonFX implements ModuleIO {
   private final Debouncer turnConnectedDebounce = new Debouncer(0.5);
   private final Debouncer turnEncoderConnectedDebounce = new Debouncer(0.5);
 
-  public ModuleIOTalonFX(SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants) {
+  public ModuleIOTalonFX(
+      SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+          constants) {
     this.constants = constants;
     driveTalon = new TalonFX(constants.DriveMotorId, TunerConstants.DrivetrainConstants.CANBusName);
     turnTalon = new TalonFX(constants.SteerMotorId, TunerConstants.DrivetrainConstants.CANBusName);
@@ -255,8 +259,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     turnTalon.setControl(
         switch (constants.SteerMotorClosedLoopOutput) {
           case Voltage -> positionVoltageRequest.withPosition(rotation.getRotations());
-          case TorqueCurrentFOC -> positionTorqueCurrentRequest.withPosition(
-              rotation.getRotations());
+          case TorqueCurrentFOC ->
+              positionTorqueCurrentRequest.withPosition(rotation.getRotations());
         });
   }
 }
