@@ -91,7 +91,6 @@ public class RobotContainer {
     autoChooser = new AutoChooser();
 
     // Add options to the chooser
-    autoChooser.addCmd("None", () -> new InstantCommand(() -> System.out.println("Auto started")));
     autoChooser.addRoutine("Example Auto Command", this::exampleAuto);
 
     // Put the auto chooser on the dashboard
@@ -130,7 +129,7 @@ public class RobotContainer {
     AutoRoutine routine = choreoAutoFactory.newRoutine("Example Auto");
 
     // Load the routine's trajectories
-    AutoTrajectory exampleTraj = routine.trajectory("Example Auo");
+    AutoTrajectory exampleTraj = routine.trajectory("Example Auto");
 
     // When the routine begins, reset odometry and start the first trajectory
     routine
