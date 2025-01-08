@@ -17,6 +17,8 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,6 +47,8 @@ public class RobotContainer {
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
+
+  private final SparkMax outtake = new SparkMax(50, MotorType.kBrushless);
 
   public RobotContainer() {
     switch (Constants.currentMode) {
@@ -123,6 +127,11 @@ public class RobotContainer {
                                 driveSubsystem.getPose().getTranslation(), new Rotation2d())),
                     driveSubsystem)
                 .ignoringDisable(true));
+
+    driver
+        .rightBumper()
+        .onTrue(Commands.sequence(new InstantCommand(() -> outtake.setVoltage(-5))))
+        .toggleOnFalse(new InstantCommand(() -> outtake.setVoltage(0)));
   }
 
   public AutoRoutine exampleAuto() {
