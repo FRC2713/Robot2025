@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.SuperStructure;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
@@ -157,7 +158,8 @@ public class RobotContainer {
     AutoRoutine routine = choreoAutoFactory.newRoutine("Example Auto");
 
     // Load the routine's trajectories
-    AutoTrajectory exampleTraj = routine.trajectory("Example Auto");
+    AutoTrajectory startToReefTraj = routine.trajectory("StartToReef");
+    AutoTrajectory reefToProcTraj = routine.trajectory("ReefToProcessor");
 
     // When the routine begins, reset odometry and start the first trajectory
     routine
@@ -165,20 +167,24 @@ public class RobotContainer {
         .onTrue(
             Commands.sequence(
                 new InstantCommand(() -> System.out.println("Example Auto started")),
-                exampleTraj.resetOdometry(),
-                exampleTraj.cmd()));
+                startToReefTraj.resetOdometry(),
+                startToReefTraj.cmd()));
 
-    // // Starting at the event marker named "intake", run the intake
-    // pickupTraj.atTime("intake").onTrue(intakeSubsystem.intake());
+    // Starting at the event marker named "intake", run the intake
+    startToReefTraj.atTime("StartElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
 
     // // When the trajectory is done, start the next trajectory
-    // pickupTraj.done().onTrue(scoreTraj.cmd());
+    startToReefTraj
+        .done()
+        .onTrue(
+            Commands.sequence(
+                SuperStructure.L1_CORAL_SCORE_AND_ALGAE_TAKE(), reefToProcTraj.cmd()));
 
     // // While the trajectory is active, prepare the scoring subsystem
-    // scoreTraj.active().whileTrue(scoringSubsystem.getReady());
+    reefToProcTraj.active().whileTrue(SuperStructure.PROCESSOR_PREP());
 
     // // When the trajectory is done, score
-    // scoreTraj.done().onTrue(scoringSubsystem.score());
+    reefToProcTraj.done().onTrue(SuperStructure.PROCESSOR_SCORE());
 
     return routine;
   }

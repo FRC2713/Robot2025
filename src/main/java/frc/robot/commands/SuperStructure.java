@@ -1,0 +1,95 @@
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
+public final class SuperStructure {
+
+  private static Command runStructure(String name, Command cmd) {
+    return new SequentialCommandGroup(Commands.print("Setting superstructure: " + name), cmd);
+  }
+
+  private static String treeifyReason(String reason) {
+    return reason != "" ? " - " + reason + "/" : "";
+  }
+
+  public static Command STARTING_CONF() {
+    return runStructure(
+        "Starting conf",
+        new SequentialCommandGroup(
+            // Elevator.Cmds.setHeight(0)
+            // AlgaeThing.Cmds.setAngle(0)
+            // AlgaeThing.Cmds.setSpeedAndWait(0)
+            // Elevator.Cmds.waitUntilSetpoint()
+            // AlgaeThing.Cmds.waitUntilSetpoint()
+            ));
+  }
+
+  public static Command L1_CORAL_PREP_ELEVATOR() {
+    return L1_CORAL_PREP_ELEVATOR("");
+  }
+
+  public static Command L1_CORAL_PREP_ELEVATOR(String reason) {
+    return runStructure(
+        treeifyReason(reason) + "Prep Elevator",
+        new SequentialCommandGroup(
+            // Elevator.Cmds.setHeightAndWait(10)
+            ));
+  }
+
+    public static Command L1_CORAL_SCORE() {
+        return L1_CORAL_SCORE("");
+    }
+
+  public static Command L1_CORAL_SCORE(String reason) {
+    return runStructure(
+        treeifyReason(reason) + "L1 Coral Score",
+        new SequentialCommandGroup(
+            L1_CORAL_PREP_ELEVATOR(treeifyReason(reason) + "L1 Coral Score"),
+            // CoralThing.Cmds.setSpeed(1000)
+            Commands.waitSeconds(1)));
+  }
+
+    public static Command L1_ALGAE_TAKE() {
+        return L1_ALGAE_TAKE("");
+    }
+
+  public static Command L1_ALGAE_TAKE(String reason) {
+    return runStructure(
+        treeifyReason(reason) + "L1 Algae Take",
+        new SequentialCommandGroup(
+            L1_CORAL_PREP_ELEVATOR(treeifyReason(reason) + "L1 Algae Take"),
+            // AlgaeThing.Cmds.setSpeed(1000)
+            Commands.waitSeconds(1)));
+  }
+
+  public static Command L1_CORAL_SCORE_AND_ALGAE_TAKE() {
+    return runStructure(
+        "L1 Coral&Algae",
+        new ParallelCommandGroup(L1_ALGAE_TAKE("L1 Coral&Algae"), L1_CORAL_SCORE("L1 Coral&Algae")));
+  }
+
+  public static Command PROCESSOR_PREP() {
+    return PROCESSOR_PREP("");
+  }
+
+  public static Command PROCESSOR_PREP(String reason) {
+    return runStructure(
+        treeifyReason(reason) + "Processor prep",
+        new ParallelCommandGroup(
+            // Elevator.Cmds.setHeightAndWait(0)
+            // AlgaeThing.Cmds.setAngleAndWait(10)
+            ));
+  }
+
+  public static Command PROCESSOR_SCORE() {
+    return runStructure(
+        "Processor score",
+        new SequentialCommandGroup(
+            PROCESSOR_PREP("Processor score")
+            // AlgaeThing.Cmds.setSpeed(-1000)
+            ));
+  }
+}
