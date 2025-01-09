@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
@@ -96,6 +97,24 @@ public class RobotContainer {
 
     // Add options to the chooser
     autoChooser.addRoutine("Example Auto Command", this::exampleAuto);
+
+    autoChooser.addCmd(
+        "Drive Simple FF Characterization",
+        () -> DriveCommands.feedforwardCharacterization(driveSubsystem));
+    autoChooser.addCmd(
+        "Drive SysId (Quasistatic Forward)",
+        () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    autoChooser.addCmd(
+        "Drive SysId (Quasistatic Backward)",
+        () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addCmd(
+        "Drive SysId (Dynamic Forward)",
+        () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    autoChooser.addCmd(
+        "Drive SysId (Dynamic Backward)",
+        () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addCmd(
+        "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
 
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
