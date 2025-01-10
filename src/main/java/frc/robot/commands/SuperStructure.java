@@ -2,13 +2,22 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import org.littletonrobotics.junction.Logger;
 
 public final class SuperStructure {
 
+  private static Command logStructure(String str) {
+    // TODO: recordOutput misses some prints
+    return Commands.sequence(
+        new InstantCommand(() -> Logger.recordOutput("SuperStructureConsole", str)),
+        Commands.print(str));
+  }
+
   private static Command runStructure(String name, Command cmd) {
-    return new SequentialCommandGroup(Commands.print("Setting superstructure: " + name), cmd);
+    return new SequentialCommandGroup(logStructure("Setting superstructure: " + name), cmd);
   }
 
   private static String treeifyReason(String reason) {

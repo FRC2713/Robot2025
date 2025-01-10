@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
@@ -157,6 +158,15 @@ public class RobotContainer {
         .rightBumper()
         .onTrue(Commands.sequence(new InstantCommand(() -> outtake.setVoltage(-5))))
         .toggleOnFalse(new InstantCommand(() -> outtake.setVoltage(0)));
+
+    // TODO: getPose isn't updating every time we click the button!
+    driver
+        .y()
+        .whileTrue(
+            ScoreAssist.scoreClosestLocation(
+                driveSubsystem::getPose,
+                SuperStructure.L1_CORAL_SCORE(),
+                SuperStructure.L1_CORAL_PREP_ELEVATOR()));
   }
 
   public AutoRoutine exampleAuto() {
