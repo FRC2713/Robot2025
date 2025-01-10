@@ -36,6 +36,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.vision.Vision;
 
 public class RobotContainer {
   // Subsystems
@@ -52,7 +53,11 @@ public class RobotContainer {
 
   private final SparkMax outtake = new SparkMax(50, MotorType.kBrushless);
 
+  private final Vision visionsubsystem;
+
   public RobotContainer() {
+    // Start subsystems
+    visionsubsystem = new Vision();
     switch (Constants.currentMode) {
       case REAL:
         driveSubsystem =

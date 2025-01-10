@@ -39,9 +39,9 @@ public final class SuperStructure {
             ));
   }
 
-    public static Command L1_CORAL_SCORE() {
-        return L1_CORAL_SCORE("");
-    }
+  public static Command L1_CORAL_SCORE() {
+    return L1_CORAL_SCORE("");
+  }
 
   public static Command L1_CORAL_SCORE(String reason) {
     return runStructure(
@@ -52,9 +52,9 @@ public final class SuperStructure {
             Commands.waitSeconds(1)));
   }
 
-    public static Command L1_ALGAE_TAKE() {
-        return L1_ALGAE_TAKE("");
-    }
+  public static Command L1_ALGAE_TAKE() {
+    return L1_ALGAE_TAKE("");
+  }
 
   public static Command L1_ALGAE_TAKE(String reason) {
     return runStructure(
@@ -68,7 +68,8 @@ public final class SuperStructure {
   public static Command L1_CORAL_SCORE_AND_ALGAE_TAKE() {
     return runStructure(
         "L1 Coral&Algae",
-        new ParallelCommandGroup(L1_ALGAE_TAKE("L1 Coral&Algae"), L1_CORAL_SCORE("L1 Coral&Algae")));
+        new ParallelCommandGroup(
+            L1_ALGAE_TAKE("L1 Coral&Algae"), L1_CORAL_SCORE("L1 Coral&Algae")));
   }
 
   public static Command PROCESSOR_PREP() {
