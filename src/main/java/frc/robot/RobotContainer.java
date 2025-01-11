@@ -31,6 +31,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -42,6 +43,8 @@ import frc.robot.subsystems.vision.Vision;
 public class RobotContainer {
   // Subsystems
   private final Drivetrain driveSubsystem;
+
+  public final Pivot PivotThing;
 
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
