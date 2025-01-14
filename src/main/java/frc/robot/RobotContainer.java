@@ -38,6 +38,9 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.util.AllianceFlipUtil;
+import java.util.Arrays;
+import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   // Subsystems
@@ -98,7 +101,14 @@ public class RobotContainer {
             driveSubsystem::resetOdometry,
             driveSubsystem::followTrajectory,
             true,
-            driveSubsystem);
+            driveSubsystem,
+            (sample, isStart) -> {
+              Logger.recordOutput(
+                  "ActiveTrajectory",
+                  Arrays.stream(sample.getPoses())
+                      .map(AllianceFlipUtil::apply)
+                      .toArray(Pose2d[]::new));
+            });
 
     autoChooser = new AutoChooser();
 
@@ -135,12 +145,14 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
-    driveSubsystem.setDefaultCommand(
+    DriveCommands.setDefaultDriveCommand(
+        driveSubsystem,
         DriveCommands.joystickDrive(
             driveSubsystem,
             () -> -driver.getLeftY(),
             () -> -driver.getLeftX(),
-            () -> -driver.getRightX()));
+            () -> -driver.getRightX()),
+        "Full Control");
 
     // Reset gyro to 0° when start button is pressed
     driver
@@ -154,9 +166,22 @@ public class RobotContainer {
                     driveSubsystem)
                 .ignoringDisable(true));
 
+    // Reset gyro to 180° when start button is pressed
+    driver
+        .back()
+        .onTrue(
+            Commands.runOnce(
+                    () ->
+                        driveSubsystem.setPose(
+                            new Pose2d(
+                                driveSubsystem.getPose().getTranslation(),
+                                Rotation2d.fromDegrees(180))),
+                    driveSubsystem)
+                .ignoringDisable(true));
+
     driver
         .rightBumper()
-        .onTrue(Commands.sequence(new InstantCommand(() -> outtake.setVoltage(-5))))
+        .onTrue(Commands.sequence(new InstantCommand(() -> outtake.setVoltage(-2.5))))
         .toggleOnFalse(new InstantCommand(() -> outtake.setVoltage(0)));
 
     // TODO: getPose isn't updating every time we click the button!
@@ -167,6 +192,90 @@ public class RobotContainer {
                 driveSubsystem::getPose,
                 SuperStructure.L1_CORAL_SCORE(),
                 SuperStructure.L1_CORAL_PREP_ELEVATOR()));
+
+    driver
+        .povUp()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(180)),
+                "Heading Controller"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
+
+    driver
+        .povDown()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(0)),
+                "Heading Controller"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
+
+    driver
+        .povLeft()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(-90)),
+                "Heading Controller"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
+
+    driver
+        .povRight()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(90)),
+                "Heading Controller"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
   }
 
   public AutoRoutine exampleAuto() {
@@ -186,7 +295,7 @@ public class RobotContainer {
                 startToReefTraj.cmd()));
 
     // Starting at the event marker named "intake", run the intake
-    startToReefTraj.atTime("StartElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
+    startToReefTraj.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
 
     // // When the trajectory is done, start the next trajectory
     startToReefTraj

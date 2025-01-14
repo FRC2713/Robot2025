@@ -48,6 +48,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.generated.TunerConstants;
+import frc.robot.util.AllianceFlipUtil;
 import java.io.IOException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -91,7 +92,7 @@ public class Drivetrain extends SubsystemBase {
   // For Trajectory Following
   private final PIDController xTrajectoryController = new PIDController(10.0, 0.0, 0.0);
   private final PIDController yTrajectoryController = new PIDController(10.0, 0.0, 0.0);
-  private final PIDController headingTrajectoryController = new PIDController(7.5, 0.0, 0.0);
+  private final PIDController headingTrajectoryController = new PIDController(5, 0.0, 0);
 
   public Drivetrain(
       GyroIO gyroIO,
@@ -300,11 +301,10 @@ public class Drivetrain extends SubsystemBase {
             sample.vy + yTrajectoryController.calculate(pose.getY(), sample.y),
             sample.omega
                 + headingTrajectoryController.calculate(
-                    pose.getRotation().getRadians(), sample.heading));
+                    AllianceFlipUtil.apply(pose.getRotation()).getRadians(),
+                    AllianceFlipUtil.apply(Rotation2d.fromRadians(sample.heading)).getRadians()));
 
-    this.runVelocity(
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            speeds, this.getRotation())); // TODO: test if we need to flip this for red
+    this.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, this.getRotation()));
   }
 
   /***********************

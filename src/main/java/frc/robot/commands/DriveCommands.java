@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
@@ -48,6 +49,20 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
   private DriveCommands() {}
+
+  public static void setDefaultDriveCommand(Drivetrain drive, Command cmd, String name) {
+    Logger.recordOutput("CurrentDriveCommand", name);
+    var currentCmd = drive.getCurrentCommand();
+    if (currentCmd != null) {
+      drive.getCurrentCommand().cancel();
+      drive.removeDefaultCommand();
+    }
+    drive.setDefaultCommand(cmd);
+  }
+
+  public static Command changeDefaultDriveCommand(Drivetrain drive, Command cmd, String name) {
+    return Commands.runOnce(() -> setDefaultDriveCommand(drive, cmd, name));
+  }
 
   private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
     // Apply deadband
