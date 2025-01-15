@@ -18,10 +18,12 @@ public class ElevatorIOSparks implements ElevatorIO {
         right = new SparkMax(100, MotorType.kBrushless);
 
     }
+
     public void setVoltage(double volts1, double volts2) {
         left.setVoltage(volts1);
         right.setVoltage(volts2);
     }
+    
     public void setTargetHeight(double height) {
         left.getClosedLoopController().setReference(height, ControlType.kMAXMotionPositionControl);
         right.getClosedLoopController().setReference(height, ControlType.kMAXMotionPositionControl);
