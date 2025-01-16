@@ -35,6 +35,10 @@ public class AllianceFlipUtil {
     return shouldFlip() ? rotation.rotateBy(Rotation2d.kPi) : rotation;
   }
 
+  public static Rotation2d dontApply(Rotation2d rotation) {
+    return rotation;
+  }
+
   public static Pose2d apply(Pose2d pose) {
     return shouldFlip()
         ? new Pose2d(apply(pose.getTranslation()), apply(pose.getRotation()))
