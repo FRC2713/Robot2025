@@ -13,21 +13,13 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-
-import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
-import frc.robot.generated.TunerConstants;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -67,40 +59,37 @@ public final class Constants {
               new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     }
 
-    public static final RobotConfig pathPlannerConfig =
-        new RobotConfig(
-            Constants.massKG,
-            Constants.momentOfInertiaKGPerM2,
-            new ModuleConfig(
-                TunerConstants.kWheelRadius.in(Meters),
-                TunerConstants.kSpeedAt12Volts.in(MetersPerSecond),
-                wheelCOF,
-                DCMotor.getKrakenX60(1),
-                TunerConstants.kSlipCurrent.in(Amps),
-                1),
-            new Translation2d[] {
-              new Translation2d(
-                  TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
-              new Translation2d(
-                  TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY),
-              new Translation2d(
-                  TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
-              new Translation2d(
-                  TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
-            });
+    public static RobotConfig pathPlannerConfig;
+    // new RobotConfig(
+    //     Constants.massKG,
+    //     Constants.momentOfInertiaKGPerM2,
+    //     new ModuleConfig(
+    //         TunerConstants.kWheelRadius.in(Meters),
+    //         TunerConstants.kSpeedAt12Volts.in(MetersPerSecond),
+    //         wheelCOF,
+    //         DCMotor.getKrakenX60(1),
+    //         TunerConstants.kSlipCurrent.in(Amps),
+    //         1),
+    //     new Translation2d[] {
+    //       new Translation2d(
+    //           TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
+    //       new Translation2d(
+    //           TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY),
+    //       new Translation2d(
+    //           TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
+    //       new Translation2d(
+    //           TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
+    //     });
 
     // Update from GUI Settings
-    // static {
-    //   try {
-    //     pathPlannerConfig = RobotConfig.fromGUISettings();
-    //   } catch (IOException e) {
-    //     // TODO Auto-generated catch block
-    //     e.printStackTrace();
-    //   } catch (ParseException e) {
-    //     // TODO Auto-generated catch block
-    //     e.printStackTrace();
-    //   }
-    // }
+    static {
+      try {
+        pathPlannerConfig = RobotConfig.fromGUISettings();
+      } catch (Exception e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
   }
 
   public static enum Mode {
