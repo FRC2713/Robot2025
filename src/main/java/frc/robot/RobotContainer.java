@@ -15,21 +15,25 @@ package frc.robot;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
-import choreo.auto.AutoRoutine;
-import choreo.auto.AutoTrajectory;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.DriveConstants.OTFConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
+import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
@@ -95,6 +99,38 @@ public class RobotContainer {
         break;
     }
 
+    // PathPlanner Config
+    AutoBuilder.configure(
+        driveSubsystem::getPose, // Robot pose supplier
+        driveSubsystem
+            ::resetOdometry, // Method to reset odometry (will be called if your auto has a starting
+        // pose)
+        driveSubsystem::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        (speeds, feedforwards) ->
+            driveSubsystem.runVelocity(
+                speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds.
+        // Also optionally outputs individual module feedforwards
+        new PPHolonomicDriveController( // PPHolonomicController is the built in path following
+            // controller for holonomic drive trains
+            OTFConstants.translationPID, // Translation PID constants
+            OTFConstants.rotationPID // Rotation PID constants
+            ),
+        DriveConstants.pathPlannerConfig, // The robot configuration
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        driveSubsystem // Reference to this subsystem to set requirements
+        );
+
+    // Choreo Autos
     choreoAutoFactory =
         new AutoFactory(
             driveSubsystem::getPose,
@@ -110,10 +146,12 @@ public class RobotContainer {
                       .toArray(Pose2d[]::new));
             });
 
+    AutoRoutines autoRoutines = new AutoRoutines(choreoAutoFactory);
+
     autoChooser = new AutoChooser();
 
     // Add options to the chooser
-    autoChooser.addRoutine("Example Auto Command", this::exampleAuto);
+    autoChooser.addRoutine("Example Auto Command", autoRoutines::exampleAuto);
 
     autoChooser.addCmd(
         "Drive Simple FF Characterization",
@@ -185,14 +223,16 @@ public class RobotContainer {
         .toggleOnFalse(new InstantCommand(() -> outtake.setVoltage(0)));
 
     // TODO: getPose isn't updating every time we click the button!
+    // Score closest L1
     driver
-        .y()
+        .a()
         .whileTrue(
             ScoreAssist.scoreClosestLocation(
                 driveSubsystem::getPose,
                 SuperStructure.L1_CORAL_SCORE(),
                 SuperStructure.L1_CORAL_PREP_ELEVATOR()));
 
+    // Heading controller
     driver
         .povUp()
         .onTrue(
@@ -276,40 +316,5 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Full Control"));
-  }
-
-  public AutoRoutine exampleAuto() {
-    AutoRoutine routine = choreoAutoFactory.newRoutine("Example Auto");
-
-    // Load the routine's trajectories
-    AutoTrajectory startToReefTraj = routine.trajectory("StartToReef");
-    AutoTrajectory reefToProcTraj = routine.trajectory("ReefToProcessor");
-
-    // When the routine begins, reset odometry and start the first trajectory
-    routine
-        .active()
-        .onTrue(
-            Commands.sequence(
-                new InstantCommand(() -> System.out.println("Example Auto started")),
-                startToReefTraj.resetOdometry(),
-                startToReefTraj.cmd()));
-
-    // Starting at the event marker named "intake", run the intake
-    startToReefTraj.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
-
-    // // When the trajectory is done, start the next trajectory
-    startToReefTraj
-        .done()
-        .onTrue(
-            Commands.sequence(
-                SuperStructure.L1_CORAL_SCORE_AND_ALGAE_TAKE(), reefToProcTraj.cmd()));
-
-    // // While the trajectory is active, prepare the scoring subsystem
-    reefToProcTraj.active().whileTrue(SuperStructure.PROCESSOR_PREP());
-
-    // // When the trajectory is done, score
-    reefToProcTraj.done().onTrue(SuperStructure.PROCESSOR_SCORE());
-
-    return routine;
   }
 }
