@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import org.littletonrobotics.junction.Logger;
 
 public final class SuperStructure {
@@ -101,5 +102,17 @@ public final class SuperStructure {
             PROCESSOR_PREP("Processor score")
             // AlgaeThing.Cmds.setSpeed(-1000)
             ));
+  }
+
+  public static Command SOURCE_PICK_UP() {
+    return runStructure(
+        "Source pick up",
+        new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                // Eleavator.Cmds.setHeight(0);
+                // Pivot.Cmds.setAngle(0);
+                ),
+            // new WaitUntilCommand(CoralThing::hasCoral);
+            new WaitCommand(2)));
   }
 }
