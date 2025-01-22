@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants.AutoContants;
 import frc.robot.Constants.Mode;
+import frc.robot.commands.ScoreAssist.ScoreLoc;
 import frc.robot.generated.TunerConstants;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -287,6 +288,28 @@ public class Drivetrain extends SubsystemBase {
       Matrix<N3, N1> visionMeasurementStdDevs) {
     poseEstimator.addVisionMeasurement(
         visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+  }
+
+  /***********************
+   ** Score Assist **
+   ***********************/
+
+  public ScoreLoc getClosestScoringLocation() {
+    Pose2d currentPose = this.getPose();
+
+    ScoreLoc closestLoc = ScoreLoc.A_ONE;
+    double closestDist =
+        currentPose.getTranslation().getDistance(closestLoc.getPose().getTranslation());
+
+    for (ScoreLoc loc : ScoreLoc.values()) {
+      double dist = currentPose.getTranslation().getDistance(loc.getPose().getTranslation());
+      if (dist < closestDist) {
+        closestLoc = loc;
+        closestDist = dist;
+      }
+    }
+
+    return closestLoc;
   }
 
   /***********************

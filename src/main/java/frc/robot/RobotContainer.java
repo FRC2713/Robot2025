@@ -33,7 +33,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriveConstants.OTFConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ScoreAssist;
-import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
@@ -130,6 +129,7 @@ public class RobotContainer {
         },
         driveSubsystem // Reference to this subsystem to set requirements
         );
+    ScoreAssist.initCommands();
 
     // Choreo Autos
     choreoAutoFactory =
@@ -241,15 +241,7 @@ public class RobotContainer {
         .onTrue(Commands.sequence(new InstantCommand(() -> outtake.setVoltage(-2.5))))
         .toggleOnFalse(new InstantCommand(() -> outtake.setVoltage(0)));
 
-    // TODO: getPose isn't updating every time we click the button!
-    // Score closest L1
-    driver
-        .a()
-        .whileTrue(
-            ScoreAssist.scoreClosestLocation(
-                driveSubsystem::getPose,
-                SuperStructure.L1_CORAL_SCORE(),
-                SuperStructure.L1_CORAL_PREP_ELEVATOR()));
+    driver.a().whileTrue(ScoreAssist.scoreClosestL1(driveSubsystem));
 
     // Heading controller
     driver
