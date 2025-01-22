@@ -15,6 +15,7 @@ package frc.robot;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -152,6 +153,24 @@ public class RobotContainer {
 
     // Add options to the chooser
     autoChooser.addRoutine("Example Auto Command", autoRoutines::exampleAuto);
+    autoChooser.addRoutine(
+        "DriveStraight",
+        () -> {
+          AutoRoutine routine = choreoAutoFactory.newRoutine("DriveStraight");
+
+          var startToReefTraj = routine.trajectory("Example");
+
+          // When the routine begins, reset odometry and start the first trajectory
+          routine
+              .active()
+              .onTrue(
+                  Commands.sequence(
+                      new InstantCommand(() -> System.out.println("DriveStraight started")),
+                      startToReefTraj.resetOdometry(),
+                      startToReefTraj.cmd()));
+
+          return routine;
+        });
 
     autoChooser.addCmd(
         "Drive Simple FF Characterization",

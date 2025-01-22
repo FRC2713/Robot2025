@@ -19,7 +19,9 @@ public class AutoRoutines {
 
     // Load the routine's trajectories
     AutoTrajectory startToReefTraj = routine.trajectory("StartToReef");
-    AutoTrajectory reefToProcTraj = routine.trajectory("ReefToProcessor");
+    AutoTrajectory reefToProcTraj = routine.trajectory("ReefB2ToProcessorToSource");
+    AutoTrajectory sourceToReefA2 = routine.trajectory("SourceToReefA2");
+    AutoTrajectory reefA2ToProcessor = routine.trajectory("ReefA2ToProcessor");
 
     // When the routine begins, reset odometry and start the first trajectory
     routine
@@ -41,10 +43,25 @@ public class AutoRoutines {
                 SuperStructure.L1_CORAL_SCORE_AND_ALGAE_TAKE(), reefToProcTraj.cmd()));
 
     // // While the trajectory is active, prepare the scoring subsystem
-    reefToProcTraj.active().whileTrue(SuperStructure.PROCESSOR_PREP());
+    // reefToProcTraj.active().whileTrue(SuperStructure.PROCESSOR_PREP());
+    reefToProcTraj.atTime("PrepProcessor").onTrue(SuperStructure.PROCESSOR_PREP());
+
+    reefToProcTraj.atTime("ScoreProcessor").onTrue(SuperStructure.PROCESSOR_SCORE());
 
     // // When the trajectory is done, score
-    reefToProcTraj.done().onTrue(SuperStructure.PROCESSOR_SCORE());
+    reefToProcTraj
+        .done()
+        .onTrue(Commands.sequence(SuperStructure.SOURCE_PICK_UP(), sourceToReefA2.cmd()));
+
+    sourceToReefA2
+        .done()
+        .onFalse(
+            Commands.sequence(
+                SuperStructure.L1_CORAL_SCORE_AND_ALGAE_TAKE(), reefA2ToProcessor.cmd()));
+
+    reefA2ToProcessor.atTime("PrepProcessor").onTrue(SuperStructure.PROCESSOR_PREP());
+
+    reefA2ToProcessor.done().onTrue(SuperStructure.PROCESSOR_SCORE());
 
     return routine;
   }
