@@ -45,7 +45,17 @@ public class ElevatorIOSparks implements ElevatorIO {
 
   @Override
   public void updateInputs(ElevatorInputs inputs) {
-    throw new UnsupportedOperationException("Unimplemented method 'updateInputs'");
+    inputs.outputVoltageRight = right.getAppliedOutput();
+    inputs.heightInchesRight = right.getEncoder().getPosition();
+    inputs.velocityInchesPerSecondRight = right.getEncoder().getVelocity() / 60;
+    inputs.tempCelsiusRight = 0.0;
+    inputs.currentDrawAmpsRight = right.getOutputCurrent();
+
+    inputs.outputVoltageLeft = left.getAppliedOutput();
+    inputs.heightInchesLeft = left.getEncoder().getPosition();
+    inputs.velocityInchesPerSecondLeft = left.getEncoder().getVelocity() / 60;
+    inputs.tempCelsiusLeft = 0.0;
+    inputs.currentDrawAmpsLeft = left.getOutputCurrent();
   }
 
   @Override
