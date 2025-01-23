@@ -172,6 +172,8 @@ public class RobotContainer {
           return routine;
         });
 
+    autoChooser.addRoutine("ScoreLotsOfCoral", autoRoutines::scoreLotsOfCoral);
+
     autoChooser.addCmd(
         "Drive Simple FF Characterization",
         () -> DriveCommands.feedforwardCharacterization(driveSubsystem));
