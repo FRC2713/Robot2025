@@ -7,50 +7,79 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import java.util.function.Supplier;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
+import frc.robot.subsystems.drive.Drivetrain;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ScoreAssist {
-  private ScoreAssist() {}
 
-  public static Command scoreClosestLocation(Supplier<Pose2d> currentLoc, Command scoreCommand) {
-    return scoreClosestLocation(currentLoc, scoreCommand, null);
-  }
-
-  public static Command scoreClosestLocation(
-      Supplier<Pose2d> currentLoc, Command scoreCommand, Command prepCommand) {
-
-    ScoreLoc closestLoc = ScoreLoc.A_ONE;
-    double closestDist =
-        currentLoc.get().getTranslation().getDistance(closestLoc.getPose().getTranslation());
-    for (ScoreLoc loc : ScoreLoc.values()) {
-      double dist = currentLoc.get().getTranslation().getDistance(loc.getPose().getTranslation());
-      if (dist < closestDist) {
-        closestLoc = loc;
-        closestDist = dist;
-      }
-    }
-    return scoreAtLocation(closestLoc, scoreCommand, prepCommand);
-  }
-
-  public static Command scoreAtLocation(ScoreLoc loc, Command scoreCommand) {
-    return scoreAtLocation(loc, scoreCommand, null);
-  }
-
-  // TODO: Flipping for alliance
-  public static Command scoreAtLocation(ScoreLoc loc, Command scoreCommand, Command prepCommand) {
-    PathConstraints constraints =
-        new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
-
-    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+  public static Command scoreClosestL1(Drivetrain drivetrain) {
     return Commands.sequence(
         Commands.parallel(
-            AutoBuilder.pathfindToPose(
-                loc.getPose(), constraints, 0.0 // Goal end velocity in meters/sec
-                ),
-            prepCommand != null ? prepCommand : Commands.none()),
-        scoreCommand);
+            SuperStructure.L1_CORAL_PREP_ELEVATOR(),
+            new SelectCommand<>(ScoreAssist.cmdsMap, drivetrain::getClosestScoringLocation)),
+        SuperStructure.L1_CORAL_SCORE());
   }
 
+  private static final PathConstraints scoreAssistConstraints =
+      new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+  private static Map<ScoreLoc, Command> cmdsMap = new HashMap<>();
+
+  /**
+   * AutoBuilder can only be called after it's configured, so this has to be a seperate method call
+   * that is called in the RobotContainer constructor. IMPORTANT NOTE: all {@link #ScoreLoc}
+   * enum should have an entry to the {@link #cmdsMap} object via this method
+   */
+  public static void initCommands() {
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.A_ONE,
+        AutoBuilder.pathfindToPose(ScoreLoc.A_ONE.getPose(), scoreAssistConstraints, 0.0));
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.A_TWO,
+        AutoBuilder.pathfindToPose(ScoreLoc.A_TWO.getPose(), scoreAssistConstraints, 0.0));
+
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.B_ONE,
+        AutoBuilder.pathfindToPose(ScoreLoc.B_ONE.getPose(), scoreAssistConstraints, 0.0));
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.B_TWO,
+        AutoBuilder.pathfindToPose(ScoreLoc.B_TWO.getPose(), scoreAssistConstraints, 0.0));
+
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.C_ONE,
+        AutoBuilder.pathfindToPose(ScoreLoc.C_ONE.getPose(), scoreAssistConstraints, 0.0));
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.C_TWO,
+        AutoBuilder.pathfindToPose(ScoreLoc.C_TWO.getPose(), scoreAssistConstraints, 0.0));
+
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.D_ONE,
+        AutoBuilder.pathfindToPose(ScoreLoc.D_ONE.getPose(), scoreAssistConstraints, 0.0));
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.D_TWO,
+        AutoBuilder.pathfindToPose(ScoreLoc.D_TWO.getPose(), scoreAssistConstraints, 0.0));
+
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.E_ONE,
+        AutoBuilder.pathfindToPose(ScoreLoc.E_ONE.getPose(), scoreAssistConstraints, 0.0));
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.E_TWO,
+        AutoBuilder.pathfindToPose(ScoreLoc.E_TWO.getPose(), scoreAssistConstraints, 0.0));
+
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.F_ONE,
+        AutoBuilder.pathfindToPose(ScoreLoc.F_ONE.getPose(), scoreAssistConstraints, 0.0));
+    ScoreAssist.cmdsMap.put(
+        ScoreLoc.F_TWO,
+        AutoBuilder.pathfindToPose(ScoreLoc.F_TWO.getPose(), scoreAssistConstraints, 0.0));
+  }
+
+  /**
+   * IMPORTANT NOTE: if you add a new ScoreLoc, you should add an entry to the {@link #cmdsMap}
+   * object via the {@link #initCommands()} method
+   */
   public static enum ScoreLoc {
     A_ONE(new Pose2d(2.884676694869995, 4.201192378997803, new Rotation2d(0))),
     A_TWO(new Pose2d(2.884676694869995, 3.8600285053253174, new Rotation2d(0))),
@@ -73,6 +102,10 @@ public class ScoreAssist {
     private Pose2d pose;
 
     ScoreLoc(Pose2d pose) {
+      this.pose = pose;
+    }
+
+    ScoreLoc(Pose2d pose, Command cmd) {
       this.pose = pose;
     }
 
