@@ -40,4 +40,6 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  public static final double elevatorRotationToHeightRatio = 1.0;
 }

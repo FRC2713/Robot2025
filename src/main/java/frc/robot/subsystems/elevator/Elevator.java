@@ -23,7 +23,12 @@ public class Elevator extends SubsystemBase {
   public void setTargetHeight(double height) {
     this.IO.setTargetHeight(height);
   }
+
   public void setVoltage(double volts1, double volts2) {
     this.IO.setVoltage(volts1, volts2);
+  }
+
+  public boolean isAtTarget() {
+    return this.IO.isAtTarget();
   }
 }

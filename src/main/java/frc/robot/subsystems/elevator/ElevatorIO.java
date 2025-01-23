@@ -30,4 +30,6 @@ public interface ElevatorIO {
   public void setTargetHeight(double heightInches);
 
   public void setCurrentLimits();
+
+  public boolean isAtTarget();
 }

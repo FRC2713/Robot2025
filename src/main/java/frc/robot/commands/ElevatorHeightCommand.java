@@ -19,7 +19,7 @@ public class ElevatorHeightCommand extends Command {
   public void execute() {}
 
   public boolean isFinished() {
-    return false;
+    return true;
   }
 
   public void end(boolean isInterupted) {}
