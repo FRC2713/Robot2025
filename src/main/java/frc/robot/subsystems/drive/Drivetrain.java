@@ -41,8 +41,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants.AutoContants;
 import frc.robot.Constants.Mode;
-import frc.robot.commands.ScoreAssist.ScoreLoc;
 import frc.robot.generated.TunerConstants;
+import frc.robot.util.ScoreNode;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -294,14 +294,14 @@ public class Drivetrain extends SubsystemBase {
    ** Score Assist **
    ***********************/
 
-  public ScoreLoc getClosestScoringLocation() {
+  public ScoreNode getClosestScoringLocation() {
     Pose2d currentPose = this.getPose();
 
-    ScoreLoc closestLoc = ScoreLoc.A_ONE;
+    ScoreNode closestLoc = ScoreNode.A;
     double closestDist =
         currentPose.getTranslation().getDistance(closestLoc.getPose().getTranslation());
 
-    for (ScoreLoc loc : ScoreLoc.values()) {
+    for (ScoreNode loc : ScoreNode.values()) {
       double dist = currentPose.getTranslation().getDistance(loc.getPose().getTranslation());
       if (dist < closestDist) {
         closestLoc = loc;

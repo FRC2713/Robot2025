@@ -65,4 +65,49 @@ public class AutoRoutines {
 
     return routine;
   }
+
+  public AutoRoutine scoreLotsOfCoral() {
+    AutoRoutine routine = m_factory.newRoutine("Score Lots of Coral");
+
+    // Load the routine's trajectories
+    AutoTrajectory startToReefTraj = routine.trajectory("Start2ToReefB2");
+    AutoTrajectory reefB2ToSource = routine.trajectory("ReefB2ToSource");
+    AutoTrajectory sourceToReefA2 = routine.trajectory("SourceToReefA2");
+    AutoTrajectory reefA2ToSource = routine.trajectory("ReefA2ToSource");
+    AutoTrajectory sourceToReefA1 = routine.trajectory("SourceToReefA1");
+    AutoTrajectory reefA1ToSource = routine.trajectory("ReefA1ToSource");
+
+    routine
+        .active()
+        .onTrue(
+            Commands.sequence(
+                new InstantCommand(() -> System.out.println("Score Lots of Coral started")),
+                startToReefTraj.resetOdometry(),
+                startToReefTraj.cmd()));
+
+    startToReefTraj.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
+    startToReefTraj
+        .done()
+        .onTrue(Commands.sequence(SuperStructure.L1_CORAL_SCORE(), reefB2ToSource.cmd()));
+
+    reefB2ToSource
+        .done()
+        .onTrue(Commands.sequence(SuperStructure.SOURCE_PICK_UP(), sourceToReefA2.cmd()));
+
+    sourceToReefA2.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
+    sourceToReefA2
+        .done()
+        .onFalse(Commands.sequence(SuperStructure.L1_CORAL_SCORE(), reefA2ToSource.cmd()));
+
+    reefA2ToSource
+        .done()
+        .onTrue(Commands.sequence(SuperStructure.SOURCE_PICK_UP(), sourceToReefA1.cmd()));
+
+    sourceToReefA1.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
+    sourceToReefA1
+        .done()
+        .onFalse(Commands.sequence(SuperStructure.L1_CORAL_SCORE(), reefA1ToSource.cmd()));
+
+    return routine;
+  }
 }
