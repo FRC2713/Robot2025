@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.superstructure.ElevatorCmds;
+import frc.robot.commands.superstructure.PivotCmds;
+import frc.robot.commands.superstructure.RollerCmds;
 import org.littletonrobotics.junction.Logger;
 
 public final class SuperStructure {
@@ -29,12 +32,11 @@ public final class SuperStructure {
     return runStructure(
         "Starting conf",
         new SequentialCommandGroup(
-            // Elevator.Cmds.setHeight(0)
-            // AlgaeThing.Cmds.setAngle(0)
-            // AlgaeThing.Cmds.setSpeedAndWait(0)
-            // Elevator.Cmds.waitUntilSetpoint()
-            // AlgaeThing.Cmds.waitUntilSetpoint()
-            ));
+            ElevatorCmds.setHeight(0),
+            PivotCmds.setAngle(0),
+            RollerCmds.setAlgaeSpeedAndWait(0),
+            ElevatorCmds.waitUntilAtTarget(),
+            RollerCmds.waitUntilAlgaeAtTarget()));
   }
 
   public static Command L1_CORAL_PREP_ELEVATOR() {
@@ -44,9 +46,7 @@ public final class SuperStructure {
   public static Command L1_CORAL_PREP_ELEVATOR(String reason) {
     return runStructure(
         treeifyReason(reason) + "Prep Elevator",
-        new SequentialCommandGroup(
-            // Elevator.Cmds.setHeightAndWait(10)
-            ));
+        new SequentialCommandGroup(ElevatorCmds.setHeightAndWait(10)));
   }
 
   public static Command L1_CORAL_SCORE() {
@@ -58,7 +58,7 @@ public final class SuperStructure {
         treeifyReason(reason) + "L1 Coral Score",
         new SequentialCommandGroup(
             L1_CORAL_PREP_ELEVATOR(treeifyReason(reason) + "L1 Coral Score"),
-            // CoralThing.Cmds.setSpeed(1000)
+            RollerCmds.setTubeSpeed(1000),
             Commands.waitSeconds(1)));
   }
 
@@ -71,7 +71,7 @@ public final class SuperStructure {
         treeifyReason(reason) + "L1 Algae Take",
         new SequentialCommandGroup(
             L1_CORAL_PREP_ELEVATOR(treeifyReason(reason) + "L1 Algae Take"),
-            // AlgaeThing.Cmds.setSpeed(1000)
+            RollerCmds.setAlgaeSpeed(1000),
             Commands.waitSeconds(1)));
   }
 
@@ -89,29 +89,21 @@ public final class SuperStructure {
   public static Command PROCESSOR_PREP(String reason) {
     return runStructure(
         treeifyReason(reason) + "Processor prep",
-        new ParallelCommandGroup(
-            // Elevator.Cmds.setHeightAndWait(0)
-            // AlgaeThing.Cmds.setAngleAndWait(10)
-            ));
+        new ParallelCommandGroup(ElevatorCmds.setHeightAndWait(0), PivotCmds.setAngleAndWait(10)));
   }
 
   public static Command PROCESSOR_SCORE() {
     return runStructure(
         "Processor score",
         new SequentialCommandGroup(
-            PROCESSOR_PREP("Processor score")
-            // AlgaeThing.Cmds.setSpeed(-1000)
-            ));
+            PROCESSOR_PREP("Processor score"), RollerCmds.setAlgaeSpeed(-1000)));
   }
 
   public static Command SOURCE_PICK_UP() {
     return runStructure(
         "Source pick up",
         new SequentialCommandGroup(
-            new ParallelCommandGroup(
-                // Eleavator.Cmds.setHeight(0);
-                // Pivot.Cmds.setAngle(0);
-                ),
+            new ParallelCommandGroup(ElevatorCmds.setHeight(0), PivotCmds.setAngle(0)),
             // new WaitUntilCommand(CoralThing::hasCoral);
             new WaitCommand(2)));
   }
