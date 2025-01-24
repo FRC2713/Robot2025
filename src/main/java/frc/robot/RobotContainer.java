@@ -148,7 +148,6 @@ public class RobotContainer {
         },
         driveSubsystem // Reference to this subsystem to set requirements
         );
-    ScoreAssist.initCommands();
 
     // Choreo Autos
     choreoAutoFactory =
@@ -190,6 +189,8 @@ public class RobotContainer {
 
           return routine;
         });
+
+    autoChooser.addRoutine("ScoreLotsOfCoral", autoRoutines::scoreLotsOfCoral);
 
     autoChooser.addCmd(
         "Drive Simple FF Characterization",
@@ -260,7 +261,7 @@ public class RobotContainer {
         .onTrue(Commands.sequence(new InstantCommand(() -> outtake.setVoltage(-2.5))))
         .toggleOnFalse(new InstantCommand(() -> outtake.setVoltage(0)));
 
-    driver.a().whileTrue(ScoreAssist.scoreClosestL1(driveSubsystem));
+    // driver.a().whileTrue(ScoreAssist.getInstance().scoreClosestL1(driveSubsystem));
 
     driver
         .x()
@@ -359,5 +360,9 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Full Control"));
+
+    ScoreAssist.getInstance()
+        .getTrigger()
+        .whileTrue(ScoreAssist.getInstance().networkTablesDrive());
   }
 }
