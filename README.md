@@ -1,3 +1,5 @@
+![build](https://github.com/FRC2713/Robot2025/actions/workflows/main.yml/badge.svg)  ![Last Commit](https://img.shields.io/github/last-commit/FRC2713/Robot2025?color=green)
+
 # Setup
  - [WPILib 2025.1.1](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/wpilib-setup.html)
  - [ChoreoLib 2025 Beta](https://choreo.autos/choreolib/getting-started/#2025-beta)
