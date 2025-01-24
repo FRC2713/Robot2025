@@ -23,11 +23,11 @@ jobs:
     - name: Add repository to git safe directories
       run: git config --global --add safe.directory $GITHUB_WORKSPACE
     # Incase the docker container doesn't have the correct jds
-    - name: Setup Java (support java annotatiosn)
-        uses: actions/setup-java@v3
-        with:
-          distribution: "temurin"
-          java-version: "17"
+    - name: Setup Java with support java annotatioms
+      uses: actions/setup-java@v3
+      with:
+        distribution: "temurin"
+        java-version: "17"
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
