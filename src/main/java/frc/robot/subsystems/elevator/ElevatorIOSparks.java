@@ -58,21 +58,6 @@ public class ElevatorIOSparks implements ElevatorIO {
     inputs.currentDrawAmpsLeft = left.getOutputCurrent();
   }
 
-  @Override
-  public void reset() {
-    throw new UnsupportedOperationException("Unimplemented method 'reset'");
-  }
-
-  @Override
-  public boolean shouldApplyFF() {
-    throw new UnsupportedOperationException("Unimplemented method 'shouldApplyFF'");
-  }
-
-  @Override
-  public void setCurrentLimits() {
-    throw new UnsupportedOperationException("Unimplemented method 'setCurrentLimits'");
-  }
-
   public boolean isAtTarget() {
     return Math.abs(Units.metersToInches(getAvgPosition()) - lastHeight) <= 1;
   }

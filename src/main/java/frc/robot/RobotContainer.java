@@ -16,20 +16,27 @@ package frc.robot;
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
-import choreo.auto.AutoTrajectory;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.DriveConstants.OTFConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ElevatorCmds;
+import frc.robot.commands.PivotCmds;
+import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
-import frc.robot.commands.SuperStructure;
+import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
@@ -38,15 +45,28 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.elevator.ElevatorIOSparks;
+import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.pivot.PivotIO;
+import frc.robot.subsystems.pivot.PivotIOSim;
+import frc.robot.subsystems.pivot.PivotSparks;
+import frc.robot.subsystems.rollers.Rollers;
+import frc.robot.subsystems.rollers.Rollers1xSim;
+import frc.robot.subsystems.rollers.Rollers1xSpark;
+import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.util.AllianceFlipUtil;
+import java.util.Arrays;
+import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   // Subsystems
-  private final Drivetrain driveSubsystem;
+  public final Drivetrain driveSubsystem;
   public static Elevator elevator;
-
+  public static Pivot pivotThing;
+  public static Rollers rollers;
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
 
@@ -55,9 +75,7 @@ public class RobotContainer {
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
-
   private final SparkMax outtake = new SparkMax(50, MotorType.kBrushless);
-
   private final Vision visionsubsystem;
 
   public RobotContainer() {
@@ -73,6 +91,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         elevator = new Elevator(new ElevatorIOSparks());
+        pivotThing = new Pivot(new PivotSparks());
+        rollers = new Rollers(new Rollers1xSpark());
         break;
 
       case SIM:
@@ -83,7 +103,9 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        pivotThing = new Pivot(new PivotIOSim());
         elevator = new Elevator(new ElevatorIOSim());
+        rollers = new Rollers(new Rollers1xSim());
         break;
 
       default:
@@ -95,22 +117,85 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        elevator = new Elevator(new ElevatorIOSim());
+        elevator = new Elevator(new ElevatorIO() {});
+        pivotThing = new Pivot(new PivotIO() {});
+        rollers = new Rollers(new RollersIO() {});
         break;
     }
 
+    // PathPlanner Config
+    AutoBuilder.configure(
+        driveSubsystem::getPose, // Robot pose supplier
+        driveSubsystem
+            ::resetOdometry, // Method to reset odometry (will be called if your auto has a starting
+        // pose)
+        driveSubsystem::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        (speeds, feedforwards) ->
+            driveSubsystem.runVelocity(
+                speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds.
+        // Also optionally outputs individual module feedforwards
+        new PPHolonomicDriveController( // PPHolonomicController is the built in path following
+            // controller for holonomic drive trains
+            OTFConstants.translationPID, // Translation PID constants
+            OTFConstants.rotationPID // Rotation PID constants
+            ),
+        DriveConstants.pathPlannerConfig, // The robot configuration
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        driveSubsystem // Reference to this subsystem to set requirements
+        );
+
+    // Choreo Autos
     choreoAutoFactory =
         new AutoFactory(
             driveSubsystem::getPose,
             driveSubsystem::resetOdometry,
             driveSubsystem::followTrajectory,
             true,
-            driveSubsystem);
+            driveSubsystem,
+            (sample, isStart) -> {
+              Logger.recordOutput(
+                  "ActiveTrajectory",
+                  Arrays.stream(sample.getPoses())
+                      .map(AllianceFlipUtil::apply)
+                      .toArray(Pose2d[]::new));
+            });
+
+    AutoRoutines autoRoutines = new AutoRoutines(choreoAutoFactory);
 
     autoChooser = new AutoChooser();
 
     // Add options to the chooser
-    autoChooser.addRoutine("Example Auto Command", this::exampleAuto);
+    autoChooser.addRoutine("Example Auto Command", autoRoutines::exampleAuto);
+    autoChooser.addRoutine(
+        "DriveStraight",
+        () -> {
+          AutoRoutine routine = choreoAutoFactory.newRoutine("DriveStraight");
+
+          var startToReefTraj = routine.trajectory("Example");
+
+          // When the routine begins, reset odometry and start the first trajectory
+          routine
+              .active()
+              .onTrue(
+                  Commands.sequence(
+                      new InstantCommand(() -> System.out.println("DriveStraight started")),
+                      startToReefTraj.resetOdometry(),
+                      startToReefTraj.cmd()));
+
+          return routine;
+        });
+
+    autoChooser.addRoutine("ScoreLotsOfCoral", autoRoutines::scoreLotsOfCoral);
 
     autoChooser.addCmd(
         "Drive Simple FF Characterization",
@@ -142,14 +227,16 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
-    driveSubsystem.setDefaultCommand(
+    DriveCommands.setDefaultDriveCommand(
+        driveSubsystem,
         DriveCommands.joystickDrive(
             driveSubsystem,
             () -> -driver.getLeftY(),
             () -> -driver.getLeftX(),
-            () -> -driver.getRightX()));
+            () -> -driver.getRightX()),
+        "Full Control");
 
-    // Reset gyro to 0° when start button is pressed
+    // Reset gyro to 0 deg when start button is pressed
     driver
         .start()
         .onTrue(
@@ -161,53 +248,128 @@ public class RobotContainer {
                     driveSubsystem)
                 .ignoringDisable(true));
 
+    // Reset gyro to 180 deg when start button is pressed
+    driver
+        .back()
+        .onTrue(
+            Commands.runOnce(
+                    () ->
+                        driveSubsystem.setPose(
+                            new Pose2d(
+                                driveSubsystem.getPose().getTranslation(),
+                                Rotation2d.fromDegrees(180))),
+                    driveSubsystem)
+                .ignoringDisable(true));
+
     driver
         .rightBumper()
-        .onTrue(Commands.sequence(new InstantCommand(() -> outtake.setVoltage(-5))))
+        .onTrue(Commands.sequence(new InstantCommand(() -> outtake.setVoltage(-2.5))))
         .toggleOnFalse(new InstantCommand(() -> outtake.setVoltage(0)));
 
-    // TODO: getPose isn't updating every time we click the button!
+    // driver.a().whileTrue(ScoreAssist.getInstance().scoreClosestL1(driveSubsystem));
+
+    driver
+        .x()
+        .onTrue(
+            Commands.parallel(
+                ElevatorCmds.setHeightCmd(60),
+                PivotCmds.setAngle(60),
+                RollerCmds.setAlgaeSpeed(4000)));
     driver
         .y()
-        .whileTrue(
-            ScoreAssist.scoreClosestLocation(
-                driveSubsystem::getPose,
-                SuperStructure.L1_CORAL_SCORE(),
-                SuperStructure.L1_CORAL_PREP_ELEVATOR()));
-  }
-
-  public AutoRoutine exampleAuto() {
-    AutoRoutine routine = choreoAutoFactory.newRoutine("Example Auto");
-
-    // Load the routine's trajectories
-    AutoTrajectory startToReefTraj = routine.trajectory("StartToReef");
-    AutoTrajectory reefToProcTraj = routine.trajectory("ReefToProcessor");
-
-    // When the routine begins, reset odometry and start the first trajectory
-    routine
-        .active()
         .onTrue(
-            Commands.sequence(
-                new InstantCommand(() -> System.out.println("Example Auto started")),
-                startToReefTraj.resetOdometry(),
-                startToReefTraj.cmd()));
+            Commands.parallel(
+                ElevatorCmds.setHeightCmd(0),
+                PivotCmds.setAngle(0),
+                RollerCmds.setTubeSpeed(4000)));
 
-    // Starting at the event marker named "intake", run the intake
-    startToReefTraj.atTime("StartElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
-
-    // // When the trajectory is done, start the next trajectory
-    startToReefTraj
-        .done()
+    // Heading controller
+    driver
+        .povUp()
         .onTrue(
-            Commands.sequence(
-                SuperStructure.L1_CORAL_SCORE_AND_ALGAE_TAKE(), reefToProcTraj.cmd()));
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(180)),
+                "Heading Controller"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
 
-    // // While the trajectory is active, prepare the scoring subsystem
-    reefToProcTraj.active().whileTrue(SuperStructure.PROCESSOR_PREP());
+    driver
+        .povDown()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(0)),
+                "Heading Controller"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
 
-    // // When the trajectory is done, score
-    reefToProcTraj.done().onTrue(SuperStructure.PROCESSOR_SCORE());
+    driver
+        .povLeft()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(-90)),
+                "Heading Controller"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
 
-    return routine;
+    driver
+        .povRight()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(90)),
+                "Heading Controller"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
+
+    ScoreAssist.getInstance()
+        .getTrigger()
+        .whileTrue(ScoreAssist.getInstance().networkTablesDrive());
   }
 }

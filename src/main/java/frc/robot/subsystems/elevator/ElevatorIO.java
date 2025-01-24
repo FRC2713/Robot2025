@@ -19,17 +19,23 @@ public interface ElevatorIO {
     public double currentDrawAmpsRight = 0.0;
   }
 
-  public void updateInputs(ElevatorInputs inputs);
+  public default boolean isAtTarget() {
+    return false;
+  }
+  ;
 
-  public void reset();
+  public default void updateInputs(ElevatorInputs inputs) {}
+  ;
 
-  public boolean shouldApplyFF();
+  public default void setVoltage(double volts1, double volts2) {}
+  ;
 
-  public void setVoltage(double volts1, double volts2);
+  public default void setTargetHeight(double heightInches) {}
+  ;
 
-  public void setTargetHeight(double heightInches);
+  // public void reset();
 
-  public void setCurrentLimits();
+  // public boolean shouldApplyFF();
 
-  public boolean isAtTarget();
+  // public void setCurrentLimits();
 }
