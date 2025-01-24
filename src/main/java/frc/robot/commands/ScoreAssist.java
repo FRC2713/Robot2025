@@ -46,7 +46,7 @@ public class ScoreAssist {
 
   /**
    * AutoBuilder can only be called after it's configured, so this has to be a seperate method call
-   * that is called in the RobotContainer constructor. IMPORTANT NOTE: all {@link #ScoreLoc} enum
+   * that is called in the RobotContainer constructor. IMPORTANT NOTE: all {@link #ScoreNode} enum
    * should have an entry to the {@link #cmdsMap} object via this method
    */
   private ScoreAssist() {
