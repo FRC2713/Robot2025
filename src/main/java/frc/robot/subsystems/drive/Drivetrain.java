@@ -39,9 +39,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveConstants.AutoContants;
 import frc.robot.Constants.Mode;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.constants.DriveConstants.AutoConstants;
 import frc.robot.util.ScoreNode;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -218,7 +218,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void followTrajectory(SwerveSample sample) {
-    AutoContants.headingTrajectoryController.enableContinuousInput(-Math.PI, Math.PI);
+    AutoConstants.headingTrajectoryController.enableContinuousInput(-Math.PI, Math.PI);
 
     // Get the current pose of the robot
     Pose2d pose = getPose();
@@ -226,10 +226,10 @@ public class Drivetrain extends SubsystemBase {
     // Generate the next speeds for the robot
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            sample.vx + AutoContants.xTrajectoryController.calculate(pose.getX(), sample.x),
-            sample.vy + AutoContants.yTrajectoryController.calculate(pose.getY(), sample.y),
+            sample.vx + AutoConstants.xTrajectoryController.calculate(pose.getX(), sample.x),
+            sample.vy + AutoConstants.yTrajectoryController.calculate(pose.getY(), sample.y),
             sample.omega
-                + AutoContants.headingTrajectoryController.calculate(
+                + AutoConstants.headingTrajectoryController.calculate(
                     pose.getRotation().getRadians(),
                     Rotation2d.fromRadians(sample.heading).getRadians()));
 

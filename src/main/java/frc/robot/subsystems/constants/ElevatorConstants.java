@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.util.ControlGains;
 
 public class ElevatorConstants {
+  // TODO: 100 is arbitrary and needs to be changed.
   public static final int kLeftCANId = 100;
   public static final int kRightCANId = 101;
 
@@ -18,6 +19,7 @@ public class ElevatorConstants {
 
   public static final double kRotationsToHeightConversion =
       (1 / 20.0 * Math.PI * 1.7567); // values from 2024
+      
   public static final double kGearReduction = 5.0;
   public static final double kCarriageMass = 4.0; // kg
   public static final double kDrumRadius = Units.inchesToMeters(1.0);

@@ -5,9 +5,9 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.constants.ElevatorConstants;
 
 public class ElevatorIOSparks implements ElevatorIO {
   private SparkMax left, right;
@@ -17,16 +17,17 @@ public class ElevatorIOSparks implements ElevatorIO {
   public double lastHeight = 0.0;
 
   public ElevatorIOSparks() {
-    // TODO: 100 is arbitrary and needs to be changed.
-    left = new SparkMax(100, MotorType.kBrushless);
-    right = new SparkMax(100, MotorType.kBrushless);
-    leftConfig.smartCurrentLimit(0).secondaryCurrentLimit(0);
-    leftConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-    left.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    left = new SparkMax(ElevatorConstants.kLeftCANId, MotorType.kBrushless);
+    right = new SparkMax(ElevatorConstants.kRightCANId, MotorType.kBrushless);
 
-    rightConfig.smartCurrentLimit(0).secondaryCurrentLimit(0);
-    rightConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-    right.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    left.configure(
+        ElevatorConstants.createLeftSparkMaxConfig(),
+        ResetMode.kResetSafeParameters,
+        PersistMode.kNoPersistParameters);
+    right.configure(
+        ElevatorConstants.createRightSparkMaxConfig(),
+        ResetMode.kResetSafeParameters,
+        PersistMode.kNoPersistParameters);
   }
 
   private double getAvgPosition() {

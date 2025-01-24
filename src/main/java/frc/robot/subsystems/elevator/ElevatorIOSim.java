@@ -5,15 +5,23 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import frc.robot.subsystems.constants.ElevatorConstants;
 
 public class ElevatorIOSim implements ElevatorIO {
   private final DCMotor motor = DCMotor.getNEO(2);
-  private final ProfiledPIDController pid = new ProfiledPIDController(0, 0, 0, null);
 
-  private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.5, 0.1, 0);
+  private final ProfiledPIDController pid = ElevatorConstants.PID.createTrapezoidalPIDController();
+  private final ElevatorFeedforward feedforward = ElevatorConstants.FF.createElevatorFF();
   private final ElevatorSim sim =
       new ElevatorSim(
-          motor, 5.0, 0.3, Units.inchesToMeters(1), 0, Units.inchesToMeters(17), true, 0);
+          motor,
+          ElevatorConstants.kGearReduction,
+          ElevatorConstants.kCarriageMass,
+          ElevatorConstants.kDrumRadius,
+          ElevatorConstants.kMinHeight,
+          ElevatorConstants.kMaxHeight,
+          true,
+          ElevatorConstants.kInitialHeight);
   public double lastHeight = 0.0;
 
   @Override
