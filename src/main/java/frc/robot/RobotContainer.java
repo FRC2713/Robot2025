@@ -29,15 +29,15 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.DriveConstants.OTFConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ElevatorCmds;
+import frc.robot.commands.PivotCmds;
+import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.autos.AutoRoutines;
-import frc.robot.commands.superstructure.ElevatorCmds;
-import frc.robot.commands.superstructure.PivotCmds;
-import frc.robot.commands.superstructure.RollerCmds;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.constants.DriveConstants;
+import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -46,8 +46,11 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorIOSparks;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
+import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.pivot.PivotSparks;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers1xSim;
@@ -60,9 +63,9 @@ import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   // Subsystems
-  public static Drivetrain driveSubsystem;
-  public static Pivot pivotThing;
+  public final Drivetrain driveSubsystem;
   public static Elevator elevator;
+  public static Pivot pivotThing;
   public static Rollers rollers;
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
@@ -87,6 +90,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+        elevator = new Elevator(new ElevatorIOSparks());
         pivotThing = new Pivot(new PivotSparks());
         rollers = new Rollers(new Rollers1xSpark());
         break;
@@ -99,8 +103,8 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        pivotThing = new Pivot(new PivotIO() {}); // TODO: implement sim
-        elevator = new Elevator(new ElevatorIO() {}); // TODO: implement sim
+        pivotThing = new Pivot(new PivotIOSim());
+        elevator = new Elevator(new ElevatorIOSim());
         rollers = new Rollers(new Rollers1xSim());
         break;
 
@@ -113,6 +117,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        elevator = new Elevator(new ElevatorIO() {});
         pivotThing = new Pivot(new PivotIO() {});
         rollers = new Rollers(new RollersIO() {});
         break;
@@ -267,14 +272,16 @@ public class RobotContainer {
         .x()
         .onTrue(
             Commands.parallel(
-                ElevatorCmds.setHeight(60),
+                ElevatorCmds.setHeightCmd(60),
                 PivotCmds.setAngle(60),
                 RollerCmds.setAlgaeSpeed(4000)));
     driver
         .y()
         .onTrue(
             Commands.parallel(
-                ElevatorCmds.setHeight(0), PivotCmds.setAngle(0), RollerCmds.setTubeSpeed(4000)));
+                ElevatorCmds.setHeightCmd(0),
+                PivotCmds.setAngle(0),
+                RollerCmds.setTubeSpeed(4000)));
 
     // Heading controller
     driver

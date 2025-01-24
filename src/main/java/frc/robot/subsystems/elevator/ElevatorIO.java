@@ -17,9 +17,12 @@ public interface ElevatorIO {
     public double velocityInchesPerSecondRight = 0.0;
     public double tempCelsiusRight = 0.0;
     public double currentDrawAmpsRight = 0.0;
-
-    public double commandedHeight = 0.0;
   }
+
+  public default boolean isAtTarget() {
+    return false;
+  }
+  ;
 
   public default void updateInputs(ElevatorInputs inputs) {}
   ;

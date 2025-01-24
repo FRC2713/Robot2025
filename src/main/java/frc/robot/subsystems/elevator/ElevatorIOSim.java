@@ -5,20 +5,16 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
-import frc.robot.Constants;
 import frc.robot.subsystems.constants.ElevatorConstants;
 
 public class ElevatorIOSim implements ElevatorIO {
+  private final DCMotor motor = DCMotor.getNEO(2);
 
-  private final DCMotor m_motor = DCMotor.getNEO(2);
-
-  private final ProfiledPIDController m_controller =
-      ElevatorConstants.PID.createTrapezoidalPIDController();
-  private final ElevatorFeedforward m_feedforward = ElevatorConstants.FF.createElevatorFF();
-
-  private final ElevatorSim m_elevatorSim =
+  private final ProfiledPIDController pid = ElevatorConstants.PID.createTrapezoidalPIDController();
+  private final ElevatorFeedforward feedforward = ElevatorConstants.FF.createElevatorFF();
+  private final ElevatorSim sim =
       new ElevatorSim(
-          m_motor,
+          motor,
           ElevatorConstants.kGearReduction,
           ElevatorConstants.kCarriageMass,
           ElevatorConstants.kDrumRadius,
@@ -26,38 +22,39 @@ public class ElevatorIOSim implements ElevatorIO {
           ElevatorConstants.kMaxHeight,
           true,
           ElevatorConstants.kInitialHeight);
+  public double lastHeight = 0.0;
 
+  @Override
   public void updateInputs(ElevatorInputs inputs) {
-    double pidOutput = m_controller.calculate(m_elevatorSim.getPositionMeters());
-    double feedforwardOutput = m_feedforward.calculate(m_controller.getSetpoint().velocity);
-    m_elevatorSim.setInputVoltage(pidOutput + feedforwardOutput);
-    m_elevatorSim.update(Constants.simulationRate);
+    double pidOutput = pid.calculate(Units.metersToInches(sim.getPositionMeters()));
+    double feedforwardOutput = feedforward.calculate(pid.getSetpoint().velocity);
+    sim.setInputVoltage(pidOutput + feedforwardOutput);
+    sim.update(0.02);
 
-    inputs.currentDrawAmpsLeft = m_elevatorSim.getCurrentDrawAmps();
-    inputs.currentDrawAmpsRight = m_elevatorSim.getCurrentDrawAmps();
+    inputs.outputVoltageLeft = sim.getOutput(0);
+    inputs.heightInchesLeft = Units.metersToInches(sim.getPositionMeters());
+    inputs.velocityInchesPerSecondLeft = Units.metersToInches(sim.getVelocityMetersPerSecond());
+    inputs.tempCelsiusLeft = 0.0;
+    inputs.currentDrawAmpsLeft = sim.getCurrentDrawAmps();
 
-    inputs.heightInchesLeft = Units.metersToInches(m_elevatorSim.getPositionMeters());
-    inputs.heightInchesRight = Units.metersToInches(m_elevatorSim.getPositionMeters());
+    inputs.outputVoltageRight = sim.getOutput(0);
+    inputs.heightInchesRight = Units.metersToInches(sim.getPositionMeters());
+    inputs.velocityInchesPerSecondRight = Units.metersToInches(sim.getVelocityMetersPerSecond());
+    inputs.tempCelsiusRight = 0.0;
+    inputs.currentDrawAmpsRight = sim.getCurrentDrawAmps();
+  }
 
-    inputs.outputVoltageLeft = m_elevatorSim.getOutput(0);
-    inputs.outputVoltageRight = m_elevatorSim.getOutput(0);
-
-    inputs.tempCelsiusLeft = 0;
-    inputs.tempCelsiusRight = 0;
-
-    inputs.velocityInchesPerSecondLeft =
-        Units.metersToInches(m_elevatorSim.getVelocityMetersPerSecond());
-    inputs.velocityInchesPerSecondRight =
-        Units.metersToInches(m_elevatorSim.getVelocityMetersPerSecond());
-
-    inputs.commandedHeight = Units.metersToInches(m_controller.getGoal().position);
+  @Override
+  public void setTargetHeight(double heightInches) {
+    pid.setGoal(heightInches);
+    lastHeight = heightInches;
   }
 
   public void setVoltage(double volts1, double volts2) {
-    m_elevatorSim.setInputVoltage((volts1 + volts2) / 2);
+    sim.setInputVoltage((volts1 + volts2) / 2.0);
   }
 
-  public void setTargetHeight(double heightInches) {
-    m_controller.setGoal(Units.inchesToMeters(heightInches));
+  public boolean isAtTarget() {
+    return Math.abs(Units.metersToInches(sim.getPositionMeters()) - lastHeight) <= 1;
   }
 }

@@ -7,7 +7,6 @@ import frc.robot.subsystems.constants.ElevatorConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
-
   private ElevatorInputsAutoLogged inputs;
   private ElevatorIO IO;
   public final MechanismLigament2d mech2d =
@@ -17,8 +16,6 @@ public class Elevator extends SubsystemBase {
           90,
           ElevatorConstants.mech2dWidth,
           ElevatorConstants.mech2dColor);
-
-  private double targetHeightInches = 0.0;
 
   public Elevator(ElevatorIO IO) {
     this.inputs = new ElevatorInputsAutoLogged();
@@ -34,18 +31,17 @@ public class Elevator extends SubsystemBase {
 
   public void setTargetHeight(double height) {
     this.IO.setTargetHeight(height);
-    this.targetHeightInches = height;
+  }
+
+  public void setVoltage(double volts1, double volts2) {
+    this.IO.setVoltage(volts1, volts2);
   }
 
   public boolean isAtTarget() {
-    return Math.abs(this.inputs.heightInchesLeft - this.targetHeightInches)
-            < ElevatorConstants.kAcceptablePositionErrorInches
-        && Math.abs(this.inputs.heightInchesRight - this.targetHeightInches)
-            < ElevatorConstants.kAcceptablePositionErrorInches;
+    return this.IO.isAtTarget();
   }
 
   public void updateMech2D() {
-    this.mech2d.setLength(
-        Units.inchesToMeters((this.inputs.heightInchesLeft + this.inputs.heightInchesRight) / 2));
+    this.mech2d.setLength(Units.inchesToMeters(this.inputs.heightInchesLeft));
   }
 }

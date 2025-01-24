@@ -5,28 +5,33 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.RobotController;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.ElevatorConstants;
 
-public class ElevatorSparks implements ElevatorIO {
-
+public class ElevatorIOSparks implements ElevatorIO {
   private SparkMax left, right;
-  private double targetHeight;
+  SparkMaxConfig leftConfig = new SparkMaxConfig();
+  SparkMaxConfig rightConfig = new SparkMaxConfig();
 
-  public ElevatorSparks() {
-    // Note: 100 is arbitrary and needs to be changed.
+  public double lastHeight = 0.0;
+
+  public ElevatorIOSparks() {
     left = new SparkMax(ElevatorConstants.kLeftCANId, MotorType.kBrushless);
-    this.left.configure(
+    right = new SparkMax(ElevatorConstants.kRightCANId, MotorType.kBrushless);
+
+    left.configure(
         ElevatorConstants.createLeftSparkMaxConfig(),
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
-
-    right = new SparkMax(ElevatorConstants.kRightCANId, MotorType.kBrushless);
-    this.right.configure(
+    right.configure(
         ElevatorConstants.createRightSparkMaxConfig(),
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
+  }
+
+  private double getAvgPosition() {
+    return (left.getEncoder().getPosition() + right.getEncoder().getPosition()) / 2;
   }
 
   public void setVoltage(double volts1, double volts2) {
@@ -41,20 +46,20 @@ public class ElevatorSparks implements ElevatorIO {
 
   @Override
   public void updateInputs(ElevatorInputs inputs) {
-    inputs.currentDrawAmpsLeft = left.getOutputCurrent();
-    inputs.outputVoltageLeft =
-        MathUtil.clamp(left.getAppliedOutput() * RobotController.getBatteryVoltage(), -12.0, 12.0);
-    inputs.heightInchesLeft = left.getEncoder().getPosition();
-    inputs.velocityInchesPerSecondLeft = left.getEncoder().getVelocity();
-    inputs.tempCelsiusLeft = left.getMotorTemperature();
-
-    inputs.currentDrawAmpsRight = right.getOutputCurrent();
-    inputs.outputVoltageRight =
-        MathUtil.clamp(right.getAppliedOutput() * RobotController.getBatteryVoltage(), -12.0, 12.0);
+    inputs.outputVoltageRight = right.getAppliedOutput();
     inputs.heightInchesRight = right.getEncoder().getPosition();
-    inputs.velocityInchesPerSecondRight = right.getEncoder().getVelocity();
-    inputs.tempCelsiusRight = right.getMotorTemperature();
+    inputs.velocityInchesPerSecondRight = right.getEncoder().getVelocity() / 60;
+    inputs.tempCelsiusRight = 0.0;
+    inputs.currentDrawAmpsRight = right.getOutputCurrent();
 
-    inputs.commandedHeight = targetHeight;
+    inputs.outputVoltageLeft = left.getAppliedOutput();
+    inputs.heightInchesLeft = left.getEncoder().getPosition();
+    inputs.velocityInchesPerSecondLeft = left.getEncoder().getVelocity() / 60;
+    inputs.tempCelsiusLeft = 0.0;
+    inputs.currentDrawAmpsLeft = left.getOutputCurrent();
+  }
+
+  public boolean isAtTarget() {
+    return Math.abs(Units.metersToInches(getAvgPosition()) - lastHeight) <= 1;
   }
 }

@@ -6,9 +6,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.superstructure.ElevatorCmds;
-import frc.robot.commands.superstructure.PivotCmds;
-import frc.robot.commands.superstructure.RollerCmds;
 import org.littletonrobotics.junction.Logger;
 
 public final class SuperStructure {
@@ -32,7 +29,7 @@ public final class SuperStructure {
     return runStructure(
         "Starting conf",
         new SequentialCommandGroup(
-            ElevatorCmds.setHeight(0),
+            ElevatorCmds.setHeightCmd(0),
             PivotCmds.setAngle(0),
             RollerCmds.setAlgaeSpeedAndWait(0),
             ElevatorCmds.waitUntilAtTarget(),
@@ -46,7 +43,7 @@ public final class SuperStructure {
   public static Command L1_CORAL_PREP_ELEVATOR(String reason) {
     return runStructure(
         treeifyReason(reason) + "Prep Elevator",
-        new SequentialCommandGroup(ElevatorCmds.setHeightAndWait(10)));
+        new SequentialCommandGroup(ElevatorCmds.setHeightWaitCmd(10)));
   }
 
   public static Command L1_CORAL_SCORE() {
@@ -89,7 +86,7 @@ public final class SuperStructure {
   public static Command PROCESSOR_PREP(String reason) {
     return runStructure(
         treeifyReason(reason) + "Processor prep",
-        new ParallelCommandGroup(ElevatorCmds.setHeightAndWait(0), PivotCmds.setAngleAndWait(10)));
+        new ParallelCommandGroup(ElevatorCmds.setHeightCmd(0), PivotCmds.setAngleAndWait(10)));
   }
 
   public static Command PROCESSOR_SCORE() {
@@ -103,7 +100,7 @@ public final class SuperStructure {
     return runStructure(
         "Source pick up",
         new SequentialCommandGroup(
-            new ParallelCommandGroup(ElevatorCmds.setHeight(0), PivotCmds.setAngle(0)),
+            new ParallelCommandGroup(ElevatorCmds.setHeightCmd(0), PivotCmds.setAngle(0)),
             // new WaitUntilCommand(CoralThing::hasCoral);
             new WaitCommand(2)));
   }
