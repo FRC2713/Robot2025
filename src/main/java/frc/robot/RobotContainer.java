@@ -231,7 +231,7 @@ public class RobotContainer {
             () -> -driver.getRightX()),
         "Full Control");
 
-    // Reset gyro to 0° when start button is pressed
+    // Reset gyro to 0 deg when start button is pressed
     driver
         .start()
         .onTrue(
@@ -243,7 +243,7 @@ public class RobotContainer {
                     driveSubsystem)
                 .ignoringDisable(true));
 
-    // Reset gyro to 180° when start button is pressed
+    // Reset gyro to 180 deg when start button is pressed
     driver
         .back()
         .onTrue(

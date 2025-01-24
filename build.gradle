@@ -101,9 +101,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.36'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
-
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit:akit-autolog:$akitJson.version"
 }
@@ -143,7 +140,7 @@ tasks.withType(JavaCompile) {
 }
 
 // Create version file
-// project.compileJava.dependsOn(createVersionFile)
+project.compileJava.dependsOn(createVersionFile)
 gversion {
     srcDir       = "src/main/java/"
     classPackage = "frc.robot"
