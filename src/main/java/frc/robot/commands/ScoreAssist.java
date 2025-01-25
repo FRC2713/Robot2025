@@ -99,13 +99,14 @@ public class ScoreAssist {
     return new Trigger(() -> ScoreLoc.checkNTValid(sub.get("none")));
   }
 
-  public Command networkTablesDrive() {
-    return Commands.sequence(
-        Commands.parallel(
-            //   loc.getLevel().getPrepCommand(),
-            new SelectCommand<>(
-                ScoreAssist.cmdsMap, () -> ScoreLoc.parseFromNT(sub.get("none")).getNode()))
-        //   loc.getLevel().getScoreCommand()
-        );
-  }
+  // TODO: CommandScheduler is complaining about command composition, need to look into the error
+  //   public Command networkTablesDrive() {
+  //     return Commands.sequence(
+  //         Commands.parallel(
+  //             //   loc.getLevel().getPrepCommand(),
+  //             new SelectCommand<>(
+  //                 ScoreAssist.cmdsMap, () -> ScoreLoc.parseFromNT(sub.get("none")).getNode()))
+  //         //   loc.getLevel().getScoreCommand()
+  //         );
+  //   }
 }

@@ -33,7 +33,6 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
-import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants;
@@ -47,14 +46,11 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
-import frc.robot.subsystems.elevator.ElevatorIOSparks;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOSim;
-import frc.robot.subsystems.pivot.PivotSparks;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers1xSim;
-import frc.robot.subsystems.rollers.Rollers1xSpark;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.AllianceFlipUtil;
@@ -90,9 +86,9 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        elevator = new Elevator(new ElevatorIOSparks());
-        pivotThing = new Pivot(new PivotSparks());
-        rollers = new Rollers(new Rollers1xSpark());
+        elevator = new Elevator(new ElevatorIOSim()); // TODO: once we have HW, use the HW
+        pivotThing = new Pivot(new PivotIOSim()); // TODO: once we have HW, use the HW
+        rollers = new Rollers(new Rollers1xSim()); // TODO: once we have HW, use the HW
         break;
 
       case SIM:
@@ -229,12 +225,12 @@ public class RobotContainer {
     // Default command, normal field-relative drive
     DriveCommands.setDefaultDriveCommand(
         driveSubsystem,
-        DriveCommands.joystickDrive(
+        DriveCommands.joystickDriveClosedLoopHeading(
             driveSubsystem,
             () -> -driver.getLeftY(),
             () -> -driver.getLeftX(),
             () -> -driver.getRightX()),
-        "Full Control");
+        "Full Control Modified");
 
     // Reset gyro to 0 deg when start button is pressed
     driver
@@ -368,8 +364,9 @@ public class RobotContainer {
                     () -> -driver.getRightX()),
                 "Full Control"));
 
-    ScoreAssist.getInstance()
-        .getTrigger()
-        .whileTrue(ScoreAssist.getInstance().networkTablesDrive());
+    // TODO: CommandScheduler is complaining about command composition, need to look into the error
+    // ScoreAssist.getInstance()
+    //     .getTrigger()
+    //     .whileTrue(ScoreAssist.getInstance().networkTablesDrive());
   }
 }
