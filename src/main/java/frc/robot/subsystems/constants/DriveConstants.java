@@ -37,12 +37,10 @@ public class DriveConstants {
 
     public static final ProfiledPIDController joystickAngleController =
         new ControlGains()
-            .p(3.0)
+            .p(5.0)
             .d(0.4)
             .trapezoidal(kMaxAngularVelocity, kMaxAngularAcceleration)
             .createTrapezoidalPIDController();
-
-
 
     public static final ProfiledPIDController angleController =
         new ControlGains()
