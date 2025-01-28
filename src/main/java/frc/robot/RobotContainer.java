@@ -31,6 +31,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
+import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants;
