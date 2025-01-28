@@ -53,6 +53,7 @@ import frc.robot.subsystems.rollers.Rollers1xSim;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.ScoreLevel;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
 
@@ -223,7 +224,7 @@ public class RobotContainer {
     // Default command, normal field-relative drive
     DriveCommands.setDefaultDriveCommand(
         driveSubsystem,
-        DriveCommands.joystickDriveClosedLoopHeading(
+        DriveCommands.joystickDrive(
             driveSubsystem,
             () -> -driver.getLeftY(),
             () -> -driver.getLeftX(),
@@ -255,9 +256,17 @@ public class RobotContainer {
                     driveSubsystem)
                 .ignoringDisable(true));
 
-    // driver.a().whileTrue(ScoreAssist.getInstance().scoreClosestL1(driveSubsystem));
+    driver
+        .a()
+        .whileTrue(
+            ScoreAssist.getInstance()
+                .scoreAtLoc(() -> driveSubsystem.getClosestScoringLocation(ScoreLevel.ONE)));
 
-    driver.x().onTrue(ScoreAssist.getInstance().scoreClosestL1(driveSubsystem));
+    driver
+        .b()
+        .whileTrue(
+            ScoreAssist.getInstance()
+                .scoreAtLoc(() -> driveSubsystem.getClosestScoringLocation(ScoreLevel.TWO)));
     driver
         .y()
         .onTrue(
@@ -351,9 +360,8 @@ public class RobotContainer {
                     () -> -driver.getRightX()),
                 "Full Control"));
 
-    // TODO: CommandScheduler is complaining about command composition, need to look into the error
-    // ScoreAssist.getInstance()
-    //     .getTrigger()
-    //     .whileTrue(ScoreAssist.getInstance().networkTablesDrive());
+    ScoreAssist.getInstance()
+        .getTrigger()
+        .whileTrue(ScoreAssist.getInstance().networkTablesDrive());
   }
 }

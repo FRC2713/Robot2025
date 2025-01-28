@@ -42,6 +42,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants.AutoConstants;
+import frc.robot.util.ScoreLevel;
+import frc.robot.util.ScoreLoc;
 import frc.robot.util.ScoreNode;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -294,7 +296,7 @@ public class Drivetrain extends SubsystemBase {
    ** Score Assist **
    ***********************/
 
-  public ScoreNode getClosestScoringLocation() {
+  public ScoreLoc getClosestScoringLocation(ScoreLevel level) {
     Pose2d currentPose = this.getPose();
 
     ScoreNode closestLoc = ScoreNode.A;
@@ -309,7 +311,7 @@ public class Drivetrain extends SubsystemBase {
       }
     }
 
-    return closestLoc;
+    return ScoreLoc.fromNodeAndLevel(closestLoc, level);
   }
 
   /***********************

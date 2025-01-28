@@ -2,6 +2,8 @@ package frc.robot.util;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.SuperStructure;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Getter;
 
 public enum ScoreLevel {
@@ -17,5 +19,21 @@ public enum ScoreLevel {
   private ScoreLevel(Command prepCommand, Command scoreCommand) {
     this.prepCommand = prepCommand;
     this.scoreCommand = scoreCommand;
+  }
+
+  public static Map<ScoreLevel, Command> createPrepCommandsMap() {
+    var cmdsMap = new HashMap<ScoreLevel, Command>();
+    for (ScoreLevel level : ScoreLevel.values()) {
+      cmdsMap.put(level, level.getPrepCommand());
+    }
+    return cmdsMap;
+  }
+
+  public static Map<ScoreLevel, Command> createScoreCommandsMap() {
+    var cmdsMap = new HashMap<ScoreLevel, Command>();
+    for (ScoreLevel level : ScoreLevel.values()) {
+      cmdsMap.put(level, level.getScoreCommand());
+    }
+    return cmdsMap;
   }
 }

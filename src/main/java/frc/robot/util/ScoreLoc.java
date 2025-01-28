@@ -260,4 +260,13 @@ public enum ScoreLoc {
         return null;
     }
   }
+
+  public static ScoreLoc fromNodeAndLevel(ScoreNode closestLoc, ScoreLevel level2) {
+    for (ScoreLoc loc : ScoreLoc.values()) {
+      if (loc.node == closestLoc && loc.level == level2) {
+        return loc;
+      }
+    }
+    return null;
+  }
 }
