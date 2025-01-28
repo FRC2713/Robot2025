@@ -6,11 +6,11 @@ public final class BuildConstants {
   public static final String MAVEN_NAME = "Robot2025";
   public static final String VERSION = "unspecified";
   public static final int GIT_REVISION = 43;
-  public static final String GIT_SHA = "a14b56e96031c7c8a5f124ac539880bd0f95477f";
-  public static final String GIT_DATE = "2025-01-25 12:45:38 EST";
-  public static final String GIT_BRANCH = "heading-controller-teleop";
-  public static final String BUILD_DATE = "2025-01-25 12:51:15 EST";
-  public static final long BUILD_UNIX_TIME = 1737827475467L;
+  public static final String GIT_SHA = "2a7f2208a0d623464345807ee373b4f5c9c4d0c0";
+  public static final String GIT_DATE = "2025-01-27 19:28:51 GMT-05:00";
+  public static final String GIT_BRANCH = "main";
+  public static final String BUILD_DATE = "2025-01-27 19:37:37 GMT-05:00";
+  public static final long BUILD_UNIX_TIME = 1738024657237L;
   public static final int DIRTY = 1;
 
   private BuildConstants() {}

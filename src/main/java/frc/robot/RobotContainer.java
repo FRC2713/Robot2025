@@ -18,8 +18,6 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -71,7 +69,6 @@ public class RobotContainer {
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
-  private final SparkMax outtake = new SparkMax(50, MotorType.kBrushless);
   private final Vision visionsubsystem;
 
   public RobotContainer() {
@@ -257,20 +254,9 @@ public class RobotContainer {
                     driveSubsystem)
                 .ignoringDisable(true));
 
-    driver
-        .rightBumper()
-        .onTrue(Commands.sequence(new InstantCommand(() -> outtake.setVoltage(-2.5))))
-        .toggleOnFalse(new InstantCommand(() -> outtake.setVoltage(0)));
-
     // driver.a().whileTrue(ScoreAssist.getInstance().scoreClosestL1(driveSubsystem));
 
-    driver
-        .x()
-        .onTrue(
-            Commands.parallel(
-                ElevatorCmds.setHeightCmd(60),
-                PivotCmds.setAngle(60),
-                RollerCmds.setAlgaeSpeed(4000)));
+    driver.x().onTrue(ScoreAssist.getInstance().scoreClosestL1(driveSubsystem));
     driver
         .y()
         .onTrue(
