@@ -76,6 +76,55 @@ public class DriveCommands {
   /**
    * Field relative drive command using two joysticks (controlling linear and angular velocities).
    */
+  public static Command joystickDriveClosedLoopHeading(
+      Drivetrain drive,
+      DoubleSupplier xSupplier,
+      DoubleSupplier ySupplier,
+      DoubleSupplier omegaSupplier) {
+    return Commands.run(
+        () -> {
+          // Get linear velocity
+          Translation2d linearVelocity =
+              getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+
+          // Apply rotation deadband and get rotational velocity
+          double omegaInput = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
+          omegaInput =
+              Math.copySign(
+                  omegaInput * omegaInput,
+                  omegaInput); // Square rotation value for more precise control
+          double angularVelocity = omegaInput * drive.getMaxAngularSpeedRadPerSec();
+
+          // Determine desired rotational position
+          double rotationDesired = drive.getRotation().getRadians() + angularVelocity;
+
+          // Close the loop on rotation
+          double omegaControlled =
+              HeadingControllerConstants.angleController.calculate(
+                  drive.getRotation().getRadians(), rotationDesired);
+
+          // Convert to field relative speeds & send command
+          ChassisSpeeds speeds =
+              new ChassisSpeeds(
+                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                  omegaControlled);
+          boolean isFlipped =
+              DriverStation.getAlliance().isPresent()
+                  && DriverStation.getAlliance().get() == Alliance.Red;
+          drive.runVelocity(
+              ChassisSpeeds.fromFieldRelativeSpeeds(
+                  speeds,
+                  isFlipped
+                      ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                      : drive.getRotation()));
+        },
+        drive);
+  }
+
+  /**
+   * Field relative drive command using two joysticks (controlling linear and angular velocities).
+   */
   public static Command joystickDrive(
       Drivetrain drive,
       DoubleSupplier xSupplier,
