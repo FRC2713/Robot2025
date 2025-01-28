@@ -45,6 +45,12 @@ public class AllianceFlipUtil {
         : pose;
   }
 
+  public static Pose2d flip(Pose2d pose) {
+    return new Pose2d(
+        new Translation2d(fieldLength - pose.getX(), fieldWidth - pose.getY()),
+        pose.getRotation().rotateBy(Rotation2d.kPi));
+  }
+
   public static boolean shouldFlip() {
     return DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;

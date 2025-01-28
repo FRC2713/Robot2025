@@ -42,7 +42,7 @@ public final class SuperStructure {
 
   public static Command L1_CORAL_PREP_ELEVATOR(String reason) {
     return runStructure(
-        treeifyReason(reason) + "Prep Elevator",
+        treeifyReason(reason) + "L1 Prep Elevator",
         new SequentialCommandGroup(ElevatorCmds.setHeightWaitCmd(10)));
   }
 
@@ -61,6 +61,29 @@ public final class SuperStructure {
 
   public static Command L1_ALGAE_TAKE() {
     return L1_ALGAE_TAKE("");
+  }
+
+  public static Command L2_CORAL_PREP_ELEVATOR() {
+    return L2_CORAL_PREP_ELEVATOR("");
+  }
+
+  public static Command L2_CORAL_PREP_ELEVATOR(String reason) {
+    return runStructure(
+        treeifyReason(reason) + "L2 Prep Elevator",
+        new SequentialCommandGroup(ElevatorCmds.setHeightWaitCmd(20)));
+  }
+
+  public static Command L2_CORAL_SCORE() {
+    return L2_CORAL_SCORE("");
+  }
+
+  public static Command L2_CORAL_SCORE(String reason) {
+    return runStructure(
+        treeifyReason(reason) + "L2 Coral Score",
+        new SequentialCommandGroup(
+            L2_CORAL_PREP_ELEVATOR(treeifyReason(reason) + "L1 Coral Score"),
+            RollerCmds.setTubeSpeed(1000),
+            Commands.waitSeconds(1)));
   }
 
   public static Command L1_ALGAE_TAKE(String reason) {

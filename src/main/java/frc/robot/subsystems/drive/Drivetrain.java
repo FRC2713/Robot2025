@@ -42,6 +42,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants.AutoConstants;
+import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLevel;
 import frc.robot.util.ScoreLoc;
 import frc.robot.util.ScoreNode;
@@ -304,7 +305,10 @@ public class Drivetrain extends SubsystemBase {
         currentPose.getTranslation().getDistance(closestLoc.getPose().getTranslation());
 
     for (ScoreNode loc : ScoreNode.values()) {
-      double dist = currentPose.getTranslation().getDistance(loc.getPose().getTranslation());
+      double dist =
+          currentPose
+              .getTranslation()
+              .getDistance(AllianceFlipUtil.apply(loc.getPose().getTranslation()));
       if (dist < closestDist) {
         closestLoc = loc;
         closestDist = dist;
