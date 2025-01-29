@@ -20,13 +20,13 @@ public class ElevatorConstants {
   public static final double kRotationsToHeightConversion =
       (1 / 20.0 * Math.PI * 1.7567); // values from 2024
 
-  public static final double kGearReduction = 5.0;
-  public static final double kCarriageMass = 4.0; // kg
+  public static final double kGearReduction = 9.0;
+  public static final double kCarriageMass = Units.lbsToKilograms(0.249377); // kg
   public static final double kDrumRadius = Units.inchesToMeters(1.0);
   public static final double kAcceptablePositionErrorInches = 2; // inches
 
   public static final double kMinHeight = Units.inchesToMeters(0.0); // inches
-  public static final double kMaxHeight = Units.inchesToMeters(60);
+  public static final double kMaxHeight = Units.inchesToMeters(52.5);
   public static final double kInitialHeight = Units.inchesToMeters(5);
 
   public static final ControlGains PID = new ControlGains().p(25.0).trapezoidal(10, 10);
