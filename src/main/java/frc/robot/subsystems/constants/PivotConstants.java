@@ -12,7 +12,7 @@ public class PivotConstants {
 
   public static final double kGearing = 200;
   public static final double kLength = Units.inchesToMeters(18);
-  public static final double kMass = 7.094328;// kg
+  public static final double kMass = 7.094328; // kg
   public static final double kMinAngle = Units.degreesToRadians(0);
   public static final double kMaxAngle = Units.degreesToRadians(60);
   public static final double kInitialAngle = Units.degreesToRadians(30);
