@@ -81,7 +81,7 @@ public final class SuperStructure {
     return runStructure(
         treeifyReason(reason) + "L2 Coral Score",
         new SequentialCommandGroup(
-            L2_CORAL_PREP_ELEVATOR(treeifyReason(reason) + "L1 Coral Score"),
+            L2_CORAL_PREP_ELEVATOR(treeifyReason(reason) + "L2 Coral Score"),
             RollerCmds.setTubeSpeed(1000),
             Commands.waitSeconds(1)));
   }

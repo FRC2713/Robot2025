@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -31,6 +32,9 @@ public final class Constants {
 
   public static final double massKG = Units.lbsToKilograms(150);
   public static final double momentOfInertiaKGPerM2 = 6.0;
+
+  public static final PathConstraints scoreAssistConstraints =
+      new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
   public static enum Mode {
     /** Running on a real robot. */

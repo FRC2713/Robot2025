@@ -258,15 +258,20 @@ public class RobotContainer {
 
     driver
         .a()
-        .whileTrue(
+        .onTrue(
             ScoreAssist.getInstance()
-                .scoreAtLoc(() -> driveSubsystem.getClosestScoringLocation(ScoreLevel.ONE)));
+                .setActiveCommand(
+                    () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.ONE)))
+        .onFalse(ScoreAssist.getInstance().cancelCmd());
 
     driver
         .b()
-        .whileTrue(
+        .onTrue(
             ScoreAssist.getInstance()
-                .scoreAtLoc(() -> driveSubsystem.getClosestScoringLocation(ScoreLevel.TWO)));
+                .setActiveCommand(
+                    () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.TWO)))
+        .onFalse(ScoreAssist.getInstance().cancelCmd());
+
     driver
         .y()
         .onTrue(
@@ -362,6 +367,9 @@ public class RobotContainer {
 
     ScoreAssist.getInstance()
         .getTrigger()
-        .whileTrue(ScoreAssist.getInstance().networkTablesDrive());
+        .onTrue(
+            ScoreAssist.getInstance()
+                .setActiveCommand(ScoreAssist.getInstance()::networkTablesDrive))
+        .onFalse(ScoreAssist.getInstance().cancelCmd());
   }
 }

@@ -1,5 +1,13 @@
 package frc.robot.util;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
+import frc.robot.Constants;
+import java.util.Map;
+
 /**
  * IMPORTANT NOTE: if you add a new ScoreLoc, you should add an entry to the cmdsMap in ScoreAssist
  * object via the method
@@ -69,6 +77,24 @@ public enum ScoreLoc {
   ScoreLoc(ScoreNode node, ScoreLevel level) {
     this.node = node;
     this.level = level;
+  }
+
+  public Command getScoreCommand() {
+    return Commands.parallel(
+        level.getPrepCommand().get(),
+        Commands.sequence(
+            new SelectCommand<>(
+                Map.of(
+                    DriverStation.Alliance.Red,
+                    AutoBuilder.pathfindToPose(
+                        AllianceFlipUtil.flip(node.getPose()),
+                        Constants.scoreAssistConstraints,
+                        0.0),
+                    DriverStation.Alliance.Blue,
+                    AutoBuilder.pathfindToPose(
+                        node.getPose(), Constants.scoreAssistConstraints, 0.0)),
+                () -> DriverStation.getAlliance().get()),
+            level.getScoreCommand().get()));
   }
 
   public static boolean checkNTValid(String ntloc) {
@@ -261,9 +287,9 @@ public enum ScoreLoc {
     }
   }
 
-  public static ScoreLoc fromNodeAndLevel(ScoreNode closestLoc, ScoreLevel level2) {
+  public static ScoreLoc fromNodeAndLevel(ScoreNode node2, ScoreLevel level2) {
     for (ScoreLoc loc : ScoreLoc.values()) {
-      if (loc.node == closestLoc && loc.level == level2) {
+      if (loc.node == node2 && loc.level == level2) {
         return loc;
       }
     }
