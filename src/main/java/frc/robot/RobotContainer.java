@@ -50,6 +50,7 @@ import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers1xSim;
+import frc.robot.subsystems.rollers.Rollers1xSpark;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.AllianceFlipUtil;
@@ -85,9 +86,9 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        elevator = new Elevator(new ElevatorIOSim()); // TODO: once we have HW, use the HW
-        pivotThing = new Pivot(new PivotIOSim()); // TODO: once we have HW, use the HW
-        rollers = new Rollers(new Rollers1xSim()); // TODO: once we have HW, use the HW
+        // elevator = new Elevator(new ElevatorIOSim()); // TODO: once we have HW, use the HW
+        // pivotThing = new Pivot(new PivotIOSim()); // TODO: once we have HW, use the HW
+        rollers = new Rollers(new Rollers1xSpark()); // TODO: once we have HW, use the HW
         break;
 
       case SIM:
@@ -280,6 +281,11 @@ public class RobotContainer {
                 PivotCmds.setAngle(0),
                 RollerCmds.setTubeSpeed(4000)));
 
+    driver
+        .leftBumper()
+        .whileTrue(RollerCmds.setAlgaeSpeed(1000))
+        .whileFalse(RollerCmds.setAlgaeSpeed(0));
+
     // Heading controller
     driver
         .povUp()
@@ -365,11 +371,11 @@ public class RobotContainer {
                     () -> -driver.getRightX()),
                 "Full Control"));
 
-    ScoreAssist.getInstance()
-        .getTrigger()
-        .onTrue(
-            ScoreAssist.getInstance()
-                .setActiveCommand(ScoreAssist.getInstance()::networkTablesDrive))
-        .onFalse(ScoreAssist.getInstance().cancelCmd());
+    // ScoreAssist.getInstance()
+    //     .getTrigger()
+    //     .onTrue(
+    //         ScoreAssist.getInstance()
+    //             .setActiveCommand(ScoreAssist.getInstance()::networkTablesDrive))
+    //     .onFalse(ScoreAssist.getInstance().cancelCmd());
   }
 }

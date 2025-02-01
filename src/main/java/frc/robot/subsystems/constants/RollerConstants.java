@@ -6,7 +6,7 @@ import frc.robot.util.ControlGains;
 
 public class RollerConstants {
   public static final int kCoralCANId = 101; // unitless
-  public static final int kAlgaeCANId = 102; // unitless
+  public static final int kAlgaeCANId = 25; // unitless
 
   public static final double kAlgaeMOI = 0.001;
   public static final double kAlgaeGearing = 1;
@@ -15,7 +15,7 @@ public class RollerConstants {
 
   // values from Rev velocity control examples
   public static final ControlGains CORALPID = new ControlGains().p(1).d(0.1); // unitless
-  public static final ControlGains ALGAEPID = new ControlGains().p(1).d(0.1); // unitless
+  public static final ControlGains ALGAEPID = new ControlGains().p(0.01).d(0); // unitless
 
   public static final double kCoralAcceptablePositionError = 1000; // rotations
   public static final double kCoralMaxVelocity = 6000; // rpm
@@ -43,7 +43,7 @@ public class RollerConstants {
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
     config.closedLoop.maxMotion.maxVelocity(kAlgaeMaxVelocity);
     config.closedLoop.maxMotion.maxAcceleration(kAlgaeMaxAcceleration);
-    CORALPID.applyPID(config.closedLoop);
+    ALGAEPID.applyPID(config.closedLoop);
 
     return config;
   }

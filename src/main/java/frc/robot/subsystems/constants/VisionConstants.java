@@ -26,7 +26,7 @@ public class VisionConstants {
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS =
       new PoseEstimatorErrorStDevs(0.2, Units.degreesToRadians(99999));
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS =
-      new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(0.06));
+      new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(99999));
 
   public static final boolean ENABLE_MEGATAG2 = true;
 }

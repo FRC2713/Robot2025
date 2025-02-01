@@ -58,7 +58,7 @@ public class Vision extends SubsystemBase {
       Logger.recordOutput("Vision/Adding Measurement", true);
       Logger.recordOutput("Vision/Reasoning", "All good!");
       RobotContainer.driveSubsystem.addVisionMeasurement(
-          pose2d, rawTime, VisionConstants.POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS.toMatrix());
+          pose2d, rawTime, VisionConstants.POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS.toMatrix());
       return;
     }
 
