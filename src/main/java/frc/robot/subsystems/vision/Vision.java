@@ -10,6 +10,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.VisionConstants;
+import lombok.Getter;
+import lombok.Setter;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -17,6 +19,7 @@ public class Vision extends SubsystemBase {
   private NetworkTable table;
   private Pose3d pose;
   private Pose2d pose2d;
+  @Setter @Getter private boolean allowJumps = true;
 
   public Vision() {
     inst = NetworkTableInstance.getDefault();
@@ -47,6 +50,8 @@ public class Vision extends SubsystemBase {
 
     var timeDiff = Logger.getTimestamp() - rawTime;
     Logger.recordOutput("Vision/timeDiff", timeDiff);
+    var time = rawTime / 1e6;
+    Logger.recordOutput("Vision/timeLeaveSec", time);
 
     if (timeDiff > (0.5 * 1e6)) {
       Logger.recordOutput("Vision/Adding Measurement", false);
@@ -54,11 +59,22 @@ public class Vision extends SubsystemBase {
       return;
     }
 
+    // Jump protection
+    if (pose2d
+                .getTranslation()
+                .getDistance(RobotContainer.driveSubsystem.getPose().getTranslation())
+            > 2
+        && !allowJumps) {
+      Logger.recordOutput("Vision/Adding Measurement", false);
+      Logger.recordOutput("Vision/Reasoning", "Jump protection");
+      return;
+    }
+
     if (pose2d.getTranslation().getX() != 0.0 || pose2d.getTranslation().getY() != 0.0) {
       Logger.recordOutput("Vision/Adding Measurement", true);
       Logger.recordOutput("Vision/Reasoning", "All good!");
       RobotContainer.driveSubsystem.addVisionMeasurement(
-          pose2d, rawTime, VisionConstants.POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS.toMatrix());
+          pose2d, time, VisionConstants.POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS.toMatrix());
       return;
     }
 

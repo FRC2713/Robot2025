@@ -86,8 +86,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        // elevator = new Elevator(new ElevatorIOSim()); // TODO: once we have HW, use the HW
-        // pivotThing = new Pivot(new PivotIOSim()); // TODO: once we have HW, use the HW
+        elevator = new Elevator(new ElevatorIO() {}); // TODO: once we have HW, use the HW
+        pivotThing = new Pivot(new PivotIO() {}); // TODO: once we have HW, use the HW
         rollers = new Rollers(new Rollers1xSpark()); // TODO: once we have HW, use the HW
         break;
 
@@ -240,7 +240,8 @@ public class RobotContainer {
                     () ->
                         driveSubsystem.setPose(
                             new Pose2d(
-                                driveSubsystem.getPose().getTranslation(), new Rotation2d())),
+                                driveSubsystem.getPose().getTranslation(),
+                                Rotation2d.fromDegrees(90))),
                     driveSubsystem)
                 .ignoringDisable(true));
 
@@ -253,7 +254,7 @@ public class RobotContainer {
                         driveSubsystem.setPose(
                             new Pose2d(
                                 driveSubsystem.getPose().getTranslation(),
-                                Rotation2d.fromDegrees(180))),
+                                Rotation2d.fromDegrees(270))),
                     driveSubsystem)
                 .ignoringDisable(true));
 
