@@ -59,7 +59,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   // Subsystems
-  public final Drivetrain driveSubsystem;
+  public static Drivetrain driveSubsystem;
   public static Elevator elevator;
   public static Pivot pivotThing;
   public static Rollers rollers;
