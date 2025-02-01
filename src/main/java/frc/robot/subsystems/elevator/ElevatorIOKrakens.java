@@ -7,70 +7,94 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.spark.SparkBase.ControlType;
-
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.util.PhoenixUtil;
 
 public class ElevatorIOKrakens implements ElevatorIO {
-    private final TalonFX left;
-    private final TalonFX right;
+  private final TalonFX left;
+  private final TalonFX right;
 
-    private final PositionVoltage positionVoltageRequest = new PositionVoltage(0.0);
-    private final VelocityVoltage velocityVoltageRequest = new VelocityVoltage(0.0);
+  private final PositionVoltage positionVoltageRequest = new PositionVoltage(0.0);
+  private final VelocityVoltage velocityVoltageRequest = new VelocityVoltage(0.0);
 
-    private final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0.0);
+  private final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0.0);
 
-    private TalonFXConfiguration configLeft;
-    private TalonFXConfiguration configRight;
+  // Both configLeft and configRight are actually used, VSCode doesn't think so
+  // for some reason
+  @SuppressWarnings("unused")
+  private TalonFXConfiguration configLeft;
 
-    public double lastHeight = ElevatorConstants.kInitialHeight;
+  @SuppressWarnings("unused")
+  private TalonFXConfiguration configRight;
 
-    public ElevatorIOKrakens(TalonFXConfiguration configLeft, TalonFXConfiguration configRight) {
-        this.configLeft = configLeft;
-        this.configRight = configRight;
-        left = new TalonFX(ElevatorConstants.kLeftCANId);
-        right = new TalonFX(ElevatorConstants.kLeftCANId);
-        
-        var leftConfig = configLeft;
-        leftConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        leftConfig.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearReduction;
-        leftConfig.TorqueCurrent.PeakForwardTorqueCurrent = ElevatorConstants.kMaxCurrentLimit;
-        leftConfig.TorqueCurrent.PeakReverseTorqueCurrent = -ElevatorConstants.kMaxCurrentLimit;
-        //change this
-        leftConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kMaxCurrentLimit;
-        leftConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        leftConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        PhoenixUtil.tryUntilOk(5, () -> left.getConfigurator().apply(leftConfig, 0.25));
-        PhoenixUtil.tryUntilOk(5, () -> left.setPosition(ElevatorConstants.kInitialHeight, 0.25));
+  public double lastHeight = ElevatorConstants.kInitialHeight;
 
-        var rightConfig = configRight;
-        rightConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        rightConfig.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearReduction;
-        rightConfig.TorqueCurrent.PeakForwardTorqueCurrent = ElevatorConstants.kMaxCurrentLimit;
-        rightConfig.TorqueCurrent.PeakReverseTorqueCurrent = -ElevatorConstants.kMaxCurrentLimit;
-        //change this
-        rightConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kMaxCurrentLimit;
-        rightConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        rightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        PhoenixUtil.tryUntilOk(5, () -> right.getConfigurator().apply(rightConfig, 0.25));
-        PhoenixUtil.tryUntilOk(5, () -> right.setPosition(ElevatorConstants.kInitialHeight, 0.25));
+  public ElevatorIOKrakens(TalonFXConfiguration configLeft, TalonFXConfiguration configRight) {
+    this.configLeft = configLeft;
+    this.configRight = configRight;
+    left = new TalonFX(ElevatorConstants.kLeftCANId);
+    right = new TalonFX(ElevatorConstants.kLeftCANId);
 
-    }
-    private double getAvgPosition() {
-        return (left.getPosition().getValueAsDouble() + right.getPosition().getValueAsDouble()) / 2.0;
-    }
-    public void setVoltage(double volts1, double volts2) {
-        left.setVoltage(volts1);
-        right.setVoltage(volts2);
-    }
-    public void setTargetHeight(double height) {
-        left.setControl(positionRequest.withPosition(height));
-        right.setControl(positionRequest.withPosition(height));
-        lastHeight = height;
-    }
-    public boolean isAtTarget() {
-        return Math.abs(Units.metersToInches(getAvgPosition()) - lastHeight) <= 1;
-    }
+    var leftConfig = configLeft;
+    leftConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    leftConfig.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearReduction;
+    leftConfig.TorqueCurrent.PeakForwardTorqueCurrent = ElevatorConstants.kMaxCurrentLimit;
+    leftConfig.TorqueCurrent.PeakReverseTorqueCurrent = -ElevatorConstants.kMaxCurrentLimit;
+    // change this
+    leftConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kMaxCurrentLimit;
+    leftConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    leftConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    PhoenixUtil.tryUntilOk(5, () -> left.getConfigurator().apply(leftConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> left.setPosition(ElevatorConstants.kInitialHeight, 0.25));
+
+    var rightConfig = configRight;
+    rightConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    rightConfig.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearReduction;
+    rightConfig.TorqueCurrent.PeakForwardTorqueCurrent = ElevatorConstants.kMaxCurrentLimit;
+    rightConfig.TorqueCurrent.PeakReverseTorqueCurrent = -ElevatorConstants.kMaxCurrentLimit;
+    // change this
+    rightConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kMaxCurrentLimit;
+    rightConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    rightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    PhoenixUtil.tryUntilOk(5, () -> right.getConfigurator().apply(rightConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> right.setPosition(ElevatorConstants.kInitialHeight, 0.25));
+  }
+
+  private double getAvgPosition() {
+    return (left.getPosition().getValueAsDouble() + right.getPosition().getValueAsDouble()) / 2.0;
+  }
+
+  public void setVoltage(double volts1, double volts2) {
+    left.setVoltage(volts1);
+    right.setVoltage(volts2);
+  }
+
+  public void setTargetHeight(double height) {
+    left.setControl(positionRequest.withPosition(height));
+    right.setControl(positionRequest.withPosition(height));
+    lastHeight = height;
+  }
+
+  public boolean isAtTarget() {
+    return Math.abs(Units.metersToInches(getAvgPosition()) - lastHeight) <= 1;
+  }
+
+  public void updateInputs(ElevatorInputs inputs) {
+    inputs.outputVoltageRight = right.getMotorVoltage().getValueAsDouble();
+    inputs.heightInchesRight =
+        right.getPosition().getValueAsDouble() * ElevatorConstants.kRotationsToHeightConversion;
+    inputs.velocityInchesPerSecondRight =
+        right.getVelocity().getValueAsDouble() * ElevatorConstants.kRotationsToHeightConversion;
+    inputs.tempCelsiusRight = 0.0;
+    inputs.currentDrawAmpsRight = Math.abs(right.getTorqueCurrent().getValueAsDouble());
+
+    inputs.outputVoltageLeft = left.getMotorVoltage().getValueAsDouble();
+    inputs.heightInchesLeft =
+        left.getPosition().getValueAsDouble() * ElevatorConstants.kRotationsToHeightConversion;
+    inputs.velocityInchesPerSecondLeft =
+        left.getVelocity().getValueAsDouble() * ElevatorConstants.kRotationsToHeightConversion;
+    inputs.tempCelsiusLeft = 0.0;
+    inputs.currentDrawAmpsLeft = Math.abs(left.getTorqueCurrent().getValueAsDouble());
+  }
 }
