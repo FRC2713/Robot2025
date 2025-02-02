@@ -76,7 +76,6 @@ public class RobotContainer {
 
   public RobotContainer() {
     // Start subsystems
-    visionsubsystem = new Vision();
     switch (Constants.currentMode) {
       case REAL:
         driveSubsystem =
@@ -118,6 +117,7 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIO() {});
         break;
     }
+    visionsubsystem = new Vision();
 
     // PathPlanner Config
     AutoBuilder.configure(

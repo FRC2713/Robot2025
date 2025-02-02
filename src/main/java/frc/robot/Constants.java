@@ -46,4 +46,9 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  public class FieldConstants {
+    public static final double fieldWidth = Units.feetToMeters(26.0) + Units.inchesToMeters(5.0);
+    public static final double fieldLength = Units.feetToMeters(57.0) + Units.inchesToMeters(6.875);
+  }
 }

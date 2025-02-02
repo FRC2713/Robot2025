@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.VisionConstants;
 import lombok.Getter;
@@ -19,11 +20,13 @@ public class Vision extends SubsystemBase {
   private NetworkTable table;
   private Pose3d pose;
   private Pose2d pose2d;
-  @Setter @Getter private boolean allowJumps = true;
+  @Setter @Getter private boolean allowJumps = false;
 
+  // IMPORTANT: Vision must be initialized after the drive subsystem
   public Vision() {
     inst = NetworkTableInstance.getDefault();
     table = inst.getTable("slamdunk");
+    RobotContainer.driveSubsystem.resetOdometry(new Pose2d());
   }
 
   @Override
@@ -67,6 +70,14 @@ public class Vision extends SubsystemBase {
         && !allowJumps) {
       Logger.recordOutput("Vision/Adding Measurement", false);
       Logger.recordOutput("Vision/Reasoning", "Jump protection");
+      return;
+    }
+
+    // If out of field
+    if (pose2d.getTranslation().getX() > FieldConstants.fieldLength
+        || pose2d.getTranslation().getY() > FieldConstants.fieldWidth) {
+      Logger.recordOutput("Vision/Adding Measurement", false);
+      Logger.recordOutput("Vision/Reasoning", "Out of field");
       return;
     }
 
