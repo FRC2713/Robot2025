@@ -31,6 +31,9 @@ public class ElevatorIOKrakens implements ElevatorIO {
     left = new TalonFX(ElevatorConstants.kLeftCANId);
     right = new TalonFX(ElevatorConstants.kLeftCANId);
 
+    configLeft = ElevatorConstants.createLeftKrakenConfig();
+    configRight = ElevatorConstants.createRightKrakenConfig();
+
     var leftConfig = configLeft;
     leftConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     leftConfig.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearReduction;
