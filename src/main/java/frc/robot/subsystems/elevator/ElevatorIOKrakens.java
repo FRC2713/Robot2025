@@ -1,9 +1,8 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -15,13 +14,11 @@ public class ElevatorIOKrakens implements ElevatorIO {
   private final TalonFX left;
   private final TalonFX right;
 
-  private final PositionVoltage positionVoltageRequest = new PositionVoltage(0.0);
-  private final VelocityVoltage velocityVoltageRequest = new VelocityVoltage(0.0);
+  private final MotionMagicExpoTorqueCurrentFOC heightRequest = new MotionMagicExpoTorqueCurrentFOC(0);
 
   private final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0.0);
 
-  // Both configLeft and configRight are actually used, VSCode doesn't think so
-  // for some reason
+  // Both configLeft and configRight are actually used, VSCode doesn't think so for some reason
   @SuppressWarnings("unused")
   private TalonFXConfiguration configLeft;
 
@@ -46,7 +43,7 @@ public class ElevatorIOKrakens implements ElevatorIO {
     leftConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     leftConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     PhoenixUtil.tryUntilOk(5, () -> left.getConfigurator().apply(leftConfig, 0.25));
-    PhoenixUtil.tryUntilOk(5, () -> left.setPosition(ElevatorConstants.kInitialHeight, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> left.setPosition(ElevatorConstants.kInitialHeight * ElevatorConstants.kRotationsToHeightConversion, 0.25));
 
     var rightConfig = configRight;
     rightConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -58,7 +55,7 @@ public class ElevatorIOKrakens implements ElevatorIO {
     rightConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     rightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     PhoenixUtil.tryUntilOk(5, () -> right.getConfigurator().apply(rightConfig, 0.25));
-    PhoenixUtil.tryUntilOk(5, () -> right.setPosition(ElevatorConstants.kInitialHeight, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> right.setPosition(ElevatorConstants.kInitialHeight * ElevatorConstants.kRotationsToHeightConversion, 0.25));
   }
 
   private double getAvgPosition() {
@@ -73,6 +70,8 @@ public class ElevatorIOKrakens implements ElevatorIO {
   public void setTargetHeight(double height) {
     left.setControl(positionRequest.withPosition(height));
     right.setControl(positionRequest.withPosition(height));
+    left.setControl(heightRequest.withPosition(height));
+    right.setControl(heightRequest.withPosition(height));
     lastHeight = height;
   }
 
