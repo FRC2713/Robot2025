@@ -109,6 +109,7 @@ public class ControlGains {
     configs.MotionMagicCruiseVelocity = this.kMMCruiseVelo;
     configs.MotionMagicExpo_kA = this.kA;
     configs.MotionMagicExpo_kV = this.kV;
+
     return configs;
   }
-} 
+}

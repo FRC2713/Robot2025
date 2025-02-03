@@ -39,6 +39,8 @@ public class ElevatorConstants {
   public static final ControlGains PID = new ControlGains().p(25.0).trapezoidal(10, 10);
   public static final ControlGains FF = new ControlGains().g(0.45).v(0.76);
 
+  public static final ControlGains TalonFF = new ControlGains().s(0.).v(0.).a(0.);
+
   public static final int mech2dWidth = 20;
   public static final Color8Bit mech2dColor = new Color8Bit(255, 255, 0);
 
@@ -79,6 +81,14 @@ public class ElevatorConstants {
     leftConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     leftConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
+    var slot0Config = leftConfig.Slot0;
+    slot0Config.kP = ElevatorConstants.PID.getKP();
+    slot0Config.kI = ElevatorConstants.PID.getKI();
+    slot0Config.kD = ElevatorConstants.PID.getKD();
+    slot0Config.kS = ElevatorConstants.TalonFF.getKS();
+    slot0Config.kV = ElevatorConstants.TalonFF.getKV();
+    slot0Config.kA = ElevatorConstants.TalonFF.getKA();
+
     leftConfig.MotionMagic = motionMagic.createMMConfigs();
     return leftConfig;
   }
@@ -92,6 +102,14 @@ public class ElevatorConstants {
     rightConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kMaxCurrentLimit;
     rightConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     rightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+    var slot0Config = rightConfig.Slot0;
+    slot0Config.kP = ElevatorConstants.PID.getKP();
+    slot0Config.kI = ElevatorConstants.PID.getKI();
+    slot0Config.kD = ElevatorConstants.PID.getKD();
+    slot0Config.kS = ElevatorConstants.TalonFF.getKS();
+    slot0Config.kV = ElevatorConstants.TalonFF.getKV();
+    slot0Config.kA = ElevatorConstants.TalonFF.getKA();
 
     rightConfig.MotionMagic = motionMagic.createMMConfigs();
     return rightConfig;

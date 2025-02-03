@@ -2,7 +2,7 @@ package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
+//import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -16,7 +16,7 @@ public class ElevatorIOKrakens implements ElevatorIO {
 
   private final MotionMagicExpoTorqueCurrentFOC heightRequest = new MotionMagicExpoTorqueCurrentFOC(0);
 
-  private final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0.0);
+  //private final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0.0);
 
   // Both configLeft and configRight are actually used, VSCode doesn't think so for some reason
   @SuppressWarnings("unused")
@@ -27,9 +27,7 @@ public class ElevatorIOKrakens implements ElevatorIO {
 
   public double lastHeight = ElevatorConstants.kInitialHeight;
 
-  public ElevatorIOKrakens(TalonFXConfiguration configLeft, TalonFXConfiguration configRight) {
-    this.configLeft = configLeft;
-    this.configRight = configRight;
+  public ElevatorIOKrakens() {
     left = new TalonFX(ElevatorConstants.kLeftCANId);
     right = new TalonFX(ElevatorConstants.kLeftCANId);
 
@@ -68,10 +66,8 @@ public class ElevatorIOKrakens implements ElevatorIO {
   }
 
   public void setTargetHeight(double height) {
-    left.setControl(positionRequest.withPosition(height));
-    right.setControl(positionRequest.withPosition(height));
-    left.setControl(heightRequest.withPosition(height));
-    right.setControl(heightRequest.withPosition(height));
+    left.setControl(heightRequest.withPosition(height / ElevatorConstants.kRotationsToHeightConversion).withFeedForward(ElevatorConstants.FF.getKG()));
+    right.setControl(heightRequest.withPosition(height / ElevatorConstants.kRotationsToHeightConversion).withFeedForward(ElevatorConstants.FF.getKG()));
     lastHeight = height;
   }
 

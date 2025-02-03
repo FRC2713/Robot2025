@@ -44,6 +44,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
@@ -85,7 +86,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        elevator = new Elevator(new ElevatorIOSim()); // TODO: once we have HW, use the HW
+        elevator = new Elevator(new ElevatorIOKrakens());
         pivotThing = new Pivot(new PivotIOSim()); // TODO: once we have HW, use the HW
         rollers = new Rollers(new Rollers1xSim()); // TODO: once we have HW, use the HW
         break;
