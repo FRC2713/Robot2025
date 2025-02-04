@@ -286,6 +286,28 @@ public class RobotContainer {
         .whileTrue(RollerCmds.setAlgaeSpeed(1000))
         .whileFalse(RollerCmds.setAlgaeSpeed(0));
 
+    // Slow-Mode
+    driver
+        .rightBumper()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY() * 0.3,
+                    () -> -driver.getLeftX() * 0.3,
+                    () -> -driver.getRightX() * 0.3),
+                "Slow-Mode"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
+
     // Heading controller
     driver
         .povUp()
