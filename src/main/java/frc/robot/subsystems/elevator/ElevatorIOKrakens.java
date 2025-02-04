@@ -13,10 +13,6 @@ public class ElevatorIOKrakens implements ElevatorIO {
 
   private final MotionMagicExpoTorqueCurrentFOC heightRequest = new MotionMagicExpoTorqueCurrentFOC(0);
 
-  //private final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0.0);
-
-  // Both configLeft and configRight are actually used, VSCode doesn't think so for some reason
-
   public double lastHeight = ElevatorConstants.kInitialHeight;
 
   public ElevatorIOKrakens() {
