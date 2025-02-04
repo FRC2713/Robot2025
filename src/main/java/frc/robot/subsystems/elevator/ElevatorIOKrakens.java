@@ -1,11 +1,8 @@
 package frc.robot.subsystems.elevator;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 //import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.util.PhoenixUtil;
@@ -19,11 +16,6 @@ public class ElevatorIOKrakens implements ElevatorIO {
   //private final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0.0);
 
   // Both configLeft and configRight are actually used, VSCode doesn't think so for some reason
-  @SuppressWarnings("unused")
-  private TalonFXConfiguration configLeft;
-
-  @SuppressWarnings("unused")
-  private TalonFXConfiguration configRight;
 
   public double lastHeight = ElevatorConstants.kInitialHeight;
 
@@ -31,30 +23,11 @@ public class ElevatorIOKrakens implements ElevatorIO {
     left = new TalonFX(ElevatorConstants.kLeftCANId);
     right = new TalonFX(ElevatorConstants.kLeftCANId);
 
-    configLeft = ElevatorConstants.createLeftKrakenConfig();
-    configRight = ElevatorConstants.createRightKrakenConfig();
-
-    var leftConfig = configLeft;
-    leftConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    leftConfig.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearReduction;
-    leftConfig.TorqueCurrent.PeakForwardTorqueCurrent = ElevatorConstants.kMaxCurrentLimit;
-    leftConfig.TorqueCurrent.PeakReverseTorqueCurrent = -ElevatorConstants.kMaxCurrentLimit;
-    // change this
-    leftConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kMaxCurrentLimit;
-    leftConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    leftConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    var leftConfig = ElevatorConstants.createKrakenConfig(false);
     PhoenixUtil.tryUntilOk(5, () -> left.getConfigurator().apply(leftConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> left.setPosition(ElevatorConstants.kInitialHeight * ElevatorConstants.kRotationsToHeightConversion, 0.25));
 
-    var rightConfig = configRight;
-    rightConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    rightConfig.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearReduction;
-    rightConfig.TorqueCurrent.PeakForwardTorqueCurrent = ElevatorConstants.kMaxCurrentLimit;
-    rightConfig.TorqueCurrent.PeakReverseTorqueCurrent = -ElevatorConstants.kMaxCurrentLimit;
-    // change this
-    rightConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kMaxCurrentLimit;
-    rightConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    rightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    var rightConfig = ElevatorConstants.createKrakenConfig(true);
     PhoenixUtil.tryUntilOk(5, () -> right.getConfigurator().apply(rightConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> right.setPosition(ElevatorConstants.kInitialHeight * ElevatorConstants.kRotationsToHeightConversion, 0.25));
   }
@@ -69,8 +42,8 @@ public class ElevatorIOKrakens implements ElevatorIO {
   }
 
   public void setTargetHeight(double height) {
-    left.setControl(heightRequest.withPosition(height / ElevatorConstants.kRotationsToHeightConversion).withFeedForward(ElevatorConstants.FF.getKG()));
-    right.setControl(heightRequest.withPosition(height / ElevatorConstants.kRotationsToHeightConversion).withFeedForward(ElevatorConstants.FF.getKG()));
+    left.setControl(heightRequest.withPosition(height / ElevatorConstants.kRotationsToHeightConversion));
+    right.setControl(heightRequest.withPosition(height / ElevatorConstants.kRotationsToHeightConversion));
     lastHeight = height;
   }
 
