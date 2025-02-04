@@ -50,7 +50,6 @@ import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers1xSim;
-import frc.robot.subsystems.rollers.Rollers1xSpark;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.AllianceFlipUtil;
@@ -87,7 +86,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         elevator = new Elevator(new ElevatorIO() {}); // TODO: once we have HW, use the HW
         pivotThing = new Pivot(new PivotIO() {}); // TODO: once we have HW, use the HW
-        rollers = new Rollers(new Rollers1xSpark()); // TODO: once we have HW, use the HW
+        rollers = new Rollers(new RollersIO() {}); // TODO: once we have HW, use the HW
         break;
 
       case SIM:
@@ -241,7 +240,7 @@ public class RobotContainer {
                         driveSubsystem.setPose(
                             new Pose2d(
                                 driveSubsystem.getPose().getTranslation(),
-                                Rotation2d.fromDegrees(90))),
+                                Rotation2d.fromDegrees(0))),
                     driveSubsystem)
                 .ignoringDisable(true));
 
@@ -254,7 +253,7 @@ public class RobotContainer {
                         driveSubsystem.setPose(
                             new Pose2d(
                                 driveSubsystem.getPose().getTranslation(),
-                                Rotation2d.fromDegrees(270))),
+                                Rotation2d.fromDegrees(180))),
                     driveSubsystem)
                 .ignoringDisable(true));
 

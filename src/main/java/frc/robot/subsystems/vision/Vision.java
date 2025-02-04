@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.VisionConstants;
+import frc.robot.util.RHRUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.Logger;
@@ -20,7 +21,8 @@ public class Vision extends SubsystemBase {
   private NetworkTable table;
   private Pose3d pose;
   private Pose2d pose2d;
-  @Setter @Getter private boolean allowJumps = false;
+  @Setter @Getter private boolean allowJumps = true;
+  private double lastTimestamp = -1;
 
   // IMPORTANT: Vision must be initialized after the drive subsystem
   public Vision() {
@@ -56,6 +58,13 @@ public class Vision extends SubsystemBase {
     var time = rawTime / 1e6;
     Logger.recordOutput("Vision/timeLeaveSec", time);
 
+    if (lastTimestamp == time) {
+      Logger.recordOutput("Vision/Adding Measurement", false);
+      Logger.recordOutput("Vision/Reasoning", "No new data");
+      return;
+    }
+    lastTimestamp = time;
+
     if (timeDiff > (0.5 * 1e6)) {
       Logger.recordOutput("Vision/Adding Measurement", false);
       Logger.recordOutput("Vision/Reasoning", "Time difference too large");
@@ -63,11 +72,11 @@ public class Vision extends SubsystemBase {
     }
 
     // Jump protection
-    if (pose2d
+    if ((pose2d
                 .getTranslation()
                 .getDistance(RobotContainer.driveSubsystem.getPose().getTranslation())
-            > 2
-        && !allowJumps) {
+            > VisionConstants.MAX_POSE_JUMP_METERS
+        && !allowJumps)) {
       Logger.recordOutput("Vision/Adding Measurement", false);
       Logger.recordOutput("Vision/Reasoning", "Jump protection");
       return;
@@ -81,8 +90,16 @@ public class Vision extends SubsystemBase {
       return;
     }
 
+    var speed = RHRUtil.speed(RobotContainer.driveSubsystem.getChassisSpeeds().toTwist2d(0.02));
     if (pose2d.getTranslation().getX() != 0.0 || pose2d.getTranslation().getY() != 0.0) {
       Logger.recordOutput("Vision/Adding Measurement", true);
+      Logger.recordOutput("Vision/Speed", speed);
+      if (speed > VisionConstants.MAX_SPEED) {
+        Logger.recordOutput("Vision/Reasoning", "Moving more than max speed");
+        RobotContainer.driveSubsystem.addVisionMeasurement(
+            pose2d, time, VisionConstants.POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS.toMatrix());
+        return;
+      }
       Logger.recordOutput("Vision/Reasoning", "All good!");
       RobotContainer.driveSubsystem.addVisionMeasurement(
           pose2d, time, VisionConstants.POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS.toMatrix());

@@ -7,8 +7,9 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 
 public class VisionConstants {
-  public static double CAMERA_TO_TAG_MAX_DIST_INCHES = 120;
+  // public static double CAMERA_TO_TAG_MAX_DIST_INCHES = 120;
   public static double MAX_POSE_JUMP_METERS = 0.5; // Units.feetToMeters(5);
+  public static double MAX_SPEED = 0.25;
 
   public record PoseEstimatorErrorStDevs(double translationalStDev, double rotationalStDev) {
     public PoseEstimatorErrorStDevs multiplyByRange(double range) {
