@@ -28,7 +28,8 @@ public class PivotConstants {
   // TODO: might need diff controllers for up and down
   public static final ControlGains PID = new ControlGains().p(10).trapezoidal(3.0, 3.0);
 
-  public static final ControlGains motionMagic = new ControlGains().p(42).a(0.01).v(0.01).s(0.01).mmCruiseVelo(0);
+  public static final ControlGains motionMagic =
+      new ControlGains().p(42).a(0.01).v(0.01).s(0.01).mmCruiseVelo(0);
   public static final ControlGains TalonFF = new ControlGains().s(0.).v(0.).a(0.);
 
   public static final double kAbsoluteEncoderOffset = 118.7;
@@ -50,6 +51,7 @@ public class PivotConstants {
 
     return config;
   }
+
   public static TalonFXConfiguration createKrakenConfig() {
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -58,7 +60,10 @@ public class PivotConstants {
     config.TorqueCurrent.PeakReverseTorqueCurrent = -PivotConstants.kStallCurrentLimit;
     config.CurrentLimits.StatorCurrentLimit = PivotConstants.kStatorCurrentLimit;
     config.CurrentLimits.StatorCurrentLimitEnable = true;
-    config.MotorOutput.Inverted = (PivotConstants.kInverted) ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
+    config.MotorOutput.Inverted =
+        (PivotConstants.kInverted)
+            ? InvertedValue.CounterClockwise_Positive
+            : InvertedValue.Clockwise_Positive;
 
     var slot0Config = config.Slot0;
     slot0Config.kP = PivotConstants.PID.getKP();

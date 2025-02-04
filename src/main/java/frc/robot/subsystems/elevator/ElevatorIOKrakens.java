@@ -1,7 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
-//import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
+// import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.ElevatorConstants;
@@ -11,7 +11,8 @@ public class ElevatorIOKrakens implements ElevatorIO {
   private final TalonFX left;
   private final TalonFX right;
 
-  private final MotionMagicExpoTorqueCurrentFOC heightRequest = new MotionMagicExpoTorqueCurrentFOC(0);
+  private final MotionMagicExpoTorqueCurrentFOC heightRequest =
+      new MotionMagicExpoTorqueCurrentFOC(0);
 
   public double lastHeight = ElevatorConstants.kInitialHeight;
 
@@ -21,11 +22,21 @@ public class ElevatorIOKrakens implements ElevatorIO {
 
     var leftConfig = ElevatorConstants.createKrakenConfig(false);
     PhoenixUtil.tryUntilOk(5, () -> left.getConfigurator().apply(leftConfig, 0.25));
-    PhoenixUtil.tryUntilOk(5, () -> left.setPosition(ElevatorConstants.kInitialHeight * ElevatorConstants.kRotationsToHeightConversion, 0.25));
+    PhoenixUtil.tryUntilOk(
+        5,
+        () ->
+            left.setPosition(
+                ElevatorConstants.kInitialHeight * ElevatorConstants.kRotationsToHeightConversion,
+                0.25));
 
     var rightConfig = ElevatorConstants.createKrakenConfig(true);
     PhoenixUtil.tryUntilOk(5, () -> right.getConfigurator().apply(rightConfig, 0.25));
-    PhoenixUtil.tryUntilOk(5, () -> right.setPosition(ElevatorConstants.kInitialHeight * ElevatorConstants.kRotationsToHeightConversion, 0.25));
+    PhoenixUtil.tryUntilOk(
+        5,
+        () ->
+            right.setPosition(
+                ElevatorConstants.kInitialHeight * ElevatorConstants.kRotationsToHeightConversion,
+                0.25));
   }
 
   private double getAvgPosition() {
@@ -38,8 +49,10 @@ public class ElevatorIOKrakens implements ElevatorIO {
   }
 
   public void setTargetHeight(double height) {
-    left.setControl(heightRequest.withPosition(height / ElevatorConstants.kRotationsToHeightConversion));
-    right.setControl(heightRequest.withPosition(height / ElevatorConstants.kRotationsToHeightConversion));
+    left.setControl(
+        heightRequest.withPosition(height / ElevatorConstants.kRotationsToHeightConversion));
+    right.setControl(
+        heightRequest.withPosition(height / ElevatorConstants.kRotationsToHeightConversion));
     lastHeight = height;
   }
 
