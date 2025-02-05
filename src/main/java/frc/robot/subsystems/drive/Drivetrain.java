@@ -98,6 +98,9 @@ public class Drivetrain extends SubsystemBase {
               VisionConstants.POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS.translationalStDev(),
               VisionConstants.POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS.rotationalStDev()));
 
+  private SwerveDrivePoseEstimator odometryPoseEstimator =
+      new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+
   public Drivetrain(
       GyroIO gyroIO,
       ModuleIO flModuleIO,
@@ -178,6 +181,7 @@ public class Drivetrain extends SubsystemBase {
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+      odometryPoseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
 
     // Update gyro alert
@@ -367,6 +371,12 @@ public class Drivetrain extends SubsystemBase {
     return poseEstimator.getEstimatedPosition();
   }
 
+  /** Returns the current Wheel-Based estimated pose. */
+  @AutoLogOutput(key = "Odometry/WheelBased")
+  public Pose2d getWheelBasedPose() {
+    return odometryPoseEstimator.getEstimatedPosition();
+  }
+
   /** Returns the current odometry rotation. */
   public Rotation2d getRotation() {
     return getPose().getRotation();
@@ -375,6 +385,7 @@ public class Drivetrain extends SubsystemBase {
   /** Resets the current odometry pose. */
   public void setPose(Pose2d pose) {
     poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+    odometryPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
   }
 
   /** Returns the maximum linear speed in meters per sec. */

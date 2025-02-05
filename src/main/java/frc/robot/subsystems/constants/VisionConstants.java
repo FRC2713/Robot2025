@@ -30,4 +30,5 @@ public class VisionConstants {
       new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(99999));
 
   public static final boolean ENABLE_MEGATAG2 = true;
+  public static final double MAX_TIME_DIFFERENCE = 0.5;
 }
