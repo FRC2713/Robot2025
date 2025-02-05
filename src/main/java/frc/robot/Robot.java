@@ -91,7 +91,7 @@ public class Robot extends LoggedRobot {
         mech2d
             .getRoot("root", 1.5, 0)
             .append(RobotContainer.elevator.mech2d)
-            .append(RobotContainer.pivotThing.mech2d);
+            .append(RobotContainer.pivot.mech2d);
     mech2d_pre_rollers.append(RobotContainer.rollers.mech2dAlgae);
     mech2d_pre_rollers.append(RobotContainer.rollers.mech2dTube);
     SmartDashboard.putData("Mech2d", mech2d);
@@ -114,9 +114,9 @@ public class Robot extends LoggedRobot {
     Threads.setCurrentThreadPriority(false, 10);
 
     // update the Mech2d's
-    // RobotContainer.elevator.updateMech2D();
-    // RobotContainer.pivotThing.updateMech2D();
-    // RobotContainer.rollers.updateMech2D();
+    RobotContainer.elevator.updateMech2D();
+    RobotContainer.pivot.updateMech2D();
+    RobotContainer.rollers.updateMech2D();
   }
 
   /** This function is called once when the robot is disabled. */

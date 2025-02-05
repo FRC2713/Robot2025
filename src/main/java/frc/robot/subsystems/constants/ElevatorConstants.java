@@ -7,6 +7,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.util.ControlGains;
 import frc.robot.util.LoggedTunablePID;
+import frc.robot.util.RHRUtil;
 
 public class ElevatorConstants {
   public static final int kLeftCANId = 61;
@@ -31,11 +32,11 @@ public class ElevatorConstants {
   public static final double kMaxHeight = 52.5;
   public static final double kInitialHeight = 0.0;
 
-  public static final double kP = 0.1;
+  public static final double kP = RHRUtil.modeDependentDouble(0., 0.1);
   public static final double kI = 0.0;
-  public static final double kD = 0.0;
+  public static final double kD = RHRUtil.modeDependentDouble(0, 0.01);
 
-  public static final double kG = 0.0785;
+  public static final double kG = RHRUtil.modeDependentDouble(0, 0.0785);
   public static final double kV = 0.0;
   public static final double kA = 0.0;
 
@@ -63,24 +64,24 @@ public class ElevatorConstants {
   public static final Color8Bit mech2dColor = new Color8Bit(255, 255, 0);
 
   public static TalonFXConfiguration createKrakenConfig(boolean inverted) {
-    var talonFXConfigs = new TalonFXConfiguration();
+    var config = new TalonFXConfiguration();
 
-    talonFXConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    talonFXConfigs.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearReduction;
-    talonFXConfigs.TorqueCurrent.PeakForwardTorqueCurrent = ElevatorConstants.kMaxCurrentLimit;
-    talonFXConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -ElevatorConstants.kMaxCurrentLimit;
-    talonFXConfigs.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kMaxCurrentLimit;
-    talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-    talonFXConfigs.MotorOutput.Inverted =
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    config.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearReduction;
+    config.TorqueCurrent.PeakForwardTorqueCurrent = ElevatorConstants.kMaxCurrentLimit;
+    config.TorqueCurrent.PeakReverseTorqueCurrent = -ElevatorConstants.kMaxCurrentLimit;
+    config.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kMaxCurrentLimit;
+    config.CurrentLimits.StatorCurrentLimitEnable = true;
+    config.MotorOutput.Inverted =
         (inverted) ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
 
     // set slot 0 gains
-    talonFXConfigs.Slot0 = PID.toTaloxFX();
+    config.Slot0 = PID.toTalonFX();
 
     // set Motion Magic settings
-    talonFXConfigs.MotionMagic = PID.toMotionMagic();
+    config.MotionMagic = PID.toMotionMagic();
 
-    return talonFXConfigs;
+    return config;
   }
 
   public static final double AT_TARGET_GIVE_INCHES = 1.0;

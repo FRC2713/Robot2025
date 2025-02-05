@@ -62,7 +62,7 @@ public class RobotContainer {
   // Subsystems
   public static Drivetrain driveSubsystem;
   public static Elevator elevator;
-  public static Pivot pivotThing;
+  public static Pivot pivot;
   public static Rollers rollers;
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
@@ -85,8 +85,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        elevator = new Elevator(new ElevatorIOKrakens() {}); // TODO: once we have HW, use the HW
-        pivotThing = new Pivot(new PivotIO() {}); // TODO: once we have HW, use the HW
+        elevator = new Elevator(new ElevatorIOKrakens() {});
+        pivot = new Pivot(new PivotIO() {}); // TODO: once we have HW, use the HW
         rollers = new Rollers(new RollersIO() {}); // TODO: once we have HW, use the HW
         break;
 
@@ -98,7 +98,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        pivotThing = new Pivot(new PivotIOSim());
+        pivot = new Pivot(new PivotIOSim());
         elevator = new Elevator(new ElevatorIOSim());
         rollers = new Rollers(new Rollers1xSim());
         break;
@@ -113,7 +113,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         elevator = new Elevator(new ElevatorIO() {});
-        pivotThing = new Pivot(new PivotIO() {});
+        pivot = new Pivot(new PivotIO() {});
         rollers = new Rollers(new RollersIO() {});
         break;
     }
@@ -284,8 +284,8 @@ public class RobotContainer {
 
     driver
         .leftBumper()
-        .whileTrue(ElevatorCmds.setHeightCmd(5))
-        .whileFalse(ElevatorCmds.setHeightCmd(0));
+        .whileTrue(Commands.sequence(ElevatorCmds.setHeightCmd(50), PivotCmds.setAngle(60)))
+        .whileFalse(Commands.sequence(ElevatorCmds.setHeightCmd(0), PivotCmds.setAngle(30)));
 
     // Slow-Mode
     driver

@@ -1,47 +1,65 @@
 package frc.robot.subsystems.pivot;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import frc.robot.Constants;
 import frc.robot.subsystems.constants.PivotConstants;
+import frc.robot.util.LoggedTunablePID;
 
 public class PivotIOSim implements PivotIO {
 
   private static final SingleJointedArmSim sim =
       new SingleJointedArmSim(
-          DCMotor.getNEO(2),
+          DCMotor.getKrakenX60Foc(1),
           PivotConstants.kGearing,
           SingleJointedArmSim.estimateMOI(PivotConstants.kLength, PivotConstants.kMass),
           PivotConstants.kLength,
-          PivotConstants.kMinAngle,
-          PivotConstants.kMaxAngle,
+          PivotConstants.kMinAngleRad,
+          PivotConstants.kMaxAngleRad,
           true,
-          PivotConstants.kInitialAngle);
+          PivotConstants.kInitialAngleRad);
 
-  private PIDController controller = PivotConstants.PID.createPIDController();
-  private double targetAngleDeg;
+  private PIDController pid = PivotConstants.PID.createPIDController();
 
+  public PivotIOSim() {
+    pid.enableContinuousInput(0, 2 * Math.PI);
+  }
+
+  private ArmFeedforward feedforward = PivotConstants.PID.createArmFF();
+  private double targetAngleDeg = Units.radiansToDegrees(PivotConstants.kInitialAngleRad);
+
+  @Override
   public void updateInputs(PivotInputs inputs) {
-    double pidOutput =
-        controller.calculate(sim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
-    sim.setInputVoltage(pidOutput);
-    sim.update(Constants.simulationRate);
+    double pidOutput = pid.calculate(sim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
+    double feedforwardOutput =
+        feedforward.calculate(sim.getAngleRads(), sim.getVelocityRadPerSec());
+    double output = pidOutput + feedforwardOutput;
+
+    sim.setInputVoltage(output);
+    sim.update(0.02);
 
     inputs.angleDegrees = Units.radiansToDegrees(sim.getAngleRads());
     inputs.velocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
-    inputs.voltage = sim.getOutput(0);
-    inputs.isOn = Math.abs(inputs.voltage) > 0.001;
+    inputs.voltage = output;
 
-    inputs.commandedAngle = Units.radiansToDegrees(controller.getSetpoint());
+    inputs.commandedAngleDegs = targetAngleDeg;
   }
 
+  @Override
   public void setVoltage(double volts) {
     sim.setInputVoltage(volts);
   }
 
+  @Override
   public void setTargetAngle(double degrees) {
     this.targetAngleDeg = degrees;
+  }
+
+  @Override
+  public void setPID(LoggedTunablePID pid) {
+    this.pid = pid.createPIDController();
+    feedforward = pid.createArmFF();
   }
 }

@@ -43,8 +43,8 @@ public class ElevatorIOKrakens implements ElevatorIO {
 
   @Override
   public void setPID(LoggedTunablePID pid) {
-    leftConfig.Slot0 = pid.toTaloxFX();
-    rightConfig.Slot0 = pid.toTaloxFX();
+    leftConfig.Slot0 = pid.toTalonFX();
+    rightConfig.Slot0 = pid.toTalonFX();
 
     leftConfig.MotionMagic = pid.toMotionMagic();
     rightConfig.MotionMagic = pid.toMotionMagic();

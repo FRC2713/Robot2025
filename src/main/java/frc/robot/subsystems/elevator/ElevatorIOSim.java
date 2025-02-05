@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -11,9 +12,8 @@ import frc.robot.util.LoggedTunablePID;
 public class ElevatorIOSim implements ElevatorIO {
   private final DCMotor motor = DCMotor.getKrakenX60Foc(2);
 
-  private ProfiledPIDController pid =
-      ElevatorConstants.PID.createTrapezoidalPIDController(
-          ElevatorConstants.KTrapezoidalMaxVelocity, ElevatorConstants.KTrapezoidalMaxAcceleration);
+  private PIDController pid =
+      ElevatorConstants.PID.createPIDController();
   private ElevatorFeedforward feedforward = ElevatorConstants.PID.createElevatorFF();
   private final ElevatorSim sim =
       new ElevatorSim(
@@ -25,12 +25,12 @@ public class ElevatorIOSim implements ElevatorIO {
           ElevatorConstants.kMaxHeight,
           true,
           ElevatorConstants.kInitialHeight);
-  public double lastHeight = 0.0;
+  public double setpoint = 0.0;
 
   @Override
   public void updateInputs(ElevatorInputs inputs) {
-    double pidOutput = pid.calculate(Units.metersToInches(sim.getPositionMeters()));
-    double feedforwardOutput = feedforward.calculate(pid.getSetpoint().velocity);
+    double pidOutput = pid.calculate(Units.metersToInches(sim.getPositionMeters()), setpoint);
+    double feedforwardOutput = feedforward.calculate(pid.getSetpoint());
 
     double input = pidOutput + feedforwardOutput;
 
@@ -49,21 +49,18 @@ public class ElevatorIOSim implements ElevatorIO {
     inputs.tempCelsiusRight = 0.0;
     inputs.currentDrawAmpsRight = sim.getCurrentDrawAmps();
 
-    inputs.commandedHeightInches = lastHeight;
+    inputs.commandedHeightInches = setpoint;
   }
 
   @Override
   public void setTargetHeight(double heightInches) {
-    pid.setGoal(heightInches);
-    lastHeight = heightInches;
+    setpoint = heightInches;
   }
 
   @Override
   public void setPID(LoggedTunablePID pid) {
     this.pid =
-        pid.createTrapezoidalPIDController(
-            ElevatorConstants.KTrapezoidalMaxVelocity,
-            ElevatorConstants.KTrapezoidalMaxAcceleration);
+        pid.createPIDController();
     feedforward = pid.createElevatorFF();
   }
 
@@ -73,7 +70,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
   @Override
   public boolean isAtTarget() {
-    return Math.abs(Units.metersToInches(sim.getPositionMeters()) - lastHeight)
+    return Math.abs(Units.metersToInches(sim.getPositionMeters()) - setpoint)
         <= ElevatorConstants.AT_TARGET_GIVE_INCHES;
   }
 }

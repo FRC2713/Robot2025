@@ -2,7 +2,10 @@ package frc.robot.util;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.signals.GravityTypeValue;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants;
@@ -86,9 +89,14 @@ public class LoggedTunablePID {
   }
 
   // IMPORTANT: Further settings (e.g. gravity type) may need to be added to Slot0Configs
-  public Slot0Configs toTaloxFX() {
+  public Slot0Configs toTalonFX() {
+    return toTalonFX(GravityTypeValue.Elevator_Static);
+  }
+
+  public Slot0Configs toTalonFX(GravityTypeValue gravityType) {
     var slot0Configs = new Slot0Configs();
 
+    slot0Configs.GravityType = gravityType;
     slot0Configs.kP = getKP();
     slot0Configs.kI = getKI();
     slot0Configs.kD = getKD();
@@ -118,6 +126,14 @@ public class LoggedTunablePID {
         this.getKI(),
         this.getKD(),
         new TrapezoidProfile.Constraints(KTrapezoidalMaxVelocity, getKTrapezoidalMaxAcceleration));
+  }
+
+  public PIDController createPIDController() {
+    return new PIDController(this.getKP(), this.getKI(), this.getKD());
+  }
+
+  public ArmFeedforward createArmFF() {
+    return new ArmFeedforward(this.getKS(), this.getKG(), this.getKV(), this.getKA());
   }
 
   public ElevatorFeedforward createElevatorFF() {
