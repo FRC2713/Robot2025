@@ -4,6 +4,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.constants.ElevatorConstants;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
@@ -41,6 +42,7 @@ public class Elevator extends SubsystemBase {
     this.IO.setVoltage(volts1, volts2);
   }
 
+  @AutoLogOutput(key = "Elevator/isAtTarget")
   public boolean isAtTarget() {
     return this.IO.isAtTarget();
   }

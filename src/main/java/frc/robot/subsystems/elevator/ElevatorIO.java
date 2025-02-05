@@ -2,7 +2,6 @@ package frc.robot.subsystems.elevator;
 
 import frc.robot.util.LoggedTunablePID;
 import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.AutoLogOutput;
 
 public interface ElevatorIO {
 
@@ -22,7 +21,6 @@ public interface ElevatorIO {
     public double commandedHeightInches = 0.0;
   }
 
-  @AutoLogOutput(key = "Elevator/isAtTarget")
   public default boolean isAtTarget() {
     return false;
   }

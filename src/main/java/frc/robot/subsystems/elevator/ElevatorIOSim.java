@@ -9,7 +9,7 @@ import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.util.LoggedTunablePID;
 
 public class ElevatorIOSim implements ElevatorIO {
-  private final DCMotor motor = DCMotor.getNEO(2);
+  private final DCMotor motor = DCMotor.getKrakenX60Foc(2);
 
   private ProfiledPIDController pid =
       ElevatorConstants.PID.createTrapezoidalPIDController(
