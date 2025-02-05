@@ -18,7 +18,7 @@ public class ElevatorIOKrakens implements ElevatorIO {
 
   public ElevatorIOKrakens() {
     left = new TalonFX(ElevatorConstants.kLeftCANId);
-    right = new TalonFX(ElevatorConstants.kLeftCANId);
+    right = new TalonFX(ElevatorConstants.kRightCANId);
 
     var leftConfig = ElevatorConstants.createKrakenConfig(false);
     PhoenixUtil.tryUntilOk(5, () -> left.getConfigurator().apply(leftConfig, 0.25));
@@ -76,5 +76,6 @@ public class ElevatorIOKrakens implements ElevatorIO {
         left.getVelocity().getValueAsDouble() * ElevatorConstants.kRotationsToHeightConversion;
     inputs.tempCelsiusLeft = 0.0;
     inputs.currentDrawAmpsLeft = Math.abs(left.getTorqueCurrent().getValueAsDouble());
+    inputs.commandedHeightInches = lastHeight;
   }
 }

@@ -85,7 +85,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        elevator = new Elevator(new ElevatorIO() {}); // TODO: once we have HW, use the HW
+        elevator = new Elevator(new ElevatorIOKrakens() {}); // TODO: once we have HW, use the HW
         pivotThing = new Pivot(new PivotIO() {}); // TODO: once we have HW, use the HW
         rollers = new Rollers(new RollersIO() {}); // TODO: once we have HW, use the HW
         break;
@@ -284,8 +284,8 @@ public class RobotContainer {
 
     driver
         .leftBumper()
-        .whileTrue(RollerCmds.setAlgaeSpeed(1000))
-        .whileFalse(RollerCmds.setAlgaeSpeed(0));
+        .whileTrue(ElevatorCmds.setHeightCmd(5))
+        .whileFalse(ElevatorCmds.setHeightCmd(0));
 
     // Slow-Mode
     driver

@@ -12,8 +12,8 @@ import frc.robot.util.ControlGains;
 
 public class ElevatorConstants {
   // TODO: 100 & 101 are arbitrary and need to be changed.
-  public static final int kLeftCANId = 100;
-  public static final int kRightCANId = 101;
+  public static final int kLeftCANId = 61;
+  public static final int kRightCANId = 62;
 
   public static final boolean kIsLeftInverted = false;
   public static final boolean kIsRightInverted = true;
@@ -30,16 +30,16 @@ public class ElevatorConstants {
 
   public static final double kRotationsToHeightConversion = (1 / 25.0 * Math.PI * kDrumRadius);
 
-  public static final double kMinHeight = Units.inchesToMeters(0.0); // inches
-  public static final double kMaxHeight = Units.inchesToMeters(52.5);
-  public static final double kInitialHeight = Units.inchesToMeters(5);
+  public static final double kMinHeight = 0.0; // inches
+  public static final double kMaxHeight = 52.5;
+  public static final double kInitialHeight = 0.0;
 
   public static final ControlGains motionMagic =
-      new ControlGains().p(42).a(0.01).v(0.01).s(0.01).mmCruiseVelo(0);
-  public static final ControlGains TalonFF = new ControlGains().s(0.).v(0.).a(0.);
+      new ControlGains().p(0).a(0.0).v(0.0).s(0.0).mmCruiseVelo(0);
+  public static final ControlGains TalonFF = new ControlGains().s(0.).v(0.).a(0.).g(0.001);
 
-  public static final ControlGains PID = new ControlGains().p(25.0).trapezoidal(10, 10);
-  public static final ControlGains FF = new ControlGains().g(0.45).v(0.76);
+  public static final ControlGains PID = new ControlGains().p(0.0).trapezoidal(10, 10);
+  public static final ControlGains FF = new ControlGains().g(0.001).v(0.0);
 
   public static final int mech2dWidth = 20;
   public static final Color8Bit mech2dColor = new Color8Bit(255, 255, 0);
@@ -87,6 +87,7 @@ public class ElevatorConstants {
     slot0Config.kP = ElevatorConstants.PID.getKP();
     slot0Config.kI = ElevatorConstants.PID.getKI();
     slot0Config.kD = ElevatorConstants.PID.getKD();
+    slot0Config.kG = ElevatorConstants.TalonFF.getKG();
     slot0Config.kS = ElevatorConstants.TalonFF.getKS();
     slot0Config.kV = ElevatorConstants.TalonFF.getKV();
     slot0Config.kA = ElevatorConstants.TalonFF.getKA();
