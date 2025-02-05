@@ -21,6 +21,7 @@ import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -42,6 +43,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants.AutoConstants;
+import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLevel;
 import frc.robot.util.ScoreLoc;
@@ -82,7 +84,19 @@ public class Drivetrain extends SubsystemBase {
         new SwerveModulePosition()
       };
   private SwerveDrivePoseEstimator poseEstimator =
-      new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+      new SwerveDrivePoseEstimator(
+          kinematics,
+          rawGyroRotation,
+          lastModulePositions,
+          new Pose2d(),
+          VecBuilder.fill(
+              VisionConstants.POSE_ESTIMATOR_STATE_STDEVS.translationalStDev(),
+              VisionConstants.POSE_ESTIMATOR_STATE_STDEVS.translationalStDev(),
+              VisionConstants.POSE_ESTIMATOR_STATE_STDEVS.rotationalStDev()),
+          VecBuilder.fill(
+              VisionConstants.POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS.translationalStDev(),
+              VisionConstants.POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS.translationalStDev(),
+              VisionConstants.POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS.rotationalStDev()));
 
   public Drivetrain(
       GyroIO gyroIO,
@@ -347,7 +361,7 @@ public class Drivetrain extends SubsystemBase {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 
-  /** Returns the current odometry pose. */
+  /** Returns the current estimated pose. */
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
     return poseEstimator.getEstimatedPosition();

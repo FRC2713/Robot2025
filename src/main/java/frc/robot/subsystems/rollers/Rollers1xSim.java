@@ -17,6 +17,8 @@ public class Rollers1xSim implements RollersIO {
           algaeModel);
   private double commandedRPM;
 
+  private boolean hasCoral = false;
+
   // private PIDController m_controller = RollerConstants.ALGAEPID.createPIDController();
 
   public void updateInputs(RollersInputs inputs) {

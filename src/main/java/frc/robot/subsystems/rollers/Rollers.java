@@ -66,4 +66,8 @@ public class Rollers extends SubsystemBase {
     this.mech2dTube.setColor(tubeColor);
     this.mech2dAlgae.setColor(algaeColor);
   }
+
+  public boolean hasCoral() {
+    return this.IO.hasCoral();
+  }
 }

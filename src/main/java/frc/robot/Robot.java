@@ -15,8 +15,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -86,15 +84,15 @@ public class Robot extends LoggedRobot {
     robotContainer = new RobotContainer();
 
     // Instantiate the Mechanism2d structure
-    mech2d = new Mechanism2d(3, 3);
-    MechanismLigament2d mech2d_pre_rollers =
-        mech2d
-            .getRoot("root", 1.5, 0)
-            .append(RobotContainer.elevator.mech2d)
-            .append(RobotContainer.pivotThing.mech2d);
-    mech2d_pre_rollers.append(RobotContainer.rollers.mech2dAlgae);
-    mech2d_pre_rollers.append(RobotContainer.rollers.mech2dTube);
-    SmartDashboard.putData("Mech2d", mech2d);
+    // mech2d = new Mechanism2d(3, 3);
+    // MechanismLigament2d mech2d_pre_rollers =
+    //     mech2d
+    //         .getRoot("root", 1.5, 0)
+    //         .append(RobotContainer.elevator.mech2d)
+    //         .append(RobotContainer.pivotThing.mech2d);
+    // mech2d_pre_rollers.append(RobotContainer.rollers.mech2dAlgae);
+    // mech2d_pre_rollers.append(RobotContainer.rollers.mech2dTube);
+    // SmartDashboard.putData("Mech2d", mech2d);
   }
 
   /** This function is called periodically during all modes. */
@@ -114,9 +112,9 @@ public class Robot extends LoggedRobot {
     Threads.setCurrentThreadPriority(false, 10);
 
     // update the Mech2d's
-    RobotContainer.elevator.updateMech2D();
-    RobotContainer.pivotThing.updateMech2D();
-    RobotContainer.rollers.updateMech2D();
+    // RobotContainer.elevator.updateMech2D();
+    // RobotContainer.pivotThing.updateMech2D();
+    // RobotContainer.rollers.updateMech2D();
   }
 
   /** This function is called once when the robot is disabled. */

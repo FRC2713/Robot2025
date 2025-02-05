@@ -28,4 +28,9 @@ public interface RollersIO {
 
   public default void setAlgaeRPM(double rpm) {}
   ;
+
+  public default boolean hasCoral() {
+    return false;
+  }
+  ;
 }

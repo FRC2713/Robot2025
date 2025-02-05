@@ -60,7 +60,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   // Subsystems
-  public final Drivetrain driveSubsystem;
+  public static Drivetrain driveSubsystem;
   public static Elevator elevator;
   public static Pivot pivotThing;
   public static Rollers rollers;
@@ -76,7 +76,6 @@ public class RobotContainer {
 
   public RobotContainer() {
     // Start subsystems
-    visionsubsystem = new Vision();
     switch (Constants.currentMode) {
       case REAL:
         driveSubsystem =
@@ -86,9 +85,9 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        elevator = new Elevator(new ElevatorIOKrakens());
-        pivotThing = new Pivot(new PivotIOSim()); // TODO: once we have HW, use the HW
-        rollers = new Rollers(new Rollers1xSim()); // TODO: once we have HW, use the HW
+        elevator = new Elevator(new ElevatorIO() {}); // TODO: once we have HW, use the HW
+        pivotThing = new Pivot(new PivotIO() {}); // TODO: once we have HW, use the HW
+        rollers = new Rollers(new RollersIO() {}); // TODO: once we have HW, use the HW
         break;
 
       case SIM:
@@ -118,6 +117,7 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIO() {});
         break;
     }
+    visionsubsystem = new Vision();
 
     // PathPlanner Config
     AutoBuilder.configure(
@@ -240,7 +240,8 @@ public class RobotContainer {
                     () ->
                         driveSubsystem.setPose(
                             new Pose2d(
-                                driveSubsystem.getPose().getTranslation(), new Rotation2d())),
+                                driveSubsystem.getPose().getTranslation(),
+                                Rotation2d.fromDegrees(0))),
                     driveSubsystem)
                 .ignoringDisable(true));
 
@@ -259,15 +260,20 @@ public class RobotContainer {
 
     driver
         .a()
-        .whileTrue(
+        .onTrue(
             ScoreAssist.getInstance()
-                .scoreAtLoc(() -> driveSubsystem.getClosestScoringLocation(ScoreLevel.ONE)));
+                .setActiveCommand(
+                    () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.ONE)))
+        .onFalse(ScoreAssist.getInstance().cancelCmd());
 
     driver
         .b()
-        .whileTrue(
+        .onTrue(
             ScoreAssist.getInstance()
-                .scoreAtLoc(() -> driveSubsystem.getClosestScoringLocation(ScoreLevel.TWO)));
+                .setActiveCommand(
+                    () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.TWO)))
+        .onFalse(ScoreAssist.getInstance().cancelCmd());
+
     driver
         .y()
         .onTrue(
@@ -275,6 +281,33 @@ public class RobotContainer {
                 ElevatorCmds.setHeightCmd(0),
                 PivotCmds.setAngle(0),
                 RollerCmds.setTubeSpeed(4000)));
+
+    driver
+        .leftBumper()
+        .whileTrue(RollerCmds.setAlgaeSpeed(1000))
+        .whileFalse(RollerCmds.setAlgaeSpeed(0));
+
+    // Slow-Mode
+    driver
+        .rightBumper()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY() * 0.3,
+                    () -> -driver.getLeftX() * 0.3,
+                    () -> -driver.getRightX() * 0.3),
+                "Slow-Mode"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
 
     // Heading controller
     driver
@@ -361,8 +394,11 @@ public class RobotContainer {
                     () -> -driver.getRightX()),
                 "Full Control"));
 
-    ScoreAssist.getInstance()
-        .getTrigger()
-        .whileTrue(ScoreAssist.getInstance().networkTablesDrive());
+    // ScoreAssist.getInstance()
+    //     .getTrigger()
+    //     .onTrue(
+    //         ScoreAssist.getInstance()
+    //             .setActiveCommand(ScoreAssist.getInstance()::networkTablesDrive))
+    //     .onFalse(ScoreAssist.getInstance().cancelCmd());
   }
 }
