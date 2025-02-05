@@ -21,22 +21,22 @@ public class ElevatorConstants {
 
   public static final int kMaxCurrentLimit = 40;
 
-  public static final double kGearReduction = 9.0;
+  public static final double kGearReduction = 5.0;
   public static final double kCarriageMass = Units.lbsToKilograms(0.249377); // kg
   public static final double kDrumRadius = 1.0;
   public static final double kAcceptablePositionErrorInches = 2; // inches
 
-  public static final double kRotationsToHeightConversion = (1 / 25.0 * Math.PI * kDrumRadius);
+  public static final double kRotationsToHeightConversion = (Math.PI * kDrumRadius * 2);
 
   public static final double kMinHeight = 0.0; // inches
   public static final double kMaxHeight = 52.5;
   public static final double kInitialHeight = 0.0;
 
-  public static final double kP = RHRUtil.modeDependentDouble(0., 0.1);
+  public static final double kP = RHRUtil.modeDependentDouble(19., 0.1);
   public static final double kI = 0.0;
-  public static final double kD = RHRUtil.modeDependentDouble(0, 0.01);
+  public static final double kD = RHRUtil.modeDependentDouble(1, 0.01);
 
-  public static final double kG = RHRUtil.modeDependentDouble(0, 0.0785);
+  public static final double kG = RHRUtil.modeDependentDouble(9, 0.0785);
   public static final double kV = 0.0;
   public static final double kA = 0.0;
 
@@ -56,7 +56,7 @@ public class ElevatorConstants {
               .v(kV)
               .a(kA)
               // Motion Magic
-              .mmCruiseVelo(0),
+              .mmCruiseVelo(10.0),
           160,
           1600);
 

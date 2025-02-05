@@ -43,6 +43,7 @@ public class ElevatorIOKrakens implements ElevatorIO {
 
   @Override
   public void setPID(LoggedTunablePID pid) {
+    System.out.println("Updating elevator PID");
     leftConfig.Slot0 = pid.toTalonFX();
     rightConfig.Slot0 = pid.toTalonFX();
 
