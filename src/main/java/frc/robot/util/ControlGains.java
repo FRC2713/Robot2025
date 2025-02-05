@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
@@ -23,6 +24,7 @@ public class ControlGains {
 
   @Getter private double kTrapezoidalMaxVelocity;
   @Getter private double kTrapezoidalMaxAcceleration;
+  @Getter private double kMMCruiseVelo;
 
   public ControlGains() {}
 
@@ -72,6 +74,11 @@ public class ControlGains {
     return this;
   }
 
+  public ControlGains mmCruiseVelo(double velo) {
+    this.kMMCruiseVelo = velo;
+    return this;
+  }
+
   public PIDConstants createPathPlannerGains() {
     return new PIDConstants(this.getKP(), this.getKI(), this.getKD());
   }
@@ -95,5 +102,14 @@ public class ControlGains {
 
   public ElevatorFeedforward createElevatorFF() {
     return new ElevatorFeedforward(this.getKS(), this.getKG(), this.getKV(), this.getKA());
+  }
+
+  public MotionMagicConfigs createMMConfigs() {
+    var configs = new MotionMagicConfigs();
+    configs.MotionMagicCruiseVelocity = this.kMMCruiseVelo;
+    configs.MotionMagicExpo_kA = this.kA;
+    configs.MotionMagicExpo_kV = this.kV;
+
+    return configs;
   }
 }

@@ -42,6 +42,7 @@ public class ElevatorIOSparks implements ElevatorIO {
   public void setTargetHeight(double height) {
     left.getClosedLoopController().setReference(height, ControlType.kMAXMotionPositionControl);
     right.getClosedLoopController().setReference(height, ControlType.kMAXMotionPositionControl);
+    lastHeight = height;
   }
 
   @Override
