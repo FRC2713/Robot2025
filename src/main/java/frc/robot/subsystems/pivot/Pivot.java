@@ -18,7 +18,7 @@ public class Pivot extends SubsystemBase {
           PivotConstants.mech2dWidth,
           PivotConstants.mech2dColor);
 
-  private double targetAngleDeg =  Units.radiansToDegrees(PivotConstants.kInitialAngleRad);
+  private double targetAngleDeg = Units.radiansToDegrees(PivotConstants.kInitialAngleRad);
 
   public Pivot(PivotIO IO) {
     this.inputs = new PivotInputsAutoLogged();
@@ -30,7 +30,6 @@ public class Pivot extends SubsystemBase {
     if (PivotConstants.PID.hasChanged(hashCode())) {
       this.IO.setPID(PivotConstants.PID);
     }
-
 
     IO.updateInputs(inputs);
     Logger.processInputs("Pivot", inputs);

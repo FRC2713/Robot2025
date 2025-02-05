@@ -2,7 +2,6 @@ package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
@@ -12,8 +11,7 @@ import frc.robot.util.LoggedTunablePID;
 public class ElevatorIOSim implements ElevatorIO {
   private final DCMotor motor = DCMotor.getKrakenX60Foc(2);
 
-  private PIDController pid =
-      ElevatorConstants.PID.createPIDController();
+  private PIDController pid = ElevatorConstants.PID.createPIDController();
   private ElevatorFeedforward feedforward = ElevatorConstants.PID.createElevatorFF();
   private final ElevatorSim sim =
       new ElevatorSim(
@@ -59,8 +57,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
   @Override
   public void setPID(LoggedTunablePID pid) {
-    this.pid =
-        pid.createPIDController();
+    this.pid = pid.createPIDController();
     feedforward = pid.createElevatorFF();
   }
 

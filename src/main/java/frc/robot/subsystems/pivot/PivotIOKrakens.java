@@ -20,7 +20,9 @@ public class PivotIOKrakens implements PivotIO {
     this.motor = new TalonFX(PivotConstants.kCANId);
     config = PivotConstants.createKrakenConfig();
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config, 0.25));
-    PhoenixUtil.tryUntilOk(5, () -> motor.setPosition(Units.radiansToRotations(PivotConstants.kInitialAngleRad), 0.25));
+    PhoenixUtil.tryUntilOk(
+        5,
+        () -> motor.setPosition(Units.radiansToRotations(PivotConstants.kInitialAngleRad), 0.25));
   }
 
   @Override
