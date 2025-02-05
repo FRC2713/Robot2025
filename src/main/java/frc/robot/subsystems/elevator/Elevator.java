@@ -25,6 +25,10 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (ElevatorConstants.PID.hasChanged(hashCode())) {
+      this.IO.setPID(ElevatorConstants.PID);
+    }
+
     this.IO.updateInputs(this.inputs);
     Logger.processInputs("Elevator", this.inputs);
   }

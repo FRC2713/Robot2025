@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 public final class Constants {
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
-  public static final boolean tuningMode = false;
+  public static final boolean tuningMode = true;
   public static final double simulationRate = 0.020;
 
   public static final double massKG = Units.lbsToKilograms(150);
