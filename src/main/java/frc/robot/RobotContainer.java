@@ -44,10 +44,10 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
+import frc.robot.subsystems.pivot.PivotIOKrakens;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers1xSim;
@@ -85,8 +85,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        elevator = new Elevator(new ElevatorIOKrakens() {});
-        pivot = new Pivot(new PivotIO() {}); // TODO: once we have HW, use the HW
+        elevator = new Elevator(new ElevatorIO() {});
+        pivot = new Pivot(new PivotIOKrakens()); // TODO: once we have HW, use the HW
         rollers = new Rollers(new RollersIO() {}); // TODO: once we have HW, use the HW
         break;
 
@@ -284,8 +284,8 @@ public class RobotContainer {
 
     driver
         .leftBumper()
-        .whileTrue(Commands.sequence(ElevatorCmds.setHeightCmd(35), PivotCmds.setAngle(60)))
-        .whileFalse(Commands.sequence(ElevatorCmds.setHeightCmd(5), PivotCmds.setAngle(30)));
+        .whileTrue(Commands.sequence(PivotCmds.setAngle(60)))
+        .whileFalse(Commands.sequence(PivotCmds.setAngle(30)));
 
     // Slow-Mode
     driver
