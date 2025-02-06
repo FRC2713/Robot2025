@@ -284,7 +284,7 @@ public class RobotContainer {
 
     driver
         .leftBumper()
-        .whileTrue(Commands.sequence(ElevatorCmds.setHeightCmd(15), PivotCmds.setAngle(60)))
+        .whileTrue(Commands.sequence(ElevatorCmds.setHeightCmd(35), PivotCmds.setAngle(60)))
         .whileFalse(Commands.sequence(ElevatorCmds.setHeightCmd(5), PivotCmds.setAngle(30)));
 
     // Slow-Mode

@@ -32,33 +32,37 @@ public class ElevatorConstants {
   public static final double kMaxHeight = 52.5;
   public static final double kInitialHeight = 0.0;
 
-  public static final double kP = RHRUtil.modeDependentDouble(19., 0.1);
-  public static final double kI = 0.0;
-  public static final double kD = RHRUtil.modeDependentDouble(1, 0.01);
-
-  public static final double kG = RHRUtil.modeDependentDouble(9, 0.0785);
-  public static final double kV = 0.0;
-  public static final double kA = 0.0;
-
-  public static final double KTrapezoidalMaxVelocity = 10.0;
-  public static final double KTrapezoidalMaxAcceleration = 10.0;
-
-  public static final LoggedTunablePID PID =
+  public static final LoggedTunablePID PID_LEVEL_ONE =
       new LoggedTunablePID(
-          "Elevator",
+          "Elevator_L_ONE",
           new ControlGains()
               // PID
-              .p(kP)
-              .i(kI)
-              .d(kD)
+              .p(RHRUtil.modeDependentDouble(19., 0.1))
+              .i(0.0)
+              .d(RHRUtil.modeDependentDouble(1, 0.01))
               // FF
-              .g(kG)
-              .v(kV)
-              .a(kA)
+              .g(RHRUtil.modeDependentDouble(9, 0.0785))
+              .v(0.0)
+              .a(0.0)
               // Motion Magic
               .mmCruiseVelo(10.0),
           160,
           1600);
+
+  public static final double LEVEL_TWO_HEIGHT_IN = 25.13427520950623;
+
+  public static final LoggedTunablePID PID_LEVEL_TWO =
+      new LoggedTunablePID(
+          "Elevator_L_TWO",
+          new ControlGains()
+              // PID
+              .p(RHRUtil.modeDependentDouble(19., 0.1))
+              .i(0.0)
+              .d(RHRUtil.modeDependentDouble(1, 0.01))
+              // FF
+              .g(RHRUtil.modeDependentDouble(12, 0.0785))
+              .v(0.0)
+              .a(0.0));
 
   public static final int mech2dWidth = 20;
   public static final Color8Bit mech2dColor = new Color8Bit(255, 255, 0);
@@ -76,10 +80,11 @@ public class ElevatorConstants {
         (inverted) ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
 
     // set slot 0 gains
-    config.Slot0 = PID.toTalonFX();
+    config.Slot0 = PID_LEVEL_ONE.toTalonFX();
+    config.Slot1 = PID_LEVEL_TWO.toTalonFXS1();
 
     // set Motion Magic settings
-    config.MotionMagic = PID.toMotionMagic();
+    config.MotionMagic = PID_LEVEL_ONE.toMotionMagic();
 
     return config;
   }

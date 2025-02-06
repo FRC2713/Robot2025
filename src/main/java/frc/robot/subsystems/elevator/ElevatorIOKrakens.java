@@ -42,13 +42,16 @@ public class ElevatorIOKrakens implements ElevatorIO {
   }
 
   @Override
-  public void setPID(LoggedTunablePID pid) {
+  public void setPID(LoggedTunablePID slot0pid, LoggedTunablePID slot1pid) {
     System.out.println("Updating elevator PID");
-    leftConfig.Slot0 = pid.toTalonFX();
-    rightConfig.Slot0 = pid.toTalonFX();
+    leftConfig.Slot0 = slot0pid.toTalonFX();
+    rightConfig.Slot0 = slot0pid.toTalonFX();
 
-    leftConfig.MotionMagic = pid.toMotionMagic();
-    rightConfig.MotionMagic = pid.toMotionMagic();
+    leftConfig.Slot1 = slot1pid.toTalonFXS1();
+    rightConfig.Slot1 = slot1pid.toTalonFXS1();
+
+    leftConfig.MotionMagic = slot0pid.toMotionMagic();
+    rightConfig.MotionMagic = slot0pid.toMotionMagic();
 
     PhoenixUtil.tryUntilOk(5, () -> left.getConfigurator().apply(leftConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> right.getConfigurator().apply(rightConfig, 0.25));
@@ -103,5 +106,11 @@ public class ElevatorIOKrakens implements ElevatorIO {
     inputs.currentDrawAmpsLeft = Math.abs(left.getTorqueCurrent().getValueAsDouble());
 
     inputs.commandedHeightInches = lastHeight;
+  }
+
+  @Override
+  public void changeSlot(int slot) {
+    heightRequest.withSlot(slot);
+    setTargetHeight(lastHeight);
   }
 }
