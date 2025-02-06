@@ -10,6 +10,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.VisionConstants;
+import frc.robot.util.VisionOutputs;
 import org.littletonrobotics.junction.Logger;
 
 public class VisionSub extends SubsystemBase {

@@ -4,6 +4,7 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.util.RHRUtil;
+import frc.robot.util.VisionOutputs;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.Logger;

@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.RobotContainer;
+import frc.robot.util.VisionOutputs;
 
 public class VisionIOOdometry implements VisionIO {
   public NetworkTableInstance inst;

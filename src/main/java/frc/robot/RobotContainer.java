@@ -52,7 +52,8 @@ import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers1xSim;
 import frc.robot.subsystems.rollers.RollersIO;
-import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIOOdometry;
+import frc.robot.subsystems.vision.VisionSub;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLevel;
 import java.util.Arrays;
@@ -72,7 +73,7 @@ public class RobotContainer {
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
-  private final Vision visionsubsystem;
+  private final VisionSub visionsubsystem;
 
   public RobotContainer() {
     // Start subsystems
@@ -117,7 +118,7 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIO() {});
         break;
     }
-    visionsubsystem = new Vision();
+    visionsubsystem = new VisionSub(new VisionIOOdometry());
 
     // PathPlanner Config
     AutoBuilder.configure(
