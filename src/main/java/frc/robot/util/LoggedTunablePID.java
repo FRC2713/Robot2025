@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
@@ -107,6 +108,26 @@ public class LoggedTunablePID {
     slot0Configs.kA = getKA();
 
     return slot0Configs;
+  }
+
+  public Slot1Configs toTalonFXS1() {
+    return toTalonFXS1(GravityTypeValue.Elevator_Static);
+  }
+
+  public Slot1Configs toTalonFXS1(GravityTypeValue gravityType) {
+    var slot1Configs = new Slot1Configs();
+
+    slot1Configs.GravityType = gravityType;
+    slot1Configs.kP = getKP();
+    slot1Configs.kI = getKI();
+    slot1Configs.kD = getKD();
+
+    slot1Configs.kG = getKG();
+    slot1Configs.kS = getKS();
+    slot1Configs.kV = getKV();
+    slot1Configs.kA = getKA();
+
+    return slot1Configs;
   }
 
   public MotionMagicConfigs toMotionMagic() {

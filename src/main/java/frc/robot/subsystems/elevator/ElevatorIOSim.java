@@ -11,8 +11,8 @@ import frc.robot.util.LoggedTunablePID;
 public class ElevatorIOSim implements ElevatorIO {
   private final DCMotor motor = DCMotor.getKrakenX60Foc(2);
 
-  private PIDController pid = ElevatorConstants.PID.createPIDController();
-  private ElevatorFeedforward feedforward = ElevatorConstants.PID.createElevatorFF();
+  private PIDController pid = ElevatorConstants.PID_LEVEL_ONE.createPIDController();
+  private ElevatorFeedforward feedforward = ElevatorConstants.PID_LEVEL_TWO.createElevatorFF();
   private final ElevatorSim sim =
       new ElevatorSim(
           motor,
@@ -56,7 +56,7 @@ public class ElevatorIOSim implements ElevatorIO {
   }
 
   @Override
-  public void setPID(LoggedTunablePID pid) {
+  public void setPID(LoggedTunablePID pid, LoggedTunablePID pid2) {
     this.pid = pid.createPIDController();
     feedforward = pid.createElevatorFF();
   }

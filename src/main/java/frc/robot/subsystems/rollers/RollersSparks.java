@@ -12,6 +12,7 @@ public class RollersSparks implements RollersIO {
 
   private final SparkMax tubeMotor;
   private final SparkMax algaeMotor;
+
   private double commandedAlgaeRPM, commandedTubeRPM;
 
   public RollersSparks() {
