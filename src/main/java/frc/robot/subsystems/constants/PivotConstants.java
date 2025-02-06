@@ -31,11 +31,11 @@ public class PivotConstants {
   public static final int kStatorCurrentLimit = 100; // also amps
   public static final double kMaxAngularVelocity = 5; // RPM
 
-  public static final double kP = RHRUtil.modeDependentDouble(0., 2);
+  public static final double kP = RHRUtil.modeDependentDouble(0., 10);
   public static final double kI = 0.0;
-  public static final double kD = RHRUtil.modeDependentDouble(0., 0.9);
+  public static final double kD = RHRUtil.modeDependentDouble(0., 0);
 
-  public static final double kG = RHRUtil.modeDependentDouble(6.5, 7.63);
+  public static final double kG = RHRUtil.modeDependentDouble(6.5, 0.381);
   public static final double kV = 0.0;
   public static final double kA = 0.0;
 

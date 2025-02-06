@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.util.LoggedTunablePID;
@@ -30,7 +31,7 @@ public class ElevatorIOSim implements ElevatorIO {
     double pidOutput = pid.calculate(Units.metersToInches(sim.getPositionMeters()), setpoint);
     double feedforwardOutput = feedforward.calculate(pid.getSetpoint());
 
-    double input = pidOutput + feedforwardOutput;
+    double input = DriverStation.isEnabled() ? pidOutput + feedforwardOutput : 0;
 
     sim.setInputVoltage(input);
     sim.update(0.02);

@@ -285,8 +285,8 @@ public class RobotContainer {
 
     driver
         .leftBumper()
-        .whileTrue(Commands.sequence(PivotCmds.setAngle(60)))
-        .whileFalse(Commands.sequence(PivotCmds.setAngle(30)));
+        .whileTrue(Commands.sequence(ElevatorCmds.setHeightCmd(50), PivotCmds.setAngle(60)))
+        .whileFalse(Commands.sequence(ElevatorCmds.setHeightCmd(10), PivotCmds.setAngle(30)));
 
     // Slow-Mode
     driver
@@ -401,5 +401,13 @@ public class RobotContainer {
     //         ScoreAssist.getInstance()
     //             .setActiveCommand(ScoreAssist.getInstance()::networkTablesDrive))
     //     .onFalse(ScoreAssist.getInstance().cancelCmd());
+  }
+
+  public void disabledPeriodic() {
+    // Safety
+    elevator.setTargetHeight(elevator.getCurrentHeight());
+    pivot.setTargetAngle(pivot.getCurrentAngle());
+    rollers.setTubeRPM(0);
+    rollers.setAlgaeRPM(0);
   }
 }

@@ -50,4 +50,8 @@ public class Pivot extends SubsystemBase {
     // 0 deg points up in Mech2d, +90 points left (or back in 3d)
     this.mech2d.setAngle((this.inputs.angleDegrees) - 90);
   }
+
+  public double getCurrentAngle() {
+    return this.inputs.angleDegrees;
+  }
 }

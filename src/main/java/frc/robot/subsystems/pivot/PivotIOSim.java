@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.subsystems.constants.PivotConstants;
 import frc.robot.util.LoggedTunablePID;
@@ -35,7 +36,7 @@ public class PivotIOSim implements PivotIO {
     double pidOutput = pid.calculate(sim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
     double feedforwardOutput =
         feedforward.calculate(sim.getAngleRads(), sim.getVelocityRadPerSec());
-    double output = pidOutput + feedforwardOutput;
+    double output = DriverStation.isEnabled() ? pidOutput + feedforwardOutput : 0;
 
     sim.setInputVoltage(output);
     sim.update(0.02);
