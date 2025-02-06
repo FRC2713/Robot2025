@@ -17,9 +17,16 @@ public class PivotConstants {
   public static final double kGearing = 48.0 / 18.0;
   public static final double kLength = Units.inchesToMeters(18);
   public static final double kMass = 7.094328; // kg
+
   public static final double kMinAngleRad = Units.degreesToRadians(0);
   public static final double kMaxAngleRad = Units.degreesToRadians(60);
+
   public static final double kInitialAngleRad = Units.degreesToRadians(30);
+  public static final double kRampAngleRad = Units.degreesToRadians(30);
+  public static final double kL1AngleRad = kRampAngleRad;
+  public static final double kL2AngleRad = Units.degreesToRadians(35);
+  public static final double kL4AngleRad = kMaxAngleRad;
+
   public static final double kRotationConversionFactor = (1.0 / 225.0 * 10); // values from 2024
 
   public static final int kStallCurrentLimit = 30; // amps

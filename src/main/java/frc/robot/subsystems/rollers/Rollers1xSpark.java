@@ -2,23 +2,24 @@ package frc.robot.subsystems.rollers;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.RollerConstants;
-import frc.robot.util.DebounceBoolean;
-import org.littletonrobotics.junction.Logger;
 
 /** For the first implementation, the robot controls Tube and Algae with a single NEO */
 public class Rollers1xSpark implements RollersIO {
 
   private final SparkMax algaeMotor;
-  private double targetRPM;
+  private final SparkLimitSwitch limitSwitch;
 
-  private DebounceBoolean currentSensing = new DebounceBoolean();
+  private double targetRPM;
 
   public Rollers1xSpark() {
     this.algaeMotor = new SparkMax(RollerConstants.kAlgaeCANId, MotorType.kBrushless);
+    this.limitSwitch = algaeMotor.getForwardLimitSwitch();
     algaeMotor.configure(
         RollerConstants.createAlgaeConfig(),
         ResetMode.kResetSafeParameters,
@@ -35,7 +36,7 @@ public class Rollers1xSpark implements RollersIO {
     inputs.algaeCurrentAmps = algaeMotor.getOutputCurrent();
     inputs.commandedAlgaeRPM = this.targetRPM;
 
-    Logger.recordOutput("Rollers/HasCoral", currentSensing.get());
+    inputs.hasCoral = this.hasCoral();
   }
 
   public void setTubeRPM(double rpm) {
@@ -58,7 +59,14 @@ public class Rollers1xSpark implements RollersIO {
     return algaeMotor.getEncoder().getVelocity();
   }
 
+  public void enableLimitSwitch(boolean setEnable) {
+    SparkMaxConfig newConfig = RollerConstants.createAlgaeConfig();
+    newConfig.limitSwitch.forwardLimitSwitchEnabled(setEnable);
+    algaeMotor.configureAsync(
+        newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+  }
+
   public boolean hasCoral() {
-    return currentSensing.set(Math.abs(algaeMotor.getOutputCurrent()) > 30.0);
+    return limitSwitch.isPressed();
   }
 }

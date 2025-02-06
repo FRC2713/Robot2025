@@ -1,11 +1,13 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.constants.PivotConstants;
 import org.littletonrobotics.junction.Logger;
 
 public final class SuperStructure {
@@ -30,7 +32,7 @@ public final class SuperStructure {
         "Starting conf",
         new SequentialCommandGroup(
             ElevatorCmds.setHeightCmd(0),
-            PivotCmds.setAngle(0),
+            PivotCmds.setAngle(Units.radiansToDegrees(PivotConstants.kInitialAngleRad)),
             RollerCmds.setAlgaeSpeedAndWait(0),
             ElevatorCmds.waitUntilAtTarget(),
             RollerCmds.waitUntilAlgaeAtTarget()));
@@ -43,7 +45,9 @@ public final class SuperStructure {
   public static Command L1_CORAL_PREP_ELEVATOR(String reason) {
     return runStructure(
         treeifyReason(reason) + "L1 Prep Elevator",
-        new SequentialCommandGroup(ElevatorCmds.setHeightWaitCmd(10)));
+        new ParallelCommandGroup(
+            ElevatorCmds.setHeightWaitCmd(10),
+            PivotCmds.setAngleAndWait(Units.radiansToDegrees(PivotConstants.kL1AngleRad))));
   }
 
   public static Command L1_CORAL_SCORE() {
@@ -70,7 +74,9 @@ public final class SuperStructure {
   public static Command L2_CORAL_PREP_ELEVATOR(String reason) {
     return runStructure(
         treeifyReason(reason) + "L2 Prep Elevator",
-        new SequentialCommandGroup(ElevatorCmds.setHeightWaitCmd(20)));
+        new ParallelCommandGroup(
+            ElevatorCmds.setHeightWaitCmd(20),
+            PivotCmds.setAngleAndWait(Units.radiansToDegrees(PivotConstants.kL1AngleRad))));
   }
 
   public static Command L2_CORAL_SCORE() {

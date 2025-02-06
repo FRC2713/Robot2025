@@ -18,6 +18,8 @@ public interface RollersIO {
 
     public double commandedAlgaeRPM = 0.0;
     public double commandedTubeRPM = 0.0;
+
+    public boolean hasCoral = false;
   }
 
   public default void updateInputs(RollersInputs inputs) {}
@@ -32,5 +34,8 @@ public interface RollersIO {
   public default boolean hasCoral() {
     return false;
   }
+  ;
+
+  public default void enableLimitSwitch(double rpm) {}
   ;
 }
