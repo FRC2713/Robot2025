@@ -7,7 +7,7 @@ import frc.robot.SSConstants;
 import frc.robot.subsystems.constants.PivotConstants;
 import java.util.function.Supplier;
 
-public enum SuperStructureEnum {
+public enum SuperStructure {
   STARTING_CONF(
       () ->
           Commands.sequence(
@@ -33,7 +33,7 @@ public enum SuperStructureEnum {
 
   private Supplier<Command> cmd;
 
-  private SuperStructureEnum(Supplier<Command> cmd) {
+  private SuperStructure(Supplier<Command> cmd) {
     this.cmd = cmd;
   }
 

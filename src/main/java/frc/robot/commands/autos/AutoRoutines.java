@@ -5,6 +5,7 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.SuperStructure;
 
 public class AutoRoutines {
   private final AutoFactory m_factory;
@@ -32,15 +33,13 @@ public class AutoRoutines {
                 startToReefTraj.cmd()));
 
     // Starting at the event marker named "intake", run the intake
-    // startToReefTraj.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
+    startToReefTraj.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP.getCommand());
 
     // // When the trajectory is done, start the next trajectory
     startToReefTraj
         .done()
         .onTrue(
-            Commands.sequence(
-                // SuperStructure.L1_CORAL_SCORE_AND_ALGAE_TAKE(),
-                reefToProcTraj.cmd()));
+            Commands.sequence(SuperStructure.L1_CORAL_SCORE.getCommand(), reefToProcTraj.cmd()));
 
     // // While the trajectory is active, prepare the scoring subsystem
     // reefToProcTraj.active().whileTrue(SuperStructure.PROCESSOR_PREP());

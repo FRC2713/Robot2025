@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ScoreAssist;
-import frc.robot.commands.SuperStructureEnum;
+import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants;
@@ -85,8 +85,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         elevator = new Elevator(new ElevatorIO() {});
-        pivot = new Pivot(new PivotIOKrakens()); // TODO: once we have HW, use the HW
-        rollers = new Rollers(new RollersIO() {}); // TODO: once we have HW, use the HW
+        pivot = new Pivot(new PivotIOKrakens());
+        rollers = new Rollers(new RollersIO() {});
         break;
 
       case SIM:
@@ -265,8 +265,7 @@ public class RobotContainer {
                     () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.ONE)))
         .onFalse(
             Commands.sequence(
-                ScoreAssist.getInstance().cancelCmd(),
-                SuperStructureEnum.STARTING_CONF.getCommand()));
+                ScoreAssist.getInstance().cancelCmd(), SuperStructure.STARTING_CONF.getCommand()));
 
     driver
         .b()
@@ -276,13 +275,12 @@ public class RobotContainer {
                     () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.TWO)))
         .onFalse(
             Commands.sequence(
-                ScoreAssist.getInstance().cancelCmd(),
-                SuperStructureEnum.STARTING_CONF.getCommand()));
+                ScoreAssist.getInstance().cancelCmd(), SuperStructure.STARTING_CONF.getCommand()));
 
     driver
         .leftBumper()
-        .whileTrue(SuperStructureEnum.L1_CORAL_SCORE.getCommand())
-        .onFalse(SuperStructureEnum.STARTING_CONF.getCommand());
+        .whileTrue(SuperStructure.L1_CORAL_SCORE.getCommand())
+        .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
     // Slow-Mode
     driver
