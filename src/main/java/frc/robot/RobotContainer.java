@@ -282,6 +282,11 @@ public class RobotContainer {
         .whileTrue(SuperStructure.L1_CORAL_SCORE.getCommand())
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
+    driver
+        .rightBumper()
+        .whileTrue(SuperStructure.L2_CORAL_SCORE.getCommand())
+        .onFalse(SuperStructure.STARTING_CONF.getCommand());
+
     // Slow-Mode
     driver
         .rightBumper()

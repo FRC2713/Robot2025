@@ -29,7 +29,18 @@ public enum SuperStructure {
                   ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_CORAL_SCORE_HEIGHT_IN),
                   PivotCmds.setAngleAndWait(SSConstants.Pivot.L1_CORAL_SCORE_ANGLE_DEG)),
               RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.L1_CORAL_SCORE_SPEED))),
-  ;
+  L2_CORAL_PREP(
+      () ->
+          Commands.parallel(
+              ElevatorCmds.setHeight(SSConstants.Elevator.L2_CORAL_PREP_HEIGHT_IN),
+              PivotCmds.setAngle(SSConstants.Pivot.L2_CORAL_PREP_ANGLE_DEG))),
+  L2_CORAL_SCORE(
+      () ->
+          Commands.sequence(
+              Commands.parallel(
+                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_CORAL_SCORE_HEIGHT_IN),
+                  PivotCmds.setAngleAndWait(SSConstants.Pivot.L2_CORAL_SCORE_ANGLE_DEG)),
+              RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.L2_CORAL_SCORE_SPEED)));
 
   private Supplier<Command> cmd;
 
