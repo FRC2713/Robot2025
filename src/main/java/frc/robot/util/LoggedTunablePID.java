@@ -31,18 +31,18 @@ public class LoggedTunablePID {
 
   public LoggedTunablePID(
       String subsystem, ControlGains PID, double MotionMagicAcceleration, double MotionMagicJerk) {
-    kP = new LoggedTunableNumber(subsystem + "/P", PID.getKP());
-    kI = new LoggedTunableNumber(subsystem + "/I", PID.getKI());
-    kD = new LoggedTunableNumber(subsystem + "/D", PID.getKD());
-    kG = new LoggedTunableNumber(subsystem + "/G", PID.getKG());
-    kS = new LoggedTunableNumber(subsystem + "/S", PID.getKS());
-    kV = new LoggedTunableNumber(subsystem + "/V", PID.getKV());
-    kA = new LoggedTunableNumber(subsystem + "/A", PID.getKA());
+    kP = new LoggedTunableNumber(subsystem + "/PID/P", PID.getKP());
+    kI = new LoggedTunableNumber(subsystem + "/PID/I", PID.getKI());
+    kD = new LoggedTunableNumber(subsystem + "/PID/D", PID.getKD());
+    kG = new LoggedTunableNumber(subsystem + "/PID/G", PID.getKG());
+    kS = new LoggedTunableNumber(subsystem + "/PID/S", PID.getKS());
+    kV = new LoggedTunableNumber(subsystem + "/PID/V", PID.getKV());
+    kA = new LoggedTunableNumber(subsystem + "/PID/A", PID.getKA());
     MotionMagicCruiseVelocity =
-        new LoggedTunableNumber(subsystem + "/CruiseVelocity", PID.getKMMCruiseVelo());
+        new LoggedTunableNumber(subsystem + "/PID/CruiseVelocity", PID.getKMMCruiseVelo());
     this.MotionMagicAcceleration =
-        new LoggedTunableNumber(subsystem + "/Acceleration", MotionMagicAcceleration);
-    this.MotionMagicJerk = new LoggedTunableNumber(subsystem + "/Jerk", MotionMagicJerk);
+        new LoggedTunableNumber(subsystem + "/PID/Acceleration", MotionMagicAcceleration);
+    this.MotionMagicJerk = new LoggedTunableNumber(subsystem + "/PID/Jerk", MotionMagicJerk);
   }
 
   public boolean hasChanged(int id) {

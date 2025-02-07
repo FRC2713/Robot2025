@@ -8,10 +8,6 @@ import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.Constants;
 import java.util.Map;
 
-/**
- * IMPORTANT NOTE: if you add a new ScoreLoc, you should add an entry to the cmdsMap in ScoreAssist
- * object via the method
- */
 public enum ScoreLoc {
   A_ONE(ScoreNode.A, ScoreLevel.ONE),
   A_TWO(ScoreNode.A, ScoreLevel.TWO),

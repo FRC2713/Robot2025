@@ -28,10 +28,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.ElevatorCmds;
-import frc.robot.commands.PivotCmds;
-import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
+import frc.robot.commands.SuperStructureEnum;
 import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants;
@@ -50,10 +48,10 @@ import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOKrakens;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
-import frc.robot.subsystems.rollers.Rollers1xSim;
 import frc.robot.subsystems.rollers.RollersIO;
-import frc.robot.subsystems.vision.VisionIOOdometry;
+import frc.robot.subsystems.rollers.RollersIOSim;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLevel;
 import java.util.Arrays;
@@ -101,7 +99,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         pivot = new Pivot(new PivotIOSim());
         elevator = new Elevator(new ElevatorIOSim());
-        rollers = new Rollers(new Rollers1xSim());
+        rollers = new Rollers(new RollersIOSim());
         break;
 
       default:
@@ -276,17 +274,9 @@ public class RobotContainer {
         .onFalse(ScoreAssist.getInstance().cancelCmd());
 
     driver
-        .y()
-        .onTrue(
-            Commands.parallel(
-                ElevatorCmds.setHeightCmd(0),
-                PivotCmds.setAngle(0),
-                RollerCmds.setTubeSpeed(4000)));
-
-    driver
         .leftBumper()
-        .whileTrue(Commands.sequence(ElevatorCmds.setHeightCmd(50), PivotCmds.setAngle(60)))
-        .whileFalse(Commands.sequence(ElevatorCmds.setHeightCmd(10), PivotCmds.setAngle(30)));
+        .whileTrue(SuperStructureEnum.L1_CORAL_SCORE.getCommand())
+        .onFalse(SuperStructureEnum.STARTING_CONF.getCommand());
 
     // Slow-Mode
     driver
@@ -395,12 +385,12 @@ public class RobotContainer {
                     () -> -driver.getRightX()),
                 "Full Control"));
 
-    // ScoreAssist.getInstance()
-    //     .getTrigger()
-    //     .onTrue(
-    //         ScoreAssist.getInstance()
-    //             .setActiveCommand(ScoreAssist.getInstance()::networkTablesDrive))
-    //     .onFalse(ScoreAssist.getInstance().cancelCmd());
+    ScoreAssist.getInstance()
+        .getTrigger()
+        .onTrue(
+            ScoreAssist.getInstance()
+                .setActiveCommand(ScoreAssist.getInstance()::networkTablesDrive))
+        .onFalse(ScoreAssist.getInstance().cancelCmd());
   }
 
   public void disabledPeriodic() {
@@ -408,6 +398,5 @@ public class RobotContainer {
     elevator.setTargetHeight(elevator.getCurrentHeight());
     pivot.setTargetAngle(pivot.getCurrentAngle());
     rollers.setTubeRPM(0);
-    rollers.setAlgaeRPM(0);
   }
 }

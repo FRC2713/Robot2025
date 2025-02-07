@@ -23,9 +23,6 @@ public class PivotConstants {
 
   public static final double kInitialAngleRad = Units.degreesToRadians(0);
   public static final double kRampAngleRad = Units.degreesToRadians(30);
-  public static final double kL1AngleRad = kRampAngleRad;
-  public static final double kL2AngleRad = Units.degreesToRadians(35);
-  public static final double kL4AngleRad = kMaxAngleRad;
 
   public static final int kStallCurrentLimit = 30; // amps
   public static final int kStatorCurrentLimit = 100; // also amps

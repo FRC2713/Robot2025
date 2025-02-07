@@ -5,7 +5,6 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.SuperStructure;
 
 public class AutoRoutines {
   private final AutoFactory m_factory;
@@ -33,35 +32,40 @@ public class AutoRoutines {
                 startToReefTraj.cmd()));
 
     // Starting at the event marker named "intake", run the intake
-    startToReefTraj.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
+    // startToReefTraj.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
 
     // // When the trajectory is done, start the next trajectory
     startToReefTraj
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L1_CORAL_SCORE_AND_ALGAE_TAKE(), reefToProcTraj.cmd()));
+                // SuperStructure.L1_CORAL_SCORE_AND_ALGAE_TAKE(),
+                reefToProcTraj.cmd()));
 
     // // While the trajectory is active, prepare the scoring subsystem
     // reefToProcTraj.active().whileTrue(SuperStructure.PROCESSOR_PREP());
-    reefToProcTraj.atTime("PrepProcessor").onTrue(SuperStructure.PROCESSOR_PREP());
+    // reefToProcTraj.atTime("PrepProcessor").onTrue(SuperStructure.PROCESSOR_PREP());
 
-    reefToProcTraj.atTime("ScoreProcessor").onTrue(SuperStructure.PROCESSOR_SCORE());
+    // reefToProcTraj.atTime("ScoreProcessor").onTrue(SuperStructure.PROCESSOR_SCORE());
 
     // // When the trajectory is done, score
     reefToProcTraj
         .done()
-        .onTrue(Commands.sequence(SuperStructure.SOURCE_PICK_UP(), sourceToReefA2.cmd()));
+        .onTrue(
+            Commands.sequence(
+                // SuperStructure.SOURCE_PICK_UP(),
+                sourceToReefA2.cmd()));
 
     sourceToReefA2
         .done()
         .onFalse(
             Commands.sequence(
-                SuperStructure.L1_CORAL_SCORE_AND_ALGAE_TAKE(), reefA2ToProcessor.cmd()));
+                // SuperStructure.L1_CORAL_SCORE_AND_ALGAE_TAKE(),
+                reefA2ToProcessor.cmd()));
 
-    reefA2ToProcessor.atTime("PrepProcessor").onTrue(SuperStructure.PROCESSOR_PREP());
+    // reefA2ToProcessor.atTime("PrepProcessor").onTrue(SuperStructure.PROCESSOR_PREP());
 
-    reefA2ToProcessor.done().onTrue(SuperStructure.PROCESSOR_SCORE());
+    // reefA2ToProcessor.done().onTrue(SuperStructure.PROCESSOR_SCORE());
 
     return routine;
   }
@@ -85,28 +89,43 @@ public class AutoRoutines {
                 startToReefTraj.resetOdometry(),
                 startToReefTraj.cmd()));
 
-    startToReefTraj.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
+    // startToReefTraj.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
     startToReefTraj
         .done()
-        .onTrue(Commands.sequence(SuperStructure.L1_CORAL_SCORE(), reefB2ToSource.cmd()));
+        .onTrue(
+            Commands.sequence(
+                // SuperStructure.L1_CORAL_SCORE(),
+                reefB2ToSource.cmd()));
 
     reefB2ToSource
         .done()
-        .onTrue(Commands.sequence(SuperStructure.SOURCE_PICK_UP(), sourceToReefA2.cmd()));
+        .onTrue(
+            Commands.sequence(
+                // SuperStructure.SOURCE_PICK_UP(),
+                sourceToReefA2.cmd()));
 
-    sourceToReefA2.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
+    // sourceToReefA2.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
     sourceToReefA2
         .done()
-        .onFalse(Commands.sequence(SuperStructure.L1_CORAL_SCORE(), reefA2ToSource.cmd()));
+        .onFalse(
+            Commands.sequence(
+                // SuperStructure.L1_CORAL_SCORE(),
+                reefA2ToSource.cmd()));
 
     reefA2ToSource
         .done()
-        .onTrue(Commands.sequence(SuperStructure.SOURCE_PICK_UP(), sourceToReefA1.cmd()));
+        .onTrue(
+            Commands.sequence(
+                // SuperStructure.SOURCE_PICK_UP(),
+                sourceToReefA1.cmd()));
 
-    sourceToReefA1.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
+    // sourceToReefA1.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
     sourceToReefA1
         .done()
-        .onFalse(Commands.sequence(SuperStructure.L1_CORAL_SCORE(), reefA1ToSource.cmd()));
+        .onFalse(
+            Commands.sequence(
+                // SuperStructure.L1_CORAL_SCORE(),
+                reefA1ToSource.cmd()));
 
     return routine;
   }

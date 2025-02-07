@@ -7,8 +7,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.util.ControlGains;
 
 public class RollerConstants {
-  public static final int kCoralCANId = 101; // unitless
-  public static final int kAlgaeCANId = 25; // unitless
+  public static final int kCoralCANId = 25;
+  public static final int kAlgaeCANId = 101;
 
   public static final double kAlgaeMOI = 0.001;
   public static final double kAlgaeGearing = 1 / (48.0 / 18.0);
@@ -19,8 +19,8 @@ public class RollerConstants {
   public static final boolean kAlgaeMotorInverted = true;
 
   // values from Rev velocity control examples
-  public static final ControlGains CORALPID = new ControlGains().p(1).d(0.1); // unitless
-  public static final ControlGains ALGAEPID = new ControlGains().p(0.0003); // unitless
+  public static final ControlGains CORALPID = new ControlGains().p(1).d(0.1);
+  public static final ControlGains ALGAEPID = new ControlGains().p(0.0003);
 
   public static final double kCoralAcceptablePositionError = 1000; // rotations
   public static final double kCoralMaxVelocity = 6000; // rpm
@@ -61,4 +61,6 @@ public class RollerConstants {
 
     return config;
   }
+
+  public static final double AT_TARGET_GIVE_RPM = 150;
 }

@@ -92,7 +92,6 @@ public class Robot extends LoggedRobot {
             .getRoot("root", 1.5, 0)
             .append(RobotContainer.elevator.mech2d)
             .append(RobotContainer.pivot.mech2d);
-    mech2d_pre_rollers.append(RobotContainer.rollers.mech2dAlgae);
     mech2d_pre_rollers.append(RobotContainer.rollers.mech2dTube);
     SmartDashboard.putData("Mech2d", mech2d);
   }
