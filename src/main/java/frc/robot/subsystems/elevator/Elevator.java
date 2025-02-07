@@ -35,16 +35,16 @@ public class Elevator extends SubsystemBase {
     }
 
     if (getCurrentHeight() > ElevatorConstants.LEVEL_TWO_HEIGHT_IN && !crossedLevelTwo) {
-      System.out.println("Elevator L2 crossed");
       this.IO.changeSlot(1);
       crossedLevelTwo = true;
       crossedLevelOne = false;
     } else if (getCurrentHeight() <= ElevatorConstants.LEVEL_TWO_HEIGHT_IN && !crossedLevelOne) {
-      System.out.println("Elevator L1 crossed");
       this.IO.changeSlot(0);
       crossedLevelOne = true;
       crossedLevelTwo = false;
     }
+    Logger.recordOutput(
+        "Elevator/Stage", getCurrentHeight() > ElevatorConstants.LEVEL_TWO_HEIGHT_IN ? 2 : 1);
 
     this.IO.updateInputs(this.inputs);
     Logger.processInputs("Elevator", this.inputs);

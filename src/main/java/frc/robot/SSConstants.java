@@ -5,7 +5,7 @@ import frc.robot.util.LoggedTunableNumber;
 public class SSConstants {
   public class Elevator {
     public static final LoggedTunableNumber L1_CORAL_SCORE_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/L1 Score Height", 10);
+        new LoggedTunableNumber("Elevator/SS/L1 Score Height", 28);
     public static final LoggedTunableNumber L1_CORAL_PREP_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L1 Prep Height", 10);
   }

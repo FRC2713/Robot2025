@@ -263,7 +263,10 @@ public class RobotContainer {
             ScoreAssist.getInstance()
                 .setActiveCommand(
                     () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.ONE)))
-        .onFalse(ScoreAssist.getInstance().cancelCmd());
+        .onFalse(
+            Commands.sequence(
+                ScoreAssist.getInstance().cancelCmd(),
+                SuperStructureEnum.STARTING_CONF.getCommand()));
 
     driver
         .b()
@@ -271,7 +274,10 @@ public class RobotContainer {
             ScoreAssist.getInstance()
                 .setActiveCommand(
                     () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.TWO)))
-        .onFalse(ScoreAssist.getInstance().cancelCmd());
+        .onFalse(
+            Commands.sequence(
+                ScoreAssist.getInstance().cancelCmd(),
+                SuperStructureEnum.STARTING_CONF.getCommand()));
 
     driver
         .leftBumper()
