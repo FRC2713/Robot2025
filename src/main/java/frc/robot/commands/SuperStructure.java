@@ -8,6 +8,7 @@ import frc.robot.subsystems.constants.PivotConstants;
 import java.util.function.Supplier;
 
 public enum SuperStructure {
+  // Loc_GamePiece_Action
   STARTING_CONF(
       () ->
           Commands.sequence(
@@ -17,6 +18,14 @@ public enum SuperStructure {
               RollerCmds.setTubeSpeedAndWait(() -> 0),
               ElevatorCmds.waitUntilAtTarget(),
               RollerCmds.waitUntilTubeAtTarget())),
+  SOURCE_CORAL_INTAKE(
+      () ->
+          Commands.sequence(
+              Commands.parallel(
+                  ElevatorCmds.setHeight(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
+                  RollerCmds.setTubeSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
+                  PivotCmds.setAngle(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG)),
+              RollerCmds.waitUntilCoral())),
   L1_CORAL_PREP(
       () ->
           Commands.parallel(

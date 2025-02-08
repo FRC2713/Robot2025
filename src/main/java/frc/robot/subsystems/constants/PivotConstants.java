@@ -81,5 +81,5 @@ public class PivotConstants {
     return config;
   }
 
-  public static final double AT_TARGET_GIVE_DEGS = 0.5;
+  public static final double AT_TARGET_GIVE_DEGS = 2;
 }

@@ -23,15 +23,9 @@ public class PoseAndTwist3d implements Sendable {
   }
 
   public static PoseAndTwist3d from(Pose2d pose, ChassisSpeeds speeds) {
-    return new PoseAndTwist3d(
-        new Pose3d(pose),
-        new Twist3d(
-            speeds.vxMetersPerSecond,
-            speeds.vyMetersPerSecond,
-            0,
-            0,
-            0,
-            speeds.omegaRadiansPerSecond));
+    var inst = new PoseAndTwist3d();
+    inst.update(pose, speeds);
+    return inst;
   }
 
   public void update(Pose2d pose, ChassisSpeeds speeds) {
