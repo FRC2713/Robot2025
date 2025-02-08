@@ -37,6 +37,7 @@ public class RollerCmds {
         setEnableLimitSwitch(false),
         setTubeSpeed(targetRPM),
         waitUntilNoCoral(),
+        Commands.waitSeconds(1),
         setEnableLimitSwitch(true));
   }
 }

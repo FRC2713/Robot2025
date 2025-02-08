@@ -28,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.PivotCmds;
+import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
@@ -42,6 +44,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
@@ -50,6 +53,7 @@ import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIOSim;
+import frc.robot.subsystems.rollers.RollersIOSparks;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.util.AllianceFlipUtil;
@@ -86,7 +90,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         elevator = new Elevator(new ElevatorIO() {});
         pivot = new Pivot(new PivotIOKrakens());
-        rollers = new Rollers(new RollersIO() {});
+        rollers = new Rollers(new RollersIOSparks() {});
         break;
 
       case SIM:
@@ -279,12 +283,12 @@ public class RobotContainer {
 
     driver
         .leftBumper()
-        .whileTrue(SuperStructure.L1_CORAL_SCORE.getCommand())
-        .onFalse(SuperStructure.STARTING_CONF.getCommand());
+        .whileTrue(Commands.sequence(PivotCmds.setAngle(55), RollerCmds.setTubeSpeed(() -> 1000)))
+        .onFalse(Commands.sequence(PivotCmds.setAngle(5), RollerCmds.setTubeSpeed(() -> 0)));
 
     driver
         .rightBumper()
-        .whileTrue(SuperStructure.L2_CORAL_SCORE.getCommand())
+        .whileTrue(SuperStructure.L1_CORAL_SCORE.getCommand())
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
     // Slow-Mode
