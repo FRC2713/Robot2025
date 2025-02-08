@@ -43,6 +43,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
@@ -50,10 +51,8 @@ import frc.robot.subsystems.pivot.PivotIOKrakens;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
-import frc.robot.subsystems.rollers.RollersIOSim;
 import frc.robot.subsystems.rollers.RollersIOSparks;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLevel;
 import java.util.Arrays;
@@ -86,7 +85,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        elevator = new Elevator(new ElevatorIO() {});
+        elevator = new Elevator(new ElevatorIOKrakens() {});
         pivot = new Pivot(new PivotIOKrakens());
         rollers = new Rollers(new RollersIOSparks() {});
         break;
@@ -288,7 +287,11 @@ public class RobotContainer {
     // Score Coral
     driver
         .rightBumper()
-        .whileTrue(SuperStructure.L1_CORAL_SCORE.getCommand())
+        .whileTrue(
+            Commands.sequence(
+                PivotCmds.setAngle(35),
+                new InstantCommand(() -> RobotContainer.rollers.setEnableLimitSwitch(false)),
+                RollerCmds.setTubeSpeed(() -> 1000)))
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
     // Roller intake test
     driver.a().onTrue(RollerCmds.driveUntilLimitSet(() -> 1000));

@@ -34,10 +34,12 @@ public class RollerCmds {
 
   public static Command setTubeSpeedAndWaitForNoCoral(DoubleSupplier targetRPM) {
     return Commands.sequence(
+        Commands.print("Disbaling limit switch"),
         setEnableLimitSwitch(false),
         setTubeSpeed(targetRPM),
         waitUntilNoCoral(),
         Commands.waitSeconds(1),
+        Commands.print("Enabling limit switch"),
         setEnableLimitSwitch(true));
   }
 
