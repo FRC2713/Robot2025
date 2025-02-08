@@ -37,10 +37,8 @@ import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
-import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
-import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOKrakens;
@@ -51,10 +49,11 @@ import frc.robot.subsystems.pivot.PivotIOKrakens;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
+import frc.robot.subsystems.rollers.RollersIOSim;
 import frc.robot.subsystems.rollers.RollersIOSparks;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.util.AllianceFlipUtil;
-import frc.robot.util.ScoreLevel;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
 
@@ -78,16 +77,23 @@ public class RobotContainer {
     // Start subsystems
     switch (Constants.currentMode) {
       case REAL:
+        // driveSubsystem =
+        //     new Drivetrain(
+        //         new GyroIOPigeon2(),
+        //         new ModuleIOTalonFX(TunerConstants.FrontLeft),
+        //         new ModuleIOTalonFX(TunerConstants.FrontRight),
+        //         new ModuleIOTalonFX(TunerConstants.BackLeft),
+        //         new ModuleIOTalonFX(TunerConstants.BackRight));
         driveSubsystem =
             new Drivetrain(
-                new GyroIOPigeon2(),
-                new ModuleIOTalonFX(TunerConstants.FrontLeft),
-                new ModuleIOTalonFX(TunerConstants.FrontRight),
-                new ModuleIOTalonFX(TunerConstants.BackLeft),
-                new ModuleIOTalonFX(TunerConstants.BackRight));
-        elevator = new Elevator(new ElevatorIOKrakens() {});
+                new GyroIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {});
+        elevator = new Elevator(new ElevatorIOKrakens());
         pivot = new Pivot(new PivotIOKrakens());
-        rollers = new Rollers(new RollersIOSparks() {});
+        rollers = new Rollers(new RollersIOSparks());
         break;
 
       case SIM:
@@ -258,25 +264,29 @@ public class RobotContainer {
                     driveSubsystem)
                 .ignoringDisable(true));
 
-    driver
-        .a()
-        .onTrue(
-            ScoreAssist.getInstance()
-                .setActiveCommand(
-                    () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.ONE)))
-        .onFalse(
-            Commands.sequence(
-                ScoreAssist.getInstance().cancelCmd(), SuperStructure.STARTING_CONF.getCommand()));
+    // driver
+    //     .a()
+    //     .onTrue(
+    //         ScoreAssist.getInstance()
+    //             .setActiveCommand(
+    //                 () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose,
+    // ScoreLevel.ONE)))
+    //     .onFalse(
+    //         Commands.sequence(
+    //             ScoreAssist.getInstance().cancelCmd(),
+    // SuperStructure.STARTING_CONF.getCommand()));
 
-    driver
-        .b()
-        .onTrue(
-            ScoreAssist.getInstance()
-                .setActiveCommand(
-                    () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.TWO)))
-        .onFalse(
-            Commands.sequence(
-                ScoreAssist.getInstance().cancelCmd(), SuperStructure.STARTING_CONF.getCommand()));
+    // driver
+    //     .b()
+    //     .onTrue(
+    //         ScoreAssist.getInstance()
+    //             .setActiveCommand(
+    //                 () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose,
+    // ScoreLevel.TWO)))
+    //     .onFalse(
+    //         Commands.sequence(
+    //             ScoreAssist.getInstance().cancelCmd(),
+    // SuperStructure.STARTING_CONF.getCommand()));
 
     // Intake Coral
     driver
@@ -292,17 +302,22 @@ public class RobotContainer {
 
     // Score Coral
     driver
-        .rightBumper()
+        .rightTrigger(0.25)
         .whileTrue(
             Commands.sequence(
-                PivotCmds.setAngle(35),
-                new InstantCommand(() -> RobotContainer.rollers.setEnableLimitSwitch(false)),
-                RollerCmds.setTubeSpeed(() -> 1000)))
+                new InstantCommand(() -> rollers.setEnableLimitSwitch(false)),
+                RollerCmds.setTubeSpeed(() -> 2000)))
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
+
+    driver.a().onTrue(SuperStructure.L1_CORAL_SCORE.getCommand());
+    driver.b().onTrue(SuperStructure.L2_CORAL_SCORE.getCommand());
+    driver.y().onTrue(SuperStructure.L3_CORAL_SCORE.getCommand());
+
     // Roller intake test
-    driver.a().onTrue(RollerCmds.driveUntilLimitSet(() -> 1000));
+    // driver.a().onTrue(RollerCmds.driveUntilLimitSet(() -> 1000));
     // Roller out test
-    driver.b().onTrue(RollerCmds.setTubeSpeed(() -> -1000));
+    // driver.b().onTrue(RollerCmds.setTubeSpeed(() -> -1000));
+
     // Slow-Mode
     driver
         .rightBumper()

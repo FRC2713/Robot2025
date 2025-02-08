@@ -5,7 +5,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.RollerConstants;
 
@@ -21,7 +20,7 @@ public class RollersIOSparks implements RollersIO {
     this.motor = new SparkMax(RollerConstants.kCoralCANId, MotorType.kBrushless);
     this.limitSwitch = motor.getForwardLimitSwitch();
     motor.configure(
-        RollerConstants.createAlgaeConfig(),
+        RollerConstants.createAlgaeConfig(true),
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
   }
@@ -45,10 +44,10 @@ public class RollersIOSparks implements RollersIO {
 
   @Override
   public void setEnableLimitSwitch(boolean setEnable) {
-    SparkMaxConfig newConfig = RollerConstants.createAlgaeConfig();
-    newConfig.limitSwitch.forwardLimitSwitchEnabled(setEnable);
-    motor.configureAsync(
-        newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    motor.configure(
+        RollerConstants.createAlgaeConfig(setEnable),
+        ResetMode.kResetSafeParameters,
+        PersistMode.kNoPersistParameters);
   }
 
   private boolean hasCoral() {

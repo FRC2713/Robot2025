@@ -44,14 +44,16 @@ public class RollerConstants {
     return config;
   }
 
-  public static SparkMaxConfig createAlgaeConfig() {
+  public static SparkMaxConfig createAlgaeConfig(boolean enableLS) {
     SparkMaxConfig config = new SparkMaxConfig();
 
     config.inverted(kAlgaeMotorInverted);
     config.encoder.positionConversionFactor(kAlgaeGearing);
     config.idleMode(IdleMode.kBrake);
-
-    config.limitSwitch.forwardLimitSwitchEnabled(true).forwardLimitSwitchType(Type.kNormallyOpen);
+    config
+        .limitSwitch
+        .forwardLimitSwitchEnabled(enableLS)
+        .forwardLimitSwitchType(Type.kNormallyOpen);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
     ALGAEPID.applyPID(config.closedLoop);

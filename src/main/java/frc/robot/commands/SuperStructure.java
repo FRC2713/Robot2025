@@ -22,6 +22,7 @@ public enum SuperStructure {
       () ->
           Commands.sequence(
               Commands.parallel(
+                  RollerCmds.setEnableLimitSwitch(true),
                   ElevatorCmds.setHeight(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
                   RollerCmds.setTubeSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
                   PivotCmds.setAngle(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG)),
@@ -51,12 +52,17 @@ public enum SuperStructure {
           Commands.parallel(
               ElevatorCmds.setHeight(SSConstants.Elevator.L2_CORAL_PREP_HEIGHT_IN),
               PivotCmds.setAngle(SSConstants.Pivot.L2_CORAL_PREP_ANGLE_DEG))),
+  L3_CORAL_SCORE(
+      () ->
+          Commands.sequence(
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L3_CORAL_SCORE_HEIGHT_IN),
+              PivotCmds.setAngleAndWait(SSConstants.Pivot.L3_CORAL_SCORE_ANGLE_DEG),
+              RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.L3_CORAL_SCORE_SPEED))),
   L2_CORAL_SCORE(
       () ->
           Commands.sequence(
-              Commands.parallel(
-                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_CORAL_SCORE_HEIGHT_IN),
-                  PivotCmds.setAngleAndWait(SSConstants.Pivot.L2_CORAL_SCORE_ANGLE_DEG)),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_CORAL_SCORE_HEIGHT_IN),
+              PivotCmds.setAngleAndWait(SSConstants.Pivot.L2_CORAL_SCORE_ANGLE_DEG),
               RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.L2_CORAL_SCORE_SPEED)));
 
   private Supplier<Command> cmd;
