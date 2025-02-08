@@ -45,7 +45,7 @@ public class ElevatorConstants {
               .v(0.0)
               .a(0.0)
               // Motion Magic
-              .mmCruiseVelo(10.0),
+              .mmCruiseVelo(1),
           160,
           1600);
 

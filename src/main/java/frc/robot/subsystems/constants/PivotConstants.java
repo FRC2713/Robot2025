@@ -28,13 +28,14 @@ public class PivotConstants {
   public static final int kStatorCurrentLimit = 100; // also amps
   public static final double kMaxAngularVelocity = 5; // RPM
 
-  public static final double kP = RHRUtil.modeDependentDouble(0., 10);
+  public static final double kP = RHRUtil.modeDependentDouble(300., 10);
   public static final double kI = 0.0;
-  public static final double kD = RHRUtil.modeDependentDouble(0., 0);
+  public static final double kD = RHRUtil.modeDependentDouble(5., 0);
 
   public static final double kG = RHRUtil.modeDependentDouble(6.5, 0.381);
   public static final double kV = 0.0;
   public static final double kA = 0.0;
+  public static final double kS = RHRUtil.modeDependentDouble(40, 0.);
 
   public static final double KTrapezoidalMaxVelocity = 3;
   public static final double KTrapezoidalMaxAcceleration = 3;
@@ -49,11 +50,12 @@ public class PivotConstants {
               .d(kD)
               // FF
               .g(kG)
+              .s(kS)
               .v(kV)
               .a(kA)
               // Motion Magic
               .mmCruiseVelo(0),
-          160,
+          80,
           1600);
 
   public static final double kAbsoluteEncoderOffset = 118.7;
