@@ -26,6 +26,14 @@ public enum SuperStructure {
                   RollerCmds.setTubeSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
                   PivotCmds.setAngle(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG)),
               RollerCmds.waitUntilCoral())),
+  L1_ALGAE_GRAB(
+      () ->
+          Commands.sequence(
+              Commands.parallel(
+                  ElevatorCmds.setHeight(SSConstants.Elevator.L1_ALGAE_GRAB_HEIGHT_IN),
+                  RollerCmds.setTubeSpeed(SSConstants.Roller.L1_ALGAE_GRAB_SPEED),
+                  PivotCmds.setAngle(SSConstants.Pivot.L1_ALGAE_GRAB_DEG)),
+              RollerCmds.waitUntilCoral())),
   L1_CORAL_PREP(
       () ->
           Commands.parallel(

@@ -287,6 +287,12 @@ public class RobotContainer {
         .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
+    // Intake Algae
+    driver
+        .leftTrigger(0.25)
+        .whileTrue(SuperStructure.L1_ALGAE_GRAB.getCommand())
+        .onFalse(SuperStructure.STARTING_CONF.getCommand());
+
     // Score Coral
     driver
         .rightBumper()
