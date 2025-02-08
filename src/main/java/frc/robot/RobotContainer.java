@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
@@ -289,7 +290,10 @@ public class RobotContainer {
         .rightBumper()
         .whileTrue(SuperStructure.L1_CORAL_SCORE.getCommand())
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
-
+    // Roller intake test
+    driver.a().onTrue(RollerCmds.driveUntilLimitSet(() -> 1000));
+    // Roller out test
+    driver.b().onTrue(RollerCmds.setTubeSpeed(() -> -1000));
     // Slow-Mode
     driver
         .rightBumper()

@@ -40,4 +40,9 @@ public class RollerCmds {
         Commands.waitSeconds(1),
         setEnableLimitSwitch(true));
   }
+
+  public static Command driveUntilLimitSet(DoubleSupplier targetRPM) {
+    // () -> 0
+    return Commands.sequence(setTubeSpeed(targetRPM), waitUntilCoral(), setTubeSpeed(() -> 0.0));
+  }
 }
