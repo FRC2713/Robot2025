@@ -22,7 +22,7 @@ public interface ElevatorIO {
   }
 
   public default boolean isAtTarget() {
-    return false;
+    return true;
   }
   ;
 
