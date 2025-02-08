@@ -28,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.PivotCmds;
+import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
@@ -287,7 +289,11 @@ public class RobotContainer {
     // Score Coral
     driver
         .rightBumper()
-        .whileTrue(SuperStructure.L1_CORAL_SCORE.getCommand())
+        .whileTrue(
+            Commands.sequence(
+                PivotCmds.setAngle(35),
+                new InstantCommand(() -> RobotContainer.rollers.setEnableLimitSwitch(false)),
+                RollerCmds.setTubeSpeed(() -> 1000)))
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
     // Slow-Mode
