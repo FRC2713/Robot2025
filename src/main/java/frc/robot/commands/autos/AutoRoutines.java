@@ -44,8 +44,8 @@ public class AutoRoutines {
             Commands.sequence(
                 SuperStructure.L3_CORAL_SCORE.getCommand(),
                 SuperStructure.L3_ALGAE_GRAB.getCommand(),
-                Commands.parallel(SuperStructure.STARTING_CONF.getCommand(),
-                reefDToProcTraj.cmd())));
+                Commands.parallel(
+                    SuperStructure.STARTING_CONF.getCommand(), reefDToProcTraj.cmd())));
 
     // When the trajectory is done, score in processor. Then go to source
     reefDToProcTraj
@@ -70,7 +70,8 @@ public class AutoRoutines {
             Commands.sequence(
                 SuperStructure.L3_CORAL_SCORE.getCommand(),
                 SuperStructure.L3_ALGAE_GRAB.getCommand(),
-                Commands.parallel(SuperStructure.STARTING_CONF.getCommand(),reefBToProcessor.cmd())));
+                Commands.parallel(
+                    SuperStructure.STARTING_CONF.getCommand(), reefBToProcessor.cmd())));
 
     // When at the processor, score!
     reefBToProcessor.done().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
