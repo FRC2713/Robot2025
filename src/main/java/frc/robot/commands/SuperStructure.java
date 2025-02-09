@@ -26,20 +26,25 @@ public enum SuperStructure {
                   ElevatorCmds.setHeight(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
                   RollerCmds.setTubeSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
                   PivotCmds.setAngle(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG)),
-              RollerCmds.waitUntilCoral())),
-  L1_ALGAE_GRAB(
+              RollerCmds.waitUntilCoral(2))),
+  L3_ALGAE_GRAB(
       () ->
           Commands.sequence(
               Commands.parallel(
-                  ElevatorCmds.setHeight(SSConstants.Elevator.L1_ALGAE_GRAB_HEIGHT_IN),
-                  RollerCmds.setTubeSpeed(SSConstants.Roller.L1_ALGAE_GRAB_SPEED),
-                  PivotCmds.setAngle(SSConstants.Pivot.L1_ALGAE_GRAB_DEG)),
-              RollerCmds.waitUntilCoral())),
+                  ElevatorCmds.setHeight(SSConstants.Elevator.L3_ALGAE_GRAB_HEIGHT_IN),
+                  RollerCmds.setTubeSpeed(SSConstants.Roller.L3_ALGAE_GRAB_SPEED),
+                  PivotCmds.setAngle(SSConstants.Pivot.L3_ALGAE_GRAB_DEG)),
+              RollerCmds.waitUntilAlgae(2))),
   L1_CORAL_PREP(
       () ->
           Commands.parallel(
               ElevatorCmds.setHeight(SSConstants.Elevator.L1_CORAL_PREP_HEIGHT_IN),
               PivotCmds.setAngle(SSConstants.Pivot.L1_CORAL_PREP_ANGLE_DEG))),
+  L3_CORAL_PREP(
+      () ->
+          Commands.parallel(
+              ElevatorCmds.setHeight(SSConstants.Elevator.L3_CORAL_PREP_HEIGHT_IN),
+              PivotCmds.setAngle(SSConstants.Pivot.L3_CORAL_PREP_ANGLE_DEG))),
   L1_CORAL_SCORE(
       () ->
           Commands.sequence(
@@ -63,7 +68,14 @@ public enum SuperStructure {
           Commands.sequence(
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_CORAL_SCORE_HEIGHT_IN),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.L2_CORAL_SCORE_ANGLE_DEG),
-              RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.L2_CORAL_SCORE_SPEED)));
+              RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.L2_CORAL_SCORE_SPEED))),
+  PROCESSOR_SCORE(
+      () ->
+          Commands.sequence(
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN),
+              PivotCmds.setAngleAndWait(SSConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
+              RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.PROCESSOR_SCORE_SPEED))),
+  ;
 
   private Supplier<Command> cmd;
 
@@ -72,6 +84,6 @@ public enum SuperStructure {
   }
 
   public Command getCommand() {
-    return cmd.get();
+    return Commands.sequence(Commands.print("Starting SS: " + this.toString()), cmd.get());
   }
 }

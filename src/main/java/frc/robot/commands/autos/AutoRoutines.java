@@ -14,12 +14,14 @@ public class AutoRoutines {
     m_factory = factory;
   }
 
-  public AutoRoutine exampleAuto() {
-    AutoRoutine routine = m_factory.newRoutine("Example Auto");
+  public AutoRoutine coralAndAlgaeAuto() {
+    String name = "Coral and Algae Auto";
+    AutoRoutine routine = m_factory.newRoutine(name);
 
     // Load the routine's trajectories
-    AutoTrajectory startToReefTraj = routine.trajectory("StartToReef");
-    AutoTrajectory reefToProcTraj = routine.trajectory("ReefB2ToProcessorToSource");
+    AutoTrajectory startToReefB2Traj = routine.trajectory("StartToReefB2");
+    AutoTrajectory reefB2ToProcTraj = routine.trajectory("ReefB2ToProcessor");
+    AutoTrajectory procToSourceTraj = routine.trajectory("ProcessorToSource");
     AutoTrajectory sourceToReefA2 = routine.trajectory("SourceToReefA2");
     AutoTrajectory reefA2ToProcessor = routine.trajectory("ReefA2ToProcessor");
 
@@ -28,43 +30,50 @@ public class AutoRoutines {
         .active()
         .onTrue(
             Commands.sequence(
-                new InstantCommand(() -> System.out.println("Example Auto started")),
-                startToReefTraj.resetOdometry(),
-                startToReefTraj.cmd()));
+                Commands.print(name + " started!"),
+                startToReefB2Traj.resetOdometry(),
+                startToReefB2Traj.cmd()));
 
-    // Starting at the event marker named "intake", run the intake
-    startToReefTraj.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP.getCommand());
+    // Go from start to reef B2, preping the elevator along the way
+    startToReefB2Traj.atTime("PrepElevator").onTrue(SuperStructure.L3_CORAL_PREP.getCommand());
 
-    // // When the trajectory is done, start the next trajectory
-    startToReefTraj
-        .done()
-        .onTrue(
-            Commands.sequence(SuperStructure.L1_CORAL_SCORE.getCommand(), reefToProcTraj.cmd()));
-
-    // // While the trajectory is active, prepare the scoring subsystem
-    // reefToProcTraj.active().whileTrue(SuperStructure.PROCESSOR_PREP());
-    // reefToProcTraj.atTime("PrepProcessor").onTrue(SuperStructure.PROCESSOR_PREP());
-
-    // reefToProcTraj.atTime("ScoreProcessor").onTrue(SuperStructure.PROCESSOR_SCORE());
-
-    // // When the trajectory is done, score
-    reefToProcTraj
+    // When at the reef, score and pick up algae; then go to the processor
+    startToReefB2Traj
         .done()
         .onTrue(
             Commands.sequence(
-                // SuperStructure.SOURCE_PICK_UP(),
-                sourceToReefA2.cmd()));
+                SuperStructure.L3_CORAL_SCORE.getCommand(),
+                SuperStructure.L3_ALGAE_GRAB.getCommand(),
+                SuperStructure.STARTING_CONF.getCommand(),
+                reefB2ToProcTraj.cmd()));
 
+    // When the trajectory is done, score in processor. Then go to source
+    reefB2ToProcTraj
+        .done()
+        .onTrue(
+            Commands.sequence(SuperStructure.PROCESSOR_SCORE.getCommand(), procToSourceTraj.cmd()));
+
+    // When at the source, pick up coral and go to reef A2
+    procToSourceTraj
+        .done()
+        .onTrue(
+            Commands.sequence(
+                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), sourceToReefA2.cmd()));
+
+    // Prep elevator along the way
+    sourceToReefA2.atTime("PrepElevator").onTrue(SuperStructure.L3_CORAL_PREP.getCommand());
+
+    // Once at reef A2, score and pick up algae; then go to processor
     sourceToReefA2
         .done()
         .onFalse(
             Commands.sequence(
-                // SuperStructure.L1_CORAL_SCORE_AND_ALGAE_TAKE(),
+                SuperStructure.L3_CORAL_SCORE.getCommand(),
+                SuperStructure.L3_ALGAE_GRAB.getCommand(),
                 reefA2ToProcessor.cmd()));
 
-    // reefA2ToProcessor.atTime("PrepProcessor").onTrue(SuperStructure.PROCESSOR_PREP());
-
-    // reefA2ToProcessor.done().onTrue(SuperStructure.PROCESSOR_SCORE());
+    // When at the processor, score!
+    reefA2ToProcessor.done().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
 
     return routine;
   }
@@ -73,7 +82,7 @@ public class AutoRoutines {
     AutoRoutine routine = m_factory.newRoutine("Score Lots of Coral");
 
     // Load the routine's trajectories
-    AutoTrajectory startToReefTraj = routine.trajectory("Start2ToReefB2");
+    AutoTrajectory startToReefB2Traj = routine.trajectory("Start2ToReefB2");
     AutoTrajectory reefB2ToSource = routine.trajectory("ReefB2ToSource");
     AutoTrajectory sourceToReefA2 = routine.trajectory("SourceToReefA2");
     AutoTrajectory reefA2ToSource = routine.trajectory("ReefA2ToSource");
@@ -85,46 +94,48 @@ public class AutoRoutines {
         .onTrue(
             Commands.sequence(
                 new InstantCommand(() -> System.out.println("Score Lots of Coral started")),
-                startToReefTraj.resetOdometry(),
-                startToReefTraj.cmd()));
+                startToReefB2Traj.resetOdometry(),
+                startToReefB2Traj.cmd()));
 
-    // startToReefTraj.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
-    startToReefTraj
+    // Go from start to reef B2, preping the elevator along the way
+    startToReefB2Traj.atTime("PrepElevator").onTrue(SuperStructure.L3_CORAL_PREP.getCommand());
+    // When at the reef, score and go to source
+    startToReefB2Traj
         .done()
         .onTrue(
-            Commands.sequence(
-                // SuperStructure.L1_CORAL_SCORE(),
-                reefB2ToSource.cmd()));
+            Commands.sequence(SuperStructure.L3_CORAL_SCORE.getCommand(), reefB2ToSource.cmd()));
 
+    // When the trajectory is done, intake; then go to reef A2
     reefB2ToSource
         .done()
         .onTrue(
             Commands.sequence(
-                // SuperStructure.SOURCE_PICK_UP(),
-                sourceToReefA2.cmd()));
+                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), sourceToReefA2.cmd()));
 
-    // sourceToReefA2.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
+    // Prep elevator along the way
+    sourceToReefA2.atTime("PrepElevator").onTrue(SuperStructure.L3_CORAL_PREP.getCommand());
+    // Once at reef A2, score and go to source
     sourceToReefA2
         .done()
         .onFalse(
-            Commands.sequence(
-                // SuperStructure.L1_CORAL_SCORE(),
-                reefA2ToSource.cmd()));
+            Commands.sequence(SuperStructure.L3_CORAL_SCORE.getCommand(), reefA2ToSource.cmd()));
 
+    // When the trajectory is done, intake; then go to reef A1
     reefA2ToSource
         .done()
         .onTrue(
             Commands.sequence(
-                // SuperStructure.SOURCE_PICK_UP(),
-                sourceToReefA1.cmd()));
+                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), sourceToReefA1.cmd()));
 
-    // sourceToReefA1.atTime("PrepElevator").onTrue(SuperStructure.L1_CORAL_PREP_ELEVATOR());
+    // Prep elevator along the way
+    sourceToReefA1.atTime("PrepElevator").onTrue(SuperStructure.L3_CORAL_SCORE.getCommand());
+    // Once at reef A1, score and go to source
     sourceToReefA1
         .done()
         .onFalse(
-            Commands.sequence(
-                // SuperStructure.L1_CORAL_SCORE(),
-                reefA1ToSource.cmd()));
+            Commands.sequence(SuperStructure.L3_CORAL_SCORE.getCommand(), reefA1ToSource.cmd()));
+
+    reefA1ToSource.done().onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand());
 
     return routine;
   }

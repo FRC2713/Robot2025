@@ -45,6 +45,10 @@ public class Rollers extends SubsystemBase {
     return inputs.hasCoral;
   }
 
+  public boolean hasAlgae() {
+    return inputs.hasAlgae;
+  }
+
   public void setEnableLimitSwitch(boolean setEnable) {
     IO.setEnableLimitSwitch(setEnable);
   }

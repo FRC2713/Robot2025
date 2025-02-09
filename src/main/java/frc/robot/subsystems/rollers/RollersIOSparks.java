@@ -20,7 +20,7 @@ public class RollersIOSparks implements RollersIO {
     this.motor = new SparkMax(RollerConstants.kCoralCANId, MotorType.kBrushless);
     this.limitSwitch = motor.getForwardLimitSwitch();
     motor.configure(
-        RollerConstants.createAlgaeConfig(true),
+        RollerConstants.createCoralConfig(true),
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
   }
@@ -34,6 +34,7 @@ public class RollersIOSparks implements RollersIO {
     inputs.tubePositionDegs = Units.rotationsToDegrees(motor.getEncoder().getPosition());
 
     inputs.hasCoral = this.hasCoral();
+    inputs.hasAlgae = motor.getOutputCurrent() > RollerConstants.kAlgaeCurrentThreshold;
   }
 
   @Override
@@ -45,7 +46,7 @@ public class RollersIOSparks implements RollersIO {
   @Override
   public void setEnableLimitSwitch(boolean setEnable) {
     motor.configure(
-        RollerConstants.createAlgaeConfig(setEnable),
+        RollerConstants.createCoralConfig(setEnable),
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
   }

@@ -17,11 +17,29 @@ public class RollerCmds {
   }
 
   public static Command waitUntilCoral() {
-    return new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral());
+    return waitUntilCoral(Integer.MAX_VALUE);
   }
 
   public static Command waitUntilNoCoral() {
-    return new WaitUntilCommand(() -> !RobotContainer.rollers.hasCoral());
+    return waitUntilNoCoral(Integer.MAX_VALUE);
+  }
+
+  public static Command waitUntilCoral(double timeout) {
+    return Commands.race(
+        Commands.waitSeconds(timeout),
+        new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral()));
+  }
+
+  public static Command waitUntilAlgae(double timeout) {
+    return Commands.race(
+        Commands.waitSeconds(timeout),
+        new WaitUntilCommand(() -> RobotContainer.rollers.hasAlgae()));
+  }
+
+  public static Command waitUntilNoCoral(double timeout) {
+    return Commands.race(
+        Commands.waitSeconds(timeout),
+        new WaitUntilCommand(() -> !RobotContainer.rollers.hasCoral()));
   }
 
   public static Command setEnableLimitSwitch(boolean setEnable) {
@@ -34,12 +52,10 @@ public class RollerCmds {
 
   public static Command setTubeSpeedAndWaitForNoCoral(DoubleSupplier targetRPM) {
     return Commands.sequence(
-        Commands.print("Disbaling limit switch"),
         setEnableLimitSwitch(false),
         setTubeSpeed(targetRPM),
-        waitUntilNoCoral(),
+        waitUntilNoCoral(2),
         Commands.waitSeconds(1),
-        Commands.print("Enabling limit switch"),
         setEnableLimitSwitch(true));
   }
 

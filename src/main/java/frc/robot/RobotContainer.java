@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
@@ -177,7 +176,8 @@ public class RobotContainer {
     autoChooser = new AutoChooser();
 
     // Add options to the chooser
-    autoChooser.addRoutine("Example Auto Command", autoRoutines::exampleAuto);
+    autoChooser.addRoutine("Coral and Algae Auto", autoRoutines::coralAndAlgaeAuto);
+    autoChooser.addRoutine("Score Lots Of Coral", autoRoutines::scoreLotsOfCoral);
     autoChooser.addRoutine(
         "DriveStraight",
         () -> {
@@ -197,25 +197,24 @@ public class RobotContainer {
           return routine;
         });
 
-    autoChooser.addRoutine("ScoreLotsOfCoral", autoRoutines::scoreLotsOfCoral);
-
-    autoChooser.addCmd(
-        "Drive Simple FF Characterization",
-        () -> DriveCommands.feedforwardCharacterization(driveSubsystem));
-    autoChooser.addCmd(
-        "Drive SysId (Quasistatic Forward)",
-        () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addCmd(
-        "Drive SysId (Quasistatic Backward)",
-        () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addCmd(
-        "Drive SysId (Dynamic Forward)",
-        () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addCmd(
-        "Drive SysId (Dynamic Backward)",
-        () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addCmd(
-        "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
+    // Uncomment for swerve drive characterization
+    // autoChooser.addCmd(
+    //     "Drive Simple FF Characterization",
+    //     () -> DriveCommands.feedforwardCharacterization(driveSubsystem));
+    // autoChooser.addCmd(
+    //     "Drive SysId (Quasistatic Forward)",
+    //     () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    // autoChooser.addCmd(
+    //     "Drive SysId (Quasistatic Backward)",
+    //     () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    // autoChooser.addCmd(
+    //     "Drive SysId (Dynamic Forward)",
+    //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    // autoChooser.addCmd(
+    //     "Drive SysId (Dynamic Backward)",
+    //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    // autoChooser.addCmd(
+    //     "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
 
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -297,7 +296,7 @@ public class RobotContainer {
     // Intake Algae
     driver
         .leftTrigger(0.25)
-        .whileTrue(SuperStructure.L1_ALGAE_GRAB.getCommand())
+        .whileTrue(SuperStructure.L3_ALGAE_GRAB.getCommand())
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
     // Score Coral

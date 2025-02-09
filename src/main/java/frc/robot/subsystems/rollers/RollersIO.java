@@ -18,6 +18,7 @@ public interface RollersIO {
     // public double commandedAlgaeRPM = 0.0;
 
     public boolean hasCoral = false;
+    public boolean hasAlgae = false;
   }
 
   public default void updateInputs(RollersInputs inputs) {}
