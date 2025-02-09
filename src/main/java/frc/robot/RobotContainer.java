@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
@@ -296,26 +295,28 @@ public class RobotContainer {
     // Intake Algae
     driver
         .leftTrigger(0.25)
-        .whileTrue(SuperStructure.L3_ALGAE_GRAB.getCommand())
+        .whileTrue(SuperStructure.L1_ALGAE_GRAB.getCommand())
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
     // Score Coral
     driver
-        .rightTrigger(0.25)
-        .whileTrue(
-            Commands.sequence(
-                new InstantCommand(() -> rollers.setEnableLimitSwitch(false)),
-                RollerCmds.setTubeSpeed(() -> 2000)))
+        .a()
+        .whileTrue(SuperStructure.L1_CORAL_SCORE.getCommand())
+        .onFalse(SuperStructure.STARTING_CONF.getCommand());
+    driver
+        .b()
+        .whileTrue(SuperStructure.L2_CORAL_SCORE.getCommand())
+        .onFalse(SuperStructure.STARTING_CONF.getCommand());
+    driver
+        .y()
+        .whileTrue(SuperStructure.L3_CORAL_SCORE.getCommand())
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
-    driver.a().onTrue(SuperStructure.L1_CORAL_SCORE.getCommand());
-    driver.b().onTrue(SuperStructure.L2_CORAL_SCORE.getCommand());
-    driver.y().onTrue(SuperStructure.L3_CORAL_SCORE.getCommand());
-
-    // Roller intake test
-    // driver.a().onTrue(RollerCmds.driveUntilLimitSet(() -> 1000));
-    // Roller out test
-    // driver.b().onTrue(RollerCmds.setTubeSpeed(() -> -1000));
+    // Score algae
+    driver
+        .rightTrigger(0.25)
+        .whileTrue(SuperStructure.PROCESSOR_SCORE.getCommand())
+        .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
     // Slow-Mode
     driver
