@@ -33,6 +33,7 @@ import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
+import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -51,6 +52,7 @@ import frc.robot.subsystems.rollers.RollersIOSim;
 import frc.robot.subsystems.rollers.RollersIOSparks;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOOdometry;
+import frc.robot.subsystems.vision.VisionIOPoseEstimator;
 import frc.robot.util.AllianceFlipUtil;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
@@ -69,7 +71,7 @@ public class RobotContainer {
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
-  private static Vision visionsubsystem;
+  public static Vision visionsubsystem;
 
   public RobotContainer() {
     // Start subsystems
@@ -121,7 +123,11 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIO() {});
         break;
     }
-    visionsubsystem = new Vision(new VisionIOOdometry());
+    visionsubsystem =
+        new Vision(
+            VisionConstants.USE_WHEEL_ODOMETRY
+                ? new VisionIOOdometry()
+                : new VisionIOPoseEstimator());
 
     // PathPlanner Config
     AutoBuilder.configure(

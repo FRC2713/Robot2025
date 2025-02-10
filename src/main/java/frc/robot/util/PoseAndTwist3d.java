@@ -1,5 +1,8 @@
 package frc.robot.util;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Twist3d;
@@ -58,6 +61,15 @@ public class PoseAndTwist3d implements Sendable {
     builder.addDoubleProperty("twist/angular/x", () -> twist.rx, null);
     builder.addDoubleProperty("twist/angular/y", () -> twist.ry, null);
     builder.addDoubleProperty("twist/angular/z", () -> twist.rz, null);
+  }
+
+  public String toJSON() {
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      return mapper.configure(JsonGenerator.Feature.IGNORE_UNKNOWN, true).writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      return "null";
+    }
   }
 
   public static final PoseAndTwist3dStruct struct = new PoseAndTwist3dStruct();

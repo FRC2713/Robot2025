@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants.AutoConstants;
 import frc.robot.subsystems.constants.VisionConstants;
@@ -368,6 +369,14 @@ public class Drivetrain extends SubsystemBase {
   /** Returns the current estimated pose. */
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
+    if (VisionConstants.USE_WHEEL_ODOMETRY) {
+      try {
+        return RobotContainer.visionsubsystem.getPose();
+      } catch (NullPointerException e) {
+        return new Pose2d();
+      }
+    }
+
     return poseEstimator.getEstimatedPosition();
   }
 
@@ -386,6 +395,13 @@ public class Drivetrain extends SubsystemBase {
   public void setPose(Pose2d pose) {
     poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     odometryPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+    if (VisionConstants.USE_WHEEL_ODOMETRY) {
+      // try {
+      RobotContainer.visionsubsystem.resetPose(pose);
+      // } catch (NullPointerException e) {
+
+      // }
+    }
   }
 
   /** Returns the maximum linear speed in meters per sec. */
