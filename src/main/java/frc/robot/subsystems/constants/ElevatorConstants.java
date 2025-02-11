@@ -37,15 +37,15 @@ public class ElevatorConstants {
           "Elevator_L_ONE",
           new ControlGains()
               // PID
-              .p(RHRUtil.modeDependentDouble(19., 0.1))
+              .p(RHRUtil.modeDependentDouble(25., 0.1))
               .i(0.0)
               .d(RHRUtil.modeDependentDouble(1, 0.01))
               // FF
-              .g(RHRUtil.modeDependentDouble(9, 0.0785))
+              .g(RHRUtil.modeDependentDouble(12, 0.0785))
               .v(0.0)
               .a(0.0)
               // Motion Magic
-              .mmCruiseVelo(1.5),
+              .mmCruiseVelo(7),
           160,
           1600);
 
@@ -56,11 +56,11 @@ public class ElevatorConstants {
           "Elevator_L_TWO",
           new ControlGains()
               // PID
-              .p(RHRUtil.modeDependentDouble(19., 0.1))
+              .p(RHRUtil.modeDependentDouble(25., 0.1))
               .i(0.0)
               .d(RHRUtil.modeDependentDouble(1, 0.01))
               // FF
-              .g(RHRUtil.modeDependentDouble(10, 0.0785))
+              .g(RHRUtil.modeDependentDouble(15, 0.0785))
               .v(0.0)
               .a(0.0));
 

@@ -28,14 +28,14 @@ public class PivotConstants {
   public static final int kStatorCurrentLimit = 100; // also amps
   public static final double kMaxAngularVelocity = 5; // RPM
 
-  public static final double kP = RHRUtil.modeDependentDouble(300., 10);
-  public static final double kI = 0.0;
-  public static final double kD = RHRUtil.modeDependentDouble(5., 0);
+  public static final double kP = RHRUtil.modeDependentDouble(0., 10); // output/rotation
+  public static final double kI = 0.0; // Integral of kP
+  public static final double kD = RHRUtil.modeDependentDouble(0., 0); // output/error in velocity
 
   public static final double kG = RHRUtil.modeDependentDouble(6.5, 0.381);
-  public static final double kV = 0.0;
+  public static final double kV = 0.0; // kV * rev/s = volts
   public static final double kA = 0.0;
-  public static final double kS = RHRUtil.modeDependentDouble(40, 0.);
+  public static final double kS = RHRUtil.modeDependentDouble(15, 0.); // Volts
 
   public static final double KTrapezoidalMaxVelocity = 3;
   public static final double KTrapezoidalMaxAcceleration = 3;
@@ -54,7 +54,7 @@ public class PivotConstants {
               .v(kV)
               .a(kA)
               // Motion Magic
-              .mmCruiseVelo(0),
+              .mmCruiseVelo(1),
           80,
           1600);
 
@@ -67,6 +67,7 @@ public class PivotConstants {
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     config.Feedback.SensorToMechanismRatio = PivotConstants.kGearing;
+    config.Feedback.RotorToSensorRatio = 1;
     config.TorqueCurrent.PeakForwardTorqueCurrent = PivotConstants.kStallCurrentLimit;
     config.TorqueCurrent.PeakReverseTorqueCurrent = -PivotConstants.kStallCurrentLimit;
     config.CurrentLimits.StatorCurrentLimit = PivotConstants.kStatorCurrentLimit;
@@ -77,7 +78,10 @@ public class PivotConstants {
             : InvertedValue.Clockwise_Positive;
 
     config.Slot0 = PID.toTalonFX(GravityTypeValue.Arm_Cosine);
-    config.MotionMagic = PID.toMotionMagic();
+    // config.MotionMagic = PID.toMotionMagic();
+    config.MotionMagic.MotionMagicCruiseVelocity = .1;
+    config.MotionMagic.MotionMagicExpo_kV = 6.4;
+    config.MotionMagic.MotionMagicExpo_kA = 0.1;
     return config;
   }
 

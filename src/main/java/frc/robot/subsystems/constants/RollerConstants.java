@@ -1,7 +1,6 @@
 package frc.robot.subsystems.constants;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.util.ControlGains;
@@ -13,7 +12,7 @@ public class RollerConstants {
   public static final double kAlgaeMOI = 0.001;
   public static final double kAlgaeGearing = 1 / (48.0 / 18.0);
   public static final double kCoralMOI = 0.001;
-  public static final double kCoralGearing = 1;
+  public static final double kCoralGearing = 1 / (48.0 / 18.0);
 
   public static final boolean kCoralMotorInverted = true;
   public static final boolean kAlgaeMotorInverted = true;
@@ -33,13 +32,11 @@ public class RollerConstants {
   public static SparkMaxConfig createCoralConfig(boolean enableLS) {
     SparkMaxConfig config = new SparkMaxConfig();
 
-    config.inverted(kAlgaeMotorInverted);
-    config.encoder.positionConversionFactor(kAlgaeGearing);
+    config.inverted(kCoralMotorInverted);
+    config.encoder.positionConversionFactor(kCoralGearing);
     config.idleMode(IdleMode.kBrake);
-    config
-        .limitSwitch
-        .forwardLimitSwitchEnabled(enableLS)
-        .forwardLimitSwitchType(Type.kNormallyOpen);
+    config.limitSwitch.forwardLimitSwitchEnabled(false);
+    // .forwardLimitSwitchType(Type.kNormallyOpen);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
     ALGAEPID.applyPID(config.closedLoop);

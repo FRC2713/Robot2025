@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.PivotCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
@@ -321,9 +322,8 @@ public class RobotContainer {
     // Score algae
     driver
         .rightTrigger(0.25)
-        .whileTrue(SuperStructure.PROCESSOR_SCORE.getCommand())
-        .onFalse(SuperStructure.STARTING_CONF.getCommand());
-
+        .whileTrue(Commands.sequence(PivotCmds.setAngle(30)))
+        .onFalse(PivotCmds.setAngle(0));
     // Slow-Mode
     driver
         .rightBumper()
