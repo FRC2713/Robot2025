@@ -5,6 +5,9 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.LimitSwitchConfig;
+import com.revrobotics.spark.config.LimitSwitchConfig.Type;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.RollerConstants;
 
@@ -16,13 +19,12 @@ public class RollersIOSparks implements RollersIO {
 
   private double targetRPM;
 
+  private final SparkMaxConfig config = RollerConstants.createCoralConfig();
+
   public RollersIOSparks() {
     this.motor = new SparkMax(RollerConstants.kCoralCANId, MotorType.kBrushless);
     this.limitSwitch = motor.getForwardLimitSwitch();
-    motor.configure(
-        RollerConstants.createCoralConfig(true),
-        ResetMode.kResetSafeParameters,
-        PersistMode.kNoPersistParameters);
+    motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
   @Override
@@ -45,10 +47,14 @@ public class RollersIOSparks implements RollersIO {
 
   @Override
   public void setEnableLimitSwitch(boolean setEnable) {
-    motor.configure(
-        RollerConstants.createCoralConfig(setEnable),
-        ResetMode.kResetSafeParameters,
-        PersistMode.kNoPersistParameters);
+    if (setEnable) {
+      config.limitSwitch.apply(
+          (new LimitSwitchConfig())
+              .forwardLimitSwitchEnabled(true)
+              .forwardLimitSwitchType(Type.kNormallyOpen));
+    } else {
+      config.limitSwitch.apply((new LimitSwitchConfig()).forwardLimitSwitchEnabled(false));
+    }
   }
 
   private boolean hasCoral() {

@@ -31,7 +31,6 @@ public class VisionConstants {
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS =
       new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(99999));
 
-  public static final boolean ENABLE_MEGATAG2 = true;
   public static final double MAX_TIME_DIFFERENCE = 0.5;
 
   public static final boolean USE_WHEEL_ODOMETRY = false;

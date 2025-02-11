@@ -29,14 +29,12 @@ public class RollerConstants {
   public static final double kAlgaeMaxVelocity = 6000; // rpm
   public static final double kAlgaeMaxAcceleration = 6000; // rpm / sec
 
-  public static SparkMaxConfig createCoralConfig(boolean enableLS) {
+  public static SparkMaxConfig createCoralConfig() {
     SparkMaxConfig config = new SparkMaxConfig();
 
     config.inverted(kCoralMotorInverted);
     config.encoder.positionConversionFactor(kCoralGearing);
     config.idleMode(IdleMode.kBrake);
-    config.limitSwitch.forwardLimitSwitchEnabled(false);
-    // .forwardLimitSwitchType(Type.kNormallyOpen);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
     ALGAEPID.applyPID(config.closedLoop);
