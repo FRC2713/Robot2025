@@ -2,7 +2,7 @@ package frc.robot.subsystems.constants;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import frc.robot.util.ControlGains;
 
 public class RollerConstants {
@@ -29,8 +29,8 @@ public class RollerConstants {
   public static final double kAlgaeMaxVelocity = 6000; // rpm
   public static final double kAlgaeMaxAcceleration = 6000; // rpm / sec
 
-  public static SparkMaxConfig createCoralConfig() {
-    SparkMaxConfig config = new SparkMaxConfig();
+  public static SparkFlexConfig createCoralConfig() {
+    SparkFlexConfig config = new SparkFlexConfig();
 
     config.inverted(kCoralMotorInverted);
     config.encoder.positionConversionFactor(kCoralGearing);

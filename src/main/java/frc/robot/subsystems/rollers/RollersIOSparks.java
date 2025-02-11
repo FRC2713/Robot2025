@@ -2,27 +2,27 @@ package frc.robot.subsystems.rollers;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.RollerConstants;
 
 /** For the first implementation, the robot controls Tube and Algae with a single NEO */
 public class RollersIOSparks implements RollersIO {
 
-  private final SparkMax motor;
+  private final SparkFlex motor;
   private final SparkLimitSwitch limitSwitch;
 
   private double targetRPM;
 
-  private final SparkMaxConfig config = RollerConstants.createCoralConfig();
+  private final SparkFlexConfig config = RollerConstants.createCoralConfig();
 
   public RollersIOSparks() {
-    this.motor = new SparkMax(RollerConstants.kCoralCANId, MotorType.kBrushless);
+    this.motor = new SparkFlex(RollerConstants.kCoralCANId, MotorType.kBrushless);
     this.limitSwitch = motor.getForwardLimitSwitch();
     motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
   }
