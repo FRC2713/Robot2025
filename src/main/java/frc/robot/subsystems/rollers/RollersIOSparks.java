@@ -55,6 +55,7 @@ public class RollersIOSparks implements RollersIO {
     } else {
       config.limitSwitch.apply((new LimitSwitchConfig()).forwardLimitSwitchEnabled(false));
     }
+    motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
   private boolean hasCoral() {
