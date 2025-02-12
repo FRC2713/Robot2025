@@ -32,10 +32,10 @@ public class PivotConstants {
   public static final double kI = 0.0; // Integral of kP
   public static final double kD = RHRUtil.modeDependentDouble(0., 0); // output/error in velocity
 
-  public static final double kG = RHRUtil.modeDependentDouble(6.5, 0.381);
+  public static final double kG = RHRUtil.modeDependentDouble(4., 0.381);
   public static final double kV = 0.0; // kV * rev/s = volts
   public static final double kA = 0.0;
-  public static final double kS = RHRUtil.modeDependentDouble(15, 0.); // Volts
+  public static final double kS = RHRUtil.modeDependentDouble(0, 0.); // Volts
 
   public static final double KTrapezoidalMaxVelocity = 3;
   public static final double KTrapezoidalMaxAcceleration = 3;

@@ -54,4 +54,9 @@ public class Pivot extends SubsystemBase {
   public double getCurrentAngle() {
     return this.inputs.angleDegrees;
   }
+
+  public void setBus(double bus) {
+    Logger.recordOutput("bus", bus);
+    IO.setBus(bus);
+  }
 }

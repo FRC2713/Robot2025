@@ -52,4 +52,9 @@ public class PivotIOKrakens implements PivotIO {
 
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config, 0.25));
   }
+
+  @Override
+  public void setBus(double bus) {
+    motor.set(bus);
+  }
 }

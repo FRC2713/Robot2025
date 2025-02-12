@@ -27,4 +27,7 @@ public interface PivotIO {
 
   public default void setPID(LoggedTunablePID pid) {}
   ;
+
+  public default void setBus(double bus) {}
+  ;
 }

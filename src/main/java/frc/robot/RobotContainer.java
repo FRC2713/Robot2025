@@ -320,10 +320,13 @@ public class RobotContainer {
 
     // Score algae
     driver
-        .rightTrigger(0.25)
+        .rightTrigger(0.03)
         .whileTrue(Commands.sequence(PivotCmds.setAngle(30)))
         .onFalse(PivotCmds.setAngle(0));
-        
+    // .whileTrue(
+    //     new RepeatCommand(
+    //         new InstantCommand(() -> pivot.setBus(driver.getRightTriggerAxis() / 2))))
+    // .onFalse(new InstantCommand(() -> pivot.setBus(0)));
 
     // Slow-Mode
     driver
