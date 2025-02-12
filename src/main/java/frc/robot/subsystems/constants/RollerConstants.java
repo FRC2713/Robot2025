@@ -1,6 +1,7 @@
 package frc.robot.subsystems.constants;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import frc.robot.util.ControlGains;
@@ -29,7 +30,7 @@ public class RollerConstants {
   public static final double kAlgaeMaxVelocity = 6000; // rpm
   public static final double kAlgaeMaxAcceleration = 6000; // rpm / sec
 
-  public static SparkFlexConfig createCoralConfig() {
+  public static SparkFlexConfig createCoralConfig(int currentLimit) {
     SparkFlexConfig config = new SparkFlexConfig();
 
     config.inverted(kCoralMotorInverted);
@@ -37,6 +38,8 @@ public class RollerConstants {
     config.idleMode(IdleMode.kBrake);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+    config.limitSwitch.reverseLimitSwitchEnabled(true).reverseLimitSwitchType(Type.kNormallyOpen);
+    config.smartCurrentLimit(currentLimit);
     ALGAEPID.applyPID(config.closedLoop);
 
     // config.closedLoop.maxMotion.maxVelocity(kAlgaeMaxVelocity);
@@ -47,5 +50,5 @@ public class RollerConstants {
 
   public static final double AT_TARGET_GIVE_RPM = 150;
 
-  public static final double kAlgaeCurrentThreshold = 10; // amps
+  public static final double kAlgaeCurrentThreshold = 35; // amps
 }

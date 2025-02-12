@@ -41,7 +41,6 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
@@ -79,12 +78,12 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // driveSubsystem =
-        //     new Drivetrain(
-        //         new GyroIOPigeon2(),
-        //         new ModuleIOTalonFX(TunerConstants.FrontLeft),
-        //         new ModuleIOTalonFX(TunerConstants.FrontRight),
-        //         new ModuleIOTalonFX(TunerConstants.BackLeft),
-        //         new ModuleIOTalonFX(TunerConstants.BackRight));
+        // new Drivetrain(
+        //     new GyroIOPigeon2(),
+        //     new ModuleIOTalonFX(TunerConstants.FrontLeft),
+        //     new ModuleIOTalonFX(TunerConstants.FrontRight),
+        //     new ModuleIOTalonFX(TunerConstants.BackLeft),
+        //     new ModuleIOTalonFX(TunerConstants.BackRight));
         driveSubsystem =
             new Drivetrain(
                 new GyroIO() {},
@@ -92,7 +91,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        elevator = new Elevator(new ElevatorIOKrakens());
+        elevator = new Elevator(new ElevatorIO() {});
         pivot = new Pivot(new PivotIOKrakens());
         rollers = new Rollers(new RollersIOSparks());
         break;
@@ -324,6 +323,8 @@ public class RobotContainer {
         .rightTrigger(0.25)
         .whileTrue(Commands.sequence(PivotCmds.setAngle(30)))
         .onFalse(PivotCmds.setAngle(0));
+        
+
     // Slow-Mode
     driver
         .rightBumper()

@@ -29,4 +29,7 @@ public interface RollersIO {
 
   public default void setEnableLimitSwitch(boolean enabled) {}
   ;
+
+  public default void setEnableAlgaeLimitSwitch(boolean enabled) {}
+  ;
 }
