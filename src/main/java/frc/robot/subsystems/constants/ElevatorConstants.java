@@ -29,7 +29,7 @@ public class ElevatorConstants {
   public static final double kRotationsToHeightConversion = (Math.PI * kDrumRadius * 2);
 
   public static final double kMinHeight = 0.0; // inches
-  public static final double kMaxHeight = 52.5;
+  public static final double kMaxHeight = 44.7; // 52.5;
   public static final double kInitialHeight = 0.0;
 
   public static final LoggedTunablePID PID_LEVEL_ONE =
@@ -37,15 +37,15 @@ public class ElevatorConstants {
           "Elevator_L_ONE",
           new ControlGains()
               // PID
-              .p(RHRUtil.modeDependentDouble(23., 0.1))
+              .p(RHRUtil.modeDependentDouble(25., 0.1))
               .i(0.0)
-              .d(RHRUtil.modeDependentDouble(3, 0.01))
+              .d(RHRUtil.modeDependentDouble(1, 0.01))
               // FF
-              .g(RHRUtil.modeDependentDouble(9, 0.0785))
+              .g(RHRUtil.modeDependentDouble(12, 0.0785))
               .v(0.0)
               .a(0.0)
               // Motion Magic
-              .mmCruiseVelo(15),
+              .mmCruiseVelo(7),
           160,
           1600);
 
@@ -56,11 +56,11 @@ public class ElevatorConstants {
           "Elevator_L_TWO",
           new ControlGains()
               // PID
-              .p(RHRUtil.modeDependentDouble(23., 0.1))
+              .p(RHRUtil.modeDependentDouble(25., 0.1))
               .i(0.0)
-              .d(RHRUtil.modeDependentDouble(3, 0.01))
+              .d(RHRUtil.modeDependentDouble(1, 0.01))
               // FF
-              .g(RHRUtil.modeDependentDouble(10, 0.0785))
+              .g(RHRUtil.modeDependentDouble(15, 0.0785))
               .v(0.0)
               .a(0.0));
 

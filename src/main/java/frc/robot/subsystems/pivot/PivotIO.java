@@ -12,6 +12,8 @@ public interface PivotIO {
     public double angleDegrees = 0.0;
 
     public double commandedAngleDegs = 0.0;
+
+    public double setpointVelocity = 0.0;
   }
 
   public default void updateInputs(PivotInputs inputs) {}

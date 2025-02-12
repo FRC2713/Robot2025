@@ -5,6 +5,8 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Constants;
+import frc.robot.Constants.Mode;
 
 public class VisionConstants {
   // public static double CAMERA_TO_TAG_MAX_DIST_INCHES = 120;
@@ -29,6 +31,12 @@ public class VisionConstants {
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS =
       new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(99999));
 
-  public static final boolean ENABLE_MEGATAG2 = true;
   public static final double MAX_TIME_DIFFERENCE = 0.5;
+
+  public static final boolean USE_WHEEL_ODOMETRY = false;
+
+  public static final String VISION_SERVER_URL =
+      Constants.currentMode == Mode.REAL
+          ? "http://rhr-jetson-1:5801/"
+          : "http://10.10.197.83:5173/";
 }

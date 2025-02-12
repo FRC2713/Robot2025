@@ -1,9 +1,8 @@
 package frc.robot.subsystems.constants;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import frc.robot.util.ControlGains;
 
 public class RollerConstants {
@@ -13,7 +12,7 @@ public class RollerConstants {
   public static final double kAlgaeMOI = 0.001;
   public static final double kAlgaeGearing = 1 / (48.0 / 18.0);
   public static final double kCoralMOI = 0.001;
-  public static final double kCoralGearing = 1;
+  public static final double kCoralGearing = 1 / (48.0 / 18.0);
 
   public static final boolean kCoralMotorInverted = true;
   public static final boolean kAlgaeMotorInverted = true;
@@ -30,28 +29,12 @@ public class RollerConstants {
   public static final double kAlgaeMaxVelocity = 6000; // rpm
   public static final double kAlgaeMaxAcceleration = 6000; // rpm / sec
 
-  public static SparkMaxConfig createCoralConfig() {
-    SparkMaxConfig config = new SparkMaxConfig();
+  public static SparkFlexConfig createCoralConfig() {
+    SparkFlexConfig config = new SparkFlexConfig();
 
+    config.inverted(kCoralMotorInverted);
     config.encoder.positionConversionFactor(kCoralGearing);
-
-    config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-    config.closedLoop.maxMotion.maxVelocity(kCoralMaxVelocity);
-    config.closedLoop.maxMotion.maxAcceleration(kCoralMaxAcceleration);
-    config.closedLoop.maxMotion.allowedClosedLoopError(kCoralAcceptablePositionError);
-    CORALPID.applyPID(config.closedLoop);
-
-    return config;
-  }
-
-  public static SparkMaxConfig createAlgaeConfig() {
-    SparkMaxConfig config = new SparkMaxConfig();
-
-    config.inverted(kAlgaeMotorInverted);
-    config.encoder.positionConversionFactor(kAlgaeGearing);
     config.idleMode(IdleMode.kBrake);
-
-    config.limitSwitch.forwardLimitSwitchEnabled(true).forwardLimitSwitchType(Type.kNormallyOpen);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
     ALGAEPID.applyPID(config.closedLoop);
@@ -63,4 +46,6 @@ public class RollerConstants {
   }
 
   public static final double AT_TARGET_GIVE_RPM = 150;
+
+  public static final double kAlgaeCurrentThreshold = 10; // amps
 }

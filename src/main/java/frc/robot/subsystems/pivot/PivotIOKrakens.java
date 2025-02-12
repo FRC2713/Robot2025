@@ -42,6 +42,7 @@ public class PivotIOKrakens implements PivotIO {
     inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
     inputs.angleDegrees = Units.rotationsToDegrees(motor.getPosition().getValueAsDouble());
     inputs.commandedAngleDegs = targetDegrees;
+    inputs.setpointVelocity = motor.getClosedLoopReference().getValueAsDouble();
   }
 
   @Override

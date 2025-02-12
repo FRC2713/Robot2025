@@ -26,21 +26,19 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.RollerCmds;
+import frc.robot.commands.PivotCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
+import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
-import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
-import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOKrakens;
@@ -51,10 +49,12 @@ import frc.robot.subsystems.pivot.PivotIOKrakens;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
+import frc.robot.subsystems.rollers.RollersIOSim;
 import frc.robot.subsystems.rollers.RollersIOSparks;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIOOdometry;
+import frc.robot.subsystems.vision.VisionIOPoseEstimator;
 import frc.robot.util.AllianceFlipUtil;
-import frc.robot.util.ScoreLevel;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
 
@@ -72,22 +72,29 @@ public class RobotContainer {
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
-  private static Vision visionsubsystem;
+  public static Vision visionsubsystem;
 
   public RobotContainer() {
     // Start subsystems
     switch (Constants.currentMode) {
       case REAL:
+        // driveSubsystem =
+        //     new Drivetrain(
+        //         new GyroIOPigeon2(),
+        //         new ModuleIOTalonFX(TunerConstants.FrontLeft),
+        //         new ModuleIOTalonFX(TunerConstants.FrontRight),
+        //         new ModuleIOTalonFX(TunerConstants.BackLeft),
+        //         new ModuleIOTalonFX(TunerConstants.BackRight));
         driveSubsystem =
             new Drivetrain(
-                new GyroIOPigeon2(),
-                new ModuleIOTalonFX(TunerConstants.FrontLeft),
-                new ModuleIOTalonFX(TunerConstants.FrontRight),
-                new ModuleIOTalonFX(TunerConstants.BackLeft),
-                new ModuleIOTalonFX(TunerConstants.BackRight));
-        elevator = new Elevator(new ElevatorIOKrakens() {});
+                new GyroIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {});
+        elevator = new Elevator(new ElevatorIOKrakens());
         pivot = new Pivot(new PivotIOKrakens());
-        rollers = new Rollers(new RollersIOSparks() {});
+        rollers = new Rollers(new RollersIOSparks());
         break;
 
       case SIM:
@@ -117,7 +124,11 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIO() {});
         break;
     }
-    visionsubsystem = new Vision(new VisionIOOdometry());
+    visionsubsystem =
+        new Vision(
+            VisionConstants.USE_WHEEL_ODOMETRY
+                ? new VisionIOOdometry()
+                : new VisionIOPoseEstimator());
 
     // PathPlanner Config
     AutoBuilder.configure(
@@ -171,7 +182,8 @@ public class RobotContainer {
     autoChooser = new AutoChooser();
 
     // Add options to the chooser
-    autoChooser.addRoutine("Example Auto Command", autoRoutines::exampleAuto);
+    autoChooser.addRoutine("Coral and Algae Auto", autoRoutines::coralAndAlgaeAuto);
+    autoChooser.addRoutine("Score Lots Of Coral", autoRoutines::scoreLotsOfCoral);
     autoChooser.addRoutine(
         "DriveStraight",
         () -> {
@@ -191,25 +203,24 @@ public class RobotContainer {
           return routine;
         });
 
-    autoChooser.addRoutine("ScoreLotsOfCoral", autoRoutines::scoreLotsOfCoral);
-
-    autoChooser.addCmd(
-        "Drive Simple FF Characterization",
-        () -> DriveCommands.feedforwardCharacterization(driveSubsystem));
-    autoChooser.addCmd(
-        "Drive SysId (Quasistatic Forward)",
-        () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addCmd(
-        "Drive SysId (Quasistatic Backward)",
-        () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addCmd(
-        "Drive SysId (Dynamic Forward)",
-        () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addCmd(
-        "Drive SysId (Dynamic Backward)",
-        () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addCmd(
-        "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
+    // Uncomment for swerve drive characterization
+    // autoChooser.addCmd(
+    //     "Drive Simple FF Characterization",
+    //     () -> DriveCommands.feedforwardCharacterization(driveSubsystem));
+    // autoChooser.addCmd(
+    //     "Drive SysId (Quasistatic Forward)",
+    //     () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    // autoChooser.addCmd(
+    //     "Drive SysId (Quasistatic Backward)",
+    //     () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    // autoChooser.addCmd(
+    //     "Drive SysId (Dynamic Forward)",
+    //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    // autoChooser.addCmd(
+    //     "Drive SysId (Dynamic Backward)",
+    //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    // autoChooser.addCmd(
+    //     "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
 
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -258,25 +269,29 @@ public class RobotContainer {
                     driveSubsystem)
                 .ignoringDisable(true));
 
-    driver
-        .a()
-        .onTrue(
-            ScoreAssist.getInstance()
-                .setActiveCommand(
-                    () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.ONE)))
-        .onFalse(
-            Commands.sequence(
-                ScoreAssist.getInstance().cancelCmd(), SuperStructure.STARTING_CONF.getCommand()));
+    // driver
+    //     .a()
+    //     .onTrue(
+    //         ScoreAssist.getInstance()
+    //             .setActiveCommand(
+    //                 () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose,
+    // ScoreLevel.ONE)))
+    //     .onFalse(
+    //         Commands.sequence(
+    //             ScoreAssist.getInstance().cancelCmd(),
+    // SuperStructure.STARTING_CONF.getCommand()));
 
-    driver
-        .b()
-        .onTrue(
-            ScoreAssist.getInstance()
-                .setActiveCommand(
-                    () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.TWO)))
-        .onFalse(
-            Commands.sequence(
-                ScoreAssist.getInstance().cancelCmd(), SuperStructure.STARTING_CONF.getCommand()));
+    // driver
+    //     .b()
+    //     .onTrue(
+    //         ScoreAssist.getInstance()
+    //             .setActiveCommand(
+    //                 () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose,
+    // ScoreLevel.TWO)))
+    //     .onFalse(
+    //         Commands.sequence(
+    //             ScoreAssist.getInstance().cancelCmd(),
+    // SuperStructure.STARTING_CONF.getCommand()));
 
     // Intake Coral
     driver
@@ -292,17 +307,23 @@ public class RobotContainer {
 
     // Score Coral
     driver
-        .rightBumper()
-        .whileTrue(
-            Commands.sequence(
-                PivotCmds.setAngle(35),
-                new InstantCommand(() -> RobotContainer.rollers.setEnableLimitSwitch(false)),
-                RollerCmds.setTubeSpeed(() -> 1000)))
+        .a()
+        .whileTrue(SuperStructure.L1_CORAL_SCORE.getCommand())
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
-    // Roller intake test
-    driver.a().onTrue(RollerCmds.driveUntilLimitSet(() -> 1000));
-    // Roller out test
-    driver.b().onTrue(RollerCmds.setTubeSpeed(() -> -1000));
+    driver
+        .b()
+        .whileTrue(SuperStructure.L2_CORAL_SCORE.getCommand())
+        .onFalse(SuperStructure.STARTING_CONF.getCommand());
+    driver
+        .y()
+        .whileTrue(SuperStructure.L3_CORAL_SCORE.getCommand())
+        .onFalse(SuperStructure.STARTING_CONF.getCommand());
+
+    // Score algae
+    driver
+        .rightTrigger(0.25)
+        .whileTrue(Commands.sequence(PivotCmds.setAngle(30)))
+        .onFalse(PivotCmds.setAngle(0));
     // Slow-Mode
     driver
         .rightBumper()
