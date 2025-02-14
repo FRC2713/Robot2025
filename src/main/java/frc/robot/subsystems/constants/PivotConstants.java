@@ -21,7 +21,7 @@ public class PivotConstants {
   public static final double kMinAngleRad = Units.degreesToRadians(0);
   public static final double kMaxAngleRad = Units.degreesToRadians(60);
 
-  public static final double kInitialAngleRad = Units.degreesToRadians(0);
+  public static final double kInitialAngleRad = Units.degreesToRadians(20);
   public static final double kRampAngleRad = Units.degreesToRadians(30);
 
   public static final int kStallCurrentLimit = 30; // amps
@@ -37,8 +37,9 @@ public class PivotConstants {
   public static final double kA = 0.0;
   public static final double kS = RHRUtil.modeDependentDouble(0, 0.); // Volts
 
-  public static final double KTrapezoidalMaxVelocity = 3;
-  public static final double KTrapezoidalMaxAcceleration = 3;
+  public static final double kTrapezoidalMaxVelocity = 3;
+  public static final double kTrapezoidalMaxAcceleration = 30;
+  public static final double kTrapezoidalMaxJerk = 300;
 
   public static final LoggedTunablePID PID =
       new LoggedTunablePID(
@@ -79,7 +80,9 @@ public class PivotConstants {
 
     config.Slot0 = PID.toTalonFX(GravityTypeValue.Arm_Cosine);
     // config.MotionMagic = PID.toMotionMagic();
-    config.MotionMagic.MotionMagicCruiseVelocity = .1;
+    config.MotionMagic.MotionMagicCruiseVelocity = .5;
+    config.MotionMagic.MotionMagicAcceleration = kTrapezoidalMaxAcceleration;
+    config.MotionMagic.MotionMagicJerk = kTrapezoidalMaxJerk;
     config.MotionMagic.MotionMagicExpo_kV = 6.4;
     config.MotionMagic.MotionMagicExpo_kA = 0.1;
     return config;

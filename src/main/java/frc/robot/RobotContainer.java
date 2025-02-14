@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.PivotCmds;
+import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
@@ -37,10 +37,13 @@ import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
+import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
+import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
@@ -65,6 +68,7 @@ public class RobotContainer {
   public static Rollers rollers;
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
+  private final CommandXboxController operator = new CommandXboxController(1);
 
   // Dashboard inputs
   public final AutoChooser autoChooser;
@@ -77,21 +81,15 @@ public class RobotContainer {
     // Start subsystems
     switch (Constants.currentMode) {
       case REAL:
-        // driveSubsystem =
-        // new Drivetrain(
-        //     new GyroIOPigeon2(),
-        //     new ModuleIOTalonFX(TunerConstants.FrontLeft),
-        //     new ModuleIOTalonFX(TunerConstants.FrontRight),
-        //     new ModuleIOTalonFX(TunerConstants.BackLeft),
-        //     new ModuleIOTalonFX(TunerConstants.BackRight));
         driveSubsystem =
             new Drivetrain(
-                new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
-        elevator = new Elevator(new ElevatorIO() {});
+                new GyroIOPigeon2(),
+                new ModuleIOTalonFX(TunerConstants.FrontLeft),
+                new ModuleIOTalonFX(TunerConstants.FrontRight),
+                new ModuleIOTalonFX(TunerConstants.BackLeft),
+                new ModuleIOTalonFX(TunerConstants.BackRight));
+
+        elevator = new Elevator(new ElevatorIOKrakens());
         pivot = new Pivot(new PivotIOKrakens());
         rollers = new Rollers(new RollersIOSparks());
         break;
@@ -298,35 +296,21 @@ public class RobotContainer {
         .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
-    // Intake Algae
-    driver
-        .leftTrigger(0.25)
-        .whileTrue(SuperStructure.L1_ALGAE_GRAB.getCommand())
-        .onFalse(SuperStructure.STARTING_CONF.getCommand());
-
     // Score Coral
     driver
-        .a()
-        .whileTrue(SuperStructure.L1_CORAL_SCORE.getCommand())
-        .onFalse(SuperStructure.STARTING_CONF.getCommand());
-    driver
-        .b()
-        .whileTrue(SuperStructure.L2_CORAL_SCORE.getCommand())
-        .onFalse(SuperStructure.STARTING_CONF.getCommand());
-    driver
-        .y()
-        .whileTrue(SuperStructure.L3_CORAL_SCORE.getCommand())
-        .onFalse(SuperStructure.STARTING_CONF.getCommand());
+        .leftTrigger(0.25)
+        .whileTrue(RollerCmds.scoreCoral(SSConstants.Roller.L3_CORAL_SCORE_SPEED));
 
-    // Score algae
+    // Intake Algae
     driver
-        .rightTrigger(0.03)
-        .whileTrue(Commands.sequence(PivotCmds.setAngle(30)))
-        .onFalse(PivotCmds.setAngle(0));
-    // .whileTrue(
-    //     new RepeatCommand(
-    //         new InstantCommand(() -> pivot.setBus(driver.getRightTriggerAxis() / 2))))
-    // .onFalse(new InstantCommand(() -> pivot.setBus(0)));
+        .rightBumper()
+        .whileTrue(RollerCmds.intakeAlgae(SSConstants.Roller.L3_ALGAE_GRAB_SPEED))
+        .onFalse(RollerCmds.setTubeSpeed(() -> 0));
+
+    // Score Algae
+    driver
+        .rightTrigger(0.25)
+        .whileTrue(RollerCmds.scoreAlgae(SSConstants.Roller.PROCESSOR_SCORE_SPEED));
 
     // Slow-Mode
     driver
@@ -434,6 +418,14 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Full Control"));
+
+    operator.a().onTrue(SuperStructure.L1_CORAL_PREP.getCommand());
+    operator.b().onTrue(SuperStructure.L2_CORAL_PREP.getCommand());
+    operator.x().onTrue(SuperStructure.L3_CORAL_PREP.getCommand());
+
+    operator.povDown().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
+    operator.povRight().onTrue(SuperStructure.L2_CORAL_PREP.getCommand());
+    operator.povLeft().onTrue(SuperStructure.L3_CORAL_PREP.getCommand());
 
     ScoreAssist.getInstance()
         .getTrigger()

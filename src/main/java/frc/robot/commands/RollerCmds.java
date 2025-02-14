@@ -67,4 +67,16 @@ public class RollerCmds {
   public static Command setEnableAlgaeLS(boolean setEnable) {
     return new InstantCommand(() -> RobotContainer.rollers.setEnableAlgaeLimitSwitch(setEnable));
   }
+
+  public static Command intakeAlgae(DoubleSupplier targetRpm) {
+    return Commands.sequence(setTubeSpeed(() -> -targetRpm.getAsDouble()), waitUntilAlgae(1));
+  }
+
+  public static Command scoreAlgae(DoubleSupplier targetRpm) {
+    return Commands.sequence(setTubeSpeed(targetRpm));
+  }
+
+  public static Command scoreCoral(DoubleSupplier targetRpm) {
+    return Commands.sequence(setEnableLimitSwitch(false), setTubeSpeed(targetRpm));
+  }
 }
