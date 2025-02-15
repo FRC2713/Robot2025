@@ -14,6 +14,10 @@ public class AutoRoutines {
     m_factory = factory;
   }
 
+  //   public AutoRoutine processAlgae() {
+  //     String name = "Process Algae"
+  //   }
+
   public AutoRoutine coralAndAlgaeAuto() {
     String name = "Coral and Algae Auto";
     AutoRoutine routine = m_factory.newRoutine(name);

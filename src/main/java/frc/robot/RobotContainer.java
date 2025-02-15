@@ -238,7 +238,7 @@ public class RobotContainer {
             () -> -driver.getLeftY(),
             () -> -driver.getLeftX(),
             () -> -driver.getRightX()),
-        "Full Control Modified");
+        "Default Joystick Drive");
 
     // Reset gyro to 0 deg when start button is pressed
     driver
@@ -266,30 +266,6 @@ public class RobotContainer {
                     driveSubsystem)
                 .ignoringDisable(true));
 
-    // driver
-    //     .a()
-    //     .onTrue(
-    //         ScoreAssist.getInstance()
-    //             .setActiveCommand(
-    //                 () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose,
-    // ScoreLevel.ONE)))
-    //     .onFalse(
-    //         Commands.sequence(
-    //             ScoreAssist.getInstance().cancelCmd(),
-    // SuperStructure.STARTING_CONF.getCommand()));
-
-    // driver
-    //     .b()
-    //     .onTrue(
-    //         ScoreAssist.getInstance()
-    //             .setActiveCommand(
-    //                 () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose,
-    // ScoreLevel.TWO)))
-    //     .onFalse(
-    //         Commands.sequence(
-    //             ScoreAssist.getInstance().cancelCmd(),
-    // SuperStructure.STARTING_CONF.getCommand()));
-
     // Intake Coral
     driver
         .leftBumper()
@@ -310,29 +286,39 @@ public class RobotContainer {
     // Score Algae
     driver
         .rightTrigger(0.25)
-        .whileTrue(RollerCmds.scoreAlgae(SSConstants.Roller.PROCESSOR_SCORE_SPEED));
+        .onTrue(RollerCmds.scoreAlgae(SSConstants.Roller.PROCESSOR_SCORE_SPEED))
+        .onFalse(RollerCmds.setTubeSpeed(() -> 0));
+
+    // DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDrive(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> -driver.getRightX()),
+    //             "Full Control")
 
     // Slow-Mode
-    driver
-        .rightBumper()
-        .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
-                    driveSubsystem,
-                    () -> -driver.getLeftY() * 0.3,
-                    () -> -driver.getLeftX() * 0.3,
-                    () -> -driver.getRightX() * 0.3),
-                "Slow-Mode"))
-        .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Full Control"));
+    // driver
+    //     .rightBumper()
+    //     .onTrue(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDrive(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY() * 0.3,
+    //                 () -> -driver.getLeftX() * 0.3,
+    //                 () -> -driver.getRightX() * 0.3),
+    //             "Slow-Mode"))
+    //     .onFalse(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDrive(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> -driver.getRightX()),
+    //             "Full Control"));
 
     // Heading controller
     driver
@@ -424,8 +410,10 @@ public class RobotContainer {
     operator.x().onTrue(SuperStructure.L3_CORAL_PREP.getCommand());
 
     operator.povDown().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
-    operator.povRight().onTrue(SuperStructure.L2_CORAL_PREP.getCommand());
-    operator.povLeft().onTrue(SuperStructure.L3_CORAL_PREP.getCommand());
+    operator.povRight().onTrue(SuperStructure.L1_ALGAE_GRAB.getCommand());
+    operator.povLeft().onTrue(SuperStructure.L3_ALGAE_GRAB.getCommand());
+
+    operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());
 
     ScoreAssist.getInstance()
         .getTrigger()

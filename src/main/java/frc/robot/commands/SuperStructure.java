@@ -16,14 +16,15 @@ public enum SuperStructure {
           Commands.sequence(
               ElevatorCmds.setHeight(0),
               PivotCmds.setAngle(Units.radiansToDegrees(PivotConstants.kInitialAngleRad)),
+              RollerCmds.setTubeSpeed(() -> 0.0),
               RollerCmds.setEnableLimitSwitch(true),
-              ElevatorCmds.waitUntilAtTarget(),
-              RollerCmds.waitUntilTubeAtTarget())),
+              ElevatorCmds.waitUntilAtTarget())),
   SOURCE_CORAL_INTAKE(
       () ->
           Commands.sequence(
               Commands.parallel(
                   RollerCmds.setEnableLimitSwitch(true),
+                  RollerCmds.setEnableAlgaeLS(false),
                   ElevatorCmds.setHeight(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
                   RollerCmds.setTubeSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
                   PivotCmds.setAngle(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG)),
@@ -31,14 +32,11 @@ public enum SuperStructure {
   L1_ALGAE_GRAB(
       () ->
           Commands.sequence(
-              RollerCmds.setEnableAlgaeLS(false),
-              Commands.parallel(
-                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_ALGAE_GRAB_HEIGHT_IN),
-                  RollerCmds.setTubeSpeed(SSConstants.Roller.L1_ALGAE_GRAB_SPEED)),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_ALGAE_GRAB_HEIGHT_IN),
               PivotCmds.setAngle(SSConstants.Pivot.L1_ALGAE_GRAB_DEG),
-              Commands.waitSeconds(0.1),
-              RollerCmds.setEnableAlgaeLS(true),
-              RollerCmds.waitUntilAlgae(2))),
+              RollerCmds.intakeAlgae(SSConstants.Roller.L1_ALGAE_GRAB_SPEED),
+              RollerCmds.waitUntilAlgae(20),
+              RollerCmds.holdAlgae(SSConstants.Roller.ALGAE_HOLD_SPEED))),
   L3_ALGAE_GRAB(
       () ->
           Commands.sequence(
@@ -46,7 +44,7 @@ public enum SuperStructure {
                   ElevatorCmds.setHeight(SSConstants.Elevator.L3_ALGAE_GRAB_HEIGHT_IN),
                   RollerCmds.setTubeSpeed(SSConstants.Roller.L3_ALGAE_GRAB_SPEED),
                   PivotCmds.setAngle(SSConstants.Pivot.L3_ALGAE_GRAB_DEG)),
-              RollerCmds.waitUntilAlgae(2))),
+              RollerCmds.setEnableAlgaeLS(true))),
   L1_CORAL_PREP(
       () ->
           Commands.parallel(
@@ -86,7 +84,7 @@ public enum SuperStructure {
           Commands.sequence(
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
-              RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.PROCESSOR_SCORE_SPEED))),
+              RollerCmds.setTubeSpeed(SSConstants.Roller.PROCESSOR_SCORE_SPEED))),
   ;
 
   private Supplier<Command> cmd;

@@ -41,9 +41,6 @@ public class RollersIOSparks implements RollersIO {
 
     inputs.hasCoral = this.hasCoral();
     inputs.hasAlgae = motor.getOutputCurrent() > RollerConstants.kAlgaeCurrentThreshold;
-    if (inputs.hasAlgae && enableAlgaeLS) {
-      setTubeRPM(-500);
-    }
   }
 
   @Override
@@ -60,6 +57,15 @@ public class RollersIOSparks implements RollersIO {
   @Override
   public void setEnableAlgaeLimitSwitch(boolean setEnable) {
     enableAlgaeLS = setEnable;
+  }
+
+  @Override
+  public void setCurrentLimit(double amps) {
+    int currentLimit = (int) amps;
+    this.motor.configure(
+        RollerConstants.createCoralConfig(currentLimit),
+        ResetMode.kNoResetSafeParameters,
+        PersistMode.kNoPersistParameters);
   }
 
   private boolean hasCoral() {

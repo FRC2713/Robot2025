@@ -56,4 +56,8 @@ public class Rollers extends SubsystemBase {
   public void setEnableAlgaeLimitSwitch(boolean setEnable) {
     IO.setEnableAlgaeLimitSwitch(setEnable);
   }
+
+  public void setCurrentLimit(double amps) {
+    IO.setCurrentLimit(amps);
+  }
 }

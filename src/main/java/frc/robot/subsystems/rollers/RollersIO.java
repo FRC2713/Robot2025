@@ -32,4 +32,7 @@ public interface RollersIO {
 
   public default void setEnableAlgaeLimitSwitch(boolean enabled) {}
   ;
+
+  public default void setCurrentLimit(double amps) {}
+  ;
 }
