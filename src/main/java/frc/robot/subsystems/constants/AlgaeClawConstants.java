@@ -41,5 +41,4 @@ public class AlgaeClawConstants {
   }
 
   public static final double AT_TARGET_GIVE_RPM = 150;
-
 }

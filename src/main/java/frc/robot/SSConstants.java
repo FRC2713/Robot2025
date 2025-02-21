@@ -36,6 +36,8 @@ public class SSConstants {
   }
 
   public class Shoulder {
+    public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
+        new LoggedTunableNumber("Pivot/SS/Source Intake Angle", 20);
     public static final LoggedTunableNumber L1_ALGAE_GRAB_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/L1 Algae Grab Angle", 0);
     public static final LoggedTunableNumber L3_ALGAE_GRAB_ANGLE_DEG =
@@ -103,9 +105,7 @@ public class SSConstants {
         new LoggedTunableNumber("Roller/SS/L3 Score Speed", 6000);
 
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_SPEED =
-        new LoggedTunableNumber("Roller/SS/Source Intake Speed", 2000);   
-
-    
+        new LoggedTunableNumber("Roller/SS/Source Intake Speed", 2000);
   }
 
   public class AlgaeClaw {
@@ -113,7 +113,7 @@ public class SSConstants {
         new LoggedTunableNumber("AlgaeClaw/SS/L1 Algae Grab Speed", -2000);
     public static final LoggedTunableNumber L3_ALGAE_GRAB_SPEED =
         new LoggedTunableNumber("AlgaeClaw/SS/L3 Algae Grab Speed", -1000);
-        public static final DoubleSupplier PROCESSOR_SCORE_SPEED =
+    public static final DoubleSupplier PROCESSOR_SCORE_SPEED =
         new LoggedTunableNumber("Roller/SS/Proc Score Speed", 1000);
   }
 }
