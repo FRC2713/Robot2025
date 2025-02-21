@@ -31,14 +31,14 @@ public enum SuperStructure {
   L1_ALGAE_GRAB(
       () ->
           Commands.sequence(
-              RollerCmds.setEnableAlgaeLS(false),
+              AlgaeClawCmds.setEnableLimitSwitch(false),
               Commands.parallel(
                   ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_ALGAE_GRAB_HEIGHT_IN),
-                  RollerCmds.setTubeSpeed(SSConstants.Roller.L1_ALGAE_GRAB_SPEED)),
+                  AlgaeClawCmds.setSpeed(SSConstants.Roller.L1_ALGAE_GRAB_SPEED)),
               PivotCmds.setAngle(SSConstants.Pivot.L1_ALGAE_GRAB_DEG),
               Commands.waitSeconds(0.1),
-              RollerCmds.setEnableAlgaeLS(true),
-              RollerCmds.waitUntilAlgae(2))),
+              AlgaeClawCmds.setEnableLimitSwitch(true),
+              AlgaeClawCmds.waitUntilAlgae(2))),
   L3_ALGAE_GRAB(
       () ->
           Commands.sequence(
@@ -46,7 +46,7 @@ public enum SuperStructure {
                   ElevatorCmds.setHeight(SSConstants.Elevator.L3_ALGAE_GRAB_HEIGHT_IN),
                   RollerCmds.setTubeSpeed(SSConstants.Roller.L3_ALGAE_GRAB_SPEED),
                   PivotCmds.setAngle(SSConstants.Pivot.L3_ALGAE_GRAB_DEG)),
-              RollerCmds.waitUntilAlgae(2))),
+              AlgaeClawCmds.waitUntilAlgae(2))),
   L1_CORAL_PREP(
       () ->
           Commands.parallel(

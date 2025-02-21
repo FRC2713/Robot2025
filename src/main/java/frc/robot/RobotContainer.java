@@ -26,12 +26,17 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.algaeClaw.AlgaeClaw;
+import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
+import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
+import frc.robot.subsystems.algaeClaw.AlgaeClawIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
@@ -53,6 +58,10 @@ import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIOSim;
 import frc.robot.subsystems.rollers.RollersIOSparks;
+import frc.robot.subsystems.shoulder.Shoulder;
+import frc.robot.subsystems.shoulder.ShoulderIO;
+import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
+import frc.robot.subsystems.shoulder.ShoulderIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.subsystems.vision.VisionIOPoseEstimator;
@@ -66,6 +75,8 @@ public class RobotContainer {
   public static Elevator elevator;
   public static Pivot pivot;
   public static Rollers rollers;
+  public static AlgaeClaw algaeClaw;
+  public static Shoulder shoulder;
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -92,6 +103,8 @@ public class RobotContainer {
         elevator = new Elevator(new ElevatorIOKrakens());
         pivot = new Pivot(new PivotIOKrakens());
         rollers = new Rollers(new RollersIOSparks());
+        algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
+        shoulder = new Shoulder(new ShoulderIOKrakens());
         break;
 
       case SIM:
@@ -105,6 +118,8 @@ public class RobotContainer {
         pivot = new Pivot(new PivotIOSim());
         elevator = new Elevator(new ElevatorIOSim());
         rollers = new Rollers(new RollersIOSim());
+        algaeClaw = new AlgaeClaw(new AlgaeClawIOSim());
+        shoulder = new Shoulder(new ShoulderIOSim());
         break;
 
       default:
@@ -119,6 +134,8 @@ public class RobotContainer {
         elevator = new Elevator(new ElevatorIO() {});
         pivot = new Pivot(new PivotIO() {});
         rollers = new Rollers(new RollersIO() {});
+        algaeClaw = new AlgaeClaw(new AlgaeClawIO() {});
+        shoulder = new Shoulder(new ShoulderIO() {});
         break;
     }
     visionsubsystem =
@@ -304,13 +321,13 @@ public class RobotContainer {
     // Intake Algae
     driver
         .rightBumper()
-        .whileTrue(RollerCmds.intakeAlgae(SSConstants.Roller.L3_ALGAE_GRAB_SPEED))
+        .whileTrue(AlgaeClawCmds.intake(SSConstants.Roller.L3_ALGAE_GRAB_SPEED))
         .onFalse(RollerCmds.setTubeSpeed(() -> 0));
 
     // Score Algae
     driver
         .rightTrigger(0.25)
-        .whileTrue(RollerCmds.scoreAlgae(SSConstants.Roller.PROCESSOR_SCORE_SPEED));
+        .whileTrue(AlgaeClawCmds.score(SSConstants.Roller.PROCESSOR_SCORE_SPEED));
 
     // Slow-Mode
     driver

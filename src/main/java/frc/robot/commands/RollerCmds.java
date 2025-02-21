@@ -30,12 +30,6 @@ public class RollerCmds {
         new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral()));
   }
 
-  public static Command waitUntilAlgae(double timeout) {
-    return Commands.race(
-        Commands.waitSeconds(timeout),
-        new WaitUntilCommand(() -> RobotContainer.rollers.hasAlgae()));
-  }
-
   public static Command waitUntilNoCoral(double timeout) {
     return Commands.race(
         Commands.waitSeconds(timeout),
@@ -62,18 +56,6 @@ public class RollerCmds {
   public static Command driveUntilLimitSet(DoubleSupplier targetRPM) {
     // () -> 0
     return Commands.sequence(setTubeSpeed(targetRPM), waitUntilCoral(), setTubeSpeed(() -> 0.0));
-  }
-
-  public static Command setEnableAlgaeLS(boolean setEnable) {
-    return new InstantCommand(() -> RobotContainer.rollers.setEnableAlgaeLimitSwitch(setEnable));
-  }
-
-  public static Command intakeAlgae(DoubleSupplier targetRpm) {
-    return Commands.sequence(setTubeSpeed(() -> -targetRpm.getAsDouble()), waitUntilAlgae(1));
-  }
-
-  public static Command scoreAlgae(DoubleSupplier targetRpm) {
-    return Commands.sequence(setTubeSpeed(targetRpm));
   }
 
   public static Command scoreCoral(DoubleSupplier targetRpm) {

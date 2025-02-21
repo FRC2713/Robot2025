@@ -30,7 +30,7 @@ public class RollersIOSparks implements RollersIO {
   @Override
   public void updateInputs(RollersInputs inputs) {
     if (this.hasCoral() && enableLS) {
-      setTubeRPM(0);
+      setRPM(0);
     }
 
     inputs.tubeVelocityRPM = motor.getEncoder().getVelocity();
@@ -40,14 +40,10 @@ public class RollersIOSparks implements RollersIO {
     inputs.tubePositionDegs = Units.rotationsToDegrees(motor.getEncoder().getPosition());
 
     inputs.hasCoral = this.hasCoral();
-    inputs.hasAlgae = motor.getOutputCurrent() > RollerConstants.kAlgaeCurrentThreshold;
-    if (inputs.hasAlgae && enableAlgaeLS) {
-      setTubeRPM(-500);
-    }
   }
 
   @Override
-  public void setTubeRPM(double rpm) {
+  public void setRPM(double rpm) {
     this.targetRPM = rpm;
     motor.set(rpm / RollerConstants.kAlgaeMaxVelocity);
   }
@@ -55,11 +51,6 @@ public class RollersIOSparks implements RollersIO {
   @Override
   public void setEnableLimitSwitch(boolean setEnable) {
     enableLS = setEnable;
-  }
-
-  @Override
-  public void setEnableAlgaeLimitSwitch(boolean setEnable) {
-    enableAlgaeLS = setEnable;
   }
 
   private boolean hasCoral() {

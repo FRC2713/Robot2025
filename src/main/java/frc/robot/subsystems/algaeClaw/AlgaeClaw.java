@@ -28,21 +28,18 @@ public class AlgaeClaw extends SubsystemBase {
     Logger.processInputs("AlgaeClaw", inputs);
   }
 
-  public void setTubeRPM(double rpm) {
+  public void setRPM(double rpm) {
     tubeSpeedTarget = rpm;
-    IO.setTubeRPM(rpm);
+    IO.setRPM(rpm);
   }
 
-  public boolean isTubeAtTarget() {
-    return Math.abs(tubeSpeedTarget - inputs.tubeVelocityRPM) < RollerConstants.AT_TARGET_GIVE_RPM;
+  public boolean isAtTarget() {
+    return Math.abs(tubeSpeedTarget - inputs.algaeClawVelocityRPM)
+        < RollerConstants.AT_TARGET_GIVE_RPM;
   }
 
   public void updateMech2D() {
-    mech2dTube.setAngle(Rotation2d.fromDegrees(inputs.tubePositionDegs));
-  }
-
-  public boolean hasCoral() {
-    return inputs.hasCoral;
+    mech2dTube.setAngle(Rotation2d.fromDegrees(inputs.algaeClawPositionDegs));
   }
 
   public boolean hasAlgae() {
@@ -51,9 +48,5 @@ public class AlgaeClaw extends SubsystemBase {
 
   public void setEnableLimitSwitch(boolean setEnable) {
     IO.setEnableLimitSwitch(setEnable);
-  }
-
-  public void setEnableAlgaeLimitSwitch(boolean setEnable) {
-    IO.setEnableAlgaeLimitSwitch(setEnable);
   }
 }

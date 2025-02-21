@@ -33,7 +33,7 @@ public class RollersIOSim implements RollersIO {
   }
 
   @Override
-  public void setTubeRPM(double rpm) {
+  public void setRPM(double rpm) {
     this.commandedRPM = rpm;
   }
 }

@@ -6,30 +6,21 @@ public interface AlgaeClawIO {
 
   @AutoLog
   public static class AlgaeClawInputs { // PascalCase
-    public double tubeOutputVoltage = 0.0;
-    public double tubeCurrentAmps = 0.0;
-    public double tubeVelocityRPM = 0.0;
-    public double commandedTubeRPM = 0.0;
-    public double tubePositionDegs = 0.0;
+    public double algaeClawOutputVoltage = 0.0;
+    public double algaeClawCurrentAmps = 0.0;
+    public double algaeClawVelocityRPM = 0.0;
+    public double commandedAlgaeClawRPM = 0.0;
+    public double algaeClawPositionDegs = 0.0;
 
-    // public double algaeOutputVoltage = 0.0;
-    // public double algaeCurrentAmps = 0.0;
-    // public double algaeVelocityRPM = 0.0;
-    // public double commandedAlgaeRPM = 0.0;
-
-    public boolean hasCoral = false;
     public boolean hasAlgae = false;
   }
 
   public default void updateInputs(AlgaeClawInputs inputs) {}
   ;
 
-  public default void setTubeRPM(double rpm) {}
+  public default void setRPM(double rpm) {}
   ;
 
   public default void setEnableLimitSwitch(boolean enabled) {}
-  ;
-
-  public default void setEnableAlgaeLimitSwitch(boolean enabled) {}
   ;
 }

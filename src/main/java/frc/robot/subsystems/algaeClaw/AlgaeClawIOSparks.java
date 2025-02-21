@@ -8,7 +8,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.RollerConstants;
 
-/** For the first implementation, the robot controls Tube and Algae with a single NEO */
+/** For the first implementation, the robot controls AlgaeClaw and Algae with a single NEO */
 public class AlgaeClawIOSparks implements AlgaeClawIO {
 
   private final SparkFlex motor;
@@ -16,7 +16,6 @@ public class AlgaeClawIOSparks implements AlgaeClawIO {
   private double targetRPM;
 
   public boolean enableLS = true;
-  public boolean enableAlgaeLS = false;
 
   public AlgaeClawIOSparks() {
     this.motor = new SparkFlex(RollerConstants.kCoralCANId, MotorType.kBrushless);
@@ -29,25 +28,17 @@ public class AlgaeClawIOSparks implements AlgaeClawIO {
 
   @Override
   public void updateInputs(AlgaeClawInputs inputs) {
-    if (this.hasCoral() && enableLS) {
-      setTubeRPM(0);
-    }
+    inputs.algaeClawVelocityRPM = motor.getEncoder().getVelocity();
+    inputs.algaeClawOutputVoltage = motor.getAppliedOutput() * motor.getBusVoltage();
+    inputs.algaeClawCurrentAmps = motor.getOutputCurrent();
+    inputs.commandedAlgaeClawRPM = this.targetRPM;
+    inputs.algaeClawPositionDegs = Units.rotationsToDegrees(motor.getEncoder().getPosition());
 
-    inputs.tubeVelocityRPM = motor.getEncoder().getVelocity();
-    inputs.tubeOutputVoltage = motor.getAppliedOutput() * motor.getBusVoltage();
-    inputs.tubeCurrentAmps = motor.getOutputCurrent();
-    inputs.commandedTubeRPM = this.targetRPM;
-    inputs.tubePositionDegs = Units.rotationsToDegrees(motor.getEncoder().getPosition());
-
-    inputs.hasCoral = this.hasCoral();
-    inputs.hasAlgae = motor.getOutputCurrent() > RollerConstants.kAlgaeCurrentThreshold;
-    if (inputs.hasAlgae && enableAlgaeLS) {
-      setTubeRPM(-500);
-    }
+    inputs.hasAlgae = this.hasAlgae();
   }
 
   @Override
-  public void setTubeRPM(double rpm) {
+  public void setRPM(double rpm) {
     this.targetRPM = rpm;
     motor.set(rpm / RollerConstants.kAlgaeMaxVelocity);
   }
@@ -57,12 +48,7 @@ public class AlgaeClawIOSparks implements AlgaeClawIO {
     enableLS = setEnable;
   }
 
-  @Override
-  public void setEnableAlgaeLimitSwitch(boolean setEnable) {
-    enableAlgaeLS = setEnable;
-  }
-
-  private boolean hasCoral() {
+  private boolean hasAlgae() {
     return limitSwitch.isPressed();
   }
 }
