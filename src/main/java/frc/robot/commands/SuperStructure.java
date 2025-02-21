@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.SSConstants;
 import frc.robot.subsystems.constants.PivotConstants;
+import frc.robot.subsystems.constants.ShoulderConstants;
+import frc.robot.subsystems.shoulder.Shoulder;
+
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -16,9 +19,10 @@ public enum SuperStructure {
           Commands.sequence(
               ElevatorCmds.setHeight(0),
               PivotCmds.setAngle(Units.radiansToDegrees(PivotConstants.kInitialAngleRad)),
+              ShoulderCmds.setAngle(Units.radiansToDegrees(ShoulderConstants.kInitialAngleRad)),
               RollerCmds.setEnableLimitSwitch(true),
-              ElevatorCmds.waitUntilAtTarget(),
-              RollerCmds.waitUntilAtTarget())),
+              AlgaeClawCmds.setEnableLimitSwitch(true),
+              ElevatorCmds.waitUntilAtTarget())),
   SOURCE_CORAL_INTAKE(
       () ->
           Commands.sequence(
@@ -34,7 +38,7 @@ public enum SuperStructure {
               AlgaeClawCmds.setEnableLimitSwitch(false),
               Commands.parallel(
                   ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_ALGAE_GRAB_HEIGHT_IN),
-                  AlgaeClawCmds.setSpeed(SSConstants.Roller.L1_ALGAE_GRAB_SPEED)),
+                  AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.L1_ALGAE_GRAB_SPEED)),
               PivotCmds.setAngle(SSConstants.Pivot.L1_ALGAE_GRAB_DEG),
               Commands.waitSeconds(0.1),
               AlgaeClawCmds.setEnableLimitSwitch(true),
@@ -44,7 +48,7 @@ public enum SuperStructure {
           Commands.sequence(
               Commands.parallel(
                   ElevatorCmds.setHeight(SSConstants.Elevator.L3_ALGAE_GRAB_HEIGHT_IN),
-                  RollerCmds.setSpeed(SSConstants.Roller.L3_ALGAE_GRAB_SPEED),
+                  RollerCmds.setSpeed(SSConstants.AlgaeClaw.L3_ALGAE_GRAB_SPEED),
                   PivotCmds.setAngle(SSConstants.Pivot.L3_ALGAE_GRAB_DEG)),
               AlgaeClawCmds.waitUntilAlgae(2))),
   L1_CORAL_PREP(
@@ -86,7 +90,7 @@ public enum SuperStructure {
           Commands.sequence(
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
-              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.Roller.PROCESSOR_SCORE_SPEED))),
+              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))),
   ;
 
   private Supplier<Command> cmd;

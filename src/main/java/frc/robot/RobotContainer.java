@@ -319,13 +319,13 @@ public class RobotContainer {
     // Intake Algae
     driver
         .rightBumper()
-        .whileTrue(AlgaeClawCmds.intake(SSConstants.Roller.L3_ALGAE_GRAB_SPEED))
+        .whileTrue(AlgaeClawCmds.intake(SSConstants.AlgaeClaw.L3_ALGAE_GRAB_SPEED))
         .onFalse(RollerCmds.setSpeed(() -> 0));
 
     // Score Algae
     driver
         .rightTrigger(0.25)
-        .whileTrue(AlgaeClawCmds.score(SSConstants.Roller.PROCESSOR_SCORE_SPEED));
+        .whileTrue(AlgaeClawCmds.score(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED));
 
     // Slow-Mode
     driver

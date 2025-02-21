@@ -35,6 +35,33 @@ public class SSConstants {
         new LoggedTunableNumber("Elevator/SS/Proc Score Height", 0);
   }
 
+  public class Shoulder {
+    public static final LoggedTunableNumber L1_ALGAE_GRAB_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/L1 Algae Grab Angle", 0);
+    public static final LoggedTunableNumber L3_ALGAE_GRAB_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/L3 Algae Grab Angle", 0);
+
+    public static final LoggedTunableNumber L1_CORAL_SCORE_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/L1 Score Angle", 0);
+    public static final LoggedTunableNumber L1_CORAL_PREP_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/L1 Prep Angle", 0);
+
+    public static final LoggedTunableNumber L2_CORAL_SCORE_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/L2 Score Angle", 0);
+
+    public static final LoggedTunableNumber L2_CORAL_PREP_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/L2 Prep Angle", 0);
+
+    public static final LoggedTunableNumber L3_CORAL_SCORE_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/L3 Score Angle", 0);
+
+    public static final LoggedTunableNumber L3_CORAL_PREP_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/L3 Prep Angle", 0);
+
+    public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/Proc Score Angle", 0);
+  }
+
   public class Pivot {
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Source Intake Angle", 20);
@@ -76,14 +103,17 @@ public class SSConstants {
         new LoggedTunableNumber("Roller/SS/L3 Score Speed", 6000);
 
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_SPEED =
-        new LoggedTunableNumber("Roller/SS/Source Intake Speed", 2000);
+        new LoggedTunableNumber("Roller/SS/Source Intake Speed", 2000);   
 
+    
+  }
+
+  public class AlgaeClaw {
     public static final LoggedTunableNumber L1_ALGAE_GRAB_SPEED =
-        new LoggedTunableNumber("Roller/SS/L1 Algae Grab Speed", -2000);
+        new LoggedTunableNumber("AlgaeClaw/SS/L1 Algae Grab Speed", -2000);
     public static final LoggedTunableNumber L3_ALGAE_GRAB_SPEED =
-        new LoggedTunableNumber("Roller/SS/L3 Algae Grab Speed", -1000);
-
-    public static final DoubleSupplier PROCESSOR_SCORE_SPEED =
+        new LoggedTunableNumber("AlgaeClaw/SS/L3 Algae Grab Speed", -1000);
+        public static final DoubleSupplier PROCESSOR_SCORE_SPEED =
         new LoggedTunableNumber("Roller/SS/Proc Score Speed", 1000);
   }
 }
