@@ -18,14 +18,14 @@ public enum SuperStructure {
               PivotCmds.setAngle(Units.radiansToDegrees(PivotConstants.kInitialAngleRad)),
               RollerCmds.setEnableLimitSwitch(true),
               ElevatorCmds.waitUntilAtTarget(),
-              RollerCmds.waitUntilTubeAtTarget())),
+              RollerCmds.waitUntilAtTarget())),
   SOURCE_CORAL_INTAKE(
       () ->
           Commands.sequence(
               Commands.parallel(
                   RollerCmds.setEnableLimitSwitch(true),
                   ElevatorCmds.setHeight(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
-                  RollerCmds.setTubeSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
+                  RollerCmds.setSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
                   PivotCmds.setAngle(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG)),
               RollerCmds.waitUntilCoral(2))),
   L1_ALGAE_GRAB(
@@ -44,7 +44,7 @@ public enum SuperStructure {
           Commands.sequence(
               Commands.parallel(
                   ElevatorCmds.setHeight(SSConstants.Elevator.L3_ALGAE_GRAB_HEIGHT_IN),
-                  RollerCmds.setTubeSpeed(SSConstants.Roller.L3_ALGAE_GRAB_SPEED),
+                  RollerCmds.setSpeed(SSConstants.Roller.L3_ALGAE_GRAB_SPEED),
                   PivotCmds.setAngle(SSConstants.Pivot.L3_ALGAE_GRAB_DEG)),
               AlgaeClawCmds.waitUntilAlgae(2))),
   L1_CORAL_PREP(
@@ -68,25 +68,25 @@ public enum SuperStructure {
               Commands.parallel(
                   ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_CORAL_SCORE_HEIGHT_IN),
                   PivotCmds.setAngleAndWait(SSConstants.Pivot.L1_CORAL_SCORE_ANGLE_DEG)),
-              RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.L1_CORAL_SCORE_SPEED))),
+              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.Roller.L1_CORAL_SCORE_SPEED))),
   L2_CORAL_SCORE(
       () ->
           Commands.sequence(
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_CORAL_SCORE_HEIGHT_IN),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.L2_CORAL_SCORE_ANGLE_DEG),
-              RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.L2_CORAL_SCORE_SPEED))),
+              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.Roller.L2_CORAL_SCORE_SPEED))),
   L3_CORAL_SCORE(
       () ->
           Commands.sequence(
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L3_CORAL_SCORE_HEIGHT_IN),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.L3_CORAL_SCORE_ANGLE_DEG),
-              RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.L3_CORAL_SCORE_SPEED))),
+              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.Roller.L3_CORAL_SCORE_SPEED))),
   PROCESSOR_SCORE(
       () ->
           Commands.sequence(
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
-              RollerCmds.setTubeSpeedAndWaitForNoCoral(SSConstants.Roller.PROCESSOR_SCORE_SPEED))),
+              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.Roller.PROCESSOR_SCORE_SPEED))),
   ;
 
   private Supplier<Command> cmd;

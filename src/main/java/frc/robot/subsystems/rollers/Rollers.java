@@ -28,12 +28,12 @@ public class Rollers extends SubsystemBase {
     Logger.processInputs("Rollers", inputs);
   }
 
-  public void setTubeRPM(double rpm) {
+  public void setRPM(double rpm) {
     tubeSpeedTarget = rpm;
     IO.setRPM(rpm);
   }
 
-  public boolean isTubeAtTarget() {
+  public boolean isAtTarget() {
     return Math.abs(tubeSpeedTarget - inputs.tubeVelocityRPM) < RollerConstants.AT_TARGET_GIVE_RPM;
   }
 

@@ -314,15 +314,13 @@ public class RobotContainer {
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
     // Score Coral
-    driver
-        .leftTrigger(0.25)
-        .whileTrue(RollerCmds.scoreCoral(SSConstants.Roller.L3_CORAL_SCORE_SPEED));
+    driver.leftTrigger(0.25).whileTrue(RollerCmds.score(SSConstants.Roller.L3_CORAL_SCORE_SPEED));
 
     // Intake Algae
     driver
         .rightBumper()
         .whileTrue(AlgaeClawCmds.intake(SSConstants.Roller.L3_ALGAE_GRAB_SPEED))
-        .onFalse(RollerCmds.setTubeSpeed(() -> 0));
+        .onFalse(RollerCmds.setSpeed(() -> 0));
 
     // Score Algae
     driver
@@ -456,6 +454,6 @@ public class RobotContainer {
     // Safety
     elevator.setTargetHeight(elevator.getCurrentHeight());
     pivot.setTargetAngle(pivot.getCurrentAngle());
-    rollers.setTubeRPM(0);
+    rollers.setRPM(0);
   }
 }

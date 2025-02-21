@@ -8,12 +8,12 @@ import frc.robot.RobotContainer;
 import java.util.function.DoubleSupplier;
 
 public class RollerCmds {
-  public static Command setTubeSpeed(DoubleSupplier targetRPM) {
-    return new InstantCommand(() -> RobotContainer.rollers.setTubeRPM(targetRPM.getAsDouble()));
+  public static Command setSpeed(DoubleSupplier targetRPM) {
+    return new InstantCommand(() -> RobotContainer.rollers.setRPM(targetRPM.getAsDouble()));
   }
 
-  public static Command waitUntilTubeAtTarget() {
-    return new WaitUntilCommand(() -> RobotContainer.rollers.isTubeAtTarget());
+  public static Command waitUntilAtTarget() {
+    return new WaitUntilCommand(() -> RobotContainer.rollers.isAtTarget());
   }
 
   public static Command waitUntilCoral() {
@@ -40,14 +40,14 @@ public class RollerCmds {
     return new InstantCommand(() -> RobotContainer.rollers.setEnableLimitSwitch(setEnable));
   }
 
-  public static Command setTubeSpeedAndWait(DoubleSupplier targetRPM) {
-    return Commands.sequence(setTubeSpeed(targetRPM), waitUntilTubeAtTarget());
+  public static Command setSpeedAndWait(DoubleSupplier targetRPM) {
+    return Commands.sequence(setSpeed(targetRPM), waitUntilAtTarget());
   }
 
-  public static Command setTubeSpeedAndWaitForNoCoral(DoubleSupplier targetRPM) {
+  public static Command setSpeedAndWaitForNoCoral(DoubleSupplier targetRPM) {
     return Commands.sequence(
         setEnableLimitSwitch(false),
-        setTubeSpeed(targetRPM),
+        setSpeed(targetRPM),
         waitUntilNoCoral(2),
         Commands.waitSeconds(1),
         setEnableLimitSwitch(true));
@@ -55,10 +55,14 @@ public class RollerCmds {
 
   public static Command driveUntilLimitSet(DoubleSupplier targetRPM) {
     // () -> 0
-    return Commands.sequence(setTubeSpeed(targetRPM), waitUntilCoral(), setTubeSpeed(() -> 0.0));
+    return Commands.sequence(setSpeed(targetRPM), waitUntilCoral(), setSpeed(() -> 0.0));
   }
 
-  public static Command scoreCoral(DoubleSupplier targetRpm) {
-    return Commands.sequence(setEnableLimitSwitch(false), setTubeSpeed(targetRpm));
+  public static Command score(DoubleSupplier targetRpm) {
+    return Commands.sequence(setEnableLimitSwitch(false), setSpeed(targetRpm));
+  }
+
+  public static Command intake(DoubleSupplier targetRpm) {
+    return Commands.sequence(setEnableLimitSwitch(true), setSpeed(targetRpm));
   }
 }
