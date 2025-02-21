@@ -14,14 +14,14 @@ public class ShoulderConstants {
   public static final int kCANId = 15;
   public static final boolean kInverted = false;
 
-  public static final double kGearing = (48.0 / 18.0) * 20;
+  public static final double kGearing = (36.0 / 12.0) * 25;
   public static final double kLength = Units.inchesToMeters(18);
   public static final double kMass = 7.094328; // kg
 
-  public static final double kMinAngleRad = Units.degreesToRadians(0);
-  public static final double kMaxAngleRad = Units.degreesToRadians(60);
+  public static final double kMinAngleRad = Units.degreesToRadians(-190);
+  public static final double kMaxAngleRad = Units.degreesToRadians(190);
 
-  public static final double kInitialAngleRad = Units.degreesToRadians(20);
+  public static final double kInitialAngleRad = Units.degreesToRadians(0);
   public static final double kRampAngleRad = Units.degreesToRadians(30);
 
   public static final int kStallCurrentLimit = 30; // amps
@@ -43,7 +43,7 @@ public class ShoulderConstants {
 
   public static final LoggedTunablePID PID =
       new LoggedTunablePID(
-          "Pivot",
+          "Shoulder",
           new ControlGains()
               // PID
               .p(kP)
@@ -67,14 +67,14 @@ public class ShoulderConstants {
   public static TalonFXConfiguration createKrakenConfig() {
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    config.Feedback.SensorToMechanismRatio = PivotConstants.kGearing;
+    config.Feedback.SensorToMechanismRatio = ShoulderConstants.kGearing;
     config.Feedback.RotorToSensorRatio = 1;
-    config.TorqueCurrent.PeakForwardTorqueCurrent = PivotConstants.kStallCurrentLimit;
-    config.TorqueCurrent.PeakReverseTorqueCurrent = -PivotConstants.kStallCurrentLimit;
-    config.CurrentLimits.StatorCurrentLimit = PivotConstants.kStatorCurrentLimit;
+    config.TorqueCurrent.PeakForwardTorqueCurrent = ShoulderConstants.kStallCurrentLimit;
+    config.TorqueCurrent.PeakReverseTorqueCurrent = -ShoulderConstants.kStallCurrentLimit;
+    config.CurrentLimits.StatorCurrentLimit = ShoulderConstants.kStatorCurrentLimit;
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.MotorOutput.Inverted =
-        (PivotConstants.kInverted)
+        (ShoulderConstants.kInverted)
             ? InvertedValue.CounterClockwise_Positive
             : InvertedValue.Clockwise_Positive;
 
