@@ -70,6 +70,12 @@ public enum SuperStructure {
               ElevatorCmds.setHeight(SSConstants.Elevator.L3_CORAL_PREP_HEIGHT_IN),
               ShoulderCmds.setAngle(SSConstants.Shoulder.L3_CORAL_PREP_ANGLE_DEG),
               PivotCmds.setAngle(SSConstants.Pivot.L3_CORAL_PREP_ANGLE_DEG))),
+  L4_CORAL_PREP(
+      () ->
+          Commands.parallel(
+              ElevatorCmds.setHeight(SSConstants.Elevator.L4_CORAL_PREP_HEIGHT_IN),
+              ShoulderCmds.setAngle(SSConstants.Shoulder.L4_CORAL_PREP_ANGLE_DEG),
+              PivotCmds.setAngle(SSConstants.Pivot.L4_CORAL_PREP_ANGLE_DEG))),
   L1_CORAL_SCORE(
       () ->
           Commands.sequence(
@@ -92,6 +98,13 @@ public enum SuperStructure {
               ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L3_CORAL_SCORE_ANGLE_DEG),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.L3_CORAL_SCORE_ANGLE_DEG),
               RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.Roller.L3_CORAL_SCORE_SPEED))),
+  L4_CORAL_SCORE(
+      () ->
+          Commands.sequence(
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_CORAL_SCORE_HEIGHT_IN),
+              ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L4_CORAL_SCORE_ANGLE_DEG),
+              PivotCmds.setAngleAndWait(SSConstants.Pivot.L4_CORAL_SCORE_ANGLE_DEG),
+              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.Roller.L4_CORAL_SCORE_SPEED))),
   PROCESSOR_SCORE(
       () ->
           Commands.sequence(
