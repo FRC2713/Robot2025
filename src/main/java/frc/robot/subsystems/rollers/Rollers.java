@@ -15,7 +15,7 @@ public class Rollers extends SubsystemBase {
 
   public final MechanismLigament2d mech2dTube =
       new MechanismLigament2d(
-          "tuberollers", Units.inchesToMeters(2), -20, 7, new Color8Bit(100, 100, 100));
+          "tuberollers", Units.inchesToMeters(2), -20, 7, new Color8Bit(255, 255, 255));
 
   private double tubeSpeedTarget;
 

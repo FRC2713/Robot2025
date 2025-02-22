@@ -73,10 +73,10 @@ public class RobotContainer {
   // Subsystems
   public static Drivetrain driveSubsystem;
   public static Elevator elevator;
+  public static Shoulder shoulder;
   public static Pivot pivot;
   public static Rollers rollers;
   public static AlgaeClaw algaeClaw;
-  public static Shoulder shoulder;
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);

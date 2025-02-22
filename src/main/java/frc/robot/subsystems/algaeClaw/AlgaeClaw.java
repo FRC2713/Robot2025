@@ -15,7 +15,7 @@ public class AlgaeClaw extends SubsystemBase {
 
   public final MechanismLigament2d mech2dTube =
       new MechanismLigament2d(
-          "tubealgaeclaw", Units.inchesToMeters(2), -20, 7, new Color8Bit(100, 100, 100));
+          "tubealgaeclaw", Units.inchesToMeters(2), -20, 7, new Color8Bit(0, 0, 255));
 
   private double tubeSpeedTarget;
 
