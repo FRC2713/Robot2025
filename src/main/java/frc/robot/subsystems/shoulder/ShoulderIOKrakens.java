@@ -2,6 +2,7 @@ package frc.robot.subsystems.shoulder;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.math.util.Units;
@@ -11,6 +12,7 @@ import frc.robot.util.PhoenixUtil;
 
 public class ShoulderIOKrakens implements ShoulderIO {
   private final TalonFX motor;
+  private final CANcoder encoder;
   private double targetDegrees;
   private final MotionMagicExpoTorqueCurrentFOC angleRequest =
       new MotionMagicExpoTorqueCurrentFOC(0);
@@ -18,6 +20,7 @@ public class ShoulderIOKrakens implements ShoulderIO {
 
   public ShoulderIOKrakens() {
     this.motor = new TalonFX(ShoulderConstants.kCANId);
+    this.encoder = new CANcoder(ShoulderConstants.kEncoderCANId);
     config = ShoulderConstants.createKrakenConfig();
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config, 0.25));
     PhoenixUtil.tryUntilOk(
@@ -42,6 +45,8 @@ public class ShoulderIOKrakens implements ShoulderIO {
     inputs.velocityDPS = Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble());
     inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
     inputs.angleDegrees = Units.rotationsToDegrees(motor.getPosition().getValueAsDouble());
+    inputs.absoluteAngleDegrees =
+        Units.rotationsToDegrees(encoder.getAbsolutePosition().getValueAsDouble());
     inputs.commandedAngleDegs = targetDegrees;
     inputs.setpointVelocity = motor.getClosedLoopReference().getValueAsDouble();
   }

@@ -12,6 +12,7 @@ import frc.robot.util.RHRUtil;
 
 public class PivotConstants {
   public static final int kCANId = 15;
+  public static final int kEncoderCANId = 16;
   public static final boolean kInverted = false;
 
   public static final double kGearing = (48.0 / 18.0) * 20;
