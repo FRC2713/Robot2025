@@ -63,7 +63,7 @@ public class ShoulderConstants {
   public static final double kAbsoluteEncoderOffset = 118.7;
 
   public static final int mech2dWidth = 10;
-  public static final Color8Bit mech2dColor = new Color8Bit(0, 255, 255);
+  public static final Color8Bit mech2dColor = new Color8Bit(255, 0, 255);
 
   public static TalonFXConfiguration createKrakenConfig() {
     var config = new TalonFXConfiguration();
