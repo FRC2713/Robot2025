@@ -2,6 +2,7 @@ package frc.robot.subsystems.shoulder;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.constants.ShoulderConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -10,6 +11,9 @@ import org.littletonrobotics.junction.Logger;
 public class Shoulder extends SubsystemBase {
   private final ShoulderInputsAutoLogged inputs;
   private final ShoulderIO IO;
+  public final MechanismLigament2d stage0 =
+      new MechanismLigament2d(
+          "stage0", ShoulderConstants.kHeight, 0, 7, new Color8Bit(255, 255, 255));
   public final MechanismLigament2d mech2d =
       new MechanismLigament2d(
           "shoulder",

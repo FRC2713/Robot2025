@@ -1,0 +1,30 @@
+{
+    "name": "2713 2025",
+    "disableSimplification": false,
+    "rotations": [{
+      "axis": "x",
+      "degrees": 90
+    }, {
+      "axis": "y",
+      "degrees": 0
+    }, {
+      "axis": "z",
+      "degrees": -90
+    }],
+    "position": [0,0,0],
+    "cameras": [],
+    "components": [
+        {
+          "zeroedRotations": [],
+          "zeroedPosition": [0,0,0]
+        },
+        {
+          "zeroedRotations": [],
+          "zeroedPosition": [0,0,0]
+        },
+        {
+          "zeroedRotations": [],
+          "zeroedPosition": [0,0,0]
+        }
+    ]
+  }

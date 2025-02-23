@@ -33,6 +33,8 @@ public class Pivot extends SubsystemBase {
 
     IO.updateInputs(inputs);
     Logger.processInputs("Pivot", inputs);
+
+    this.updateMech2D();
   }
 
   public void setTargetAngle(double degrees) {

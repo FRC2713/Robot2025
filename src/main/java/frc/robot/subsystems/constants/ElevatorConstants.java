@@ -30,7 +30,7 @@ public class ElevatorConstants {
 
   public static final double kMinHeight = 0.0; // inches
   public static final double kMaxHeight = 44.7; // 52.5;
-  public static final double kInitialHeight = 0.0;
+  public static final double kInitialHeight = 0;
 
   public static final LoggedTunablePID PID_LEVEL_ONE =
       new LoggedTunablePID(
@@ -64,8 +64,8 @@ public class ElevatorConstants {
               .v(0.0)
               .a(0.0));
 
-  public static final int mech2dWidth = 20;
-  public static final Color8Bit mech2dColor = new Color8Bit(255, 255, 0);
+  public static final double mech2dWidth = Units.inchesToMeters(1);
+  public static final Color8Bit mech2dColor = new Color8Bit(255, 0, 0);
 
   public static TalonFXConfiguration createKrakenConfig(boolean inverted) {
     var config = new TalonFXConfiguration();

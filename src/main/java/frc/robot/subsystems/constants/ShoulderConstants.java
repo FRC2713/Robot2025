@@ -18,11 +18,12 @@ public class ShoulderConstants {
   public static final double kGearing = (36.0 / 12.0) * 25;
   public static final double kLength = Units.inchesToMeters(18);
   public static final double kMass = 7.094328; // kg
+  public static final double kHeight = Units.inchesToMeters(24);
 
   public static final double kMinAngleRad = Units.degreesToRadians(-190);
   public static final double kMaxAngleRad = Units.degreesToRadians(190);
 
-  public static final double kInitialAngleRad = Units.degreesToRadians(0);
+  public static final double kInitialAngleRad = Units.degreesToRadians(-90);
   public static final double kRampAngleRad = Units.degreesToRadians(30);
 
   public static final int kStallCurrentLimit = 30; // amps
@@ -63,7 +64,7 @@ public class ShoulderConstants {
   public static final double kAbsoluteEncoderOffset = 118.7;
 
   public static final int mech2dWidth = 10;
-  public static final Color8Bit mech2dColor = new Color8Bit(255, 0, 255);
+  public static final Color8Bit mech2dColor = new Color8Bit(0, 255, 0);
 
   public static TalonFXConfiguration createKrakenConfig() {
     var config = new TalonFXConfiguration();

@@ -13,9 +13,9 @@ public class AlgaeClaw extends SubsystemBase {
   private final AlgaeClawInputsAutoLogged inputs = new AlgaeClawInputsAutoLogged();
   private final AlgaeClawIO IO;
 
-  public final MechanismLigament2d mech2dTube =
+  public final MechanismLigament2d mech2d =
       new MechanismLigament2d(
-          "tubealgaeclaw", Units.inchesToMeters(2), -20, 7, new Color8Bit(0, 0, 255));
+          "algaeclaw", Units.inchesToMeters(2), -20, 7, new Color8Bit(100, 100, 100));
 
   private double tubeSpeedTarget;
 
@@ -39,7 +39,7 @@ public class AlgaeClaw extends SubsystemBase {
   }
 
   public void updateMech2D() {
-    mech2dTube.setAngle(Rotation2d.fromDegrees(inputs.algaeClawPositionDegs));
+    mech2d.setAngle(Rotation2d.fromDegrees(inputs.algaeClawPositionDegs));
   }
 
   public boolean hasAlgae() {

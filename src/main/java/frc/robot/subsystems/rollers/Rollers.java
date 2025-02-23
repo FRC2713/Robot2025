@@ -13,7 +13,7 @@ public class Rollers extends SubsystemBase {
   private final RollersInputsAutoLogged inputs = new RollersInputsAutoLogged();
   private final RollersIO IO;
 
-  public final MechanismLigament2d mech2dTube =
+  public final MechanismLigament2d mech2d =
       new MechanismLigament2d(
           "tuberollers", Units.inchesToMeters(2), -20, 7, new Color8Bit(255, 255, 255));
 
@@ -38,7 +38,7 @@ public class Rollers extends SubsystemBase {
   }
 
   public void updateMech2D() {
-    mech2dTube.setAngle(Rotation2d.fromDegrees(inputs.tubePositionDegs));
+    mech2d.setAngle(Rotation2d.fromDegrees(inputs.tubePositionDegs));
   }
 
   public boolean hasCoral() {

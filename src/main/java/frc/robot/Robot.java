@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -89,12 +90,13 @@ public class Robot extends LoggedRobot {
     mech2d = new Mechanism2d(3, 3);
     MechanismLigament2d mech2d_pre_rollers =
         mech2d
-            .getRoot("root", 1.5, 0)
+            .getRoot("root", 1.5, Units.inchesToMeters(0))
             .append(RobotContainer.elevator.mech2d)
+            .append(RobotContainer.shoulder.stage0)
             .append(RobotContainer.shoulder.mech2d)
-            .append(RobotContainer.pivot.mech2d);
-    mech2d_pre_rollers.append(RobotContainer.rollers.mech2dTube);
-    mech2d_pre_rollers.append(RobotContainer.algaeClaw.mech2dTube);
+            .append(RobotContainer.pivot.mech2d)
+            .append(RobotContainer.rollers.mech2d)
+            .append(RobotContainer.algaeClaw.mech2d);
     SmartDashboard.putData("Mech2d", mech2d);
   }
 
