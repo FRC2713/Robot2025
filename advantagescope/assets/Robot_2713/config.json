@@ -15,15 +15,50 @@
     "cameras": [],
     "components": [
         {
-          "zeroedRotations": [],
+          "zeroedRotations": [{
+            "axis": "x",
+            "degrees": 90
+          }, {
+            "axis": "y",
+            "degrees": 0
+          }, {
+            "axis": "z",
+            "degrees": -90
+          }],
           "zeroedPosition": [0,0,0]
         },
         {
-          "zeroedRotations": [],
-          "zeroedPosition": [0,0,0]
+          "zeroedRotations": [
+            {
+              "axis": "z",
+              "degrees": 90
+            },
+            {
+              "axis": "y",
+              "degrees": 180
+            },
+            {
+              "axis": "x",
+              "degrees": 180
+            }
+          ],
+          "zeroedPosition": [0, 0, 0]
         },
         {
-          "zeroedRotations": [],
+          "zeroedRotations": [
+            {
+              "axis": "z",
+              "degrees": 90
+            },
+            {
+              "axis": "x",
+              "degrees": 180
+            },
+            {
+              "axis": "y",
+              "degrees": 90
+            }
+          ],
           "zeroedPosition": [0,0,0]
         }
     ]

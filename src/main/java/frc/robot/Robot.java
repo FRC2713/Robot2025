@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -122,6 +123,12 @@ public class Robot extends LoggedRobot {
     RobotContainer.rollers.updateMech2D();
     RobotContainer.algaeClaw.updateMech2D();
     RobotContainer.shoulder.updateMech2D();
+
+    Pose3d[] componentPoses = {
+      RobotContainer.elevator.pose, RobotContainer.shoulder.pose, RobotContainer.pivot.pose
+    };
+
+    Logger.recordOutput("componentPoses", componentPoses);
   }
 
   /** This function is called once when the robot is disabled. */

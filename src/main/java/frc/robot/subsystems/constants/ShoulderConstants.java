@@ -4,6 +4,9 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.util.ControlGains;
@@ -24,6 +27,13 @@ public class ShoulderConstants {
   public static final double kMaxAngleRad = Units.degreesToRadians(190);
 
   public static final double kInitialAngleRad = Units.degreesToRadians(-90);
+  public static final Transform3d kInitialTransform =
+      new Transform3d(
+          0.0,
+          Units.inchesToMeters(-9.784055),
+          Units.inchesToMeters(34.75),
+          new Rotation3d(0, 0, 0));
+  public static final Pose3d kInitialPose = new Pose3d().transformBy(kInitialTransform);
   public static final double kRampAngleRad = Units.degreesToRadians(30);
 
   public static final int kStallCurrentLimit = 30; // amps

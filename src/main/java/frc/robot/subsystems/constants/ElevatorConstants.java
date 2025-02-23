@@ -3,6 +3,9 @@ package frc.robot.subsystems.constants;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.util.ControlGains;
@@ -31,6 +34,14 @@ public class ElevatorConstants {
   public static final double kMinHeight = 0.0; // inches
   public static final double kMaxHeight = 44.7; // 52.5;
   public static final double kInitialHeight = 0;
+  public static final Pose3d kInitialPose =
+      new Pose3d(
+          new Translation3d(
+              Units.inchesToMeters(0),
+              Units.inchesToMeters(0),
+              Units.inchesToMeters(kInitialHeight)),
+          new Rotation3d(
+              Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0)));
 
   public static final LoggedTunablePID PID_LEVEL_ONE =
       new LoggedTunablePID(

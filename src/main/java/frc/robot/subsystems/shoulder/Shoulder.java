@@ -1,9 +1,13 @@
 package frc.robot.subsystems.shoulder;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.ShoulderConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -22,6 +26,9 @@ public class Shoulder extends SubsystemBase {
           ShoulderConstants.mech2dWidth,
           ShoulderConstants.mech2dColor);
 
+  public Pose3d pose = ShoulderConstants.kInitialPose;
+  public Transform3d transform = new Transform3d();
+
   private double targetAngleDeg = Units.radiansToDegrees(ShoulderConstants.kInitialAngleRad);
 
   public Shoulder(ShoulderIO IO) {
@@ -37,6 +44,16 @@ public class Shoulder extends SubsystemBase {
 
     IO.updateInputs(inputs);
     Logger.processInputs("Shoulder", inputs);
+
+    this.transform =
+        new Transform3d(
+            0.0, 0.0, 0.0, new Rotation3d(0, Units.degreesToRadians(inputs.angleDegrees), 0));
+
+    this.pose =
+        ShoulderConstants.kInitialPose
+            .transformBy(RobotContainer.elevator.transform)
+            .transformBy(ShoulderConstants.kInitialTransform)
+            .transformBy(this.transform);
   }
 
   public void setTargetAngle(double degrees) {
