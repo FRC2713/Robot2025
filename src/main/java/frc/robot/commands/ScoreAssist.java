@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -79,23 +81,51 @@ public class ScoreAssist {
       }
     }
 
-    var closest = ScoreLoc.fromNodeAndLevel(closestLoc, level);
+    final var closest = ScoreLoc.fromNodeAndLevel(closestLoc, level);
     Logger.recordOutput("/ScoreAssit/Closest", AllianceFlipUtil.apply(closestLoc.getPose()));
-    if (closestLoc.getPose().getTranslation().getDistance(pose.get().getTranslation())
-        < Units.inchesToMeters(6)) {
-      Logger.recordOutput("/ScoreAssist/Mode", "Heading controller");
-      return headingControllerDrive(closestLoc.getPose());
+    Logger.recordOutput("/ScoreAssit/ClosestDist", closestDist);
+    if (closestDist < Units.inchesToMeters(30)) {
+      Logger.recordOutput("/ScoreAssist/Mode", "Align to tag");
+      return alignToTagDrive(closest.getNode());
     }
     Logger.recordOutput("/ScoreAssist/Mode", "Pathing");
     return closest.getScoreCommand();
   }
 
-  public static Command headingControllerDrive(Pose2d pose) {
+  private static PIDController tagDrivePIDX = new PIDController(1, 0, 0);
+  private static PIDController tagDrivePIDArea = new PIDController(1, 0, 0);
+
+  private static Pair<Double, Double> getAlignToTagDriveOutput(ScoreNode node) {
+    double targetX = node.isRightNode() ? 100 : 10;
+    double targetArea = 50_000;
+    var detections = RobotContainer.visionDetector.detections;
+    System.out.println(detections);
+    long targetId = node.getAprilTagID();
+    if (detections.containsKey(targetId)) {
+      var measurementX = detections.get(targetId).cx();
+      var measurementArea = detections.get(targetId).area();
+      var outputX = tagDrivePIDX.calculate(measurementX, targetX);
+      var outputY = tagDrivePIDArea.calculate(measurementArea, targetArea);
+
+      Logger.recordOutput("ScoreAssist/AlignToTag/Reasoning", "All good!");
+      Logger.recordOutput("ScoreAssist/AlignToTag/outputX", outputX);
+      Logger.recordOutput("ScoreAssist/AlignToTag/outputY", outputY);
+
+      return new Pair<>(outputX, outputY);
+    }
+
+    Logger.recordOutput("ScoreAssist/AlignToTag/Reasoning", "Tag not seen");
+    return new Pair<>(0., 0.);
+  }
+
+  public static Command alignToTagDrive(ScoreNode node) {
     return DriveCommands.changeDefaultDriveCommand(
         RobotContainer.driveSubsystem,
-        DriveCommands.joystickDriveAtAngle(
-            RobotContainer.driveSubsystem, () -> 0, () -> 0, () -> pose.getRotation()),
-        "Score Assist Heading Controller");
+        DriveCommands.joystickDriveAtAngleRotationRelative(
+            RobotContainer.driveSubsystem,
+            () -> getAlignToTagDriveOutput(node),
+            () -> AllianceFlipUtil.apply(node.getPose().getRotation())),
+        "Align to Tag");
   }
 
   public Trigger getTrigger() {

@@ -61,9 +61,11 @@ import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
 import frc.robot.subsystems.shoulder.ShoulderIOSim;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionDetector;
 import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.subsystems.vision.VisionIOPoseEstimator;
 import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.ScoreLevel;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
 
@@ -85,6 +87,7 @@ public class RobotContainer {
   // For Choreo
   private final AutoFactory choreoAutoFactory;
   public static Vision visionsubsystem;
+  public static VisionDetector visionDetector;
 
   public RobotContainer() {
     // Start subsystems
@@ -141,6 +144,7 @@ public class RobotContainer {
             VisionConstants.USE_WHEEL_ODOMETRY
                 ? new VisionIOOdometry()
                 : new VisionIOPoseEstimator());
+    visionDetector = new VisionDetector();
 
     // PathPlanner Config
     AutoBuilder.configure(
@@ -281,17 +285,24 @@ public class RobotContainer {
                     driveSubsystem)
                 .ignoringDisable(true));
 
-    // driver
-    //     .a()
-    //     .onTrue(
-    //         ScoreAssist.getInstance()
-    //             .setActiveCommand(
-    //                 () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose,
-    // ScoreLevel.ONE)))
-    //     .onFalse(
-    //         Commands.sequence(
-    //             ScoreAssist.getInstance().cancelCmd(),
-    // SuperStructure.STARTING_CONF.getCommand()));
+    driver
+        .b()
+        .onTrue(
+            ScoreAssist.getInstance()
+                .setActiveCommand(
+                    () -> ScoreAssist.getClosestCommand(driveSubsystem::getPose, ScoreLevel.ONE)))
+        .onFalse(
+            Commands.sequence(
+                DriveCommands.changeDefaultDriveCommand(
+                    driveSubsystem,
+                    DriveCommands.joystickDrive(
+                        driveSubsystem,
+                        () -> -driver.getLeftY(),
+                        () -> -driver.getLeftX(),
+                        () -> -driver.getRightX()),
+                    "Full Control"),
+                ScoreAssist.getInstance().cancelCmd(),
+                SuperStructure.STARTING_CONF.getCommand()));
 
     // driver
     //     .b()

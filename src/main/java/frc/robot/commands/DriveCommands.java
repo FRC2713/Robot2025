@@ -14,6 +14,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -161,6 +162,38 @@ public class DriveCommands {
         drive);
   }
 
+  public static Command joystickDriveAtAngleRotationRelative(
+      Drivetrain drive,
+      Supplier<Pair<Double, Double>> suppliers,
+      Supplier<Rotation2d> rotationSupplier) {
+    return Commands.run(
+            () -> {
+              // Get linear velocity
+              Translation2d linearVelocity =
+                  getLinearVelocityFromJoysticks(
+                      suppliers.get().getFirst(), suppliers.get().getSecond());
+
+              // Calculate angular speed
+              double omega =
+                  HeadingControllerConstants.angleController.calculate(
+                      drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
+
+              // Convert to field relative speeds & send command
+              ChassisSpeeds speeds =
+                  new ChassisSpeeds(
+                      linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                      linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                      omega);
+
+              drive.runVelocity(speeds);
+            },
+            drive)
+
+        // Reset PID controller when command starts
+        .beforeStarting(
+            () ->
+                HeadingControllerConstants.angleController.reset(drive.getRotation().getRadians()));
+  }
   /**
    * Field relative drive command using joystick for linear control and PID for angular control.
    * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
