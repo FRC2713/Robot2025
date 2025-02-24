@@ -52,7 +52,6 @@ public class Shoulder extends SubsystemBase {
     this.pose =
         ShoulderConstants.kInitialPose
             .transformBy(RobotContainer.elevator.transform)
-            .transformBy(ShoulderConstants.kInitialTransform)
             .transformBy(this.transform);
   }
 

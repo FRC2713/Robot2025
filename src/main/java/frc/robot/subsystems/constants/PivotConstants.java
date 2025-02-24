@@ -25,12 +25,18 @@ public class PivotConstants {
   public static final double kMinAngleRad = Units.degreesToRadians(0);
   public static final double kMaxAngleRad = Units.degreesToRadians(60);
 
-  public static final double kInitialAngleRad = Units.degreesToRadians(18);
+  public static final double kInitialAngleRad = Units.degreesToRadians(35);
   public static final double kRampAngleRad = Units.degreesToRadians(30);
 
+  // transform from shoulder origin to pivot origin
   public static final Transform3d kInitialTransform =
       new Transform3d(
-          Units.inchesToMeters(4.675000), 0, Units.inchesToMeters(-18), new Rotation3d(0, 0, 0));
+          -ShoulderConstants.kLength,
+          Units.inchesToMeters(4.675),
+          0,
+          new Rotation3d(0, -kInitialAngleRad, 0));
+
+  // pose in robot frame
   public static final Pose3d kInitialPose =
       new Pose3d().transformBy(ShoulderConstants.kInitialTransform).transformBy(kInitialTransform);
 

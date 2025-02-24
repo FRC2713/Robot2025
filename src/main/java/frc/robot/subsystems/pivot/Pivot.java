@@ -41,14 +41,14 @@ public class Pivot extends SubsystemBase {
     IO.updateInputs(inputs);
     Logger.processInputs("Pivot", inputs);
 
-    this.transform =
-        new Transform3d(
-            0.0, 0.0, 0.0, new Rotation3d(0, Units.degreesToRadians(inputs.angleDegrees), 0));
+    this.transform = PivotConstants.kInitialTransform;
+
+    Pose3d pivotPoint = RobotContainer.shoulder.pose.transformBy(this.transform);
+
     this.pose =
-        PivotConstants.kInitialPose
-            .transformBy(RobotContainer.shoulder.transform)
-            .transformBy(PivotConstants.kInitialTransform)
-            .transformBy(this.transform);
+        new Pose3d(
+            pivotPoint.getTranslation(),
+            new Rotation3d(0, Units.degreesToRadians(-inputs.angleDegrees), 0));
   }
 
   public void setTargetAngle(double degrees) {

@@ -124,10 +124,11 @@ public class Robot extends LoggedRobot {
     RobotContainer.algaeClaw.updateMech2D();
     RobotContainer.shoulder.updateMech2D();
 
+    // Record the pose of each subsystem
+    // order matters here.
     Pose3d[] componentPoses = {
       RobotContainer.elevator.pose, RobotContainer.shoulder.pose, RobotContainer.pivot.pose
     };
-
     Logger.recordOutput("componentPoses", componentPoses);
   }
 

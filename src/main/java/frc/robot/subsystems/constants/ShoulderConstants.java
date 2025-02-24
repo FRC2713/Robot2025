@@ -27,14 +27,19 @@ public class ShoulderConstants {
   public static final double kMaxAngleRad = Units.degreesToRadians(190);
 
   public static final double kInitialAngleRad = Units.degreesToRadians(-90);
+  public static final double kRampAngleRad = Units.degreesToRadians(30);
+
+  // transform from elevator origin to shoulder origin
   public static final Transform3d kInitialTransform =
       new Transform3d(
           0.0,
           Units.inchesToMeters(-9.784055),
           Units.inchesToMeters(34.75),
           new Rotation3d(0, 0, 0));
-  public static final Pose3d kInitialPose = new Pose3d().transformBy(kInitialTransform);
-  public static final double kRampAngleRad = Units.degreesToRadians(30);
+
+  // pose in robot frame
+  public static final Pose3d kInitialPose =
+      ElevatorConstants.kInitialPose.transformBy(kInitialTransform);
 
   public static final int kStallCurrentLimit = 30; // amps
   public static final int kStatorCurrentLimit = 100; // also amps
