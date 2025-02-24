@@ -86,6 +86,7 @@ public class TunerConstants {
 
   private static final double kDriveGearRatio = 6.746031746031747;
   private static final double kSteerGearRatio = 21.428571428571427;
+  // Hey team, radius and diameter are different things....
   public static final Distance kWheelRadius = Inches.of(2);
 
   private static final boolean kInvertLeftSide = false;

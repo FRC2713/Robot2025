@@ -25,7 +25,7 @@ public class PivotConstants {
   public static final double kMinAngleRad = Units.degreesToRadians(0);
   public static final double kMaxAngleRad = Units.degreesToRadians(60);
 
-  public static final double kInitialAngleRad = Units.degreesToRadians(20);
+  public static final double kInitialAngleRad = Units.degreesToRadians(18);
   public static final double kRampAngleRad = Units.degreesToRadians(30);
 
   public static final Transform3d kInitialTransform =
@@ -38,17 +38,17 @@ public class PivotConstants {
   public static final int kStatorCurrentLimit = 100; // also amps
   public static final double kMaxAngularVelocity = 5; // RPM
 
-  public static final double kP = RHRUtil.modeDependentDouble(0., 10); // output/rotation
+  public static final double kP = RHRUtil.modeDependentDouble(400., 10); // output/rotation
   public static final double kI = 0.0; // Integral of kP
-  public static final double kD = RHRUtil.modeDependentDouble(0., 0); // output/error in velocity
+  public static final double kD = RHRUtil.modeDependentDouble(60, 0); // output/error in velocity
 
   public static final double kG = RHRUtil.modeDependentDouble(4., 0.381);
   public static final double kV = 0.0; // kV * rev/s = volts
   public static final double kA = 0.0;
   public static final double kS = RHRUtil.modeDependentDouble(0, 0.); // Volts
 
-  public static final double kTrapezoidalMaxVelocity = 3;
-  public static final double kTrapezoidalMaxAcceleration = 30;
+  public static final double kTrapezoidalMaxVelocity = .1;
+  public static final double kTrapezoidalMaxAcceleration = 60;
   public static final double kTrapezoidalMaxJerk = 300;
 
   public static final LoggedTunablePID PID =
@@ -90,7 +90,7 @@ public class PivotConstants {
 
     config.Slot0 = PID.toTalonFX(GravityTypeValue.Arm_Cosine);
     // config.MotionMagic = PID.toMotionMagic();
-    config.MotionMagic.MotionMagicCruiseVelocity = .5;
+    config.MotionMagic.MotionMagicCruiseVelocity = kTrapezoidalMaxVelocity;
     config.MotionMagic.MotionMagicAcceleration = kTrapezoidalMaxAcceleration;
     config.MotionMagic.MotionMagicJerk = kTrapezoidalMaxJerk;
     config.MotionMagic.MotionMagicExpo_kV = 6.4;
@@ -98,5 +98,5 @@ public class PivotConstants {
     return config;
   }
 
-  public static final double AT_TARGET_GIVE_DEGS = 2;
+  public static final double AT_TARGET_GIVE_DEGS = 1;
 }

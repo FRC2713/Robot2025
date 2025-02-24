@@ -52,7 +52,6 @@ public class RollersIOSparks implements RollersIO {
   public void setEnableLimitSwitch(boolean setEnable) {
     enableLS = setEnable;
   }
-
   private boolean hasCoral() {
     return limitSwitch.isPressed();
   }

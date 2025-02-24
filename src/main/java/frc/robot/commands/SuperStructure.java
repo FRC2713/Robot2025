@@ -26,6 +26,7 @@ public enum SuperStructure {
           Commands.sequence(
               Commands.parallel(
                   RollerCmds.setEnableLimitSwitch(true),
+                  RollerCmds.setEnableAlgaeLS(false),
                   ElevatorCmds.setHeight(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
                   RollerCmds.setSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
                   PivotCmds.setAngle(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
