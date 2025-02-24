@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
-import frc.robot.SSConstants;
 import java.util.function.DoubleSupplier;
 
 public class RollerCmds {
@@ -64,14 +63,5 @@ public class RollerCmds {
 
   public static Command intake(DoubleSupplier targetRpm) {
     return Commands.sequence(setEnableLimitSwitch(true), setSpeed(targetRpm));
-  }
-
-  public static Command holdAlgae(DoubleSupplier targetRpm) {
-    return Commands.sequence(
-        new InstantCommand(
-            () ->
-                RobotContainer.rollers.setCurrentLimit(
-                    SSConstants.Roller.ALGAE_CURRENT_LIMIT.getAsDouble())),
-        setTubeSpeed(targetRpm));
   }
 }

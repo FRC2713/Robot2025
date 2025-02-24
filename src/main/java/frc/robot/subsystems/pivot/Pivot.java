@@ -3,6 +3,7 @@ package frc.robot.subsystems.pivot;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,9 +47,11 @@ public class Pivot extends SubsystemBase {
     Pose3d pivotPoint = RobotContainer.shoulder.pose.transformBy(this.transform);
 
     this.pose =
-        new Pose3d(
-            pivotPoint.getTranslation(),
-            new Rotation3d(0, Units.degreesToRadians(-inputs.angleDegrees), 0));
+        new Pose3d(pivotPoint.getTranslation(), new Rotation3d())
+            .transformBy(
+                new Transform3d(
+                    new Translation3d(),
+                    new Rotation3d(0, Units.degreesToRadians(inputs.angleDegrees), 0)));
   }
 
   public void setTargetAngle(double degrees) {

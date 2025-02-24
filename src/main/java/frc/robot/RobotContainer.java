@@ -299,8 +299,8 @@ public class RobotContainer {
     // Score Algae
     driver
         .rightTrigger(0.25)
-        .onTrue(RollerCmds.scoreAlgae(SSConstants.Roller.PROCESSOR_SCORE_SPEED))
-        .onFalse(RollerCmds.setTubeSpeed(() -> 0));
+        .onTrue(AlgaeClawCmds.score(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
+        .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
     // Heading controller
     driver

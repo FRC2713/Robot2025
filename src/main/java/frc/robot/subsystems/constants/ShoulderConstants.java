@@ -23,8 +23,8 @@ public class ShoulderConstants {
   public static final double kMass = 7.094328; // kg
   public static final double kHeight = Units.inchesToMeters(24);
 
-  public static final double kMinAngleRad = Units.degreesToRadians(-190);
-  public static final double kMaxAngleRad = Units.degreesToRadians(190);
+  public static final double kMinAngleRad = Units.degreesToRadians(-280);
+  public static final double kMaxAngleRad = Units.degreesToRadians(100);
 
   public static final double kInitialAngleRad = Units.degreesToRadians(-90);
   public static final double kRampAngleRad = Units.degreesToRadians(30);
@@ -33,7 +33,7 @@ public class ShoulderConstants {
   public static final Transform3d kInitialTransform =
       new Transform3d(
           0.0,
-          Units.inchesToMeters(-9.784055),
+          Units.inchesToMeters(9.784055),
           Units.inchesToMeters(34.75),
           new Rotation3d(0, 0, 0));
 

@@ -26,7 +26,6 @@ public enum SuperStructure {
           Commands.sequence(
               Commands.parallel(
                   RollerCmds.setEnableLimitSwitch(true),
-                  RollerCmds.setEnableAlgaeLS(false),
                   ElevatorCmds.setHeight(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
                   RollerCmds.setSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
                   PivotCmds.setAngle(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
@@ -112,7 +111,8 @@ public enum SuperStructure {
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN),
               ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
-              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))),
+              AlgaeClawCmds.setSpeedAndWaitForNoAlgae(
+                  SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))),
   ;
 
   private Supplier<Command> cmd;

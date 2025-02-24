@@ -46,11 +46,7 @@ public class AlgaeClawCmds {
 
   public static Command setSpeedAndWaitForNoAlgae(DoubleSupplier targetRPM) {
     return Commands.sequence(
-        setEnableLimitSwitch(false),
-        setSpeed(targetRPM),
-        waitUntilNoAlgae(2),
-        Commands.waitSeconds(1),
-        setEnableLimitSwitch(true));
+        setEnableLimitSwitch(true), setSpeed(targetRPM), waitUntilNoAlgae(0.5));
   }
 
   public static Command driveUntilLimitSet(DoubleSupplier targetRPM) {

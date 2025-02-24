@@ -7,11 +7,10 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import frc.robot.util.ControlGains;
 
 public class AlgaeClawConstants {
-  public static final int kCoralCANId = 25;
-  public static final int kAlgaeCANId = 101;
+  public static final int kCANId = 101;
 
   public static final double kMOI = 0.001;
-  public static final double kGearing = 1 / (48.0 / 18.0);
+  public static final double kGearing = 12.0 / 32.0;
 
   public static final boolean kMotorInverted = true;
 
@@ -22,7 +21,7 @@ public class AlgaeClawConstants {
   public static final double kMaxVelocity = 6000; // rpm
   public static final double kMaxAcceleration = 6000; // rpm / sec
 
-  public static SparkFlexConfig createCoralConfig(int currentLimit) {
+  public static SparkFlexConfig createConfig(int currentLimit) {
     SparkFlexConfig config = new SparkFlexConfig();
 
     config.inverted(kMotorInverted);

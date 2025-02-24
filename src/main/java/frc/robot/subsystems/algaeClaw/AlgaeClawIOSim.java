@@ -4,7 +4,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import frc.robot.subsystems.constants.RollerConstants;
+import frc.robot.subsystems.constants.AlgaeClawConstants;
 
 /** For the first implementation, the robot controls AlgaeClaw and Algae with a single NEO */
 public class AlgaeClawIOSim implements AlgaeClawIO {
@@ -13,7 +13,7 @@ public class AlgaeClawIOSim implements AlgaeClawIO {
   private final DCMotorSim sim =
       new DCMotorSim(
           LinearSystemId.createDCMotorSystem(
-              motor, RollerConstants.kAlgaeMOI, RollerConstants.kAlgaeGearing),
+              motor, AlgaeClawConstants.kMOI, AlgaeClawConstants.kGearing),
           motor);
   private double commandedRPM;
 

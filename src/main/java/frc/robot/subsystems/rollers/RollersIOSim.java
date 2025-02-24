@@ -12,8 +12,7 @@ public class RollersIOSim implements RollersIO {
   private final DCMotor motor = DCMotor.getNEO(1);
   private final DCMotorSim sim =
       new DCMotorSim(
-          LinearSystemId.createDCMotorSystem(
-              motor, RollerConstants.kAlgaeMOI, RollerConstants.kAlgaeGearing),
+          LinearSystemId.createDCMotorSystem(motor, RollerConstants.kMOI, RollerConstants.kGearing),
           motor);
   private double commandedRPM;
 

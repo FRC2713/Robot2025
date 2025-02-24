@@ -32,7 +32,7 @@ public class PivotConstants {
   public static final Transform3d kInitialTransform =
       new Transform3d(
           -ShoulderConstants.kLength,
-          Units.inchesToMeters(4.675),
+          Units.inchesToMeters(-4.675),
           0,
           new Rotation3d(0, -kInitialAngleRad, 0));
 
