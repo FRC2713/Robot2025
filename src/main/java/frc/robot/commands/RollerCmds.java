@@ -48,8 +48,7 @@ public class RollerCmds {
     return Commands.sequence(
         setEnableLimitSwitch(false),
         setSpeed(targetRPM),
-        waitUntilNoCoral(2),
-        Commands.waitSeconds(1),
+        waitUntilNoCoral(0.5),
         setEnableLimitSwitch(true));
   }
 
