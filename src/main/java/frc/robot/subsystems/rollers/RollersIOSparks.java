@@ -19,10 +19,10 @@ public class RollersIOSparks implements RollersIO {
   public boolean enableAlgaeLS = false;
 
   public RollersIOSparks() {
-    this.motor = new SparkFlex(RollerConstants.kCoralCANId, MotorType.kBrushless);
-    this.limitSwitch = motor.getReverseLimitSwitch();
+    this.motor = new SparkFlex(RollerConstants.kCANId, MotorType.kBrushless);
+    this.limitSwitch = motor.getForwardLimitSwitch();
     motor.configure(
-        RollerConstants.createCoralConfig(60),
+        RollerConstants.createConfig(60),
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
   }
@@ -30,7 +30,7 @@ public class RollersIOSparks implements RollersIO {
   @Override
   public void updateInputs(RollersInputs inputs) {
     if (this.hasCoral() && enableLS) {
-      setTubeRPM(0);
+      setRPM(0);
     }
 
     inputs.tubeVelocityRPM = motor.getEncoder().getVelocity();
@@ -40,32 +40,18 @@ public class RollersIOSparks implements RollersIO {
     inputs.tubePositionDegs = Units.rotationsToDegrees(motor.getEncoder().getPosition());
 
     inputs.hasCoral = this.hasCoral();
-    inputs.hasAlgae = motor.getOutputCurrent() > RollerConstants.kAlgaeCurrentThreshold;
   }
 
   @Override
-  public void setTubeRPM(double rpm) {
+  public void setRPM(double rpm) {
     this.targetRPM = rpm;
-    motor.set(rpm / RollerConstants.kAlgaeMaxVelocity);
+    motor.set(rpm / RollerConstants.kMaxVelocity);
   }
 
   @Override
   public void setEnableLimitSwitch(boolean setEnable) {
+
     enableLS = setEnable;
-  }
-
-  @Override
-  public void setEnableAlgaeLimitSwitch(boolean setEnable) {
-    enableAlgaeLS = setEnable;
-  }
-
-  @Override
-  public void setCurrentLimit(double amps) {
-    int currentLimit = (int) amps;
-    this.motor.configure(
-        RollerConstants.createCoralConfig(currentLimit),
-        ResetMode.kNoResetSafeParameters,
-        PersistMode.kNoPersistParameters);
   }
 
   private boolean hasCoral() {

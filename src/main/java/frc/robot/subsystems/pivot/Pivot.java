@@ -1,8 +1,13 @@
 package frc.robot.subsystems.pivot;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.PivotConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -17,6 +22,9 @@ public class Pivot extends SubsystemBase {
           PivotConstants.kInitialAngleRad,
           PivotConstants.mech2dWidth,
           PivotConstants.mech2dColor);
+
+  public Pose3d pose = PivotConstants.kInitialPose;
+  public Transform3d transform = new Transform3d();
 
   private double targetAngleDeg = Units.radiansToDegrees(PivotConstants.kInitialAngleRad);
 
@@ -33,6 +41,17 @@ public class Pivot extends SubsystemBase {
 
     IO.updateInputs(inputs);
     Logger.processInputs("Pivot", inputs);
+
+    this.transform = PivotConstants.kInitialTransform;
+
+    Pose3d pivotPoint = RobotContainer.shoulder.pose.transformBy(this.transform);
+
+    this.pose =
+        new Pose3d(pivotPoint.getTranslation(), new Rotation3d())
+            .transformBy(
+                new Transform3d(
+                    new Translation3d(),
+                    new Rotation3d(0, Units.degreesToRadians(inputs.angleDegrees), 0)));
   }
 
   public void setTargetAngle(double degrees) {

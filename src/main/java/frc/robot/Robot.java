@@ -13,6 +13,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -89,10 +91,13 @@ public class Robot extends LoggedRobot {
     mech2d = new Mechanism2d(3, 3);
     MechanismLigament2d mech2d_pre_rollers =
         mech2d
-            .getRoot("root", 1.5, 0)
+            .getRoot("root", 1.5, Units.inchesToMeters(0))
             .append(RobotContainer.elevator.mech2d)
-            .append(RobotContainer.pivot.mech2d);
-    mech2d_pre_rollers.append(RobotContainer.rollers.mech2dTube);
+            .append(RobotContainer.shoulder.stage0)
+            .append(RobotContainer.shoulder.mech2d)
+            .append(RobotContainer.pivot.mech2d)
+            .append(RobotContainer.rollers.mech2d)
+            .append(RobotContainer.algaeClaw.mech2d);
     SmartDashboard.putData("Mech2d", mech2d);
   }
 
@@ -116,6 +121,15 @@ public class Robot extends LoggedRobot {
     RobotContainer.elevator.updateMech2D();
     RobotContainer.pivot.updateMech2D();
     RobotContainer.rollers.updateMech2D();
+    RobotContainer.algaeClaw.updateMech2D();
+    RobotContainer.shoulder.updateMech2D();
+
+    // Record the pose of each subsystem
+    // order matters here.
+    Pose3d[] componentPoses = {
+      RobotContainer.elevator.pose, RobotContainer.shoulder.pose, RobotContainer.pivot.pose
+    };
+    Logger.recordOutput("componentPoses", componentPoses);
   }
 
   /** This function is called once when the robot is disabled. */

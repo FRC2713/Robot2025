@@ -1,5 +1,8 @@
 package frc.robot.subsystems.elevator;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +20,9 @@ public class Elevator extends SubsystemBase {
           90,
           ElevatorConstants.mech2dWidth,
           ElevatorConstants.mech2dColor);
+
+  public Pose3d pose = ElevatorConstants.kInitialPose;
+  public Transform3d transform = new Transform3d();
 
   public Elevator(ElevatorIO IO) {
     this.inputs = new ElevatorInputsAutoLogged();
@@ -48,6 +54,11 @@ public class Elevator extends SubsystemBase {
 
     this.IO.updateInputs(this.inputs);
     Logger.processInputs("Elevator", this.inputs);
+
+    this.transform =
+        new Transform3d(0, 0, Units.inchesToMeters(getCurrentHeight()), new Rotation3d());
+
+    this.pose = ElevatorConstants.kInitialPose.transformBy(this.transform);
   }
 
   public double getCurrentHeight() {

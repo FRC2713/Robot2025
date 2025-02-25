@@ -13,9 +13,9 @@ public class Rollers extends SubsystemBase {
   private final RollersInputsAutoLogged inputs = new RollersInputsAutoLogged();
   private final RollersIO IO;
 
-  public final MechanismLigament2d mech2dTube =
+  public final MechanismLigament2d mech2d =
       new MechanismLigament2d(
-          "tuberollers", Units.inchesToMeters(2), -20, 7, new Color8Bit(100, 100, 100));
+          "tuberollers", Units.inchesToMeters(2), -20, 7, new Color8Bit(255, 255, 255));
 
   private double tubeSpeedTarget;
 
@@ -28,36 +28,24 @@ public class Rollers extends SubsystemBase {
     Logger.processInputs("Rollers", inputs);
   }
 
-  public void setTubeRPM(double rpm) {
+  public void setRPM(double rpm) {
     tubeSpeedTarget = rpm;
-    IO.setTubeRPM(rpm);
+    IO.setRPM(rpm);
   }
 
-  public boolean isTubeAtTarget() {
+  public boolean isAtTarget() {
     return Math.abs(tubeSpeedTarget - inputs.tubeVelocityRPM) < RollerConstants.AT_TARGET_GIVE_RPM;
   }
 
   public void updateMech2D() {
-    mech2dTube.setAngle(Rotation2d.fromDegrees(inputs.tubePositionDegs));
+    mech2d.setAngle(Rotation2d.fromDegrees(inputs.tubePositionDegs));
   }
 
   public boolean hasCoral() {
     return inputs.hasCoral;
   }
 
-  public boolean hasAlgae() {
-    return inputs.hasAlgae;
-  }
-
   public void setEnableLimitSwitch(boolean setEnable) {
     IO.setEnableLimitSwitch(setEnable);
-  }
-
-  public void setEnableAlgaeLimitSwitch(boolean setEnable) {
-    IO.setEnableAlgaeLimitSwitch(setEnable);
-  }
-
-  public void setCurrentLimit(double amps) {
-    IO.setCurrentLimit(amps);
   }
 }

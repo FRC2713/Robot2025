@@ -82,7 +82,7 @@ public class ScoreAssist {
     var closest = ScoreLoc.fromNodeAndLevel(closestLoc, level);
     Logger.recordOutput("/ScoreAssit/Closest", AllianceFlipUtil.apply(closestLoc.getPose()));
     if (closestLoc.getPose().getTranslation().getDistance(pose.get().getTranslation())
-        < Units.inchesToMeters(6)) {
+        < Units.inchesToMeters(0.1)) {
       Logger.recordOutput("/ScoreAssist/Mode", "Heading controller");
       return headingControllerDrive(closestLoc.getPose());
     }
