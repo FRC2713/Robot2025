@@ -265,7 +265,8 @@ public class RHRPathFindingCommand extends Command {
       }
     }
 
-    if (currentPose.getTranslation().getDistance(targetPose.getTranslation()) < 0.00005) {
+    // updated: this tolerance can be adjusted now
+    if (currentPose.getTranslation().getDistance(targetPose.getTranslation()) < 0.0005) {
       output.accept(new ChassisSpeeds(), DriveFeedforwards.zeros(robotConfig.numModules));
       finish = true;
 
@@ -287,6 +288,7 @@ public class RHRPathFindingCommand extends Command {
     PathPlannerLogging.logCurrentPose(currentPose);
     PPLibTelemetry.setCurrentPose(currentPose);
 
+    // updated: previously this would not happen if the starting and ending poses were less than 2 (units?) apart
     if (Pathfinding.isNewPathAvailable()) {
       currentPath = Pathfinding.getCurrentPath(constraints, goalEndState);
 
