@@ -125,84 +125,6 @@ public enum ScoreLoc {
       case 0:
         switch (level) {
           case 1:
-            return A_ONE;
-          case 2:
-            return A_TWO;
-          case 3:
-            return A_THREE;
-          case 4:
-            return A_FOUR;
-          default:
-            return null;
-        }
-      case 1:
-        switch (level) {
-          case 1:
-            return B_ONE;
-          case 2:
-            return B_TWO;
-          case 3:
-            return B_THREE;
-          case 4:
-            return B_FOUR;
-          default:
-            return null;
-        }
-      case 2:
-        switch (level) {
-          case 1:
-            return C_ONE;
-          case 2:
-            return C_TWO;
-          case 3:
-            return C_THREE;
-          case 4:
-            return C_FOUR;
-          default:
-            return null;
-        }
-      case 3:
-        switch (level) {
-          case 1:
-            return D_ONE;
-          case 2:
-            return D_TWO;
-          case 3:
-            return D_THREE;
-          case 4:
-            return D_FOUR;
-          default:
-            return null;
-        }
-      case 4:
-        switch (level) {
-          case 1:
-            return E_ONE;
-          case 2:
-            return E_TWO;
-          case 3:
-            return E_THREE;
-          case 4:
-            return E_FOUR;
-          default:
-            return null;
-        }
-      case 5:
-        switch (level) {
-          case 1:
-            return F_ONE;
-          case 2:
-            return F_TWO;
-          case 3:
-            return F_THREE;
-          case 4:
-            return F_FOUR;
-          default:
-            return null;
-        }
-      case 6:
-        switch (level) {
-          case 1:
             return G_ONE;
           case 2:
             return G_TWO;
@@ -213,7 +135,7 @@ public enum ScoreLoc {
           default:
             return null;
         }
-      case 7:
+      case 1:
         switch (level) {
           case 1:
             return H_ONE;
@@ -226,7 +148,7 @@ public enum ScoreLoc {
           default:
             return null;
         }
-      case 8:
+      case 2:
         switch (level) {
           case 1:
             return I_ONE;
@@ -239,7 +161,7 @@ public enum ScoreLoc {
           default:
             return null;
         }
-      case 9:
+      case 3:
         switch (level) {
           case 1:
             return J_ONE;
@@ -252,7 +174,7 @@ public enum ScoreLoc {
           default:
             return null;
         }
-      case 10:
+      case 4:
         switch (level) {
           case 1:
             return K_ONE;
@@ -265,7 +187,7 @@ public enum ScoreLoc {
           default:
             return null;
         }
-      case 11:
+      case 5:
         switch (level) {
           case 1:
             return L_ONE;
@@ -275,6 +197,84 @@ public enum ScoreLoc {
             return L_THREE;
           case 4:
             return L_FOUR;
+          default:
+            return null;
+        }
+      case 6:
+        switch (level) {
+          case 1:
+            return A_ONE;
+          case 2:
+            return A_TWO;
+          case 3:
+            return A_THREE;
+          case 4:
+            return A_FOUR;
+          default:
+            return null;
+        }
+      case 7:
+        switch (level) {
+          case 1:
+            return B_ONE;
+          case 2:
+            return B_TWO;
+          case 3:
+            return B_THREE;
+          case 4:
+            return B_FOUR;
+          default:
+            return null;
+        }
+      case 8:
+        switch (level) {
+          case 1:
+            return C_ONE;
+          case 2:
+            return C_TWO;
+          case 3:
+            return C_THREE;
+          case 4:
+            return C_FOUR;
+          default:
+            return null;
+        }
+      case 9:
+        switch (level) {
+          case 1:
+            return D_ONE;
+          case 2:
+            return D_TWO;
+          case 3:
+            return D_THREE;
+          case 4:
+            return D_FOUR;
+          default:
+            return null;
+        }
+      case 10:
+        switch (level) {
+          case 1:
+            return E_ONE;
+          case 2:
+            return E_TWO;
+          case 3:
+            return E_THREE;
+          case 4:
+            return E_FOUR;
+          default:
+            return null;
+        }
+      case 11:
+        switch (level) {
+          case 1:
+            return F_ONE;
+          case 2:
+            return F_TWO;
+          case 3:
+            return F_THREE;
+          case 4:
+            return F_FOUR;
           default:
             return null;
         }
