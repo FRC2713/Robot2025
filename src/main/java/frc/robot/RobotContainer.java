@@ -20,8 +20,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -67,6 +69,7 @@ import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.subsystems.vision.VisionIOPoseEstimator;
 import frc.robot.util.AllianceFlipUtil;
 import java.util.Arrays;
+import java.util.HashMap;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
@@ -87,6 +90,18 @@ public class RobotContainer {
   // For Choreo
   private final AutoFactory choreoAutoFactory;
   public static Vision visionsubsystem;
+
+  // Drive Modes
+  private enum DriveMode {
+    FULL_DRIVE,
+    AIM_AT_REEF,
+    HEADING_CONTROLLER_0,
+    HEADING_CONTROLLER_90,
+    HEADING_CONTROLLER_180,
+    HEADING_CONTROLLER_270
+  }
+
+  private HashMap<DriveMode, Command> driveModes = new HashMap<>();
 
   public RobotContainer() {
     // Start subsystems
@@ -143,6 +158,55 @@ public class RobotContainer {
             VisionConstants.USE_WHEEL_ODOMETRY
                 ? new VisionIOOdometry()
                 : new VisionIOPoseEstimator());
+
+    // configure drive modes:
+    driveModes.put(
+        DriveMode.FULL_DRIVE,
+        DriveCommands.joystickDrive(
+            driveSubsystem,
+            () -> -driver.getLeftY(),
+            () -> -driver.getLeftX(),
+            () -> -driver.getRightX()));
+
+    driveModes.put(
+        DriveMode.AIM_AT_REEF,
+        DriveCommands.joystickDriveAtAngle(
+            driveSubsystem,
+            () -> -driver.getLeftY(),
+            () -> -driver.getLeftX(),
+            () -> lookAt(FieldConstants.Reef.center)));
+
+    driveModes.put(
+        DriveMode.HEADING_CONTROLLER_0,
+        DriveCommands.joystickDriveAtAngle(
+            driveSubsystem,
+            () -> -driver.getLeftY(),
+            () -> -driver.getLeftX(),
+            () -> Rotation2d.fromDegrees(0)));
+
+    driveModes.put(
+        DriveMode.HEADING_CONTROLLER_90,
+        DriveCommands.joystickDriveAtAngle(
+            driveSubsystem,
+            () -> -driver.getLeftY(),
+            () -> -driver.getLeftX(),
+            () -> Rotation2d.fromDegrees(90)));
+
+    driveModes.put(
+        DriveMode.HEADING_CONTROLLER_180,
+        DriveCommands.joystickDriveAtAngle(
+            driveSubsystem,
+            () -> -driver.getLeftY(),
+            () -> -driver.getLeftX(),
+            () -> Rotation2d.fromDegrees(180)));
+
+    driveModes.put(
+        DriveMode.HEADING_CONTROLLER_270,
+        DriveCommands.joystickDriveAtAngle(
+            driveSubsystem,
+            () -> -driver.getLeftY(),
+            () -> -driver.getLeftX(),
+            () -> Rotation2d.fromDegrees(270)));
 
     // PathPlanner Config
     AutoBuilder.configure(
@@ -248,14 +312,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
-    DriveCommands.setDefaultDriveCommand(
-        driveSubsystem,
-        DriveCommands.joystickDrive(
-            driveSubsystem,
-            () -> -driver.getLeftY(),
-            () -> -driver.getLeftX(),
-            () -> -driver.getRightX()),
-        "Default Joystick Drive");
+    changeDriveMode(DriveMode.FULL_DRIVE);
 
     // Reset gyro to 0 deg when start button is pressed
     driver
@@ -304,90 +361,31 @@ public class RobotContainer {
         .onTrue(AlgaeClawCmds.score(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
         .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
+    driver
+        .a()
+        .onTrue(changeDriveMode(DriveMode.AIM_AT_REEF))
+        .onFalse(changeDriveMode(DriveMode.FULL_DRIVE));
+
     // Heading controller
     driver
         .povUp()
-        .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> Rotation2d.fromDegrees(180)),
-                "Heading Controller"))
-        .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Full Control"));
+        .onTrue(changeDriveMode(DriveMode.HEADING_CONTROLLER_180))
+        .onFalse(changeDriveMode(DriveMode.FULL_DRIVE));
 
     driver
         .povDown()
-        .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> Rotation2d.fromDegrees(0)),
-                "Heading Controller"))
-        .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Full Control"));
+        .onTrue(changeDriveMode(DriveMode.HEADING_CONTROLLER_0))
+        .onFalse(changeDriveMode(DriveMode.FULL_DRIVE));
 
     driver
         .povLeft()
-        .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> Rotation2d.fromDegrees(-90)),
-                "Heading Controller"))
-        .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Full Control"));
+        .onTrue(changeDriveMode(DriveMode.HEADING_CONTROLLER_270))
+        .onFalse(changeDriveMode(DriveMode.FULL_DRIVE));
 
     driver
         .povRight()
-        .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> Rotation2d.fromDegrees(90)),
-                "Heading Controller"))
-        .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Full Control"));
+        .onTrue(changeDriveMode(DriveMode.HEADING_CONTROLLER_90))
+        .onFalse(changeDriveMode(DriveMode.FULL_DRIVE));
 
     operator.a().onTrue(SuperStructure.L1_CORAL_PREP.getCommand());
     operator.b().onTrue(SuperStructure.L2_CORAL_PREP.getCommand());
@@ -412,5 +410,33 @@ public class RobotContainer {
     elevator.setTargetHeight(elevator.getCurrentHeight());
     pivot.setTargetAngle(pivot.getCurrentAngle());
     rollers.setRPM(0);
+  }
+
+  // Change the default drive command based on the selected drive mode
+  private Command changeDriveMode(DriveMode mode) {
+    return new InstantCommand(
+        () ->
+            DriveCommands.setDefaultDriveCommand(
+                driveSubsystem, driveModes.get(mode), mode.name()));
+  }
+
+  // Returns the angle to look at a target
+  private Rotation2d lookAt(Pose2d target) {
+    Pose2d drivePose = driveSubsystem.getPose();
+    Logger.recordOutput("Drivetrain/LookAtTarget", drivePose, target);
+    return new Rotation2d(
+        Math.atan2(
+            target.getTranslation().getY() - drivePose.getTranslation().getY(),
+            target.getTranslation().getX() - drivePose.getTranslation().getX()));
+  }
+
+  /**
+   * Returns the angle to look at a target translation2d
+   *
+   * @param target
+   * @return
+   */
+  private Rotation2d lookAt(Translation2d target) {
+    return lookAt(new Pose2d(target, Rotation2d.fromDegrees(0)));
   }
 }

@@ -30,7 +30,7 @@
       "axisCount": 3,
       "buttonCount": 5,
       "buttonKeys": [
-        -1,
+        78,
         88,
         67,
         86,
@@ -101,7 +101,6 @@
     }
   ],
   "robotJoysticks": [
-    {},
     {
       "guid": "Keyboard0"
     }
