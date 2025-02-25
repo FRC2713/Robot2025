@@ -7,7 +7,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import frc.robot.util.ControlGains;
 
 public class RollerConstants {
-  public static final int kCANId = 25;
+  public static final int kCANId = 3;
 
   public static final double kMOI = 0.001;
   public static final double kGearing = 17.0 / 35.0;
@@ -29,7 +29,7 @@ public class RollerConstants {
     config.idleMode(IdleMode.kBrake);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-    config.limitSwitch.reverseLimitSwitchEnabled(true).reverseLimitSwitchType(Type.kNormallyOpen);
+    config.limitSwitch.forwardLimitSwitchEnabled(true).forwardLimitSwitchType(Type.kNormallyOpen);
     config.smartCurrentLimit(currentLimit);
     PID.applyPID(config.closedLoop);
 

@@ -49,15 +49,15 @@ public class SSConstants {
         new LoggedTunableNumber("Shoulder/SS/L3 Algae Grab Angle", -200);
 
     public static final LoggedTunableNumber L1_CORAL_SCORE_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L1 Score Angle", 0);
+        new LoggedTunableNumber("Shoulder/SS/L1 Score Angle", -130);
     public static final LoggedTunableNumber L1_CORAL_PREP_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L1 Prep Angle", 0);
+        new LoggedTunableNumber("Shoulder/SS/L1 Prep Angle", -130);
 
     public static final LoggedTunableNumber L2_CORAL_SCORE_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L2 Score Angle", 0);
+        new LoggedTunableNumber("Shoulder/SS/L2 Score Angle", -160);
 
     public static final LoggedTunableNumber L2_CORAL_PREP_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L2 Prep Angle", 0);
+        new LoggedTunableNumber("Shoulder/SS/L2 Prep Angle", -160);
 
     public static final LoggedTunableNumber L3_CORAL_SCORE_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/L3 Score Angle", -200);
@@ -66,9 +66,9 @@ public class SSConstants {
         new LoggedTunableNumber("Shoulder/SS/L3 Prep Angle", -200);
 
     public static final LoggedTunableNumber L4_CORAL_SCORE_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L4 Score Angle", 0);
+        new LoggedTunableNumber("Shoulder/SS/L4 Score Angle", -250);
     public static final LoggedTunableNumber L4_CORAL_PREP_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L4 Prep Angle", 0);
+        new LoggedTunableNumber("Shoulder/SS/L4 Prep Angle", -250);
 
     public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/Proc Score Angle", -30);
@@ -101,9 +101,9 @@ public class SSConstants {
         new LoggedTunableNumber("Pivot/SS/L3 Prep Angle", 35);
 
     public static final LoggedTunableNumber L4_CORAL_SCORE_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/L4 Score Angle", 55);
+        new LoggedTunableNumber("Pivot/SS/L4 Score Angle", 45);
     public static final LoggedTunableNumber L4_CORAL_PREP_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/L4 Prep Angle", 55);
+        new LoggedTunableNumber("Pivot/SS/L4 Prep Angle", 45);
 
     public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Proc Score Angle", -180);
@@ -128,15 +128,15 @@ public class SSConstants {
 
   public class AlgaeClaw {
     public static final LoggedTunableNumber L1_ALGAE_GRAB_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/L1 Algae Grab Speed", -2000);
+        new LoggedTunableNumber("AlgaeClaw/SS/L1 Algae Grab Speed", 2000);
     public static final LoggedTunableNumber L3_ALGAE_GRAB_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/L3 Algae Grab Speed", -1000);
+        new LoggedTunableNumber("AlgaeClaw/SS/L3 Algae Grab Speed", 1000);
 
     public static final DoubleSupplier PROCESSOR_SCORE_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/Proc Score Speed", 4000);
+        new LoggedTunableNumber("AlgaeClaw/SS/Proc Score Speed", -4000);
 
     public static final DoubleSupplier ALGAE_HOLD_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/Algae Hold Speed", -2000);
+        new LoggedTunableNumber("AlgaeClaw/SS/Algae Hold Speed", 2000);
 
     public static final DoubleSupplier ALGAE_CURRENT_LIMIT =
         new LoggedTunableNumber("Algae Current Limit", 40);

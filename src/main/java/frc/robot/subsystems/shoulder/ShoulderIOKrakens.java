@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shoulder;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -16,17 +17,18 @@ public class ShoulderIOKrakens implements ShoulderIO {
   private double targetDegrees;
   private final MotionMagicExpoTorqueCurrentFOC angleRequest =
       new MotionMagicExpoTorqueCurrentFOC(0);
-  private TalonFXConfiguration config;
+  private TalonFXConfiguration motorConfig;
+  private CANcoderConfiguration encoderConfig;
 
   public ShoulderIOKrakens() {
     this.motor = new TalonFX(ShoulderConstants.kCANId);
     this.encoder = new CANcoder(ShoulderConstants.kEncoderCANId);
-    config = ShoulderConstants.createKrakenConfig();
-    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config, 0.25));
+    motorConfig = ShoulderConstants.createKrakenConfig();
+    encoderConfig = ShoulderConstants.createCANcoderConfiguration();
+    PhoenixUtil.tryUntilOk(5, () -> this.encoder.getConfigurator().apply(encoderConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motorConfig, 0.25));
     PhoenixUtil.tryUntilOk(
-        5,
-        () ->
-            motor.setPosition(Units.radiansToRotations(ShoulderConstants.kInitialAngleRad), 0.25));
+        5, () -> motor.setPosition(encoder.getAbsolutePosition().getValueAsDouble(), 0.25));
   }
 
   @Override
@@ -53,10 +55,10 @@ public class ShoulderIOKrakens implements ShoulderIO {
 
   @Override
   public void setPID(LoggedTunablePID pid) {
-    config.Slot0 = pid.toTalonFX(GravityTypeValue.Arm_Cosine);
-    config.MotionMagic = pid.toMotionMagic();
+    motorConfig.Slot0 = pid.toTalonFX(GravityTypeValue.Arm_Cosine);
+    motorConfig.MotionMagic = pid.toMotionMagic();
 
-    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motorConfig, 0.25));
   }
 
   @Override

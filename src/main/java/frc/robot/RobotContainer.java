@@ -36,6 +36,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
+import frc.robot.subsystems.algaeClaw.AlgaeClawIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
@@ -56,6 +57,7 @@ import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIOSim;
+import frc.robot.subsystems.rollers.RollersIOSparks;
 import frc.robot.subsystems.shoulder.Shoulder;
 import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
@@ -100,8 +102,8 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIOKrakens());
         pivot = new Pivot(new PivotIOKrakens());
-        rollers = new Rollers(new RollersIO() {});
-        algaeClaw = new AlgaeClaw(new AlgaeClawIO() {});
+        rollers = new Rollers(new RollersIOSparks());
+        algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
         shoulder = new Shoulder(new ShoulderIOKrakens());
         break;
 

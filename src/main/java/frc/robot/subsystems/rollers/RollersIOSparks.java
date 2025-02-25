@@ -20,7 +20,7 @@ public class RollersIOSparks implements RollersIO {
 
   public RollersIOSparks() {
     this.motor = new SparkFlex(RollerConstants.kCANId, MotorType.kBrushless);
-    this.limitSwitch = motor.getReverseLimitSwitch();
+    this.limitSwitch = motor.getForwardLimitSwitch();
     motor.configure(
         RollerConstants.createConfig(60),
         ResetMode.kResetSafeParameters,
@@ -50,6 +50,7 @@ public class RollersIOSparks implements RollersIO {
 
   @Override
   public void setEnableLimitSwitch(boolean setEnable) {
+
     enableLS = setEnable;
   }
 

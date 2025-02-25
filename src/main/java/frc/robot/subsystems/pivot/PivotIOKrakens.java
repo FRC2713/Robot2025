@@ -1,5 +1,6 @@
 package frc.robot.subsystems.pivot;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -16,16 +17,18 @@ public class PivotIOKrakens implements PivotIO {
   private double targetDegrees;
   private final MotionMagicExpoTorqueCurrentFOC angleRequest =
       new MotionMagicExpoTorqueCurrentFOC(0);
-  private TalonFXConfiguration config;
+  private TalonFXConfiguration motorConfig;
+  private CANcoderConfiguration encoderConfig;
 
   public PivotIOKrakens() {
     this.motor = new TalonFX(PivotConstants.kCANId);
     this.encoder = new CANcoder(PivotConstants.kEncoderCANId);
-    config = PivotConstants.createKrakenConfig();
-    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config, 0.25));
+    motorConfig = PivotConstants.createKrakenConfig();
+    encoderConfig = PivotConstants.createCaNcoderConfiguration();
+    PhoenixUtil.tryUntilOk(5, () -> encoder.getConfigurator().apply(encoderConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motorConfig, 0.25));
     PhoenixUtil.tryUntilOk(
-        5,
-        () -> motor.setPosition(Units.radiansToRotations(PivotConstants.kInitialAngleRad), 0.25));
+        5, () -> motor.setPosition(encoder.getAbsolutePosition().getValueAsDouble(), 0.25));
   }
 
   @Override
@@ -52,10 +55,10 @@ public class PivotIOKrakens implements PivotIO {
 
   @Override
   public void setPID(LoggedTunablePID pid) {
-    config.Slot0 = pid.toTalonFX(GravityTypeValue.Arm_Cosine);
-    config.MotionMagic = pid.toMotionMagic();
+    motorConfig.Slot0 = pid.toTalonFX(GravityTypeValue.Arm_Cosine);
+    motorConfig.MotionMagic = pid.toMotionMagic();
 
-    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motorConfig, 0.25));
   }
 
   @Override

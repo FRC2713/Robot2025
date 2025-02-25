@@ -1,5 +1,6 @@
 package frc.robot.subsystems.constants;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -76,7 +77,7 @@ public class ShoulderConstants {
           80,
           1600);
 
-  public static final double kAbsoluteEncoderOffset = 118.7;
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(-139);
 
   public static final int mech2dWidth = 10;
   public static final Color8Bit mech2dColor = new Color8Bit(0, 255, 0);
@@ -97,11 +98,19 @@ public class ShoulderConstants {
 
     config.Slot0 = PID.toTalonFX(GravityTypeValue.Arm_Cosine);
     // config.MotionMagic = PID.toMotionMagic();
-    config.MotionMagic.MotionMagicCruiseVelocity = .5;
+
+    config.MotionMagic.MotionMagicCruiseVelocity = .05;
     config.MotionMagic.MotionMagicAcceleration = kTrapezoidalMaxAcceleration;
     config.MotionMagic.MotionMagicJerk = kTrapezoidalMaxJerk;
     config.MotionMagic.MotionMagicExpo_kV = 6.4;
     config.MotionMagic.MotionMagicExpo_kA = 0.1;
+    return config;
+  }
+
+  public static CANcoderConfiguration createCANcoderConfiguration() {
+    var config = new CANcoderConfiguration();
+    config.MagnetSensor.MagnetOffset = kAbsoluteEncoderOffset;
+
     return config;
   }
 
