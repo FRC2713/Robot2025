@@ -76,6 +76,8 @@ public class FieldConstants {
 
     public static final Pose2d[] centerFaces =
         new Pose2d[6]; // Starting facing the driver station in clockwise order
+    public static final Translation2d[] centerToFaceCenters = new Translation2d[6];
+
     public static final List<Map<ReefLevel, Pose3d>> branchPositions =
         new ArrayList<>(); // Starting at the right branch facing the driver station in clockwise
     public static final List<Map<ReefLevel, Pose2d>> branchPositions2d = new ArrayList<>();
@@ -84,6 +86,8 @@ public class FieldConstants {
       // Initialize faces
       var aprilTagLayout = AprilTagLayoutType.OFFICIAL.getLayout();
       centerFaces[0] = aprilTagLayout.getTagPose(18).get().toPose2d();
+      centerToFaceCenters[0] = center.minus(centerFaces[0].getTranslation());
+
       centerFaces[1] = aprilTagLayout.getTagPose(19).get().toPose2d();
       centerFaces[2] = aprilTagLayout.getTagPose(20).get().toPose2d();
       centerFaces[3] = aprilTagLayout.getTagPose(21).get().toPose2d();

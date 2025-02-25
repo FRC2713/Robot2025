@@ -14,6 +14,8 @@ import frc.robot.util.ControlGains;
 
 public class DriveConstants {
   public static final double wheelCOF = 1.1;
+  public static final double driveBaseWidthWithBumpersMeters =
+      edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 7.0);
 
   public final class AutoConstants {
     public static final PIDController xTrajectoryController =
