@@ -17,7 +17,6 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -66,6 +65,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.subsystems.vision.VisionIOPoseEstimator;
 import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.RHRHolonomicDriveController;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
 
@@ -83,6 +83,13 @@ public class RobotContainer {
 
   // Dashboard inputs
   public final AutoChooser autoChooser;
+
+  public static final RHRHolonomicDriveController otfController =
+      new RHRHolonomicDriveController(
+          OTFConstants.translationPID, // Translation PID constants
+          OTFConstants.rotationPID, // Rotation PID constants
+          OTFConstants.translationTolerance // Translation Tolerenace
+          );
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
@@ -155,11 +162,7 @@ public class RobotContainer {
             driveSubsystem.runVelocity(
                 speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds.
         // Also optionally outputs individual module feedforwards
-        new PPHolonomicDriveController( // PPHolonomicController is the built in path following
-            // controller for holonomic drive trains
-            OTFConstants.translationPID, // Translation PID constants
-            OTFConstants.rotationPID // Rotation PID constants
-            ),
+        RobotContainer.otfController,
         DriveConstants.pathPlannerConfig, // The robot configuration
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red alliance

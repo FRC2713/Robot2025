@@ -34,7 +34,7 @@ public final class Constants {
   public static final double momentOfInertiaKGPerM2 = 6.0;
 
   public static final PathConstraints scoreAssistConstraints =
-      new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+      new PathConstraints(10.0, 10.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
   public static enum Mode {
     /** Running on a real robot. */

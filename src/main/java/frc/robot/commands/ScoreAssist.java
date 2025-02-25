@@ -80,13 +80,13 @@ public class ScoreAssist {
     }
 
     var closest = ScoreLoc.fromNodeAndLevel(closestLoc, level);
-    Logger.recordOutput("/ScoreAssit/Closest", AllianceFlipUtil.apply(closestLoc.getPose()));
+    Logger.recordOutput("/ScoreAssist/Closest", AllianceFlipUtil.apply(closestLoc.getPose()));
     if (closestLoc.getPose().getTranslation().getDistance(pose.get().getTranslation())
         < Units.inchesToMeters(0.1)) {
       Logger.recordOutput("/ScoreAssist/Mode", "Heading controller");
       return headingControllerDrive(closestLoc.getPose());
     }
-    Logger.recordOutput("/ScoreAssist/Mode", "Pathing");
+    Logger.recordOutput("ScoreAssist/Mode", "Pathing");
     return closest.getScoreCommand();
   }
 
@@ -103,6 +103,8 @@ public class ScoreAssist {
   }
 
   public Command networkTablesDrive() {
-    return ScoreLoc.parseFromNT(sub.get("none")).getScoreCommand();
+    ScoreLoc location = ScoreLoc.parseFromNT(sub.get("none"));
+    Logger.recordOutput("/ScoreAssist/Mode", "Network Table Pathing");
+    return location.getScoreCommand();
   }
 }
