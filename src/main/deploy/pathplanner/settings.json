@@ -28,5 +28,7 @@
   "brModuleY": -0.273,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [],
+  "bumperWidth": 0.0635,
+  "bumperHeight": 0.0635
 }
