@@ -392,6 +392,7 @@ public class RobotContainer {
     operator.a().onTrue(SuperStructure.L1_CORAL_PREP.getCommand());
     operator.b().onTrue(SuperStructure.L2_CORAL_PREP.getCommand());
     operator.x().onTrue(SuperStructure.L3_CORAL_PREP.getCommand());
+    operator.y().onTrue(SuperStructure.L4_CORAL_PREP.getCommand());
 
     operator.povDown().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
     operator.povRight().onTrue(SuperStructure.L1_ALGAE_GRAB.getCommand());
