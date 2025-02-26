@@ -68,8 +68,10 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.subsystems.vision.VisionIOPoseEstimator;
 import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.ScoreNode;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
@@ -170,11 +172,13 @@ public class RobotContainer {
 
     driveModes.put(
         DriveMode.AIM_AT_REEF,
-        DriveCommands.joystickDriveAtAngle(
-            driveSubsystem,
-            () -> -driver.getLeftY(),
-            () -> -driver.getLeftX(),
-            () -> lookAt(FieldConstants.Reef.center)));
+        Commands.sequence(
+            new InstantCommand(() -> {}), // TODO: pose supplier issue again
+            DriveCommands.joystickDriveAtAngle(
+                driveSubsystem,
+                () -> -driver.getLeftY(),
+                () -> -driver.getLeftX(),
+                () -> lookAtClosestScoreNode(RobotContainer.driveSubsystem::getPose))));
 
     driveModes.put(
         DriveMode.HEADING_CONTROLLER_0,
@@ -418,6 +422,12 @@ public class RobotContainer {
         () ->
             DriveCommands.setDefaultDriveCommand(
                 driveSubsystem, driveModes.get(mode), mode.name()));
+  }
+
+  // Returns the angle to look at a target
+  private Rotation2d lookAtClosestScoreNode(Supplier<Pose2d> poseSupplier) {
+    ScoreNode nodeToLookAt = ScoreAssist.getInstance().getClosestScoreNode(poseSupplier);
+    return lookAt(nodeToLookAt.getPose());
   }
 
   // Returns the angle to look at a target

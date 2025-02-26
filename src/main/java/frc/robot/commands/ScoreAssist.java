@@ -61,12 +61,11 @@ public class ScoreAssist {
     return new InstantCommand(() -> cancel());
   }
 
-  public static Command getClosestCommand(Supplier<Pose2d> pose, ScoreLevel level) {
+  public static ScoreNode getClosestScoreNode(Supplier<Pose2d> pose) {
     Pose2d currentPose = pose.get();
-
-    ScoreNode closestLoc = ScoreNode.A;
+    ScoreNode closestNode = ScoreNode.A;
     double closestDist =
-        currentPose.getTranslation().getDistance(closestLoc.getPose().getTranslation());
+        currentPose.getTranslation().getDistance(closestNode.getPose().getTranslation());
 
     for (ScoreNode loc : ScoreNode.values()) {
       double dist =
@@ -74,10 +73,16 @@ public class ScoreAssist {
               .getTranslation()
               .getDistance(AllianceFlipUtil.apply(loc.getPose().getTranslation()));
       if (dist < closestDist) {
-        closestLoc = loc;
+        closestNode = loc;
         closestDist = dist;
       }
     }
+
+    return closestNode;
+  }
+
+  public static Command getClosestCommand(Supplier<Pose2d> pose, ScoreLevel level) {
+    ScoreNode closestLoc = ScoreAssist.getClosestScoreNode(pose);
 
     var closest = ScoreLoc.fromNodeAndLevel(closestLoc, level);
     Logger.recordOutput("/ScoreAssit/Closest", AllianceFlipUtil.apply(closestLoc.getPose()));
