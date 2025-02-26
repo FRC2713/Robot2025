@@ -3,6 +3,7 @@ package frc.robot.util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.FieldConstants;
 import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.subsystems.constants.DriveConstants;
@@ -49,9 +50,12 @@ public enum ScoreNode {
   }
 
   public Pose2d getRobotAlignmentPose() {
-    double fudge = 0.05;
+    double xFudge = 0.05;
+    double yFudge = 0.05;
     return pose.transformBy(
         new Transform2d(
-            (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0) + fudge, 0.0, new Rotation2d()));
+            (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0) + xFudge,
+            yFudge,
+            new Rotation2d(Units.degreesToRadians(180))));
   }
 }

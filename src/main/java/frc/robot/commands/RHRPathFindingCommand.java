@@ -288,7 +288,8 @@ public class RHRPathFindingCommand extends Command {
     PathPlannerLogging.logCurrentPose(currentPose);
     PPLibTelemetry.setCurrentPose(currentPose);
 
-    // updated: previously this would not happen if the starting and ending poses were less than 2 (units?) apart
+    // updated: previously this would not happen if the starting and ending poses were less than 2
+    // (units?) apart
     if (Pathfinding.isNewPathAvailable()) {
       currentPath = Pathfinding.getCurrentPath(constraints, goalEndState);
 

@@ -7,10 +7,9 @@ import lombok.Getter;
 
 public enum ScoreLevel {
   ONE(SuperStructure.L1_CORAL_PREP::getCommand, SuperStructure.L1_CORAL_SCORE::getCommand),
-  // TODO: Different commands for different levels
-  TWO(SuperStructure.L1_CORAL_PREP::getCommand, SuperStructure.L1_CORAL_SCORE::getCommand),
-  THREE(SuperStructure.L1_CORAL_PREP::getCommand, SuperStructure.L1_CORAL_SCORE::getCommand),
-  FOUR(SuperStructure.L1_CORAL_PREP::getCommand, SuperStructure.L1_CORAL_SCORE::getCommand);
+  TWO(SuperStructure.L2_CORAL_PREP::getCommand, SuperStructure.L2_CORAL_SCORE::getCommand),
+  THREE(SuperStructure.L3_CORAL_PREP::getCommand, SuperStructure.L3_CORAL_SCORE::getCommand),
+  FOUR(SuperStructure.L4_CORAL_PREP::getCommand, SuperStructure.L4_CORAL_SCORE::getCommand);
 
   @Getter private Supplier<Command> prepCommand;
   @Getter private Supplier<Command> scoreCommand;
