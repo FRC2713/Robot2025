@@ -69,7 +69,7 @@ public enum SuperStructure {
   ALGAE_GRAB_AND_CORAL_SCORE(
       () ->
           Commands.sequence(
-              ALGAE_GRAB.getCommand(), AlgaeClawCmds.waitUntilAlgae(), CORAL_SCORE.getCommand())),
+              ALGAE_GRAB.getCommand(), AlgaeClawCmds.waitUntilAlgae(2), CORAL_SCORE.getCommand())),
   PROCESSOR_PREP(
       () ->
           Commands.sequence(
@@ -98,5 +98,9 @@ public enum SuperStructure {
         new InstantCommand(() -> Logger.recordOutput("Active SS", this.toString())),
         Commands.print("Starting SS: " + this.toString()),
         cmd.get());
+  }
+
+  public Command delayCommand(double seconds) {
+    return Commands.sequence(Commands.waitSeconds(seconds), getCommand());
   }
 }
