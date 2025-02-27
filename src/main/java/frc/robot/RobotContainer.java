@@ -31,7 +31,6 @@ import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
-import frc.robot.commands.ShoulderCmds;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
@@ -55,13 +54,11 @@ import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOKrakens;
-// import frc.robot.subsystems.pivot.PivotIOKrakens;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIOSim;
 import frc.robot.subsystems.rollers.RollersIOSparks;
-// import frc.robot.subsystems.rollers.RollersIOSparks;
 import frc.robot.subsystems.shoulder.Shoulder;
 import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
@@ -108,7 +105,7 @@ public class RobotContainer {
         pivot = new Pivot(new PivotIOKrakens());
         rollers = new Rollers(new RollersIOSparks());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
-        shoulder = new Shoulder(new ShoulderIOKrakens() {});
+        shoulder = new Shoulder(new ShoulderIOKrakens());
         break;
 
       case SIM:
@@ -288,50 +285,36 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Intake Coral
-    // driver
-    //     .leftBumper()
-    //     .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
-    //     .onFalse(SuperStructure.STARTING_CONF.getCommand());
-    // driver
-    //     .leftBumper()
-    //     .whileTrue(ShoulderCmds.setAngle(-130))
-    //     .whileFalse(ShoulderCmds.setAngle(-90));
-
     driver
         .leftBumper()
-        .whileTrue(
-            Commands.sequence(
-                ShoulderCmds.setAngle(SSConstants.Shoulder.L3_ALGAE_GRAB_ANGLE_DEG),
-                RollerCmds.intake(() -> 6000)))
+        .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
         .whileFalse(RollerCmds.setSpeed(() -> 0));
 
     // Score Coral
     driver
         .leftTrigger(0.25)
-        .whileTrue(RollerCmds.score(() -> 6000))
+        .whileTrue(SuperStructure.CORAL_SCORE.getCommand())
         .whileFalse(RollerCmds.setSpeed(() -> 0));
 
+    // Grab Algae
     driver
         .rightBumper()
-        .whileTrue(Commands.sequence(SuperStructure.L3_ALGAE_GRAB_AND_SCORE.getCommand()));
+        .whileTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()))
+        .whileFalse(AlgaeClawCmds.setSpeedIfNoAlgae(() -> 0));
 
-    // Score Coral
+    // Score Algae
     driver
         .rightTrigger(0.25)
-        .whileTrue(AlgaeClawCmds.score(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
+        .whileTrue(SuperStructure.PROCESSOR_SCORE.getCommand())
         .whileFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
-    // Intake Algae
-    // driver
-    //     .rightBumper()
-    //     .whileTrue(AlgaeClawCmds.intake(SSConstants.AlgaeClaw.L3_ALGAE_GRAB_SPEED))
-    //     .onFalse(RollerCmds.setSpeed(() -> 0));
-
-    // // Score Algae
-    // driver
-    //     .rightTrigger(0.25)
-    //     .onTrue(AlgaeClawCmds.score(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
-    //     .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
+    // Get both!
+    driver
+        .x()
+        .whileTrue(SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand())
+        .whileFalse(
+            Commands.sequence(
+                AlgaeClawCmds.setSpeedIfNoAlgae(() -> 0), RollerCmds.setSpeed(() -> 0)));
 
     // Heading controller
     driver
@@ -418,16 +401,12 @@ public class RobotContainer {
                     () -> -driver.getRightX()),
                 "Full Control"));
 
-    // operator.a().onTrue(SuperStructure.L1_CORAL_PREP.getCommand());
-    // operator.b().onTrue(SuperStructure.L2_CORAL_PREP.getCommand());
-    operator
-        .x()
-        .onTrue(SuperStructure.L3_ALGAE_GRAB.getCommand())
-        .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
+    operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
+    operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
+    operator.x().onTrue(SuperStructure.L3_PREP.getCommand());
+    operator.rightBumper().onTrue(SuperStructure.L4_PREP.getCommand());
 
     operator.povDown().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
-    operator.povRight().onTrue(SuperStructure.L1_ALGAE_GRAB.getCommand());
-    operator.povLeft().onTrue(SuperStructure.L3_ALGAE_GRAB.getCommand());
 
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());
 

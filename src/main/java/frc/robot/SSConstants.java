@@ -113,24 +113,16 @@ public class SSConstants {
     public static final LoggedTunableNumber L1_CORAL_SCORE_SPEED =
         new LoggedTunableNumber("Roller/SS/L1 Score Speed", 3000);
 
-    public static final LoggedTunableNumber L2_CORAL_SCORE_SPEED =
-        new LoggedTunableNumber("Roller/SS/L2 Score Speed", 6000);
-
-    public static final LoggedTunableNumber L3_CORAL_SCORE_SPEED =
-        new LoggedTunableNumber("Roller/SS/L3 Score Speed", 6000);
-
-    public static final LoggedTunableNumber L4_CORAL_SCORE_SPEED =
-        new LoggedTunableNumber("Roller/SS/L4 Score Speed", 6000);
+    public static final LoggedTunableNumber L2_PLUS_CORAL_SCORE_SPEED =
+        new LoggedTunableNumber("Roller/SS/L 2+ Score Speed", 6000);
 
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_SPEED =
-        new LoggedTunableNumber("Roller/SS/Source Intake Speed", 2000);
+        new LoggedTunableNumber("Roller/SS/Source Intake Speed", 6000);
   }
 
   public class AlgaeClaw {
-    public static final LoggedTunableNumber L1_ALGAE_GRAB_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/L1 Algae Grab Speed", 4000);
-    public static final LoggedTunableNumber L3_ALGAE_GRAB_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/L3 Algae Grab Speed", 4000);
+    public static final LoggedTunableNumber ALGAE_GRAB_SPEED =
+        new LoggedTunableNumber("AlgaeClaw/SS/Algae Grab Speed", 4000);
 
     public static final DoubleSupplier PROCESSOR_SCORE_SPEED =
         new LoggedTunableNumber("AlgaeClaw/SS/Proc Score Speed", -4000);
@@ -138,7 +130,7 @@ public class SSConstants {
     public static final DoubleSupplier ALGAE_HOLD_SPEED =
         new LoggedTunableNumber("AlgaeClaw/SS/Algae Hold Speed", 2000);
 
-    public static final DoubleSupplier ALGAE_CURRENT_LIMIT =
-        new LoggedTunableNumber("Algae Current Limit", 40);
+    public static final DoubleSupplier ALGAE_DETECTED_CURRENT_LIMIT =
+        new LoggedTunableNumber("AlgaeClaw/SS/Algae Detected Current Limit", 40);
   }
 }

@@ -19,7 +19,7 @@ public enum SuperStructure {
               PivotCmds.setAngle(Units.radiansToDegrees(PivotConstants.kInitialAngleRad)),
               ShoulderCmds.setAngle(Units.radiansToDegrees(ShoulderConstants.kInitialAngleRad)),
               RollerCmds.setEnableLimitSwitch(true),
-              AlgaeClawCmds.setEnableLimitSwitch(true),
+              AlgaeClawCmds.setSpeed(() -> 0),
               ElevatorCmds.waitUntilAtTarget())),
   SOURCE_CORAL_INTAKE(
       () ->
@@ -31,87 +31,45 @@ public enum SuperStructure {
                   PivotCmds.setAngle(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
                   ShoulderCmds.setAngle(SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG)),
               RollerCmds.waitUntilCoral(2))),
-  L1_ALGAE_GRAB(
+  L1_PREP(
       () ->
           Commands.sequence(
-              AlgaeClawCmds.setEnableLimitSwitch(false),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_CORAL_PREP_HEIGHT_IN),
               Commands.parallel(
-                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_ALGAE_GRAB_HEIGHT_IN),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L1_ALGAE_GRAB_ANGLE_DEG),
-                  AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.L1_ALGAE_GRAB_SPEED)),
-              PivotCmds.setAngle(SSConstants.Pivot.L1_ALGAE_GRAB_DEG),
-              Commands.waitSeconds(0.1),
-              AlgaeClawCmds.setEnableLimitSwitch(true),
-              AlgaeClawCmds.waitUntilAlgae(0.5))),
-  L3_ALGAE_GRAB(
+                  PivotCmds.setAngle(SSConstants.Pivot.L1_CORAL_PREP_ANGLE_DEG),
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L1_CORAL_PREP_ANGLE_DEG)),
+              PivotCmds.waitUntilAtTarget())),
+  L2_PREP(
       () ->
           Commands.sequence(
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_CORAL_PREP_HEIGHT_IN),
               Commands.parallel(
-                  ElevatorCmds.setHeight(SSConstants.Elevator.L3_ALGAE_GRAB_HEIGHT_IN),
-                  RollerCmds.setSpeed(SSConstants.AlgaeClaw.L3_ALGAE_GRAB_SPEED),
-                  PivotCmds.setAngle(SSConstants.Pivot.L3_ALGAE_GRAB_DEG),
-                  ShoulderCmds.setAngle(SSConstants.Shoulder.L3_ALGAE_GRAB_ANGLE_DEG),
-                  AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.L3_ALGAE_GRAB_SPEED)))),
-  L1_CORAL_PREP(
-      () ->
-          Commands.parallel(
-              ElevatorCmds.setHeight(SSConstants.Elevator.L1_CORAL_PREP_HEIGHT_IN),
-              PivotCmds.setAngle(SSConstants.Pivot.L1_CORAL_PREP_ANGLE_DEG),
-              ShoulderCmds.setAngle(SSConstants.Shoulder.L1_CORAL_PREP_ANGLE_DEG))),
-  L2_CORAL_PREP(
-      () ->
-          Commands.parallel(
-              ElevatorCmds.setHeight(SSConstants.Elevator.L2_CORAL_PREP_HEIGHT_IN),
-              ShoulderCmds.setAngle(SSConstants.Shoulder.L2_CORAL_PREP_ANGLE_DEG),
-              PivotCmds.setAngle(SSConstants.Pivot.L2_CORAL_PREP_ANGLE_DEG))),
-  L3_CORAL_PREP(
-      () ->
-          Commands.parallel(
-              ElevatorCmds.setHeight(SSConstants.Elevator.L3_CORAL_PREP_HEIGHT_IN),
-              ShoulderCmds.setAngle(SSConstants.Shoulder.L3_CORAL_PREP_ANGLE_DEG),
-              PivotCmds.setAngle(SSConstants.Pivot.L3_CORAL_PREP_ANGLE_DEG))),
-  L4_CORAL_PREP(
-      () ->
-          Commands.parallel(
-              ElevatorCmds.setHeight(SSConstants.Elevator.L4_CORAL_PREP_HEIGHT_IN),
-              ShoulderCmds.setAngle(SSConstants.Shoulder.L4_CORAL_PREP_ANGLE_DEG),
-              PivotCmds.setAngle(SSConstants.Pivot.L4_CORAL_PREP_ANGLE_DEG))),
-  L1_CORAL_SCORE(
+                  PivotCmds.setAngle(SSConstants.Pivot.L2_CORAL_PREP_ANGLE_DEG),
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L2_CORAL_PREP_ANGLE_DEG)),
+              PivotCmds.waitUntilAtTarget())),
+  L3_PREP(
       () ->
           Commands.sequence(
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L3_CORAL_PREP_HEIGHT_IN),
               Commands.parallel(
-                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_CORAL_SCORE_HEIGHT_IN),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L1_CORAL_SCORE_ANGLE_DEG),
-                  PivotCmds.setAngleAndWait(SSConstants.Pivot.L1_CORAL_SCORE_ANGLE_DEG)),
-              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.Roller.L1_CORAL_SCORE_SPEED))),
-  L2_CORAL_SCORE(
+                  PivotCmds.setAngle(SSConstants.Pivot.L3_CORAL_PREP_ANGLE_DEG),
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L3_CORAL_PREP_ANGLE_DEG)),
+              PivotCmds.waitUntilAtTarget())),
+  L4_PREP(
       () ->
           Commands.sequence(
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_CORAL_SCORE_HEIGHT_IN),
-              ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L2_CORAL_SCORE_ANGLE_DEG),
-              PivotCmds.setAngleAndWait(SSConstants.Pivot.L2_CORAL_SCORE_ANGLE_DEG),
-              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.Roller.L2_CORAL_SCORE_SPEED))),
-  L3_CORAL_SCORE(
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_CORAL_PREP_HEIGHT_IN),
+              Commands.parallel(
+                  PivotCmds.setAngle(SSConstants.Pivot.L4_CORAL_PREP_ANGLE_DEG),
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L4_CORAL_PREP_ANGLE_DEG)),
+              PivotCmds.waitUntilAtTarget())),
+  CORAL_SCORE(() -> RollerCmds.setSpeed(SSConstants.Roller.L2_PLUS_CORAL_SCORE_SPEED)),
+  ALGAE_GRAB(
+      () -> Commands.sequence(AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED))),
+  ALGAE_GRAB_AND_CORAL_SCORE(
       () ->
           Commands.sequence(
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L3_CORAL_SCORE_HEIGHT_IN),
-              ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L3_CORAL_SCORE_ANGLE_DEG),
-              PivotCmds.setAngleAndWait(SSConstants.Pivot.L3_CORAL_SCORE_ANGLE_DEG),
-              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.Roller.L3_CORAL_SCORE_SPEED))),
-  L4_CORAL_SCORE(
-      () ->
-          Commands.sequence(
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_CORAL_SCORE_HEIGHT_IN),
-              ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L4_CORAL_SCORE_ANGLE_DEG),
-              PivotCmds.setAngleAndWait(SSConstants.Pivot.L4_CORAL_SCORE_ANGLE_DEG),
-              RollerCmds.setSpeedAndWaitForNoCoral(SSConstants.Roller.L4_CORAL_SCORE_SPEED))),
-
-  L3_ALGAE_GRAB_AND_SCORE(
-      () ->
-          Commands.sequence(
-              SuperStructure.L3_ALGAE_GRAB.getCommand(),
-              AlgaeClawCmds.waitUntilAlgae(),
-              SuperStructure.L3_CORAL_SCORE.getCommand())),
+              ALGAE_GRAB.getCommand(), AlgaeClawCmds.waitUntilAlgae(), CORAL_SCORE.getCommand())),
   PROCESSOR_PREP(
       () ->
           Commands.sequence(

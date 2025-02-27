@@ -6,11 +6,10 @@ import java.util.function.Supplier;
 import lombok.Getter;
 
 public enum ScoreLevel {
-  ONE(SuperStructure.L1_CORAL_PREP::getCommand, SuperStructure.L1_CORAL_SCORE::getCommand),
-  // TODO: Different commands for different levels
-  TWO(SuperStructure.L1_CORAL_PREP::getCommand, SuperStructure.L1_CORAL_SCORE::getCommand),
-  THREE(SuperStructure.L1_CORAL_PREP::getCommand, SuperStructure.L1_CORAL_SCORE::getCommand),
-  FOUR(SuperStructure.L1_CORAL_PREP::getCommand, SuperStructure.L1_CORAL_SCORE::getCommand);
+  ONE(SuperStructure.L1_PREP::getCommand, SuperStructure.L1_PREP::getCommand),
+  TWO(SuperStructure.L1_PREP::getCommand, SuperStructure.L2_PREP::getCommand),
+  THREE(SuperStructure.L1_PREP::getCommand, SuperStructure.L3_PREP::getCommand),
+  FOUR(SuperStructure.L1_PREP::getCommand, SuperStructure.L4_PREP::getCommand);
 
   @Getter private Supplier<Command> prepCommand;
   @Getter private Supplier<Command> scoreCommand;

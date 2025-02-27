@@ -28,7 +28,6 @@ public class PivotConstants {
   public static final double kMaxAngleRad = Units.degreesToRadians(100);
 
   public static final double kInitialAngleRad = Units.degreesToRadians(35);
-  public static final double kRampAngleRad = Units.degreesToRadians(30);
 
   // transform from shoulder origin to pivot origin
   public static final Transform3d kInitialTransform =
