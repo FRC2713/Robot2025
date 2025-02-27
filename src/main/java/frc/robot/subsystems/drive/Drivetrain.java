@@ -131,6 +131,17 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (TunerConstants.driveGainsPID.hasChanged(hashCode())) {
+      for (var module : modules) {
+        module.setDrivePID(TunerConstants.driveGainsPID);
+      }
+    }
+    if (TunerConstants.steerGainsPID.hasChanged(hashCode())) {
+      for (var module : modules) {
+        module.setTurnPID(TunerConstants.steerGainsPID);
+      }
+    }
+
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
