@@ -7,7 +7,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import frc.robot.util.ControlGains;
 
 public class RollerConstants {
-  public static final int kCANId = 3;
+  public static final int kCANId = 4;
 
   public static final double kMOI = 0.001;
   public static final double kGearing = 17.0 / 35.0;
@@ -21,7 +21,7 @@ public class RollerConstants {
   public static final double kMaxVelocity = 6000; // rpm
   public static final double kMaxAcceleration = 1000; // rpm / sec
 
-  public static SparkFlexConfig createConfig(int currentLimit) {
+  public static SparkFlexConfig createConfig(int currentLimit, boolean enableLS) {
     SparkFlexConfig config = new SparkFlexConfig();
 
     config.inverted(kMotorInverted);
@@ -29,7 +29,10 @@ public class RollerConstants {
     config.idleMode(IdleMode.kBrake);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-    config.limitSwitch.forwardLimitSwitchEnabled(true).forwardLimitSwitchType(Type.kNormallyOpen);
+    config
+        .limitSwitch
+        .forwardLimitSwitchEnabled(enableLS)
+        .forwardLimitSwitchType(Type.kNormallyOpen);
     config.smartCurrentLimit(currentLimit);
     PID.applyPID(config.closedLoop);
 

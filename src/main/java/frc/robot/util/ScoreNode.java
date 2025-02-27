@@ -21,7 +21,7 @@ public enum ScoreNode {
                   .div(FieldConstants.Reef.centerToFaceCenters[0].getNorm())
                   .times(DriveConstants.driveBaseWidthWithBumpersMeters / 2.0))),
   B(FieldConstants.Reef.branchPositions2d.get(0).get(ReefLevel.L2)),
-  //TODO: Do what we did for A for the other points
+  // TODO: Do what we did for A for the other points
   C(FieldConstants.Reef.branchPositions2d.get(11).get(ReefLevel.L2)),
   D(FieldConstants.Reef.branchPositions2d.get(10).get(ReefLevel.L2)),
 

@@ -48,12 +48,12 @@ public class PivotConstants {
 
   public static final double kP = RHRUtil.modeDependentDouble(400., 10); // output/rotation
   public static final double kI = 0.0; // Integral of kP
-  public static final double kD = RHRUtil.modeDependentDouble(60, 0); // output/error in velocity
+  public static final double kD = RHRUtil.modeDependentDouble(0, 0); // output/error in velocity
 
-  public static final double kG = RHRUtil.modeDependentDouble(4., 0.381);
+  public static final double kG = RHRUtil.modeDependentDouble(8., 0.381);
   public static final double kV = 0.0; // kV * rev/s = volts
   public static final double kA = 0.0;
-  public static final double kS = RHRUtil.modeDependentDouble(0, 0.); // Volts
+  public static final double kS = RHRUtil.modeDependentDouble(6, 0.); // Volts
 
   public static final double kTrapezoidalMaxVelocity = .05;
   public static final double kTrapezoidalMaxAcceleration = 60;
@@ -77,7 +77,8 @@ public class PivotConstants {
           80,
           1600);
 
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(80);
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(38.6);
+  public static final double humanOffsetDegs = -55;
 
   public static final int mech2dWidth = 10;
   public static final Color8Bit mech2dColor = new Color8Bit(0, 0, 255);

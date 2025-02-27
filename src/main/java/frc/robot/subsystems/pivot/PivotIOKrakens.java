@@ -39,18 +39,23 @@ public class PivotIOKrakens implements PivotIO {
   @Override
   public void setTargetAngle(double degrees) {
     this.targetDegrees = degrees;
-    motor.setControl(angleRequest.withPosition(Units.degreesToRotations(degrees)));
+    motor.setControl(
+        angleRequest.withPosition(
+            Units.degreesToRotations(degrees - PivotConstants.humanOffsetDegs)));
   }
 
   @Override
   public void updateInputs(PivotInputs inputs) {
     inputs.velocityDPS = Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble());
     inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
-    inputs.angleDegrees = Units.rotationsToDegrees(motor.getPosition().getValueAsDouble());
+    inputs.angleDegrees =
+        Units.rotationsToDegrees(motor.getPosition().getValueAsDouble())
+            + PivotConstants.humanOffsetDegs;
     inputs.commandedAngleDegs = targetDegrees;
     inputs.setpointVelocity = motor.getClosedLoopReference().getValueAsDouble();
     inputs.absoluteAngleDegrees =
-        Units.rotationsToDegrees(encoder.getAbsolutePosition().getValueAsDouble());
+        Units.rotationsToDegrees(encoder.getAbsolutePosition().getValueAsDouble())
+            + PivotConstants.humanOffsetDegs;
   }
 
   @Override

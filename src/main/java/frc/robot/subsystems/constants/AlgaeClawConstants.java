@@ -7,7 +7,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import frc.robot.util.ControlGains;
 
 public class AlgaeClawConstants {
-  public static final int kCANId = 4;
+  public static final int kCANId = 3;
 
   public static final double kMOI = 0.001;
   public static final double kGearing = 12.0 / 32.0;
