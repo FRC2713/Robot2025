@@ -53,7 +53,6 @@ import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
-import frc.robot.subsystems.pivot.PivotIOKrakens;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
@@ -102,7 +101,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
         elevator = new Elevator(new ElevatorIO() {});
-        pivot = new Pivot(new PivotIOKrakens());
+        pivot = new Pivot(new PivotIO() {});
         rollers = new Rollers(new RollersIOSparks());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
         shoulder = new Shoulder(new ShoulderIOKrakens());
@@ -403,7 +402,7 @@ public class RobotContainer {
 
     operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
     operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
-    operator.x().onTrue(SuperStructure.L3_PREP.getCommand());
+    operator.y().onTrue(SuperStructure.L3_PREP.getCommand());
     operator.rightBumper().onTrue(SuperStructure.L4_PREP.getCommand());
 
     operator.povDown().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
