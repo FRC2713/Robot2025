@@ -35,6 +35,15 @@ public class ScoreAssist {
     sub = topic.subscribe("none");
   }
 
+  public Command setCommand(Supplier<Command> cmd) {
+    return new InstantCommand(
+        () -> {
+          cancel();
+          // activeCmd = cmd.get();
+          schedule();
+        });
+  }
+
   public Command setActiveCommand(Supplier<Command> cmd) {
     return new InstantCommand(
         () -> {

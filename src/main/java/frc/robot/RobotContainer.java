@@ -404,17 +404,22 @@ public class RobotContainer {
     operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
     operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
     operator.x().onTrue(SuperStructure.L3_PREP.getCommand());
-    operator.rightBumper().onTrue(SuperStructure.L4_PREP.getCommand());
+    operator.y().onTrue(SuperStructure.L4_PREP.getCommand());
 
     operator.povDown().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
 
-    operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());
-
-    ScoreAssist.getInstance()
-        .getTrigger()
+    operator
+        .leftBumper()
+        .onTrue(SuperStructure.STARTING_CONF.getCommand())
+        .onFalse(ScoreAssist.getInstance().cancelCmd());
+    operator
+        .rightBumper()
         .onTrue(
             ScoreAssist.getInstance()
-                .setActiveCommand(ScoreAssist.getInstance()::networkTablesDrive))
+                .setActiveCommand(ScoreAssist.getInstance()::networkTablesDrive));
+    ScoreAssist.getInstance()
+        .getTrigger()
+        .onTrue(ScoreAssist.getInstance().setCommand(ScoreAssist.getInstance()::networkTablesDrive))
         .onFalse(ScoreAssist.getInstance().cancelCmd());
   }
 
