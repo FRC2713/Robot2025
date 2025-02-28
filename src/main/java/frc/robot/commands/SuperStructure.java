@@ -63,7 +63,11 @@ public enum SuperStructure {
                   PivotCmds.setAngle(SSConstants.Pivot.L4_CORAL_PREP_ANGLE_DEG),
                   ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L4_CORAL_PREP_ANGLE_DEG)),
               PivotCmds.waitUntilAtTarget())),
-  CORAL_SCORE(() -> RollerCmds.setSpeed(SSConstants.Roller.L2_PLUS_CORAL_SCORE_SPEED)),
+  CORAL_SCORE(
+      () ->
+          Commands.sequence(
+              RollerCmds.setEnableLimitSwitch(false),
+              RollerCmds.setSpeed(SSConstants.Roller.L2_PLUS_CORAL_SCORE_SPEED))),
   ALGAE_GRAB(
       () -> Commands.sequence(AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED))),
   ALGAE_GRAB_AND_CORAL_SCORE(

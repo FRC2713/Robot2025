@@ -61,8 +61,7 @@ public class Pivot extends SubsystemBase {
 
   @AutoLogOutput(key = "Pivot/isAtTarget")
   public boolean isAtTarget() {
-    return Math.abs(this.inputs.angleDegrees - this.targetAngleDeg)
-        < PivotConstants.AT_TARGET_GIVE_DEGS;
+    return inputs.isAtTarget;
   }
 
   public void updateMech2D() {

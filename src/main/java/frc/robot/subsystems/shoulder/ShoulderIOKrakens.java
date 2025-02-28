@@ -50,6 +50,7 @@ public class ShoulderIOKrakens implements ShoulderIO {
     inputs.absoluteAngleDegrees =
         Units.rotationsToDegrees(encoder.getAbsolutePosition().getValueAsDouble());
     inputs.commandedAngleDegs = targetDegrees;
+
     inputs.setpointVelocity = motor.getClosedLoopReference().getValueAsDouble();
   }
 

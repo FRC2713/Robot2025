@@ -40,7 +40,6 @@ import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
-import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -63,8 +62,7 @@ import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
 import frc.robot.subsystems.shoulder.ShoulderIOSim;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionIOOdometry;
-import frc.robot.subsystems.vision.VisionIOPoseEstimator;
+import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.AllianceFlipUtil;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
@@ -140,9 +138,11 @@ public class RobotContainer {
     }
     visionsubsystem =
         new Vision(
-            VisionConstants.USE_WHEEL_ODOMETRY
-                ? new VisionIOOdometry()
-                : new VisionIOPoseEstimator());
+            new VisionIO() {}
+            // VisionConstants.USE_WHEEL_ODOMETRY
+            //     ? new VisionIOOdometry()
+            //     : new VisionIOPoseEstimator()
+            );
 
     // PathPlanner Config
     AutoBuilder.configure(

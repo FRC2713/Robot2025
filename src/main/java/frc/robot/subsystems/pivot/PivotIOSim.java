@@ -45,7 +45,8 @@ public class PivotIOSim implements PivotIO {
     inputs.absoluteAngleDegrees = Units.radiansToDegrees(sim.getAngleRads());
     inputs.velocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
     inputs.voltage = output;
-
+    inputs.isAtTarget =
+        Math.abs(inputs.angleDegrees - targetAngleDeg) < PivotConstants.AT_TARGET_GIVE_DEGS;
     inputs.commandedAngleDegs = targetAngleDeg;
   }
 

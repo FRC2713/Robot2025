@@ -56,6 +56,9 @@ public class PivotIOKrakens implements PivotIO {
     inputs.absoluteAngleDegrees =
         Units.rotationsToDegrees(encoder.getAbsolutePosition().getValueAsDouble())
             + PivotConstants.humanOffsetDegs;
+    inputs.isAtTarget =
+        Math.abs(inputs.angleDegrees - targetDegrees) < PivotConstants.AT_TARGET_GIVE_DEGS;
+    ;
   }
 
   @Override
