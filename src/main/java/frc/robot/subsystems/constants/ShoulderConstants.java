@@ -45,7 +45,7 @@ public class ShoulderConstants {
   public static final int kStatorCurrentLimit = 100; // also amps
   public static final double kMaxAngularVelocity = 5; // RPM
 
-  public static final double kP = RHRUtil.modeDependentDouble(400., 10); // output/rotation
+  public static final double kP = RHRUtil.modeDependentDouble(350., 10); // output/rotation
   public static final double kI = 0.0; // Integral of kP
   public static final double kD = RHRUtil.modeDependentDouble(20., 0); // output/error in velocity
 
@@ -113,5 +113,5 @@ public class ShoulderConstants {
     return config;
   }
 
-  public static final double AT_TARGET_GIVE_DEGS = 2;
+  public static final double AT_TARGET_GIVE_DEGS = 4;
 }
