@@ -1,12 +1,9 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.SSConstants;
-import frc.robot.subsystems.constants.PivotConstants;
-import frc.robot.subsystems.constants.ShoulderConstants;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -15,21 +12,20 @@ public enum SuperStructure {
   STARTING_CONF(
       () ->
           Commands.sequence(
-              ElevatorCmds.setHeight(0),
-              PivotCmds.setAngle(Units.radiansToDegrees(PivotConstants.kInitialAngleRad)),
-              ShoulderCmds.setAngle(Units.radiansToDegrees(ShoulderConstants.kInitialAngleRad)),
               RollerCmds.setEnableLimitSwitch(true),
+              RollerCmds.setSpeed(() -> 0),
               AlgaeClawCmds.setSpeed(() -> 0),
-              ElevatorCmds.waitUntilAtTarget())),
+              PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
+              ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG))),
   SOURCE_CORAL_INTAKE(
       () ->
           Commands.sequence(
-              Commands.parallel(
-                  RollerCmds.setEnableLimitSwitch(true),
-                  ElevatorCmds.setHeight(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
-                  RollerCmds.setSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
-                  PivotCmds.setAngle(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
-                  ShoulderCmds.setAngle(SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG)),
+              RollerCmds.setEnableLimitSwitch(true),
+              RollerCmds.setSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
+              PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
+              ShoulderCmds.setAngle(SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG),
               RollerCmds.waitUntilCoral(2))),
   L1_PREP(
       () ->
