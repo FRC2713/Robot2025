@@ -160,4 +160,15 @@ public class LoggedTunablePID {
   public ElevatorFeedforward createElevatorFF() {
     return new ElevatorFeedforward(this.getKS(), this.getKG(), this.getKV(), this.getKA());
   }
+
+  public ControlGains toControlGains() {
+    return new ControlGains()
+        .p(this.getKP())
+        .i(this.getKI())
+        .d(this.getKD())
+        .s(this.getKS())
+        .g(this.getKG())
+        .a(this.getKG())
+        .v(this.getKV());
+  }
 }

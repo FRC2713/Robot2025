@@ -12,7 +12,7 @@ public class AlgaeClawConstants {
   public static final double kMOI = 0.001;
   public static final double kGearing = (12.0 / 32.0) / 2;
 
-  public static final boolean kMotorInverted = true;
+  public static final boolean kMotorInverted = false;
 
   // values from Rev velocity control examples
   public static final ControlGains PID = new ControlGains().p(0.0003);

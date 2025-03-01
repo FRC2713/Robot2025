@@ -2,7 +2,7 @@ package frc.robot.subsystems.pivot;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -15,8 +15,7 @@ public class PivotIOKrakens implements PivotIO {
   private final TalonFX motor;
   private final CANcoder encoder;
   private double targetDegrees;
-  private final MotionMagicExpoTorqueCurrentFOC angleRequest =
-      new MotionMagicExpoTorqueCurrentFOC(0);
+  private final MotionMagicTorqueCurrentFOC angleRequest = new MotionMagicTorqueCurrentFOC(0);
   private TalonFXConfiguration motorConfig;
   private CANcoderConfiguration encoderConfig;
 

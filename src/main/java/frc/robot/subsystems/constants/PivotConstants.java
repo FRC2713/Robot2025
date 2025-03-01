@@ -45,18 +45,18 @@ public class PivotConstants {
   public static final int kStatorCurrentLimit = 100; // also amps
   public static final double kMaxAngularVelocity = 5; // RPM
 
-  public static final double kP = RHRUtil.modeDependentDouble(400., 10); // output/rotation
+  public static final double kP = RHRUtil.modeDependentDouble(180., 10); // output/rotation
   public static final double kI = 0.0; // Integral of kP
-  public static final double kD = RHRUtil.modeDependentDouble(0, 0); // output/error in velocity
+  public static final double kD = RHRUtil.modeDependentDouble(20, 0); // output/error in velocity
 
   public static final double kG = RHRUtil.modeDependentDouble(8., 0.381);
   public static final double kV = 0.0; // kV * rev/s = volts
   public static final double kA = 0.0;
-  public static final double kS = RHRUtil.modeDependentDouble(6, 0.); // Volts
+  public static final double kS = RHRUtil.modeDependentDouble(10., 0.); // Volts
 
-  public static final double kTrapezoidalMaxVelocity = .05;
-  public static final double kTrapezoidalMaxAcceleration = 60;
-  public static final double kTrapezoidalMaxJerk = 300;
+  public static final double kTrapezoidalMaxVelocity = .1;
+  public static final double kTrapezoidalMaxAcceleration = 10;
+  public static final double kTrapezoidalMaxJerk = 100;
 
   public static final LoggedTunablePID PID =
       new LoggedTunablePID(
@@ -76,7 +76,7 @@ public class PivotConstants {
           80,
           1600);
 
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(38.6);
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(175.166);
   public static final double humanOffsetDegs = -55;
 
   public static final int mech2dWidth = 10;
@@ -114,5 +114,5 @@ public class PivotConstants {
     return config;
   }
 
-  public static final double AT_TARGET_GIVE_DEGS = 1;
+  public static final double AT_TARGET_GIVE_DEGS = 7;
 }

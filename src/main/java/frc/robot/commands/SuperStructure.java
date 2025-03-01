@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -15,17 +16,25 @@ public enum SuperStructure {
               RollerCmds.setEnableLimitSwitch(true),
               RollerCmds.setSpeed(() -> 0),
               AlgaeClawCmds.setSpeed(() -> 0),
-              PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
-              ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG))),
+              Commands.either(
+                  PivotCmds.setAngle(0),
+                  Commands.none(),
+                  () -> RobotContainer.shoulder.getCurrentAngle() < -95),
+              ElevatorCmds.setHeightAndWait(() -> 0),
+              ShoulderCmds.setAngleAndWait(() -> -90),
+              PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG))),
   SOURCE_CORAL_INTAKE(
       () ->
           Commands.sequence(
               RollerCmds.setEnableLimitSwitch(true),
               RollerCmds.setSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
-              PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
+              Commands.either(
+                  PivotCmds.setAngle(0),
+                  Commands.none(),
+                  () -> RobotContainer.shoulder.getCurrentAngle() < -95),
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
-              ShoulderCmds.setAngle(SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG),
+              ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG),
+              PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
               RollerCmds.waitUntilCoral(2))),
   L1_PREP(
       () ->

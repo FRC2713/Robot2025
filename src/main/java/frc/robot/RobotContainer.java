@@ -40,6 +40,7 @@ import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
+import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -48,10 +49,12 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 // import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
+import frc.robot.subsystems.pivot.PivotIOKrakens;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
@@ -62,7 +65,8 @@ import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
 import frc.robot.subsystems.shoulder.ShoulderIOSim;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOOdometry;
+import frc.robot.subsystems.vision.VisionIOPoseEstimator;
 import frc.robot.util.AllianceFlipUtil;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
@@ -98,8 +102,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
-        elevator = new Elevator(new ElevatorIO() {});
-        pivot = new Pivot(new PivotIO() {});
+        elevator = new Elevator(new ElevatorIOKrakens());
+        pivot = new Pivot(new PivotIOKrakens());
         rollers = new Rollers(new RollersIOSparks());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
         shoulder = new Shoulder(new ShoulderIOKrakens());
@@ -138,11 +142,10 @@ public class RobotContainer {
     }
     visionsubsystem =
         new Vision(
-            new VisionIO() {}
-            // VisionConstants.USE_WHEEL_ODOMETRY
-            //     ? new VisionIOOdometry()
-            //     : new VisionIOPoseEstimator()
-            );
+            // new VisionIO() {}
+            VisionConstants.USE_WHEEL_ODOMETRY
+                ? new VisionIOOdometry()
+                : new VisionIOPoseEstimator());
 
     // PathPlanner Config
     AutoBuilder.configure(
@@ -284,6 +287,10 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Intake Coral
+    // driver
+    //     .leftBumper()
+    //     .whileTrue(PivotCmds.setAngle(() -> 90))
+    //     .whileFalse(PivotCmds.setAngle(() -> 35));
     driver
         .leftBumper()
         .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
@@ -300,6 +307,10 @@ public class RobotContainer {
         .rightBumper()
         .whileTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()))
         .whileFalse(AlgaeClawCmds.setSpeedIfNoAlgae(() -> 0));
+    // driver
+    //     .rightBumper()
+    //     .whileTrue(ShoulderCmds.setAngle(() -> -130))
+    //     .whileFalse(ShoulderCmds.setAngle(() -> -90));
 
     // Score Algae
     driver

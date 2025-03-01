@@ -45,18 +45,18 @@ public class ShoulderConstants {
   public static final int kStatorCurrentLimit = 100; // also amps
   public static final double kMaxAngularVelocity = 5; // RPM
 
-  public static final double kP = RHRUtil.modeDependentDouble(350., 10); // output/rotation
+  public static final double kP = RHRUtil.modeDependentDouble(450., 10); // output/rotation
   public static final double kI = 0.0; // Integral of kP
   public static final double kD = RHRUtil.modeDependentDouble(20., 0); // output/error in velocity
 
-  public static final double kG = RHRUtil.modeDependentDouble(15., 0.381);
+  public static final double kG = RHRUtil.modeDependentDouble(25., 0.381);
   public static final double kV = 0.0; // kV * rev/s = volts
   public static final double kA = 0.0;
   public static final double kS = RHRUtil.modeDependentDouble(1.5, 0.); // Volts
 
-  public static final double kTrapezoidalMaxVelocity = 3;
-  public static final double kTrapezoidalMaxAcceleration = 30;
-  public static final double kTrapezoidalMaxJerk = 300;
+  public static final double kTrapezoidalMaxVelocity = .1;
+  public static final double kTrapezoidalMaxAcceleration = 1;
+  public static final double kTrapezoidalMaxJerk = 10;
 
   public static final LoggedTunablePID PID =
       new LoggedTunablePID(
@@ -76,7 +76,7 @@ public class ShoulderConstants {
           80,
           1600);
 
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(21);
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(-208.388);
 
   public static final int mech2dWidth = 10;
   public static final Color8Bit mech2dColor = new Color8Bit(0, 255, 0);
@@ -98,7 +98,7 @@ public class ShoulderConstants {
     config.Slot0 = PID.toTalonFX(GravityTypeValue.Arm_Cosine);
     // config.MotionMagic = PID.toMotionMagic();
 
-    config.MotionMagic.MotionMagicCruiseVelocity = .05;
+    config.MotionMagic.MotionMagicCruiseVelocity = kTrapezoidalMaxVelocity;
     config.MotionMagic.MotionMagicAcceleration = kTrapezoidalMaxAcceleration;
     config.MotionMagic.MotionMagicJerk = kTrapezoidalMaxJerk;
     config.MotionMagic.MotionMagicExpo_kV = 6.4;
