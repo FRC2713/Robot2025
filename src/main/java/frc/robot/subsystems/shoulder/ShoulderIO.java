@@ -1,6 +1,6 @@
 package frc.robot.subsystems.shoulder;
 
-import frc.robot.util.LoggedTunablePID;
+import frc.robot.util.LoggedTunableGains;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ShoulderIO {
@@ -26,7 +26,7 @@ public interface ShoulderIO {
   public default void setTargetAngle(double degrees) {}
   ;
 
-  public default void setPID(LoggedTunablePID pid) {}
+  public default void setPID(LoggedTunableGains pid) {}
   ;
 
   public default void setBus(double bus) {}

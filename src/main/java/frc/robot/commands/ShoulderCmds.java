@@ -29,4 +29,22 @@ public class ShoulderCmds {
   public static Command setAngleAndWait(DoubleSupplier targetAngle) {
     return Commands.sequence(setAngle(targetAngle), waitUntilAtTarget());
   }
+
+  class SetWaypoints extends Command {
+    private final double[] waypoints;
+
+    public SetWaypoints(double[] waypoints) {
+      this.waypoints = waypoints;
+    }
+
+    @Override
+    public void initialize() {
+      RobotContainer.shoulder.setTargetAngle(waypoints[0]);
+    }
+
+    @Override
+    public boolean isFinished() {
+      return RobotContainer.shoulder.isAtTarget();
+    }
+  }
 }
