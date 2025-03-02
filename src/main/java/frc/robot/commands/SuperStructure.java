@@ -17,6 +17,10 @@ public enum SuperStructure {
               RollerCmds.setSpeed(() -> 0),
               AlgaeClawCmds.setSpeed(() -> 0),
               Commands.either(
+                  PivotCmds.setAngleAndWait(() -> 35),
+                  Commands.none(),
+                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              Commands.either(
                   PivotCmds.setAngle(0),
                   Commands.none(),
                   () -> RobotContainer.shoulder.getCurrentAngle() < -95),
@@ -39,34 +43,50 @@ public enum SuperStructure {
   L1_PREP(
       () ->
           Commands.sequence(
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_CORAL_PREP_HEIGHT_IN),
+              Commands.either(
+                  PivotCmds.setAngleAndWait(() -> 35),
+                  Commands.none(),
+                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_HEIGHT_IN),
               Commands.parallel(
-                  PivotCmds.setAngle(SSConstants.Pivot.L1_CORAL_PREP_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L1_CORAL_PREP_ANGLE_DEG)),
+                  PivotCmds.setAngle(SSConstants.Pivot.L1_ANGLE_DEG),
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L1_ANGLE_DEG)),
               PivotCmds.waitUntilAtTarget())),
   L2_PREP(
       () ->
           Commands.sequence(
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_CORAL_PREP_HEIGHT_IN),
+              Commands.either(
+                  PivotCmds.setAngleAndWait(() -> 35),
+                  Commands.none(),
+                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_HEIGHT_IN),
               Commands.parallel(
-                  PivotCmds.setAngle(SSConstants.Pivot.L2_CORAL_PREP_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L2_CORAL_PREP_ANGLE_DEG)),
+                  PivotCmds.setAngle(SSConstants.Pivot.L2_ANGLE_DEG),
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L2_ANGLE_DEG)),
               PivotCmds.waitUntilAtTarget())),
   L3_PREP(
       () ->
           Commands.sequence(
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L3_CORAL_PREP_HEIGHT_IN),
+              Commands.either(
+                  PivotCmds.setAngleAndWait(() -> 35),
+                  Commands.none(),
+                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L3_HEIGHT_IN),
               Commands.parallel(
-                  PivotCmds.setAngle(SSConstants.Pivot.L3_CORAL_PREP_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L3_CORAL_PREP_ANGLE_DEG)),
+                  PivotCmds.setAngle(SSConstants.Pivot.L3_ANGLE_DEG),
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L3_ANGLE_DEG)),
               PivotCmds.waitUntilAtTarget())),
   L4_PREP(
       () ->
           Commands.sequence(
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_CORAL_PREP_HEIGHT_IN),
+              Commands.either(
+                  PivotCmds.setAngleAndWait(() -> 35),
+                  Commands.none(),
+                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_HEIGHT_IN),
               Commands.parallel(
-                  PivotCmds.setAngle(SSConstants.Pivot.L4_CORAL_PREP_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L4_CORAL_PREP_ANGLE_DEG)),
+                  PivotCmds.setAngle(SSConstants.Pivot.L4_ANGLE_DEG),
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L4_ANGLE_DEG)),
               PivotCmds.waitUntilAtTarget())),
   CORAL_SCORE(
       () ->
@@ -82,15 +102,14 @@ public enum SuperStructure {
   PROCESSOR_PREP(
       () ->
           Commands.sequence(
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_PREP_HEIGHT_IN),
               ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG),
-              PivotCmds.setAngleAndWait(SSConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG))),
+              PivotCmds.setAngleAndWait(SSConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN))),
   PROCESSOR_SCORE(
       () ->
           Commands.sequence(
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN),
-              ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG),
-              PivotCmds.setAngleAndWait(SSConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
+              PROCESSOR_PREP.getCommand(),
               AlgaeClawCmds.setSpeedAndWaitForNoAlgae(
                   SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))),
   ;

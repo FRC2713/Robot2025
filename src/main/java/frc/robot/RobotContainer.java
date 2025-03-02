@@ -293,19 +293,17 @@ public class RobotContainer {
     //     .whileFalse(PivotCmds.setAngle(() -> 35));
     driver
         .leftBumper()
-        .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
-        .whileFalse(RollerCmds.setSpeed(() -> 0));
+        .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
+        .onFalse(RollerCmds.setSpeed(() -> 0));
 
     // Score Coral
     driver
         .leftTrigger(0.25)
-        .whileTrue(SuperStructure.CORAL_SCORE.getCommand())
-        .whileFalse(RollerCmds.setSpeed(() -> 0));
+        .onTrue(SuperStructure.CORAL_SCORE.getCommand())
+        .onFalse(RollerCmds.setSpeed(() -> 0));
 
     // Grab Algae
-    driver
-        .rightBumper()
-        .whileTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()));
+    driver.rightBumper().onTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()));
     // driver
     //     .rightBumper()
     //     .whileTrue(ShoulderCmds.setAngle(() -> -130))
@@ -314,14 +312,14 @@ public class RobotContainer {
     // Score Algae
     driver
         .rightTrigger(0.25)
-        .whileTrue(SuperStructure.PROCESSOR_SCORE.getCommand())
-        .whileFalse(AlgaeClawCmds.setSpeed(() -> 0));
+        .onTrue(SuperStructure.PROCESSOR_SCORE.getCommand())
+        .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
-    // Get both!
+    // Do both!
     driver
         .x()
-        .whileTrue(SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand())
-        .whileFalse(
+        .onTrue(SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand())
+        .onFalse(
             Commands.sequence(
                 AlgaeClawCmds.setSpeedIfNoAlgae(() -> 0), RollerCmds.setSpeed(() -> 0)));
 
