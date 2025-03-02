@@ -305,8 +305,7 @@ public class RobotContainer {
     // Grab Algae
     driver
         .rightBumper()
-        .whileTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()))
-        .whileFalse(AlgaeClawCmds.setSpeedIfNoAlgae(() -> 0));
+        .whileTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()));
     // driver
     //     .rightBumper()
     //     .whileTrue(ShoulderCmds.setAngle(() -> -130))
