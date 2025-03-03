@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AlgaeClawCmds;
+import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
@@ -38,6 +39,9 @@ import frc.robot.subsystems.algaeClaw.AlgaeClaw;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSparks;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
@@ -79,6 +83,7 @@ public class RobotContainer {
   public static Pivot pivot;
   public static Rollers rollers;
   public static AlgaeClaw algaeClaw;
+  public static Climber climber;
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -107,6 +112,7 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIOSparks());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
         shoulder = new Shoulder(new ShoulderIOKrakens());
+        climber = new Climber(new ClimberIO() {});
         break;
 
       case SIM:
@@ -122,6 +128,7 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIOSim());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSim());
         shoulder = new Shoulder(new ShoulderIOSim());
+        climber = new Climber(new ClimberIOSim() {});
         break;
 
       default:
@@ -138,6 +145,7 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIO() {});
         algaeClaw = new AlgaeClaw(new AlgaeClawIO() {});
         shoulder = new Shoulder(new ShoulderIO() {});
+        climber = new Climber(new ClimberIO() {});
         break;
     }
     visionsubsystem =
@@ -407,6 +415,8 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Full Control"));
+
+    driver.a().onTrue(ClimberCmds.setAngle(90)).onFalse(ClimberCmds.setAngle(-90));
 
     operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
     operator.b().onTrue(SuperStructure.L2_PREP.getCommand());

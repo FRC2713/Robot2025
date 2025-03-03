@@ -60,7 +60,7 @@ public class Shoulder extends SubsystemBase {
 
   public void updateMech2D() {
     // 0 deg points up in Mech2d, +90 points left (or back in 3d)
-    this.mech2d.setAngle((this.inputs.angleDegrees) - 90);
+    this.mech2d.setAngle((360 - (this.inputs.angleDegrees)) - 270);
   }
 
   public double getCurrentAngle() {

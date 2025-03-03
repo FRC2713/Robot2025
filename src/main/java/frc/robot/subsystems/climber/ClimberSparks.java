@@ -1,5 +1,7 @@
 package frc.robot.subsystems.climber;
 
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
@@ -47,6 +49,9 @@ public class ClimberSparks implements ClimberIO {
   @Override
   public void setTargetAngle(double angle) {
     this.targetRPM = angle;
-    // motor.setContr/;
+    motor
+        .getClosedLoopController()
+        .setReference(
+            Units.degreesToRotations(angle), ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
 }

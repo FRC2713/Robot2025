@@ -12,10 +12,10 @@ public class Climber extends SubsystemBase {
   private final ClimberIO IO;
   public final MechanismLigament2d mech2d =
       new MechanismLigament2d(
-          "climber",
+          "climbermech",
           ClimberConstants.kLength,
           ClimberConstants.kInitialAngle,
-          1,
+          10,
           new Color8Bit(255, 0, 0));
 
   private double targetAngleDeg = (ClimberConstants.kInitialAngle);
@@ -27,8 +27,8 @@ public class Climber extends SubsystemBase {
   }
 
   public void periodic() {
-    if (ClimberConstants.PID.hasChanged(hashCode())) {
-      this.IO.setPID(ClimberConstants.PID);
+    if (ClimberConstants.Gains.hasChanged(hashCode())) {
+      this.IO.setPID(ClimberConstants.Gains);
     }
 
     IO.updateInputs(inputs);
