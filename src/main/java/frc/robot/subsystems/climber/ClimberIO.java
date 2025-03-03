@@ -1,23 +1,21 @@
-package frc.robot.subsystems.shoulder;
+package frc.robot.subsystems.climber;
 
 import frc.robot.util.LoggedTunableGains;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ShoulderIO {
+public interface ClimberIO {
 
   @AutoLog
-  public static class ShoulderInputs {
+  public static class ClimberInputs {
     public double velocityDPS = 0.0;
     public double voltage = 0.0;
     public double angleDegrees = 0.0;
-    public double absoluteAngleDegrees = 0.0;
+    public double amps = 0.0;
 
     public double commandedAngleDegs = 0.0;
-
-    public double setpointVelocity = 0.0;
   }
 
-  public default void updateInputs(ShoulderInputs inputs) {}
+  public default void updateInputs(ClimberInputs inputs) {}
   ;
 
   public default void setVoltage(double volts) {}
@@ -29,6 +27,6 @@ public interface ShoulderIO {
   public default void setPID(LoggedTunableGains pid) {}
   ;
 
-  public default void setBus(double bus) {}
+  public default void setServoPos(double pos) {}
   ;
 }

@@ -35,8 +35,8 @@ public class Pivot extends SubsystemBase {
   }
 
   public void periodic() {
-    if (PivotConstants.PID.hasChanged(hashCode())) {
-      this.IO.setPID(PivotConstants.PID);
+    if (PivotConstants.Gains.hasChanged(hashCode())) {
+      this.IO.setPID(PivotConstants.Gains);
     }
 
     IO.updateInputs(inputs);
@@ -61,13 +61,12 @@ public class Pivot extends SubsystemBase {
 
   @AutoLogOutput(key = "Pivot/isAtTarget")
   public boolean isAtTarget() {
-    return Math.abs(this.inputs.angleDegrees - this.targetAngleDeg)
-        < PivotConstants.AT_TARGET_GIVE_DEGS;
+    return inputs.isAtTarget;
   }
 
   public void updateMech2D() {
     // 0 deg points up in Mech2d, +90 points left (or back in 3d)
-    this.mech2d.setAngle((this.inputs.angleDegrees) - 90);
+    this.mech2d.setAngle((270 - this.inputs.angleDegrees));
   }
 
   public double getCurrentAngle() {

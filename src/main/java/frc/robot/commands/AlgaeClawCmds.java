@@ -12,6 +12,11 @@ public class AlgaeClawCmds {
     return new InstantCommand(() -> RobotContainer.algaeClaw.setRPM(targetRPM.getAsDouble()));
   }
 
+  public static Command setSpeedIfNoAlgae(DoubleSupplier targetRPM) {
+    return Commands.either(
+        Commands.none(), setSpeed(targetRPM), RobotContainer.algaeClaw::hasAlgae);
+  }
+
   public static Command waitUntilAtTarget() {
     return new WaitUntilCommand(() -> RobotContainer.algaeClaw.isAtTarget());
   }
@@ -36,17 +41,16 @@ public class AlgaeClawCmds {
         new WaitUntilCommand(() -> !RobotContainer.algaeClaw.hasAlgae()));
   }
 
-  public static Command setEnableLimitSwitch(boolean setEnable) {
-    return new InstantCommand(() -> RobotContainer.algaeClaw.setEnableLimitSwitch(setEnable));
-  }
+  // public static Command setEnableLimitSwitch(boolean setEnable) {
+  //   return new InstantCommand(() -> RobotContainer.algaeClaw.setEnableLimitSwitch(setEnable));
+  // }
 
   public static Command setSpeedAndWait(DoubleSupplier targetRPM) {
     return Commands.sequence(setSpeed(targetRPM), waitUntilAtTarget());
   }
 
   public static Command setSpeedAndWaitForNoAlgae(DoubleSupplier targetRPM) {
-    return Commands.sequence(
-        setEnableLimitSwitch(true), setSpeed(targetRPM), waitUntilNoAlgae(0.5));
+    return Commands.sequence(setSpeed(targetRPM), waitUntilNoAlgae(0.5), setSpeed(() -> 0));
   }
 
   public static Command driveUntilLimitSet(DoubleSupplier targetRPM) {
@@ -55,10 +59,10 @@ public class AlgaeClawCmds {
   }
 
   public static Command score(DoubleSupplier targetRpm) {
-    return Commands.sequence(setEnableLimitSwitch(false), setSpeed(targetRpm));
+    return Commands.sequence(setSpeed(targetRpm));
   }
 
   public static Command intake(DoubleSupplier targetRpm) {
-    return Commands.sequence(setEnableLimitSwitch(true), setSpeed(targetRpm));
+    return Commands.sequence(setSpeed(targetRpm));
   }
 }

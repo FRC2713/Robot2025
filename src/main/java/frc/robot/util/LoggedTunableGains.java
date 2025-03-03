@@ -11,7 +11,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants;
 
-public class LoggedTunablePID {
+public class LoggedTunableGains {
   public final LoggedTunableNumber kP;
   public final LoggedTunableNumber kI;
   public final LoggedTunableNumber kD;
@@ -24,13 +24,10 @@ public class LoggedTunablePID {
   public final LoggedTunableNumber MotionMagicCruiseVelocity;
   public final LoggedTunableNumber MotionMagicAcceleration;
   public final LoggedTunableNumber MotionMagicJerk;
+  public final LoggedTunableNumber MotionMagicExpo_kV;
+  public final LoggedTunableNumber MotionMagicExpo_kA;
 
-  public LoggedTunablePID(String subsystem, ControlGains PID) {
-    this(subsystem, PID, 0.0, 0.0);
-  }
-
-  public LoggedTunablePID(
-      String subsystem, ControlGains PID, double MotionMagicAcceleration, double MotionMagicJerk) {
+  public LoggedTunableGains(String subsystem, ControlGains PID) {
     kP = new LoggedTunableNumber(subsystem + "/PID/P", PID.getKP());
     kI = new LoggedTunableNumber(subsystem + "/PID/I", PID.getKI());
     kD = new LoggedTunableNumber(subsystem + "/PID/D", PID.getKD());
@@ -39,10 +36,18 @@ public class LoggedTunablePID {
     kV = new LoggedTunableNumber(subsystem + "/PID/V", PID.getKV());
     kA = new LoggedTunableNumber(subsystem + "/PID/A", PID.getKA());
     MotionMagicCruiseVelocity =
-        new LoggedTunableNumber(subsystem + "/PID/CruiseVelocity", PID.getKMMCruiseVelo());
+        new LoggedTunableNumber(
+            subsystem + "/PID/CruiseVelocity", PID.getKTrapezoidalMaxVelocity());
     this.MotionMagicAcceleration =
-        new LoggedTunableNumber(subsystem + "/PID/Acceleration", MotionMagicAcceleration);
-    this.MotionMagicJerk = new LoggedTunableNumber(subsystem + "/PID/Jerk", MotionMagicJerk);
+        new LoggedTunableNumber(
+            subsystem + "/PID/Acceleration", PID.getKTrapezoidalMaxAcceleration());
+    this.MotionMagicJerk =
+        new LoggedTunableNumber(subsystem + "/PID/Jerk", PID.getKTrapezoidalMaxJerk());
+
+    this.MotionMagicExpo_kV =
+        new LoggedTunableNumber(subsystem + "/PID/Expo_kV", PID.getKExponential_kV());
+    this.MotionMagicExpo_kA =
+        new LoggedTunableNumber(subsystem + "/PID/Expo_kA", PID.getKExponential_kA());
   }
 
   public boolean hasChanged(int id) {
@@ -58,7 +63,9 @@ public class LoggedTunablePID {
         || kA.hasChanged(id)
         || MotionMagicCruiseVelocity.hasChanged(id)
         || MotionMagicAcceleration.hasChanged(id)
-        || MotionMagicJerk.hasChanged(id);
+        || MotionMagicJerk.hasChanged(id)
+        || MotionMagicExpo_kV.hasChanged(id)
+        || MotionMagicExpo_kA.hasChanged(id);
   }
 
   public double getKP() {
@@ -130,12 +137,14 @@ public class LoggedTunablePID {
     return slot1Configs;
   }
 
-  public MotionMagicConfigs toMotionMagic() {
+  public MotionMagicConfigs getMotionMagicConfig() {
     var motionMagicConfigs = new MotionMagicConfigs();
 
     motionMagicConfigs.MotionMagicCruiseVelocity = MotionMagicCruiseVelocity.getAsDouble();
     motionMagicConfigs.MotionMagicAcceleration = MotionMagicAcceleration.getAsDouble();
     motionMagicConfigs.MotionMagicJerk = MotionMagicJerk.getAsDouble();
+    motionMagicConfigs.MotionMagicExpo_kV = MotionMagicExpo_kV.getAsDouble();
+    motionMagicConfigs.MotionMagicExpo_kA = MotionMagicExpo_kA.getAsDouble();
 
     return motionMagicConfigs;
   }
@@ -159,5 +168,16 @@ public class LoggedTunablePID {
 
   public ElevatorFeedforward createElevatorFF() {
     return new ElevatorFeedforward(this.getKS(), this.getKG(), this.getKV(), this.getKA());
+  }
+
+  public ControlGains toControlGains() {
+    return new ControlGains()
+        .p(this.getKP())
+        .i(this.getKI())
+        .d(this.getKD())
+        .s(this.getKS())
+        .g(this.getKG())
+        .a(this.getKG())
+        .v(this.getKV());
   }
 }

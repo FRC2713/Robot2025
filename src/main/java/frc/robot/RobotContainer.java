@@ -28,10 +28,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AlgaeClawCmds;
+import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
-import frc.robot.commands.ShoulderCmds;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.generated.TunerConstants;
@@ -39,6 +39,9 @@ import frc.robot.subsystems.algaeClaw.AlgaeClaw;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSparks;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
@@ -50,18 +53,17 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 // import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOKrakens;
-// import frc.robot.subsystems.pivot.PivotIOKrakens;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIOSim;
 import frc.robot.subsystems.rollers.RollersIOSparks;
-// import frc.robot.subsystems.rollers.RollersIOSparks;
 import frc.robot.subsystems.shoulder.Shoulder;
 import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
@@ -81,6 +83,7 @@ public class RobotContainer {
   public static Pivot pivot;
   public static Rollers rollers;
   public static AlgaeClaw algaeClaw;
+  public static Climber climber;
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -104,11 +107,12 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
-        elevator = new Elevator(new ElevatorIO() {});
+        elevator = new Elevator(new ElevatorIOKrakens());
         pivot = new Pivot(new PivotIOKrakens());
         rollers = new Rollers(new RollersIOSparks());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
-        shoulder = new Shoulder(new ShoulderIOKrakens() {});
+        shoulder = new Shoulder(new ShoulderIOKrakens());
+        climber = new Climber(new ClimberIO() {});
         break;
 
       case SIM:
@@ -124,6 +128,7 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIOSim());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSim());
         shoulder = new Shoulder(new ShoulderIOSim());
+        climber = new Climber(new ClimberIOSim() {});
         break;
 
       default:
@@ -140,10 +145,12 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIO() {});
         algaeClaw = new AlgaeClaw(new AlgaeClawIO() {});
         shoulder = new Shoulder(new ShoulderIO() {});
+        climber = new Climber(new ClimberIO() {});
         break;
     }
     visionsubsystem =
         new Vision(
+            // new VisionIO() {}
             VisionConstants.USE_WHEEL_ODOMETRY
                 ? new VisionIOOdometry()
                 : new VisionIOPoseEstimator());
@@ -290,48 +297,39 @@ public class RobotContainer {
     // Intake Coral
     // driver
     //     .leftBumper()
-    //     .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
-    //     .onFalse(SuperStructure.STARTING_CONF.getCommand());
-    // driver
-    //     .leftBumper()
-    //     .whileTrue(ShoulderCmds.setAngle(-130))
-    //     .whileFalse(ShoulderCmds.setAngle(-90));
-
+    //     .whileTrue(PivotCmds.setAngle(() -> 90))
+    //     .whileFalse(PivotCmds.setAngle(() -> 35));
     driver
         .leftBumper()
-        .whileTrue(
-            Commands.sequence(
-                ShoulderCmds.setAngle(SSConstants.Shoulder.L3_ALGAE_GRAB_ANGLE_DEG),
-                RollerCmds.intake(() -> 6000)))
-        .whileFalse(RollerCmds.setSpeed(() -> 0));
+        .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
+        .onFalse(RollerCmds.setSpeed(() -> 0));
 
     // Score Coral
     driver
         .leftTrigger(0.25)
-        .whileTrue(RollerCmds.score(() -> 6000))
-        .whileFalse(RollerCmds.setSpeed(() -> 0));
+        .onTrue(SuperStructure.CORAL_SCORE.getCommand())
+        .onFalse(RollerCmds.setSpeed(() -> 0));
 
-    driver
-        .rightBumper()
-        .whileTrue(Commands.sequence(SuperStructure.L3_ALGAE_GRAB_AND_SCORE.getCommand()));
-
-    // Score Coral
-    driver
-        .rightTrigger(0.25)
-        .whileTrue(AlgaeClawCmds.score(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
-        .whileFalse(AlgaeClawCmds.setSpeed(() -> 0));
-
-    // Intake Algae
+    // Grab Algae
+    driver.rightBumper().onTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()));
     // driver
     //     .rightBumper()
-    //     .whileTrue(AlgaeClawCmds.intake(SSConstants.AlgaeClaw.L3_ALGAE_GRAB_SPEED))
-    //     .onFalse(RollerCmds.setSpeed(() -> 0));
+    //     .whileTrue(ShoulderCmds.setAngle(() -> -130))
+    //     .whileFalse(ShoulderCmds.setAngle(() -> -90));
 
-    // // Score Algae
-    // driver
-    //     .rightTrigger(0.25)
-    //     .onTrue(AlgaeClawCmds.score(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
-    //     .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
+    // Score Algae
+    driver
+        .rightTrigger(0.25)
+        .onTrue(SuperStructure.PROCESSOR_SCORE.getCommand())
+        .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
+
+    // Do both!
+    driver
+        .x()
+        .onTrue(SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand())
+        .onFalse(
+            Commands.sequence(
+                AlgaeClawCmds.setSpeedIfNoAlgae(() -> 0), RollerCmds.setSpeed(() -> 0)));
 
     // Heading controller
     driver
@@ -418,16 +416,14 @@ public class RobotContainer {
                     () -> -driver.getRightX()),
                 "Full Control"));
 
-    // operator.a().onTrue(SuperStructure.L1_CORAL_PREP.getCommand());
-    // operator.b().onTrue(SuperStructure.L2_CORAL_PREP.getCommand());
-    operator
-        .x()
-        .onTrue(SuperStructure.L3_ALGAE_GRAB.getCommand())
-        .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
+    driver.a().onTrue(ClimberCmds.setAngle(90)).onFalse(ClimberCmds.setAngle(-90));
+
+    operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
+    operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
+    operator.y().onTrue(SuperStructure.L3_PREP.getCommand());
+    operator.rightBumper().onTrue(SuperStructure.L4_PREP.getCommand());
 
     operator.povDown().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
-    operator.povRight().onTrue(SuperStructure.L1_ALGAE_GRAB.getCommand());
-    operator.povLeft().onTrue(SuperStructure.L3_ALGAE_GRAB.getCommand());
 
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());
 
