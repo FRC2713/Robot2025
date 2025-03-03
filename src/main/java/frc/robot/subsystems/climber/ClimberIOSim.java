@@ -12,7 +12,7 @@ import frc.robot.util.LoggedTunableGains;
 public class ClimberIOSim implements ClimberIO {
   private static final SingleJointedArmSim sim =
       new SingleJointedArmSim(
-          DCMotor.getKrakenX60Foc(1),
+          DCMotor.getNeoVortex(2),
           ClimberConstants.kGearing,
           SingleJointedArmSim.estimateMOI(ClimberConstants.kLength, ClimberConstants.kMass),
           ClimberConstants.kLength,
@@ -40,9 +40,14 @@ public class ClimberIOSim implements ClimberIO {
     sim.setInputVoltage(output);
     sim.update(0.02);
 
-    inputs.angleDegrees = Units.radiansToDegrees(sim.getAngleRads());
-    inputs.velocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
-    inputs.voltage = output;
+    inputs.leftAngleDegrees = Units.radiansToDegrees(sim.getAngleRads());
+    inputs.leftVelocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
+    inputs.leftVoltage = output;
+
+    inputs.rightAngleDegrees = Units.radiansToDegrees(sim.getAngleRads());
+    inputs.rightVelocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
+    inputs.rightVoltage = output;
+
     inputs.commandedAngleDegs = targetAngleDeg;
   }
 

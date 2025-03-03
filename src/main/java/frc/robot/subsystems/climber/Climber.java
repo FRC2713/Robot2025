@@ -42,16 +42,15 @@ public class Climber extends SubsystemBase {
 
   @AutoLogOutput(key = "Climber/isAtTarget")
   public boolean isAtTarget() {
-    return Math.abs(this.inputs.angleDegrees - this.targetAngleDeg)
-        < ClimberConstants.AT_TARGET_GIVE_DEGS;
+    return Math.abs(getCurrentAngle() - this.targetAngleDeg) < ClimberConstants.AT_TARGET_GIVE_DEGS;
   }
 
   public void updateMech2D() {
     // 0 deg points up in Mech2d, +90 points left (or back in 3d)
-    this.mech2d.setAngle((this.inputs.angleDegrees) - 90);
+    this.mech2d.setAngle((getCurrentAngle()) - 90);
   }
 
   public double getCurrentAngle() {
-    return this.inputs.angleDegrees;
+    return (this.inputs.leftAngleDegrees + this.inputs.rightAngleDegrees) / 2;
   }
 }
