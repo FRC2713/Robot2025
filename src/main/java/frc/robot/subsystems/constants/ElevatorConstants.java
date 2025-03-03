@@ -49,7 +49,7 @@ public class ElevatorConstants {
 
   public static final LoggedTunableGains Gains =
       new LoggedTunableGains(
-          "Elevator_L_ONE",
+          "Elevator",
           new ControlGains()
               // PID
               .p(RHRUtil.modeDependentDouble(25., 0.1))
