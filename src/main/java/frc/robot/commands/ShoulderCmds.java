@@ -29,4 +29,5 @@ public class ShoulderCmds {
   public static Command setAngleAndWait(DoubleSupplier targetAngle) {
     return Commands.sequence(setAngle(targetAngle), waitUntilAtTarget());
   }
+
 }

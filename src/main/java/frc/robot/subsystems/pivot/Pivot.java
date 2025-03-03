@@ -35,8 +35,8 @@ public class Pivot extends SubsystemBase {
   }
 
   public void periodic() {
-    if (PivotConstants.PID.hasChanged(hashCode())) {
-      this.IO.setPID(PivotConstants.PID);
+    if (PivotConstants.Gains.hasChanged(hashCode())) {
+      this.IO.setPID(PivotConstants.Gains);
     }
 
     IO.updateInputs(inputs);

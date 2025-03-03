@@ -38,21 +38,13 @@ public class Shoulder extends SubsystemBase {
   }
 
   public void periodic() {
-    if (ShoulderConstants.PID.hasChanged(hashCode())) {
-      this.IO.setPID(ShoulderConstants.PID);
+    if (ShoulderConstants.Gains.hasChanged(hashCode())) {
+      this.IO.setPID(ShoulderConstants.Gains);
     }
 
     IO.updateInputs(inputs);
     Logger.processInputs("Shoulder", inputs);
-
-    this.transform =
-        new Transform3d(
-            0.0, 0.0, 0.0, new Rotation3d(0, Units.degreesToRadians(inputs.angleDegrees), 0));
-
-    this.pose =
-        ShoulderConstants.kInitialPose
-            .transformBy(RobotContainer.elevator.transform)
-            .transformBy(this.transform);
+    this.updateTransform();
   }
 
   public void setTargetAngle(double degrees) {
@@ -82,5 +74,16 @@ public class Shoulder extends SubsystemBase {
   public void setBus(double bus) {
     Logger.recordOutput("bus", bus);
     IO.setBus(bus);
+  }
+
+  private void updateTransform() {
+    this.transform =
+        new Transform3d(
+            0.0, 0.0, 0.0, new Rotation3d(0, Units.degreesToRadians(inputs.angleDegrees), 0));
+
+    this.pose =
+        ShoulderConstants.kInitialPose
+            .transformBy(RobotContainer.elevator.transform)
+            .transformBy(this.transform);
   }
 }

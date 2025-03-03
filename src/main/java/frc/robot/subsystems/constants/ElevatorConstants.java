@@ -1,15 +1,12 @@
 package frc.robot.subsystems.constants;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.util.ControlGains;
-import frc.robot.util.LoggedTunablePID;
+import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.RHRUtil;
 
 public class ElevatorConstants {
@@ -32,8 +29,16 @@ public class ElevatorConstants {
   public static final double kRotationsToHeightConversion = (Math.PI * kDrumRadius * 2);
 
   public static final double kMinHeight = 0.0; // inches
-  public static final double kMaxHeight = 44.7; // 52.5;
+  public static final double kMaxHeight = 26.0; // inches
   public static final double kInitialHeight = 0;
+
+  public static double toInches(double rotations) {
+    return rotations * kRotationsToHeightConversion;
+  }
+
+  public static double toRotations(double inches) {
+    return inches / kRotationsToHeightConversion;
+  }
 
   // robot frame to elevator frame
   public static final Transform3d kInitialTransform =
@@ -42,8 +47,8 @@ public class ElevatorConstants {
   // pose in robot frame
   public static final Pose3d kInitialPose = new Pose3d().transformBy(kInitialTransform);
 
-  public static final LoggedTunablePID PID_LEVEL_ONE =
-      new LoggedTunablePID(
+  public static final LoggedTunableGains Gains =
+      new LoggedTunableGains(
           "Elevator_L_ONE",
           new ControlGains()
               // PID
@@ -55,49 +60,14 @@ public class ElevatorConstants {
               .v(0.0)
               .a(0.0)
               // Motion Magic
-              .mmCruiseVelo(7),
-          160,
-          1600);
-
-  public static final double LEVEL_TWO_HEIGHT_IN = 25.13427520950623;
-
-  public static final LoggedTunablePID PID_LEVEL_TWO =
-      new LoggedTunablePID(
-          "Elevator_L_TWO",
-          new ControlGains()
-              // PID
-              .p(RHRUtil.modeDependentDouble(25., 0.1))
-              .i(0.0)
-              .d(RHRUtil.modeDependentDouble(1, 0.01))
-              // FF
-              .g(RHRUtil.modeDependentDouble(15, 0.0785))
-              .v(0.0)
-              .a(0.0));
+              .trapezoidal(
+                  RHRUtil.modeDependentDouble(0.5, 0.1),
+                  RHRUtil.modeDependentDouble(0.5, 0.1),
+                  RHRUtil.modeDependentDouble(0.5, 0.1))
+              .exponential(6.4, 0.1));
 
   public static final double mech2dWidth = Units.inchesToMeters(1);
   public static final Color8Bit mech2dColor = new Color8Bit(255, 0, 0);
-
-  public static TalonFXConfiguration createKrakenConfig(boolean inverted) {
-    var config = new TalonFXConfiguration();
-
-    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    config.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearReduction;
-    config.TorqueCurrent.PeakForwardTorqueCurrent = ElevatorConstants.kMaxCurrentLimit;
-    config.TorqueCurrent.PeakReverseTorqueCurrent = -ElevatorConstants.kMaxCurrentLimit;
-    config.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kMaxCurrentLimit;
-    config.CurrentLimits.StatorCurrentLimitEnable = true;
-    config.MotorOutput.Inverted =
-        (inverted) ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
-
-    // set slot 0 gains
-    config.Slot0 = PID_LEVEL_ONE.toTalonFX();
-    config.Slot1 = PID_LEVEL_TWO.toTalonFXS1();
-
-    // set Motion Magic settings
-    config.MotionMagic = PID_LEVEL_ONE.toMotionMagic();
-
-    return config;
-  }
 
   public static final double AT_TARGET_GIVE_INCHES = 1.0;
 }

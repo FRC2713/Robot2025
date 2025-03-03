@@ -1,6 +1,6 @@
 package frc.robot.subsystems.elevator;
 
-import frc.robot.util.LoggedTunablePID;
+import frc.robot.util.LoggedTunableGains;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ElevatorIO {
@@ -35,7 +35,7 @@ public interface ElevatorIO {
   public default void setTargetHeight(double heightInches) {}
   ;
 
-  public default void setPID(LoggedTunablePID slot0pid, LoggedTunablePID slot1pid) {}
+  public default void setPID(LoggedTunableGains slot0pid) {}
 
   public default void changeSlot(int slot) {}
   ;

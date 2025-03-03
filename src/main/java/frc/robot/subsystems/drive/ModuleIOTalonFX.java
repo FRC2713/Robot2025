@@ -43,7 +43,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.generated.TunerConstants;
-import frc.robot.util.LoggedTunablePID;
+import frc.robot.util.LoggedTunableGains;
 import java.util.Queue;
 
 /**
@@ -277,7 +277,7 @@ public class ModuleIOTalonFX implements ModuleIO {
   }
 
   @Override
-  public void setDrivePID(LoggedTunablePID pid) {
+  public void setDrivePID(LoggedTunableGains pid) {
     System.out.println("Changing drive PID");
     setDriveConfig(
         new Slot0Configs()
@@ -289,7 +289,7 @@ public class ModuleIOTalonFX implements ModuleIO {
   }
 
   @Override
-  public void setTurnPID(LoggedTunablePID pid) {
+  public void setTurnPID(LoggedTunableGains pid) {
     System.out.println("Changing turn PID");
     setTurnConfig(
         new Slot0Configs()
