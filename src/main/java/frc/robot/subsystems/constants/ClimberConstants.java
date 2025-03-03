@@ -5,15 +5,15 @@ import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import frc.robot.util.ControlGains;
-import frc.robot.util.LoggedTunablePID;
+import frc.robot.util.LoggedTunableGains;
 
 public class ClimberConstants {
   public static final int kCANId = 5;
   public static final double kLength = 10;
   public static final double kInitialAngle = -90;
 
-  public static final LoggedTunablePID PID =
-      new LoggedTunablePID(
+  public static final LoggedTunableGains PID =
+      new LoggedTunableGains(
           "Climber",
           new ControlGains()
               // PID

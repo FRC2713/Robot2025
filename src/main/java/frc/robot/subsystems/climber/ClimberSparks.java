@@ -7,7 +7,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.subsystems.constants.ClimberConstants;
-import frc.robot.util.LoggedTunablePID;
+import frc.robot.util.LoggedTunableGains;
 
 public class ClimberSparks implements ClimberIO {
   public SparkFlex motor = new SparkFlex(ClimberConstants.kCANId, MotorType.kBrushless);
@@ -32,7 +32,7 @@ public class ClimberSparks implements ClimberIO {
   }
 
   @Override
-  public void setPID(LoggedTunablePID pid) {
+  public void setPID(LoggedTunableGains pid) {
     motor.configureAsync(
         ClimberConstants.createSparkConfig(),
         ResetMode.kNoResetSafeParameters,
