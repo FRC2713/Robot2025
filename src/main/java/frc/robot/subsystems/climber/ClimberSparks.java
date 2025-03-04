@@ -74,4 +74,10 @@ public class ClimberSparks implements ClimberIO {
         .setReference(
             Units.degreesToRotations(angle), ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
+
+  @Override
+  public void setVoltage(double volts) {
+    leftMotor.setVoltage(volts);
+    rightMotor.setVoltage(volts);
+  }
 }

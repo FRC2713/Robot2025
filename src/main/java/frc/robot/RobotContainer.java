@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.PivotCmds;
+import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
@@ -55,7 +55,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
-// import frc.robot.subsystems.elevator.ElevatorIOKrakens;
+import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
@@ -108,7 +108,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
-        elevator = new Elevator(new ElevatorIO() {});
+        elevator = new Elevator(new ElevatorIOKrakens());
         pivot = new Pivot(new PivotIOKrakens());
         rollers = new Rollers(new RollersIOSparks());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
@@ -419,12 +419,36 @@ public class RobotContainer {
 
     driver.a().onTrue(ClimberCmds.setAngle(90)).onFalse(ClimberCmds.setAngle(-90));
 
-    operator.a().onTrue(PivotCmds.setAngle(90)).onFalse(PivotCmds.setAngle(35));
+    operator.a().onTrue(ElevatorCmds.setHeight(20)).onFalse(ElevatorCmds.setHeight(5));
     // operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
     operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
     operator.y().onTrue(SuperStructure.L3_PREP.getCommand());
     operator.rightBumper().onTrue(SuperStructure.L4_PREP.getCommand());
 
+    operator.povUp().onTrue(Commands.sequence(SuperStructure.CLIMB_PREP.getCommand()));
+    // Commands.runOnce(
+    //     () -> {
+    // System.out.println("Entering Climber Mode");
+    operator
+        .leftTrigger(0.1)
+        .whileTrue(
+            Commands.repeatingSequence(
+                ClimberCmds.setVoltage(
+                    () ->
+                        operator.getLeftTriggerAxis()
+                            * SSConstants.Climber.IMP_TO_VOLTS.getAsDouble())))
+        .onFalse(ClimberCmds.setVoltage(() -> 0));
+    operator
+        .rightTrigger(0.1)
+        .whileTrue(
+            Commands.repeatingSequence(
+                ClimberCmds.setVoltage(
+                    () ->
+                        -1
+                            * operator.getRightTriggerAxis()
+                            * SSConstants.Climber.IMP_TO_VOLTS.getAsDouble())))
+        .onFalse(ClimberCmds.setVoltage(() -> 0));
+    // })));
     operator.povDown().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
 
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());

@@ -57,4 +57,8 @@ public class Climber extends SubsystemBase {
   public void setServoPos(double pos) {
     IO.setServoPos(pos);
   }
+
+  public void setVoltage(double volts) {
+    IO.setVoltage(volts);
+  }
 }

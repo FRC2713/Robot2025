@@ -1,8 +1,10 @@
 package frc.robot.subsystems.constants;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import edu.wpi.first.math.util.Units;
 import frc.robot.util.ControlGains;
 import frc.robot.util.LoggedTunableGains;
 
@@ -34,6 +36,12 @@ public class ClimberConstants {
   public static final double kMinAngle = -95;
   public static final double kMaxAngle = 95;
   public static final double kMass = 1;
+  public static final SoftLimitConfig softLimits =
+      new SoftLimitConfig()
+          .forwardSoftLimitEnabled(true)
+          .forwardSoftLimit(Units.degreesToRotations(kMaxAngle))
+          .reverseSoftLimitEnabled(true)
+          .reverseSoftLimit(Units.degreesToRotations(kMinAngle));
 
   public static SparkFlexConfig createLeftSparkConfig() {
     SparkFlexConfig config = new SparkFlexConfig();
@@ -43,7 +51,7 @@ public class ClimberConstants {
     config.idleMode(IdleMode.kBrake);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-    // config.limitSwitch.reverseLimitSwitchEnabled(true).reverseLimitSwitchType(Type.kNormallyOpen);
+    config.softLimit.apply(softLimits);
     config.smartCurrentLimit(currentLimitAmps);
     Gains.toControlGains().applyPID(config.closedLoop);
 
@@ -58,7 +66,7 @@ public class ClimberConstants {
     config.idleMode(IdleMode.kBrake);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-    // config.limitSwitch.reverseLimitSwitchEnabled(true).reverseLimitSwitchType(Type.kNormallyOpen);
+    config.softLimit.apply(softLimits);
     config.smartCurrentLimit(currentLimitAmps);
     Gains.toControlGains().applyPID(config.closedLoop);
 

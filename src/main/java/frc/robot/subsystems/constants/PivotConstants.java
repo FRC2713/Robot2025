@@ -39,19 +39,20 @@ public class PivotConstants {
   public static final int kStatorCurrentLimit = 100; // also amps
   public static final double kMaxAngularVelocity = 5; // RPM
 
-  public static final double kP = RHRUtil.modeDependentDouble(180., 10); // output/rotation
+  public static final double kP = RHRUtil.modeDependentDouble(700., 10); // output/rotation
   public static final double kI = 0.0; // Integral of kP
-  public static final double kD = RHRUtil.modeDependentDouble(20, 0); // output/error in velocity
+  public static final double kD = RHRUtil.modeDependentDouble(70, 0); // output/error in velocity
 
-  public static final double kG = RHRUtil.modeDependentDouble(8., 0.381);
-  public static final double kV = 0.0; // kV * rev/s = volts
+  public static final double kG = RHRUtil.modeDependentDouble(8.5, 0.381);
+  public static final double kV = RHRUtil.modeDependentDouble(9.31, 0); // kV * rev/s = volts
   public static final double kA = 0.0;
-  public static final double kS = RHRUtil.modeDependentDouble(10., 0.); // Volts
+  public static final double kS = RHRUtil.modeDependentDouble(0.1, 0.); // Volts
 
-  public static final double kTrapezoidalMaxVelocity = .05;
+  // Theoretical Max: 1.333
+  public static final double kTrapezoidalMaxVelocity = .4;
   public static final double kTrapezoidalMaxAcceleration = 60;
   public static final double kTrapezoidalMaxJerk = 300;
-  public static final double kExponential_kV = 6.4;
+  public static final double kExponential_kV = 9.31;
   public static final double kExponential_kA = 0.1;
 
   public static final LoggedTunableGains Gains =

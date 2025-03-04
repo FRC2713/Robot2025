@@ -29,13 +29,19 @@ public class ClimberIOSim implements ClimberIO {
 
   private ArmFeedforward feedforward = ClimberConstants.Gains.createArmFF();
   private double targetAngleDeg = ClimberConstants.kInitialAngle;
+  private double volts = -1;
 
   @Override
   public void updateInputs(ClimberInputs inputs) {
-    double pidOutput = pid.calculate(sim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
-    double feedforwardOutput =
-        feedforward.calculate(sim.getAngleRads(), sim.getVelocityRadPerSec());
-    double output = DriverStation.isEnabled() ? pidOutput + feedforwardOutput : 0;
+    double output = 0;
+    if (volts == -1) {
+      double pidOutput = pid.calculate(sim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
+      double feedforwardOutput =
+          feedforward.calculate(sim.getAngleRads(), sim.getVelocityRadPerSec());
+      output = DriverStation.isEnabled() ? pidOutput + feedforwardOutput : 0;
+    } else {
+      output = volts;
+    }
 
     sim.setInputVoltage(output);
     sim.update(0.02);
@@ -53,7 +59,7 @@ public class ClimberIOSim implements ClimberIO {
 
   @Override
   public void setVoltage(double volts) {
-    sim.setInputVoltage(volts);
+    this.volts = volts;
   }
 
   @Override

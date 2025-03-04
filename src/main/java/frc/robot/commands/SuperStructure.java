@@ -112,7 +112,11 @@ public enum SuperStructure {
               PROCESSOR_PREP.getCommand(),
               AlgaeClawCmds.setSpeedAndWaitForNoAlgae(
                   SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))),
-  ;
+  CLIMB_PREP(
+      () ->
+          Commands.sequence(
+              ShoulderCmds.setAngle(SSConstants.Shoulder.CLIMB_ANGLE_DEGS),
+              PivotCmds.setAngle(SSConstants.Pivot.CLIMB_ANGLE_DEGS)));
 
   private Supplier<Command> cmd;
 
