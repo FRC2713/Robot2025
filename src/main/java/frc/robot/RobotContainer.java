@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
@@ -42,6 +43,7 @@ import frc.robot.subsystems.algaeClaw.AlgaeClawIOSparks;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
+import frc.robot.subsystems.climber.ClimberSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
@@ -53,7 +55,6 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 // import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
@@ -107,12 +108,12 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
-        elevator = new Elevator(new ElevatorIOKrakens());
+        elevator = new Elevator(new ElevatorIO() {});
         pivot = new Pivot(new PivotIOKrakens());
         rollers = new Rollers(new RollersIOSparks());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
         shoulder = new Shoulder(new ShoulderIOKrakens());
-        climber = new Climber(new ClimberIO() {});
+        climber = new Climber(new ClimberSparks());
         break;
 
       case SIM:
@@ -418,7 +419,8 @@ public class RobotContainer {
 
     driver.a().onTrue(ClimberCmds.setAngle(90)).onFalse(ClimberCmds.setAngle(-90));
 
-    operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
+    operator.a().onTrue(PivotCmds.setAngle(90)).onFalse(PivotCmds.setAngle(35));
+    // operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
     operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
     operator.y().onTrue(SuperStructure.L3_PREP.getCommand());
     operator.rightBumper().onTrue(SuperStructure.L4_PREP.getCommand());

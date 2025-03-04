@@ -53,4 +53,8 @@ public class Climber extends SubsystemBase {
   public double getCurrentAngle() {
     return (this.inputs.leftAngleDegrees + this.inputs.rightAngleDegrees) / 2;
   }
+
+  public void setServoPos(double pos) {
+    IO.setServoPos(pos);
+  }
 }

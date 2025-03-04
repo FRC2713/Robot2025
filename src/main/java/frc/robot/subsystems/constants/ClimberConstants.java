@@ -8,7 +8,7 @@ import frc.robot.util.LoggedTunableGains;
 
 public class ClimberConstants {
   public static final int kLeftCANId = 5;
-  public static final int kRightCANId = 99;
+  public static final int kRightCANId = 6;
   public static final double kLength = 0.1;
   public static final double kInitialAngle = -90;
 
@@ -28,8 +28,8 @@ public class ClimberConstants {
 
   public static final double AT_TARGET_GIVE_DEGS = 2;
   public static final boolean kLeftMotorInverted = false;
-  public static final boolean kRightMotorInverted = false;
-  public static final double kGearing = 1;
+  public static final boolean kRightMotorInverted = true;
+  public static final double kGearing = 1. / (25 * (60 / 40) * (36 / 12));
   public static final int currentLimitAmps = 200;
   public static final double kMinAngle = -95;
   public static final double kMaxAngle = 95;

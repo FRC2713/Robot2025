@@ -2,7 +2,7 @@ package frc.robot.subsystems.shoulder;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -18,7 +18,8 @@ public class ShoulderIOKrakens implements ShoulderIO {
   private final TalonFX motor;
   private final CANcoder encoder;
   private double targetDegrees;
-  private final MotionMagicTorqueCurrentFOC angleRequest = new MotionMagicTorqueCurrentFOC(0);
+  private final MotionMagicExpoTorqueCurrentFOC angleRequest =
+      new MotionMagicExpoTorqueCurrentFOC(0);
   private TalonFXConfiguration motorConfig;
   private CANcoderConfiguration encoderConfig;
 
@@ -40,7 +41,6 @@ public class ShoulderIOKrakens implements ShoulderIO {
     config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     config.Feedback.SensorToMechanismRatio = 1.0;
     config.Feedback.RotorToSensorRatio = ShoulderConstants.kGearing;
-    config.Feedback.RotorToSensorRatio = 1;
     config.TorqueCurrent.PeakForwardTorqueCurrent = ShoulderConstants.kStallCurrentLimit;
     config.TorqueCurrent.PeakReverseTorqueCurrent = -ShoulderConstants.kStallCurrentLimit;
     config.CurrentLimits.StatorCurrentLimit = ShoulderConstants.kStatorCurrentLimit;
@@ -54,9 +54,11 @@ public class ShoulderIOKrakens implements ShoulderIO {
     config.MotionMagic = ShoulderConstants.Gains.getMotionMagicConfig();
     config.ClosedLoopGeneral.ContinuousWrap = false;
     config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ShoulderConstants.kMaxAngleRad;
+    config.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
+        Units.degreesToRotations(ShoulderConstants.kMaxAngle);
     config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-    config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = ShoulderConstants.kMinAngleRad;
+    config.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
+        Units.degreesToRotations(ShoulderConstants.kMinAngle);
 
     return config;
   }
@@ -64,6 +66,7 @@ public class ShoulderIOKrakens implements ShoulderIO {
   public static CANcoderConfiguration createCANcoderConfiguration() {
     var config = new CANcoderConfiguration();
     config.MagnetSensor.MagnetOffset = ShoulderConstants.kAbsoluteEncoderOffset;
+    config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1 / 3;
 
     return config;
   }

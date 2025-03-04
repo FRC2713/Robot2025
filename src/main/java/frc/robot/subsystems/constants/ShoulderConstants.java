@@ -14,13 +14,13 @@ public class ShoulderConstants {
   public static final int kEncoderCANId = 18;
   public static final boolean kInverted = false;
 
-  public static final double kGearing = (36.0 / 12.0) * 60;
+  public static final double kGearing = 180;
   public static final double kLength = Units.inchesToMeters(18);
   public static final double kMass = 7.094328; // kg
   public static final double kHeight = Units.inchesToMeters(24);
 
-  public static final double kMinAngleRad = Units.degreesToRadians(-280);
-  public static final double kMaxAngleRad = Units.degreesToRadians(100);
+  public static final double kMinAngle = (-280);
+  public static final double kMaxAngle = (280);
 
   public static final double kInitialAngleRad = Units.degreesToRadians(-90);
 
@@ -40,20 +40,20 @@ public class ShoulderConstants {
   public static final int kStatorCurrentLimit = 100; // also amps
   public static final double kMaxAngularVelocity = 5; // RPM
 
-  public static final double kP = RHRUtil.modeDependentDouble(0., 10); // output/rotation
+  public static final double kP = RHRUtil.modeDependentDouble(400., 10); // output/rotation
   public static final double kI = 0.0; // Integral of kP
-  public static final double kD = RHRUtil.modeDependentDouble(0., 0); // output/error in velocity
+  public static final double kD = RHRUtil.modeDependentDouble(80., 0); // output/error in velocity
 
-  public static final double kG = RHRUtil.modeDependentDouble(0., 0.381);
-  public static final double kV = 0.0; // kV * rev/s = volts
-  public static final double kA = 0.0;
-  public static final double kS = RHRUtil.modeDependentDouble(0, 0.); // Volts
+  public static final double kG = RHRUtil.modeDependentDouble(3., 0.381);
+  public static final double kV = RHRUtil.modeDependentDouble(22.34, 0); // kV * rev/s = volts
+  public static final double kA = RHRUtil.modeDependentDouble(0.08, 0);
+  public static final double kS = RHRUtil.modeDependentDouble(0., 0.); // Volts
 
-  public static final double kTrapezoidalMaxVelocity = .1;
+  public static final double kTrapezoidalMaxVelocity = .5;
   public static final double kTrapezoidalMaxAcceleration = 1;
   public static final double kTrapezoidalMaxJerk = 10;
-  public static final double kExponential_kV = 6.4;
-  public static final double kExponential_kA = 0.1;
+  public static final double kExponential_kV = 22.34;
+  public static final double kExponential_kA = 0.8;
 
   public static final LoggedTunableGains Gains =
       new LoggedTunableGains(
