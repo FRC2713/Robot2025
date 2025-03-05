@@ -100,6 +100,6 @@ public class SSConstants {
 
   public class Climber {
     public static final LoggedTunableNumber IMP_TO_VOLTS =
-        new LoggedTunableNumber("Climber/SS/Inputs to Volts", 1);
+        new LoggedTunableNumber("Climber/SS/Inputs to Volts", 10);
   }
 }

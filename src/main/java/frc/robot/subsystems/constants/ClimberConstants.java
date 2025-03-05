@@ -34,7 +34,7 @@ public class ClimberConstants {
   public static final double kGearing = 1. / (25 * (60 / 40) * (36 / 12));
   public static final int currentLimitAmps = 200;
   public static final double kMinAngle = -95;
-  public static final double kMaxAngle = 95;
+  public static final double kMaxAngle = 200;
   public static final double kMass = 1;
   public static final SoftLimitConfig softLimits =
       new SoftLimitConfig()

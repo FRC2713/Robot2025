@@ -419,7 +419,7 @@ public class RobotContainer {
 
     driver.a().onTrue(ClimberCmds.setAngle(90)).onFalse(ClimberCmds.setAngle(-90));
 
-    operator.a().onTrue(ElevatorCmds.setHeight(20)).onFalse(ElevatorCmds.setHeight(5));
+    operator.a().onTrue(ElevatorCmds.setHeight(20)).onFalse(ElevatorCmds.setHeight(2));
     // operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
     operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
     operator.y().onTrue(SuperStructure.L3_PREP.getCommand());
