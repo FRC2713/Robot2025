@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.subsystems.constants.ClimberConstants;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 
@@ -99,7 +100,17 @@ public class SSConstants {
   }
 
   public class Climber {
-    public static final LoggedTunableNumber IMP_TO_VOLTS =
+    public static final LoggedTunableNumber INP_TO_VOLTS =
         new LoggedTunableNumber("Climber/SS/Inputs to Volts", 10);
+
+    public static final LoggedTunableNumber SERVO_POS_ON =
+        new LoggedTunableNumber("Climber/SS/Servo Pos On", 0.5);
+    public static final LoggedTunableNumber SERVO_POS_OFF =
+        new LoggedTunableNumber("Climber/SS/Servo Pos Off", 0.0);
+
+    public static final LoggedTunableNumber MIN_ANGLE_CLIMBING =
+        new LoggedTunableNumber("Climber/SS/Min Angle Climbing", 0.0);
+    public static final LoggedTunableNumber MAX_ANGLE_CLIMBING =
+        new LoggedTunableNumber("Climber/SS/Max Angle Climbing", ClimberConstants.kMaxAngle);
   }
 }

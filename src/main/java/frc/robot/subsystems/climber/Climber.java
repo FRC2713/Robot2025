@@ -61,4 +61,8 @@ public class Climber extends SubsystemBase {
   public void setVoltage(double volts) {
     IO.setVoltage(volts);
   }
+
+  public void configureSoftLimits(double minDeg, double maxDeg) {
+    IO.configureSoftLimits(minDeg, maxDeg);
+  }
 }

@@ -13,6 +13,16 @@ public class ClimberCmds {
     return setAngle(() -> targetAngle);
   }
 
+  public static Command configureSoftLimits(DoubleSupplier minDeg, DoubleSupplier maxDeg) {
+    return new InstantCommand(
+        () ->
+            RobotContainer.climber.configureSoftLimits(minDeg.getAsDouble(), maxDeg.getAsDouble()));
+  }
+
+  public static Command setServoPos(DoubleSupplier pos) {
+    return new InstantCommand(() -> RobotContainer.climber.setServoPos(pos.getAsDouble()));
+  }
+
   public static Command setVoltage(DoubleSupplier volts) {
     return new InstantCommand(
         () -> {

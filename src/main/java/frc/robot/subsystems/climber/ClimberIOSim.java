@@ -31,6 +31,8 @@ public class ClimberIOSim implements ClimberIO {
   private double targetAngleDeg = ClimberConstants.kInitialAngle;
   private double volts = -1;
 
+  private double servoPos;
+
   @Override
   public void updateInputs(ClimberInputs inputs) {
     double output = 0;
@@ -54,6 +56,8 @@ public class ClimberIOSim implements ClimberIO {
     inputs.rightVelocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
     inputs.rightVoltage = output;
 
+    inputs.servoCommandedPos = servoPos;
+
     inputs.commandedAngleDegs = targetAngleDeg;
   }
 
@@ -71,5 +75,10 @@ public class ClimberIOSim implements ClimberIO {
   public void setPID(LoggedTunableGains pid) {
     this.pid = pid.createPIDController();
     feedforward = pid.createArmFF();
+  }
+
+  @Override
+  public void setServoPos(double pos) {
+    servoPos = pos;
   }
 }

@@ -6,22 +6,32 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
+import frc.robot.SSConstants;
+import java.util.function.DoubleSupplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveClimber extends Command {
+  private final DoubleSupplier input;
+  private DoubleSupplier servoPos;
+
   /** Creates a new MoveClimber. */
-  public MoveClimber() {
+  public MoveClimber(DoubleSupplier input, DoubleSupplier servoPos) {
+    this.input = input;
+    this.servoPos = servoPos;
     addRequirements(RobotContainer.climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    RobotContainer.climber.setServoPos(servoPos.getAsDouble());
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.climber.setVoltage(0);
+    RobotContainer.climber.setVoltage(
+        input.getAsDouble() * SSConstants.Climber.INP_TO_VOLTS.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

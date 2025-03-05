@@ -116,7 +116,8 @@ public enum SuperStructure {
       () ->
           Commands.sequence(
               ShoulderCmds.setAngle(SSConstants.Shoulder.CLIMB_ANGLE_DEGS),
-              PivotCmds.setAngle(SSConstants.Pivot.CLIMB_ANGLE_DEGS)));
+              PivotCmds.setAngle(SSConstants.Pivot.CLIMB_ANGLE_DEGS))),
+  ;
 
   private Supplier<Command> cmd;
 
