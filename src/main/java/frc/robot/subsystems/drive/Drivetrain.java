@@ -33,6 +33,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -41,6 +42,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants.AutoConstants;
@@ -433,5 +435,24 @@ public class Drivetrain extends SubsystemBase {
       new Translation2d(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
       new Translation2d(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
     };
+  }
+
+  public double getAngleToReef() {
+    double RobotX = this.getPose().getX();
+    double RobotY = this.getPose().getY();
+    double ReefX = FieldConstants.Reef.center.getX();
+    double ReefY = FieldConstants.Reef.center.getY();
+
+    // double output = (((1 / 2) * Math.PI) - Math.atan2(RobotX - ReefX, RobotY - ReefY));
+    double output =
+        Math.IEEEremainder(
+            (90 - Units.radiansToDegrees(Math.atan2(RobotX - ReefX, RobotY - ReefY) + Math.PI)),
+            360);
+
+    Pose2d[] toLog = {new Pose2d(FieldConstants.Reef.center, new Rotation2d()), this.getPose()};
+    Logger.recordOutput("ReefRotation/poses", toLog);
+
+    Logger.recordOutput("ReefRotation/Angle", output);
+    return output;
   }
 }

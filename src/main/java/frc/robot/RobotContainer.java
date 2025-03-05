@@ -396,6 +396,26 @@ public class RobotContainer {
                 "Full Control"));
 
     driver
+        .x()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(RobotContainer.driveSubsystem.getAngleToReef())),
+                "Heading Controller"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
+    driver
         .povRight()
         .onTrue(
             DriveCommands.changeDefaultDriveCommand(
@@ -415,7 +435,6 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Full Control"));
-
     driver.a().onTrue(ClimberCmds.setAngle(90)).onFalse(ClimberCmds.setAngle(-90));
 
     operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
