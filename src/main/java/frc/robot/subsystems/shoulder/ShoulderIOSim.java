@@ -17,8 +17,8 @@ public class ShoulderIOSim implements ShoulderIO {
           ShoulderConstants.kGearing,
           SingleJointedArmSim.estimateMOI(ShoulderConstants.kLength, ShoulderConstants.kMass),
           ShoulderConstants.kLength,
-          ShoulderConstants.kMinAngleRad,
-          ShoulderConstants.kMaxAngleRad,
+          Units.degreesToRadians(ShoulderConstants.kMinAngle),
+          Units.degreesToRadians(ShoulderConstants.kMaxAngle),
           true,
           ShoulderConstants.kInitialAngleRad);
 

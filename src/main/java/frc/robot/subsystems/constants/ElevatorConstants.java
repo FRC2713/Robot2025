@@ -21,7 +21,7 @@ public class ElevatorConstants {
 
   public static final int kMaxCurrentLimit = 40;
 
-  public static final double kGearReduction = 5.0;
+  public static final double kGearReduction = 9.0;
   public static final double kCarriageMass = Units.lbsToKilograms(0.249377); // kg
   public static final double kDrumRadius = 1.0;
   public static final double kAcceptablePositionErrorInches = 2; // inches
@@ -29,7 +29,7 @@ public class ElevatorConstants {
   public static final double kRotationsToHeightConversion = (Math.PI * kDrumRadius * 2);
 
   public static final double kMinHeight = 0.0; // inches
-  public static final double kMaxHeight = 26.0; // inches
+  public static final double kMaxHeight = 25.0; // inches
   public static final double kInitialHeight = 0;
 
   public static double toInches(double rotations) {
@@ -52,19 +52,21 @@ public class ElevatorConstants {
           "Elevator",
           new ControlGains()
               // PID
-              .p(RHRUtil.modeDependentDouble(25., 0.1))
+              .p(RHRUtil.modeDependentDouble(100., 0.1))
               .i(0.0)
-              .d(RHRUtil.modeDependentDouble(1, 0.01))
+              .d(RHRUtil.modeDependentDouble(10, 0.01))
               // FF
-              .g(RHRUtil.modeDependentDouble(12, 0.0785))
-              .v(0.0)
+              .g(RHRUtil.modeDependentDouble(14, 0.0785))
+              .v(RHRUtil.modeDependentDouble(100.0 / 9, 0))
+              .s(RHRUtil.modeDependentDouble(1, 0))
+              .v(RHRUtil.modeDependentDouble(0.6328, 0))
               .a(0.0)
               // Motion Magic
               .trapezoidal(
-                  RHRUtil.modeDependentDouble(0.5, 0.1),
+                  RHRUtil.modeDependentDouble(4, 0.1),
                   RHRUtil.modeDependentDouble(0.5, 0.1),
                   RHRUtil.modeDependentDouble(0.5, 0.1))
-              .exponential(6.4, 0.1));
+              .exponential(0.6328, 0.1));
 
   public static final double mech2dWidth = Units.inchesToMeters(1);
   public static final Color8Bit mech2dColor = new Color8Bit(255, 0, 0);

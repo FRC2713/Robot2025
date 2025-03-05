@@ -7,10 +7,14 @@ public interface ClimberIO {
 
   @AutoLog
   public static class ClimberInputs {
-    public double velocityDPS = 0.0;
-    public double voltage = 0.0;
-    public double angleDegrees = 0.0;
-    public double amps = 0.0;
+    public double leftVelocityDPS = 0.0;
+    public double rightVelocityDPS = 0.0;
+    public double leftVoltage = 0.0;
+    public double rightVoltage = 0.0;
+    public double leftAngleDegrees = 0.0;
+    public double rightAngleDegrees = 0.0;
+    public double leftAmps = 0.0;
+    public double rightAmps = 0.0;
 
     public double commandedAngleDegs = 0.0;
   }

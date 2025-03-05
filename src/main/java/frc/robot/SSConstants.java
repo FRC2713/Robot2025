@@ -15,7 +15,7 @@ public class SSConstants {
         new LoggedTunableNumber("Elevator/SS/L2 Height", 0);
 
     public static final LoggedTunableNumber L3_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/L3 Height", 0);
+        new LoggedTunableNumber("Elevator/SS/L3 Height", 5);
 
     public static final LoggedTunableNumber L4_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L4 Height", 20);
@@ -38,13 +38,16 @@ public class SSConstants {
         new LoggedTunableNumber("Shoulder/SS/L2 Angle", -150);
 
     public static final LoggedTunableNumber L3_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L3 Angle", -200);
+        new LoggedTunableNumber("Shoulder/SS/L3 Angle", -150);
 
     public static final LoggedTunableNumber L4_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/L4 Prep Angle", -250 + 360);
 
     public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/Proc Score Angle", -30);
+
+    public static final LoggedTunableNumber CLIMB_ANGLE_DEGS =
+        new LoggedTunableNumber("Shoulder/SS/Climb Angle", -150);
   }
 
   public class Pivot {
@@ -62,6 +65,9 @@ public class SSConstants {
 
     public static final LoggedTunableNumber L4_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/L4 Angle", 45);
+
+    public static final LoggedTunableNumber CLIMB_ANGLE_DEGS =
+        new LoggedTunableNumber("Pivot/SS/Climb Angle", 90);
 
     public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Proc Score Angle", -180);
@@ -90,5 +96,10 @@ public class SSConstants {
 
     public static final DoubleSupplier ALGAE_DETECTED_CURRENT_LIMIT =
         new LoggedTunableNumber("AlgaeClaw/SS/Algae Detected Current Limit", 30);
+  }
+
+  public class Climber {
+    public static final LoggedTunableNumber IMP_TO_VOLTS =
+        new LoggedTunableNumber("Climber/SS/Inputs to Volts", 10);
   }
 }

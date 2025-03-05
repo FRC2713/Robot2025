@@ -13,6 +13,13 @@ public class ClimberCmds {
     return setAngle(() -> targetAngle);
   }
 
+  public static Command setVoltage(DoubleSupplier volts) {
+    return new InstantCommand(
+        () -> {
+          RobotContainer.climber.setVoltage(volts.getAsDouble());
+        });
+  }
+
   public static Command setAngle(DoubleSupplier targetAngle) {
     return new InstantCommand(
         () -> RobotContainer.climber.setTargetAngle(targetAngle.getAsDouble()));

@@ -83,8 +83,8 @@ public enum SuperStructure {
                   PivotCmds.setAngleAndWait(() -> 35),
                   Commands.none(),
                   () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_HEIGHT_IN),
               Commands.parallel(
+                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_HEIGHT_IN),
                   PivotCmds.setAngle(SSConstants.Pivot.L4_ANGLE_DEG),
                   ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L4_ANGLE_DEG)),
               PivotCmds.waitUntilAtTarget())),
@@ -112,7 +112,11 @@ public enum SuperStructure {
               PROCESSOR_PREP.getCommand(),
               AlgaeClawCmds.setSpeedAndWaitForNoAlgae(
                   SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))),
-  ;
+  CLIMB_PREP(
+      () ->
+          Commands.sequence(
+              ShoulderCmds.setAngle(SSConstants.Shoulder.CLIMB_ANGLE_DEGS),
+              PivotCmds.setAngle(SSConstants.Pivot.CLIMB_ANGLE_DEGS)));
 
   private Supplier<Command> cmd;
 

@@ -12,7 +12,7 @@ import frc.robot.util.LoggedTunableGains;
 public class ClimberIOSim implements ClimberIO {
   private static final SingleJointedArmSim sim =
       new SingleJointedArmSim(
-          DCMotor.getKrakenX60Foc(1),
+          DCMotor.getNeoVortex(2),
           ClimberConstants.kGearing,
           SingleJointedArmSim.estimateMOI(ClimberConstants.kLength, ClimberConstants.kMass),
           ClimberConstants.kLength,
@@ -29,26 +29,37 @@ public class ClimberIOSim implements ClimberIO {
 
   private ArmFeedforward feedforward = ClimberConstants.Gains.createArmFF();
   private double targetAngleDeg = ClimberConstants.kInitialAngle;
+  private double volts = -1;
 
   @Override
   public void updateInputs(ClimberInputs inputs) {
-    double pidOutput = pid.calculate(sim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
-    double feedforwardOutput =
-        feedforward.calculate(sim.getAngleRads(), sim.getVelocityRadPerSec());
-    double output = DriverStation.isEnabled() ? pidOutput + feedforwardOutput : 0;
+    double output = 0;
+    if (volts == -1) {
+      double pidOutput = pid.calculate(sim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
+      double feedforwardOutput =
+          feedforward.calculate(sim.getAngleRads(), sim.getVelocityRadPerSec());
+      output = DriverStation.isEnabled() ? pidOutput + feedforwardOutput : 0;
+    } else {
+      output = volts;
+    }
 
     sim.setInputVoltage(output);
     sim.update(0.02);
 
-    inputs.angleDegrees = Units.radiansToDegrees(sim.getAngleRads());
-    inputs.velocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
-    inputs.voltage = output;
+    inputs.leftAngleDegrees = Units.radiansToDegrees(sim.getAngleRads());
+    inputs.leftVelocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
+    inputs.leftVoltage = output;
+
+    inputs.rightAngleDegrees = Units.radiansToDegrees(sim.getAngleRads());
+    inputs.rightVelocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
+    inputs.rightVoltage = output;
+
     inputs.commandedAngleDegs = targetAngleDeg;
   }
 
   @Override
   public void setVoltage(double volts) {
-    sim.setInputVoltage(volts);
+    this.volts = volts;
   }
 
   @Override
