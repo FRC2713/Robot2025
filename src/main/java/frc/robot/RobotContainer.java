@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
@@ -439,8 +438,7 @@ public class RobotContainer {
                 "Full Control"));
     driver.a().onTrue(ClimberCmds.setAngle(90)).onFalse(ClimberCmds.setAngle(-90));
 
-    operator.a().onTrue(ElevatorCmds.setHeight(20)).onFalse(ElevatorCmds.setHeight(2));
-    // operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
+    operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
     operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
     operator.y().onTrue(SuperStructure.L3_PREP.getCommand());
     operator.rightBumper().onTrue(SuperStructure.L4_PREP.getCommand());
