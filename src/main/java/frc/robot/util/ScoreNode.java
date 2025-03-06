@@ -9,12 +9,10 @@ import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.subsystems.constants.DriveConstants;
 
 public enum ScoreNode {
-  // TODO: Ensure these represent the correct poses
   // indexes start at right branch facing driver station and move counterclockwise, which means that
   // B is zero
   A(FieldConstants.Reef.branchPositions2d.get(1).get(ReefLevel.L2)),
   B(FieldConstants.Reef.branchPositions2d.get(0).get(ReefLevel.L2)),
-
   C(FieldConstants.Reef.branchPositions2d.get(11).get(ReefLevel.L2)),
   D(FieldConstants.Reef.branchPositions2d.get(10).get(ReefLevel.L2)),
 

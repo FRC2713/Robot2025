@@ -100,6 +100,7 @@ public class Robot extends LoggedRobot {
             .append(RobotContainer.pivot.mech2d)
             .append(RobotContainer.rollers.mech2d)
             .append(RobotContainer.algaeClaw.mech2d);
+    mech2d.getRoot("climber", 2, Units.inchesToMeters(10)).append(RobotContainer.climber.mech2d);
     SmartDashboard.putData("Mech2d", mech2d);
   }
 
@@ -130,6 +131,7 @@ public class Robot extends LoggedRobot {
     RobotContainer.rollers.updateMech2D();
     RobotContainer.algaeClaw.updateMech2D();
     RobotContainer.shoulder.updateMech2D();
+    RobotContainer.climber.updateMech2D();
 
     // Record the pose of each subsystem
     // order matters here.

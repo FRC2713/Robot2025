@@ -1,6 +1,6 @@
 package frc.robot.subsystems.pivot;
 
-import frc.robot.util.LoggedTunablePID;
+import frc.robot.util.LoggedTunableGains;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface PivotIO {
@@ -13,6 +13,7 @@ public interface PivotIO {
     public double commandedAngleDegs = 0.0;
     public double setpointVelocity = 0.0;
     public double absoluteAngleDegrees = 0.0;
+    public boolean isAtTarget = true;
   }
 
   public default void updateInputs(PivotInputs inputs) {}
@@ -24,7 +25,7 @@ public interface PivotIO {
   public default void setTargetAngle(double degrees) {}
   ;
 
-  public default void setPID(LoggedTunablePID pid) {}
+  public default void setPID(LoggedTunableGains pid) {}
   ;
 
   public default void setBus(double bus) {}

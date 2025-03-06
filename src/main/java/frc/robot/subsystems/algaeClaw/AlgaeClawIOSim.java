@@ -5,6 +5,7 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.subsystems.constants.AlgaeClawConstants;
+import frc.robot.util.LoggedTunableNumber;
 
 /** For the first implementation, the robot controls AlgaeClaw and Algae with a single NEO */
 public class AlgaeClawIOSim implements AlgaeClawIO {
@@ -17,7 +18,7 @@ public class AlgaeClawIOSim implements AlgaeClawIO {
           motor);
   private double commandedRPM;
 
-  private boolean hasAlgae = false;
+  private LoggedTunableNumber hasAlgae = new LoggedTunableNumber("AlgaeClaw/hasAlgae", 0);
 
   public void updateInputs(AlgaeClawInputs inputs) {
     sim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(commandedRPM));
@@ -29,7 +30,7 @@ public class AlgaeClawIOSim implements AlgaeClawIO {
     inputs.algaeClawPositionDegs = Units.radiansToDegrees(sim.getAngularPositionRad());
 
     inputs.commandedAlgaeClawRPM = commandedRPM;
-    inputs.hasAlgae = hasAlgae;
+    inputs.hasAlgae = hasAlgae.getAsDouble() >= 1;
   }
 
   @Override

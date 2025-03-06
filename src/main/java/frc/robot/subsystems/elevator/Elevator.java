@@ -30,27 +30,11 @@ public class Elevator extends SubsystemBase {
     this.IO.updateInputs(this.inputs);
   }
 
-  private boolean crossedLevelTwo = false;
-  private boolean crossedLevelOne = true;
-
   @Override
   public void periodic() {
-    if (ElevatorConstants.PID_LEVEL_ONE.hasChanged(hashCode())
-        || ElevatorConstants.PID_LEVEL_TWO.hasChanged(hashCode())) {
-      this.IO.setPID(ElevatorConstants.PID_LEVEL_ONE, ElevatorConstants.PID_LEVEL_TWO);
+    if (ElevatorConstants.Gains.hasChanged(hashCode())) {
+      this.IO.setPID(ElevatorConstants.Gains);
     }
-
-    if (getCurrentHeight() > ElevatorConstants.LEVEL_TWO_HEIGHT_IN && !crossedLevelTwo) {
-      this.IO.changeSlot(1);
-      crossedLevelTwo = true;
-      crossedLevelOne = false;
-    } else if (getCurrentHeight() <= ElevatorConstants.LEVEL_TWO_HEIGHT_IN && !crossedLevelOne) {
-      this.IO.changeSlot(0);
-      crossedLevelOne = true;
-      crossedLevelTwo = false;
-    }
-    Logger.recordOutput(
-        "Elevator/Stage", getCurrentHeight() > ElevatorConstants.LEVEL_TWO_HEIGHT_IN ? 2 : 1);
 
     this.IO.updateInputs(this.inputs);
     Logger.processInputs("Elevator", this.inputs);

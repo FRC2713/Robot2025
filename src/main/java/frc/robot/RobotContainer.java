@@ -25,17 +25,24 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AlgaeClawCmds;
+import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
+import frc.robot.commands.climber.MoveClimber;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSparks;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSim;
+import frc.robot.subsystems.climber.ClimberIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
@@ -77,9 +84,10 @@ public class RobotContainer {
   public static Pivot pivot;
   public static Rollers rollers;
   public static AlgaeClaw algaeClaw;
+  public static Climber climber;
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
-  private final CommandXboxController operator = new CommandXboxController(1);
+  private static final CommandXboxController operator = new CommandXboxController(1);
 
   // Dashboard inputs
   public final AutoChooser autoChooser;
@@ -112,6 +120,7 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIOSparks());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
         shoulder = new Shoulder(new ShoulderIOKrakens());
+        climber = new Climber(new ClimberIOSparks());
         break;
 
       case SIM:
@@ -127,6 +136,7 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIOSim());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSim());
         shoulder = new Shoulder(new ShoulderIOSim());
+        climber = new Climber(new ClimberIOSim() {});
         break;
 
       default:
@@ -143,10 +153,12 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIO() {});
         algaeClaw = new AlgaeClaw(new AlgaeClawIO() {});
         shoulder = new Shoulder(new ShoulderIO() {});
+        climber = new Climber(new ClimberIO() {});
         break;
     }
     visionsubsystem =
         new Vision(
+            // new VisionIO() {}
             VisionConstants.USE_WHEEL_ODOMETRY
                 ? new VisionIOOdometry()
                 : new VisionIOPoseEstimator());
@@ -221,23 +233,23 @@ public class RobotContainer {
         });
 
     // Uncomment for swerve drive characterization
-    // autoChooser.addCmd(
-    //     "Drive Simple FF Characterization",
-    //     () -> DriveCommands.feedforwardCharacterization(driveSubsystem));
-    // autoChooser.addCmd(
-    //     "Drive SysId (Quasistatic Forward)",
-    //     () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    // autoChooser.addCmd(
-    //     "Drive SysId (Quasistatic Backward)",
-    //     () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    // autoChooser.addCmd(
-    //     "Drive SysId (Dynamic Forward)",
-    //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    // autoChooser.addCmd(
-    //     "Drive SysId (Dynamic Backward)",
-    //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    // autoChooser.addCmd(
-    //     "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
+    autoChooser.addCmd(
+        "Drive Simple FF Characterization",
+        () -> DriveCommands.feedforwardCharacterization(driveSubsystem));
+    autoChooser.addCmd(
+        "Drive SysId (Quasistatic Forward)",
+        () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    autoChooser.addCmd(
+        "Drive SysId (Quasistatic Backward)",
+        () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addCmd(
+        "Drive SysId (Dynamic Forward)",
+        () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    autoChooser.addCmd(
+        "Drive SysId (Dynamic Backward)",
+        () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addCmd(
+        "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
 
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -287,25 +299,41 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Intake Coral
+    // driver
+    //     .leftBumper()
+    //     .whileTrue(PivotCmds.setAngle(() -> 90))
+    //     .whileFalse(PivotCmds.setAngle(() -> 35));
     driver
         .leftBumper()
-        .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
-        .onFalse(SuperStructure.STARTING_CONF.getCommand());
+        .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
+        .onFalse(RollerCmds.setSpeed(() -> 0));
 
     // Score Coral
-    driver.leftTrigger(0.25).whileTrue(RollerCmds.score(SSConstants.Roller.L3_CORAL_SCORE_SPEED));
-
-    // Intake Algae
     driver
-        .rightBumper()
-        .whileTrue(AlgaeClawCmds.intake(SSConstants.AlgaeClaw.L3_ALGAE_GRAB_SPEED))
+        .leftTrigger(0.25)
+        .onTrue(SuperStructure.CORAL_SCORE.getCommand())
         .onFalse(RollerCmds.setSpeed(() -> 0));
+
+    // Grab Algae
+    driver.rightBumper().onTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()));
+    // driver
+    //     .rightBumper()
+    //     .whileTrue(ShoulderCmds.setAngle(() -> -130))
+    //     .whileFalse(ShoulderCmds.setAngle(() -> -90));
 
     // Score Algae
     driver
         .rightTrigger(0.25)
-        .onTrue(AlgaeClawCmds.score(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
+        .onTrue(SuperStructure.PROCESSOR_SCORE.getCommand())
         .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
+
+    // Do both!
+    driver
+        .x()
+        .onTrue(SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand())
+        .onFalse(
+            Commands.sequence(
+                AlgaeClawCmds.setSpeedIfNoAlgae(() -> 0), RollerCmds.setSpeed(() -> 0)));
 
     // Heading controller
     driver
@@ -372,6 +400,26 @@ public class RobotContainer {
                 "Full Control"));
 
     driver
+        .x()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(RobotContainer.driveSubsystem.getAngleToReef())),
+                "Heading Controller"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
+    driver
         .povRight()
         .onTrue(
             DriveCommands.changeDefaultDriveCommand(
@@ -391,14 +439,38 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Full Control"));
+    driver.a().onTrue(ClimberCmds.setAngle(90)).onFalse(ClimberCmds.setAngle(-90));
 
-    operator.a().onTrue(SuperStructure.L1_CORAL_PREP.getCommand());
-    operator.b().onTrue(SuperStructure.L2_CORAL_PREP.getCommand());
-    operator.x().onTrue(SuperStructure.L3_CORAL_PREP.getCommand());
+    operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
+    operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
+    operator.y().onTrue(SuperStructure.L3_PREP.getCommand());
+    operator.rightBumper().onTrue(SuperStructure.L4_PREP.getCommand());
+    operator.x().onTrue(SuperStructure.BARGE.getCommand());
 
+    operator.povLeft().onTrue(SuperStructure.CLIMB.getCommand());
+    operator.povUp().onTrue(Commands.sequence(SuperStructure.CLIMB_PREP.getCommand()));
+    // Commands.runOnce(
+    //     () -> {
+    // System.out.println("Entering Climber Mode");
+    operator
+        .leftTrigger(0.1)
+        .whileTrue(new MoveClimber(operator::getLeftTriggerAxis, SSConstants.Climber.SERVO_POS_OFF))
+        .onFalse(ClimberCmds.setVoltage(() -> 0));
+    operator
+        .rightTrigger(0.1)
+        .whileTrue(
+            Commands.sequence(
+                Commands.either(
+                    ClimberCmds.configureSoftLimits(
+                        SSConstants.Climber.MIN_ANGLE_CLIMBING,
+                        SSConstants.Climber.MAX_ANGLE_CLIMBING),
+                    Commands.none(),
+                    () -> climber.getCurrentAngle() > 100),
+                new MoveClimber(
+                    () -> -1 * operator.getRightTriggerAxis(), SSConstants.Climber.SERVO_POS_ON)))
+        .onFalse(ClimberCmds.setVoltage(() -> 0));
+    // })));
     operator.povDown().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
-    operator.povRight().onTrue(SuperStructure.L1_ALGAE_GRAB.getCommand());
-    operator.povLeft().onTrue(SuperStructure.L3_ALGAE_GRAB.getCommand());
 
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());
 
@@ -415,5 +487,6 @@ public class RobotContainer {
     elevator.setTargetHeight(elevator.getCurrentHeight());
     pivot.setTargetAngle(pivot.getCurrentAngle());
     rollers.setRPM(0);
+    shoulder.setTargetAngle(shoulder.getCurrentAngle());
   }
 }

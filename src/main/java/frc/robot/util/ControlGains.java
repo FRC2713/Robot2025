@@ -24,7 +24,9 @@ public class ControlGains {
 
   @Getter private double kTrapezoidalMaxVelocity;
   @Getter private double kTrapezoidalMaxAcceleration;
-  @Getter private double kMMCruiseVelo;
+  @Getter private double kTrapezoidalMaxJerk;
+  @Getter private double kExponential_kV;
+  @Getter private double kExponential_kA;
 
   public ControlGains() {}
 
@@ -68,14 +70,41 @@ public class ControlGains {
     return this;
   }
 
-  public ControlGains trapezoidal(double kMaxVel, double kMaxAccel) {
+  public ControlGains trapezoidal(double kMaxVel, double kMaxAccel, double kMaxJerk) {
     this.kTrapezoidalMaxVelocity = kMaxVel;
     this.kTrapezoidalMaxAcceleration = kMaxAccel;
+    this.kTrapezoidalMaxJerk = kMaxJerk;
     return this;
   }
 
-  public ControlGains mmCruiseVelo(double velo) {
-    this.kMMCruiseVelo = velo;
+  public ControlGains maxTrapezoidalVelocity(double velo) {
+    this.kTrapezoidalMaxVelocity = velo;
+    return this;
+  }
+
+  public ControlGains maxTrapezoidalAcceleration(double accel) {
+    this.kTrapezoidalMaxAcceleration = accel;
+    return this;
+  }
+
+  public ControlGains maxTrapezoidalJerk(double jerk) {
+    this.kTrapezoidalMaxJerk = jerk;
+    return this;
+  }
+
+  public ControlGains exponential(double kV, double kA) {
+    this.kExponential_kV = kV;
+    this.kExponential_kA = kA;
+    return this;
+  }
+
+  public ControlGains expo_kV(double kV) {
+    this.kExponential_kV = kV;
+    return this;
+  }
+
+  public ControlGains expo_kA(double kA) {
+    this.kExponential_kA = kA;
     return this;
   }
 
@@ -106,9 +135,9 @@ public class ControlGains {
 
   public MotionMagicConfigs createMMConfigs() {
     var configs = new MotionMagicConfigs();
-    configs.MotionMagicCruiseVelocity = this.kMMCruiseVelo;
-    configs.MotionMagicExpo_kA = this.kA;
-    configs.MotionMagicExpo_kV = this.kV;
+    configs.MotionMagicCruiseVelocity = this.kTrapezoidalMaxVelocity;
+    configs.MotionMagicExpo_kA = this.kExponential_kA;
+    configs.MotionMagicExpo_kV = this.kExponential_kV;
 
     return configs;
   }

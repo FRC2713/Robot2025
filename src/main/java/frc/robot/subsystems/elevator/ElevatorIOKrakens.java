@@ -3,8 +3,10 @@ package frc.robot.subsystems.elevator;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.subsystems.constants.ElevatorConstants;
-import frc.robot.util.LoggedTunablePID;
+import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.PhoenixUtil;
 
 public class ElevatorIOKrakens implements ElevatorIO {
@@ -22,7 +24,7 @@ public class ElevatorIOKrakens implements ElevatorIO {
     left = new TalonFX(ElevatorConstants.kLeftCANId);
     right = new TalonFX(ElevatorConstants.kRightCANId);
 
-    leftConfig = ElevatorConstants.createKrakenConfig(false);
+    leftConfig = createKrakenConfig(false);
     PhoenixUtil.tryUntilOk(5, () -> left.getConfigurator().apply(leftConfig, 0.25));
     PhoenixUtil.tryUntilOk(
         5,
@@ -31,7 +33,7 @@ public class ElevatorIOKrakens implements ElevatorIO {
                 ElevatorConstants.kInitialHeight * ElevatorConstants.kRotationsToHeightConversion,
                 0.25));
 
-    rightConfig = ElevatorConstants.createKrakenConfig(true);
+    rightConfig = createKrakenConfig(true);
     PhoenixUtil.tryUntilOk(5, () -> right.getConfigurator().apply(rightConfig, 0.25));
     PhoenixUtil.tryUntilOk(
         5,
@@ -41,17 +43,43 @@ public class ElevatorIOKrakens implements ElevatorIO {
                 0.25));
   }
 
+  public TalonFXConfiguration createKrakenConfig(boolean inverted) {
+    var config = new TalonFXConfiguration();
+
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    config.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearReduction;
+    config.TorqueCurrent.PeakForwardTorqueCurrent = ElevatorConstants.kMaxCurrentLimit;
+    config.TorqueCurrent.PeakReverseTorqueCurrent = -ElevatorConstants.kMaxCurrentLimit;
+    config.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kMaxCurrentLimit;
+    config.CurrentLimits.StatorCurrentLimitEnable = true;
+    config.MotorOutput.Inverted =
+        (inverted) ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
+
+    // set slot 0 gains
+    config.Slot0 = ElevatorConstants.Gains.toTalonFX();
+
+    // set Motion Magic settings
+    config.MotionMagic = ElevatorConstants.Gains.getMotionMagicConfig();
+
+    config.ClosedLoopGeneral.ContinuousWrap = false;
+    config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+    config.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
+        ElevatorConstants.toRotations(ElevatorConstants.kMaxHeight);
+    config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    config.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
+        ElevatorConstants.toRotations(ElevatorConstants.kMinHeight);
+
+    return config;
+  }
+
   @Override
-  public void setPID(LoggedTunablePID slot0pid, LoggedTunablePID slot1pid) {
+  public void setPID(LoggedTunableGains slot0pid) {
     System.out.println("Updating elevator PID");
     leftConfig.Slot0 = slot0pid.toTalonFX();
     rightConfig.Slot0 = slot0pid.toTalonFX();
 
-    leftConfig.Slot1 = slot1pid.toTalonFXS1();
-    rightConfig.Slot1 = slot1pid.toTalonFXS1();
-
-    leftConfig.MotionMagic = slot0pid.toMotionMagic();
-    rightConfig.MotionMagic = slot0pid.toMotionMagic();
+    leftConfig.MotionMagic = slot0pid.getMotionMagicConfig();
+    rightConfig.MotionMagic = slot0pid.getMotionMagicConfig();
 
     PhoenixUtil.tryUntilOk(5, () -> left.getConfigurator().apply(leftConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> right.getConfigurator().apply(rightConfig, 0.25));

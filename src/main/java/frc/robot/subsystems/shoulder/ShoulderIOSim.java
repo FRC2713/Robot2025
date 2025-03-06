@@ -7,7 +7,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.subsystems.constants.ShoulderConstants;
-import frc.robot.util.LoggedTunablePID;
+import frc.robot.util.LoggedTunableGains;
 
 public class ShoulderIOSim implements ShoulderIO {
 
@@ -17,18 +17,18 @@ public class ShoulderIOSim implements ShoulderIO {
           ShoulderConstants.kGearing,
           SingleJointedArmSim.estimateMOI(ShoulderConstants.kLength, ShoulderConstants.kMass),
           ShoulderConstants.kLength,
-          ShoulderConstants.kMinAngleRad,
-          ShoulderConstants.kMaxAngleRad,
+          Units.degreesToRadians(ShoulderConstants.kMinAngle),
+          Units.degreesToRadians(ShoulderConstants.kMaxAngle),
           true,
           ShoulderConstants.kInitialAngleRad);
 
-  private PIDController pid = ShoulderConstants.PID.createPIDController();
+  private PIDController pid = ShoulderConstants.Gains.createPIDController();
 
   public ShoulderIOSim() {
     pid.enableContinuousInput(0, 2 * Math.PI);
   }
 
-  private ArmFeedforward feedforward = ShoulderConstants.PID.createArmFF();
+  private ArmFeedforward feedforward = ShoulderConstants.Gains.createArmFF();
   private double targetAngleDeg = Units.radiansToDegrees(ShoulderConstants.kInitialAngleRad);
 
   @Override
@@ -59,7 +59,7 @@ public class ShoulderIOSim implements ShoulderIO {
   }
 
   @Override
-  public void setPID(LoggedTunablePID pid) {
+  public void setPID(LoggedTunableGains pid) {
     this.pid = pid.createPIDController();
     feedforward = pid.createArmFF();
   }

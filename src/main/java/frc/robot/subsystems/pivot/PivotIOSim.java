@@ -7,7 +7,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.subsystems.constants.PivotConstants;
-import frc.robot.util.LoggedTunablePID;
+import frc.robot.util.LoggedTunableGains;
 
 public class PivotIOSim implements PivotIO {
 
@@ -22,13 +22,13 @@ public class PivotIOSim implements PivotIO {
           true,
           PivotConstants.kInitialAngleRad);
 
-  private PIDController pid = PivotConstants.PID.createPIDController();
+  private PIDController pid = PivotConstants.Gains.createPIDController();
 
   public PivotIOSim() {
     pid.enableContinuousInput(0, 2 * Math.PI);
   }
 
-  private ArmFeedforward feedforward = PivotConstants.PID.createArmFF();
+  private ArmFeedforward feedforward = PivotConstants.Gains.createArmFF();
   private double targetAngleDeg = Units.radiansToDegrees(PivotConstants.kInitialAngleRad);
 
   @Override
@@ -45,7 +45,8 @@ public class PivotIOSim implements PivotIO {
     inputs.absoluteAngleDegrees = Units.radiansToDegrees(sim.getAngleRads());
     inputs.velocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
     inputs.voltage = output;
-
+    inputs.isAtTarget =
+        Math.abs(inputs.angleDegrees - targetAngleDeg) < PivotConstants.AT_TARGET_GIVE_DEGS;
     inputs.commandedAngleDegs = targetAngleDeg;
   }
 
@@ -60,7 +61,7 @@ public class PivotIOSim implements PivotIO {
   }
 
   @Override
-  public void setPID(LoggedTunablePID pid) {
+  public void setPID(LoggedTunableGains pid) {
     this.pid = pid.createPIDController();
     feedforward = pid.createArmFF();
   }

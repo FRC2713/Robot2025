@@ -15,24 +15,17 @@ public class RollersIOSparks implements RollersIO {
   private final SparkLimitSwitch limitSwitch;
   private double targetRPM;
 
-  public boolean enableLS = true;
-  public boolean enableAlgaeLS = false;
-
   public RollersIOSparks() {
     this.motor = new SparkFlex(RollerConstants.kCANId, MotorType.kBrushless);
     this.limitSwitch = motor.getForwardLimitSwitch();
     motor.configure(
-        RollerConstants.createConfig(60),
+        RollerConstants.createConfig(60, true),
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
   }
 
   @Override
   public void updateInputs(RollersInputs inputs) {
-    if (this.hasCoral() && enableLS) {
-      setRPM(0);
-    }
-
     inputs.tubeVelocityRPM = motor.getEncoder().getVelocity();
     inputs.tubeOutputVoltage = motor.getAppliedOutput() * motor.getBusVoltage();
     inputs.tubeCurrentAmps = motor.getOutputCurrent();
@@ -50,8 +43,10 @@ public class RollersIOSparks implements RollersIO {
 
   @Override
   public void setEnableLimitSwitch(boolean setEnable) {
-
-    enableLS = setEnable;
+    motor.configureAsync(
+        RollerConstants.createConfig(60, setEnable),
+        ResetMode.kResetSafeParameters,
+        PersistMode.kNoPersistParameters);
   }
 
   private boolean hasCoral() {

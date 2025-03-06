@@ -42,14 +42,14 @@ public class DriveConstants {
         new ControlGains()
             .p(5.0)
             .d(0.4)
-            .trapezoidal(kMaxAngularVelocity, kMaxAngularAcceleration)
+            .trapezoidal(kMaxAngularVelocity, kMaxAngularAcceleration, 0)
             .createTrapezoidalPIDController();
 
     public static final ProfiledPIDController angleController =
         new ControlGains()
             .p(5.0)
             .d(0.4)
-            .trapezoidal(kMaxAngularVelocity, kMaxAngularAcceleration)
+            .trapezoidal(kMaxAngularVelocity, kMaxAngularAcceleration, 0)
             .createTrapezoidalPIDController();
   }
 
