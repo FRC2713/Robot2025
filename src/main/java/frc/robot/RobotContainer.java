@@ -15,14 +15,12 @@ package frc.robot;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
-import choreo.auto.AutoRoutine;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -211,26 +209,10 @@ public class RobotContainer {
     autoChooser = new AutoChooser();
 
     // Add options to the chooser
+    // I add a * to the name when it generates its starting trajectory
     autoChooser.addRoutine("Coral and Algae Auto", autoRoutines::coralAndAlgaeAuto);
-    autoChooser.addRoutine("Score Lots Of Coral", autoRoutines::scoreLotsOfCoral);
-    autoChooser.addRoutine(
-        "DriveStraight",
-        () -> {
-          AutoRoutine routine = choreoAutoFactory.newRoutine("DriveStraight");
-
-          var startToReefTraj = routine.trajectory("Example");
-
-          // When the routine begins, reset odometry and start the first trajectory
-          routine
-              .active()
-              .onTrue(
-                  Commands.sequence(
-                      new InstantCommand(() -> System.out.println("DriveStraight started")),
-                      startToReefTraj.resetOdometry(),
-                      startToReefTraj.cmd()));
-
-          return routine;
-        });
+    autoChooser.addRoutine("*Score Lots Of Coral", autoRoutines::scoreLotsOfCoralGeneratedLeg1);
+    autoChooser.addRoutine("DriveStraight", autoRoutines::driveStraight);
 
     // Uncomment for swerve drive characterization
     autoChooser.addCmd(

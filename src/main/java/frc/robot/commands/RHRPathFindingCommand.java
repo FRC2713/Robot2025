@@ -52,6 +52,8 @@ public class RHRPathFindingCommand extends Command {
 
   private double timeOffset = 0;
 
+  private boolean disableTimeOut = false;
+
   private boolean finish = false;
 
   /**
@@ -398,10 +400,19 @@ public class RHRPathFindingCommand extends Command {
     }
 
     if (currentTrajectory != null) {
-      return timer.hasElapsed(currentTrajectory.getTotalTimeSeconds() - timeOffset);
+      boolean timedOut = timer.hasElapsed(currentTrajectory.getTotalTimeSeconds() - timeOffset);
+      return timedOut && !this.disableTimeOut;
     }
 
     return false;
+  }
+
+  public void disableTimeOut() {
+    this.disableTimeOut = true;
+  }
+
+  public void enableTimeOut() {
+    this.disableTimeOut = false;
   }
 
   @Override

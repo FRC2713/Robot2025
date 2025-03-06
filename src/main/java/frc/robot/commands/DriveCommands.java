@@ -13,7 +13,6 @@
 
 package frc.robot.commands;
 
-import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -27,8 +26,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.HeadingControllerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import java.text.DecimalFormat;
@@ -208,18 +205,6 @@ public class DriveCommands {
         .beforeStarting(
             () ->
                 HeadingControllerConstants.angleController.reset(drive.getRotation().getRadians()));
-  }
-
-  public static Command buildOTFPath(Pose2d pose, PathConstraints constraints, double goalEndVel) {
-    return new RHRPathFindingCommand(
-        pose,
-        constraints,
-        RobotContainer.driveSubsystem::getPose,
-        RobotContainer.driveSubsystem::getChassisSpeeds,
-        (speeds, feedforwards) -> RobotContainer.driveSubsystem.runVelocity(speeds),
-        RobotContainer.otfController,
-        DriveConstants.pathPlannerConfig,
-        RobotContainer.driveSubsystem);
   }
 
   /**

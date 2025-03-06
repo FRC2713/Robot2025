@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLevel;
 import frc.robot.util.ScoreLoc;
@@ -106,5 +108,28 @@ public class ScoreAssist {
     ScoreLoc location = ScoreLoc.parseFromNT(sub.get("none"));
     Logger.recordOutput("/ScoreAssist/Mode", "Network Table Pathing");
     return location.getScoreCommand();
+  }
+
+  public static Command buildOTFPath(
+      Pose2d targetPose, PathConstraints constraints, double goalEndVel, boolean disableTimeout) {
+    RHRPathFindingCommand cmd =
+        new RHRPathFindingCommand(
+            targetPose,
+            constraints,
+            RobotContainer.driveSubsystem::getPose,
+            RobotContainer.driveSubsystem::getChassisSpeeds,
+            (speeds, feedforwards) -> RobotContainer.driveSubsystem.runVelocity(speeds),
+            RobotContainer.otfController,
+            DriveConstants.pathPlannerConfig,
+            RobotContainer.driveSubsystem);
+
+    if (disableTimeout) cmd.disableTimeOut();
+
+    return cmd;
+  }
+
+  public static Command buildOTFPath(
+      Pose2d targetPose, PathConstraints constraints, double goalEndVel) {
+    return buildOTFPath(targetPose, constraints, goalEndVel, false);
   }
 }
