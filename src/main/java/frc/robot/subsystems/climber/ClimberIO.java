@@ -17,6 +17,7 @@ public interface ClimberIO {
     public double rightAmps = 0.0;
 
     public double commandedAngleDegs = 0.0;
+    public double servoCommandedPos = 0.0;
   }
 
   public default void updateInputs(ClimberInputs inputs) {}
@@ -33,4 +34,6 @@ public interface ClimberIO {
 
   public default void setServoPos(double pos) {}
   ;
+
+  public default void configureSoftLimits(double minDeg, double maxDeg) {}
 }

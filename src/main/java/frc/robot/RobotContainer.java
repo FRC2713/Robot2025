@@ -30,11 +30,11 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
+import frc.robot.commands.climber.MoveClimber;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
@@ -43,7 +43,7 @@ import frc.robot.subsystems.algaeClaw.AlgaeClawIOSparks;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
-import frc.robot.subsystems.climber.ClimberSparks;
+import frc.robot.subsystems.climber.ClimberIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
@@ -87,7 +87,7 @@ public class RobotContainer {
   public static Climber climber;
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
-  private final CommandXboxController operator = new CommandXboxController(1);
+  private static final CommandXboxController operator = new CommandXboxController(1);
 
   // Dashboard inputs
   public final AutoChooser autoChooser;
@@ -113,7 +113,7 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIOSparks());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
         shoulder = new Shoulder(new ShoulderIOKrakens());
-        climber = new Climber(new ClimberSparks());
+        climber = new Climber(new ClimberIOSparks());
         break;
 
       case SIM:
@@ -438,34 +438,33 @@ public class RobotContainer {
                 "Full Control"));
     driver.a().onTrue(ClimberCmds.setAngle(90)).onFalse(ClimberCmds.setAngle(-90));
 
-    operator.a().onTrue(ElevatorCmds.setHeight(20)).onFalse(ElevatorCmds.setHeight(2));
-    // operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
+    operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
     operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
     operator.y().onTrue(SuperStructure.L3_PREP.getCommand());
     operator.rightBumper().onTrue(SuperStructure.L4_PREP.getCommand());
+    operator.x().onTrue(SuperStructure.BARGE.getCommand());
 
+    operator.povLeft().onTrue(SuperStructure.CLIMB.getCommand());
     operator.povUp().onTrue(Commands.sequence(SuperStructure.CLIMB_PREP.getCommand()));
     // Commands.runOnce(
     //     () -> {
     // System.out.println("Entering Climber Mode");
     operator
         .leftTrigger(0.1)
-        .whileTrue(
-            Commands.repeatingSequence(
-                ClimberCmds.setVoltage(
-                    () ->
-                        operator.getLeftTriggerAxis()
-                            * SSConstants.Climber.IMP_TO_VOLTS.getAsDouble())))
+        .whileTrue(new MoveClimber(operator::getLeftTriggerAxis, SSConstants.Climber.SERVO_POS_OFF))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
     operator
         .rightTrigger(0.1)
         .whileTrue(
-            Commands.repeatingSequence(
-                ClimberCmds.setVoltage(
-                    () ->
-                        -1
-                            * operator.getRightTriggerAxis()
-                            * SSConstants.Climber.IMP_TO_VOLTS.getAsDouble())))
+            Commands.sequence(
+                Commands.either(
+                    ClimberCmds.configureSoftLimits(
+                        SSConstants.Climber.MIN_ANGLE_CLIMBING,
+                        SSConstants.Climber.MAX_ANGLE_CLIMBING),
+                    Commands.none(),
+                    () -> climber.getCurrentAngle() > 100),
+                new MoveClimber(
+                    () -> -1 * operator.getRightTriggerAxis(), SSConstants.Climber.SERVO_POS_ON)))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
     // })));
     operator.povDown().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());

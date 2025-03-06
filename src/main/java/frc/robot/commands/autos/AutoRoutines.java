@@ -102,25 +102,29 @@ public class AutoRoutines {
                 startToReefDTraj.cmd()));
 
     // Go from start to reef D, preping the elevator along the way
-    startToReefDTraj.atTime("PrepElevator").onTrue(SuperStructure.L3_PREP.getCommand());
+    // startToReefDTraj.atTime("PrepElevator").onTrue(SuperStructure.L4_PREP.getCommand());
     // When at the reef, score and go to source
     startToReefDTraj
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L3_PREP.getCommand(),
+                SuperStructure.L4_PREP.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
-                reefDToSource.cmd()));
+                Commands.waitSeconds(0.2),
+                Commands.parallel(
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())));
 
     // When the trajectory is done, intake; then go to reef B
     reefDToSource
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), sourceToReefB.cmd()));
+                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
+                Commands.waitSeconds(1),
+                sourceToReefB.cmd()));
 
     // Prep elevator along the way
-    sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L3_PREP.getCommand());
+    // sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L3_PREP.getCommand());
     // Once at reef B, score and go to source
     sourceToReefB
         .done()

@@ -36,14 +36,14 @@ public class ClimberConstants {
   public static final double kMinAngle = -95;
   public static final double kMaxAngle = 200;
   public static final double kMass = 1;
-  public static final SoftLimitConfig softLimits =
+  public static final SoftLimitConfig initialSoftLimits =
       new SoftLimitConfig()
           .forwardSoftLimitEnabled(true)
           .forwardSoftLimit(Units.degreesToRotations(kMaxAngle))
           .reverseSoftLimitEnabled(true)
           .reverseSoftLimit(Units.degreesToRotations(kMinAngle));
 
-  public static SparkFlexConfig createLeftSparkConfig() {
+  public static SparkFlexConfig createLeftSparkConfig(SoftLimitConfig limits) {
     SparkFlexConfig config = new SparkFlexConfig();
 
     config.inverted(kLeftMotorInverted);
@@ -51,14 +51,14 @@ public class ClimberConstants {
     config.idleMode(IdleMode.kBrake);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-    config.softLimit.apply(softLimits);
+    config.softLimit.apply(limits);
     config.smartCurrentLimit(currentLimitAmps);
     Gains.toControlGains().applyPID(config.closedLoop);
 
     return config;
   }
 
-  public static SparkFlexConfig createRightSparkConfig() {
+  public static SparkFlexConfig createRightSparkConfig(SoftLimitConfig limits) {
     SparkFlexConfig config = new SparkFlexConfig();
 
     config.inverted(kRightMotorInverted);
@@ -66,7 +66,7 @@ public class ClimberConstants {
     config.idleMode(IdleMode.kBrake);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-    config.softLimit.apply(softLimits);
+    config.softLimit.apply(limits);
     config.smartCurrentLimit(currentLimitAmps);
     Gains.toControlGains().applyPID(config.closedLoop);
 

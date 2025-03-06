@@ -6,25 +6,26 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.subsystems.constants.ClimberConstants;
 import frc.robot.util.LoggedTunableGains;
 
-public class ClimberSparks implements ClimberIO {
+public class ClimberIOSparks implements ClimberIO {
   public SparkFlex leftMotor = new SparkFlex(ClimberConstants.kLeftCANId, MotorType.kBrushless);
   public SparkFlex rightMotor = new SparkFlex(ClimberConstants.kRightCANId, MotorType.kBrushless);
-  public Servo servo = new Servo(1);
+  public Servo servo = new Servo(0);
   private double target;
 
-  public ClimberSparks() {
+  public ClimberIOSparks() {
     leftMotor.configure(
-        ClimberConstants.createLeftSparkConfig(),
+        ClimberConstants.createLeftSparkConfig(ClimberConstants.initialSoftLimits),
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
     leftMotor.getEncoder().setPosition(Units.degreesToRotations(ClimberConstants.kInitialAngle));
     rightMotor.configure(
-        ClimberConstants.createRightSparkConfig(),
+        ClimberConstants.createRightSparkConfig(ClimberConstants.initialSoftLimits),
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
     rightMotor.getEncoder().setPosition(Units.degreesToRotations(ClimberConstants.kInitialAngle));
@@ -42,17 +43,19 @@ public class ClimberSparks implements ClimberIO {
     inputs.rightAmps = rightMotor.getOutputCurrent();
     inputs.rightAngleDegrees = Units.rotationsToDegrees(rightMotor.getEncoder().getPosition());
 
+    inputs.servoCommandedPos = servo.getPosition();
+
     inputs.commandedAngleDegs = this.target;
   }
 
   @Override
   public void setPID(LoggedTunableGains pid) {
     leftMotor.configureAsync(
-        ClimberConstants.createLeftSparkConfig(),
+        ClimberConstants.createLeftSparkConfig(ClimberConstants.initialSoftLimits),
         ResetMode.kNoResetSafeParameters,
         PersistMode.kNoPersistParameters);
     rightMotor.configureAsync(
-        ClimberConstants.createRightSparkConfig(),
+        ClimberConstants.createRightSparkConfig(ClimberConstants.initialSoftLimits),
         ResetMode.kNoResetSafeParameters,
         PersistMode.kNoPersistParameters);
   }
@@ -79,5 +82,23 @@ public class ClimberSparks implements ClimberIO {
   public void setVoltage(double volts) {
     leftMotor.setVoltage(volts);
     rightMotor.setVoltage(volts);
+  }
+
+  @Override
+  public void configureSoftLimits(double minDeg, double maxDeg) {
+    var limits =
+        new SoftLimitConfig()
+            .forwardSoftLimitEnabled(true)
+            .forwardSoftLimit(Units.degreesToRotations(maxDeg))
+            .reverseSoftLimitEnabled(true)
+            .reverseSoftLimit(Units.degreesToRotations(minDeg));
+    leftMotor.configureAsync(
+        ClimberConstants.createLeftSparkConfig(limits),
+        ResetMode.kResetSafeParameters,
+        PersistMode.kNoPersistParameters);
+    rightMotor.configureAsync(
+        ClimberConstants.createRightSparkConfig(limits),
+        ResetMode.kResetSafeParameters,
+        PersistMode.kNoPersistParameters);
   }
 }
