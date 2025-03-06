@@ -442,7 +442,9 @@ public class RobotContainer {
     operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
     operator.y().onTrue(SuperStructure.L3_PREP.getCommand());
     operator.rightBumper().onTrue(SuperStructure.L4_PREP.getCommand());
+    operator.x().onTrue(SuperStructure.BARGE.getCommand());
 
+    operator.povLeft().onTrue(SuperStructure.CLIMB.getCommand());
     operator.povUp().onTrue(Commands.sequence(SuperStructure.CLIMB_PREP.getCommand()));
     // Commands.runOnce(
     //     () -> {

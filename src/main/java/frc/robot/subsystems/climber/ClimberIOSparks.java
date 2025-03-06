@@ -15,7 +15,7 @@ import frc.robot.util.LoggedTunableGains;
 public class ClimberIOSparks implements ClimberIO {
   public SparkFlex leftMotor = new SparkFlex(ClimberConstants.kLeftCANId, MotorType.kBrushless);
   public SparkFlex rightMotor = new SparkFlex(ClimberConstants.kRightCANId, MotorType.kBrushless);
-  public Servo servo = new Servo(1);
+  public Servo servo = new Servo(0);
   private double target;
 
   public ClimberIOSparks() {
@@ -95,10 +95,10 @@ public class ClimberIOSparks implements ClimberIO {
     leftMotor.configureAsync(
         ClimberConstants.createLeftSparkConfig(limits),
         ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+        PersistMode.kNoPersistParameters);
     rightMotor.configureAsync(
-        ClimberConstants.createLeftSparkConfig(limits),
+        ClimberConstants.createRightSparkConfig(limits),
         ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+        PersistMode.kNoPersistParameters);
   }
 }
