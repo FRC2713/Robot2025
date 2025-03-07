@@ -1,0 +1,55 @@
+## FIRST Robotics WPILib Java Project Rules
+
+### Project Structure
+- Use Command-Based programming structure
+- Organize code into subsystems, commands, and a RobotContainer class
+- Place constants in a separate Constants.java file
+
+### Coding Standards
+- Follow Java naming conventions (camelCase for methods and variables, PascalCase for classes)
+- Use meaningful and descriptive names for variables, methods, and classes
+- Comment code thoroughly, especially for complex logic
+
+### WPILib Best Practices
+- Use TimedRobot as the base class for the main robot code
+- Implement proper error handling and logging
+- Use the Command-Based framework for all robot functions
+- Utilize the Shuffleboard for debugging and displaying robot data
+
+### Motor Controllers
+- Define motor controllers in the appropriate subsystem classes
+- Use MotorControllerGroups for multiple motors working together
+- Set motor inversions in the subsystem constructors
+
+### Sensors
+- Initialize sensors in the subsystem constructors
+- Regularly check and update sensor values in the periodic() methods
+
+### Autonomous
+- Create separate command classes for each autonomous routine
+- Use command groups to combine multiple actions in autonomous
+
+### Teleop
+- Implement smooth control methods for driver input
+- Use button bindings in RobotContainer for assigning commands to controller buttons
+
+### Safety
+- Implement proper safety checks in all subsystems
+- Use limit switches or software limits to prevent mechanism damage
+
+### Testing
+- Write unit tests for critical functions using JUnit
+- Regularly test on the actual robot hardware
+
+### Version Control
+- Use Git for version control
+- Create meaningful commit messages
+- Use feature branches for developing new functionality
+
+### Documentation
+- Maintain up-to-date documentation for all subsystems and commands
+- Document the purpose and functionality of each class
+
+@file src/main/java/frc/robot/Robot.java
+@file src/main/java/frc/robot/RobotContainer.java
+@file src/main/java/frc/robot/Constants.java

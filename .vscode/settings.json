@@ -75,6 +75,12 @@
       "src",
       "build"
     ],
-    "java.compile.nullAnalysis.mode": "automatic"
-  
+    "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-17",
+      "path": "~/wpilib/2025/jdk",
+      "default": true
+    }
+  ]
 }
