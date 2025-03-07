@@ -46,33 +46,31 @@ public class VisionConstants {
           ? "http://rhr-jetson-1:5801/"
           : "http://10.10.197.83:5173/";
 
-  // TODO determine limelight locations
+  // https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-coordinate-systems#robot-space
+
+  // aka scoring side
   public static LimelightInfo FRONT_LIMELIGHT_INFO =
       LimelightInfo.builder()
           .ntTableName("limelight-a")
           .location(
               new Transform3d(
-                  Units.inchesToMeters(-10.072374),
-                  Units.inchesToMeters(9.304687),
-                  Units.inchesToMeters(24.149765),
-                  new Rotation3d(
-                      0,
-                      Units.degreesToRadians(-14.209976),
-                      Units.degreesToRadians(180 - 71.409653 + 90))))
+                  Units.inchesToMeters(7.522),
+                  Units.inchesToMeters(-11.190),
+                  Units.inchesToMeters(15.070),
+                  new Rotation3d(0, 0, Units.degreesToRadians(-30))))
           .mountingDirection(LimelightInfo.MountingDirection.HORIZONTAL_LL3)
           .build();
+
+  // aka intake side
   public static LimelightInfo BACK_LIMELIGHT_INFO =
       LimelightInfo.builder()
           .ntTableName("limelight-b")
           .location(
               new Transform3d(
-                  Units.inchesToMeters(-10.062783),
-                  Units.inchesToMeters(-9.304855),
-                  Units.inchesToMeters(24.185351),
-                  new Rotation3d(
-                      0,
-                      Units.degreesToRadians(-14.209976),
-                      Units.degreesToRadians(180 - 23.725656))))
+                  Units.inchesToMeters(-6.594),
+                  Units.inchesToMeters(-11.650),
+                  Units.inchesToMeters(36.255),
+                  new Rotation3d(0, 0, Units.degreesToRadians(180))))
           .mountingDirection(LimelightInfo.MountingDirection.HORIZONTAL_LL3)
           .build();
 

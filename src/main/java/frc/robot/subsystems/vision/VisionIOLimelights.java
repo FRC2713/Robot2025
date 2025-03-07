@@ -20,6 +20,9 @@ public class VisionIOLimelights implements VisionIO {
   private CombinedMegaTagState state;
 
   public VisionIOLimelights(LimelightInfo primary, LimelightInfo secondary, Drivetrain drivetrain) {
+    primary.setCameraPose_RobotSpace();
+    secondary.setCameraPose_RobotSpace();
+
     LimelightHelpers.SetRobotOrientation(
         secondary.getNtTableName(),
         RobotContainer.driveSubsystem.getPose().getRotation().getDegrees(),
@@ -47,6 +50,25 @@ public class VisionIOLimelights implements VisionIO {
     if (RobotContainer.driveSubsystem.getAngularVelocityRadPerSec() > Units.degreesToRadians(720)) {
       this.state = CombinedMegaTagState.REJECTED_DUE_TO_SPIN_BLUR;
     }
+
+    // https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-robot-localization-megatag2
+    // docs say this needs to be called every frame
+    LimelightHelpers.SetRobotOrientation(
+        primaryInfo.getNtTableName(),
+        RobotContainer.driveSubsystem.getPose().getRotation().getDegrees(),
+        0,
+        0,
+        0,
+        0,
+        0);
+    LimelightHelpers.SetRobotOrientation(
+        secondaryInfo.getNtTableName(),
+        RobotContainer.driveSubsystem.getPose().getRotation().getDegrees(),
+        0,
+        0,
+        0,
+        0,
+        0);
 
     LimelightHelpers.PoseEstimate primaryMT2 =
         LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(primaryInfo.getNtTableName());
