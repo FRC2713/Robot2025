@@ -20,6 +20,10 @@ public class Vision extends SubsystemBase {
     return io.getPose();
   }
 
+  public double getTimestamp() {
+    return io.getTimestamp();
+  }
+
   public void resetPose(Pose2d pose) {
     io.resetPose(pose);
   }

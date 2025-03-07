@@ -11,4 +11,8 @@ public interface VisionIO {
 
   public default void resetPose(Pose2d pose) {}
   ;
+
+  public default double getTimestamp() {
+    return 0;
+  }
 }

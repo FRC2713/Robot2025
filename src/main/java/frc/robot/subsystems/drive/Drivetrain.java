@@ -47,6 +47,7 @@ import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.DriveConstants.AutoConstants;
 import frc.robot.subsystems.constants.VisionConstants;
+import frc.robot.subsystems.constants.VisionConstants.VisionOptions;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLevel;
 import frc.robot.util.ScoreLoc;
@@ -194,7 +195,15 @@ public class Drivetrain extends SubsystemBase {
       }
 
       // Apply update
-      poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+      if (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.MEGATAG2) {
+        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.6, .6, 9999999));
+        poseEstimator.addVisionMeasurement(
+            RobotContainer.visionsubsystem.getPose(),
+            RobotContainer.visionsubsystem.getTimestamp());
+      } else {
+        poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+      }
+
       odometryPoseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
 
@@ -382,7 +391,7 @@ public class Drivetrain extends SubsystemBase {
   /** Returns the current estimated pose. */
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
-    if (VisionConstants.USE_WHEEL_ODOMETRY) {
+    if (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.WHEEL_ODOMETRY) {
       try {
         return RobotContainer.visionsubsystem.getPose();
       } catch (NullPointerException e) {
@@ -408,13 +417,17 @@ public class Drivetrain extends SubsystemBase {
   public void setPose(Pose2d pose) {
     poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     odometryPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
-    if (VisionConstants.USE_WHEEL_ODOMETRY) {
+    if (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.WHEEL_ODOMETRY) {
       // try {
       RobotContainer.visionsubsystem.resetPose(pose);
       // } catch (NullPointerException e) {
 
       // }
     }
+  }
+
+  public double getAngularVelocityRadPerSec() {
+    return gyroInputs.yawVelocityRadPerSec;
   }
 
   /** Returns the maximum linear speed in meters per sec. */
