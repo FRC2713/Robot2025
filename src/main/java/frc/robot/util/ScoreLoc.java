@@ -1,11 +1,11 @@
 package frc.robot.util;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.Constants;
+import frc.robot.commands.ScoreAssist;
 import java.util.Map;
 
 public enum ScoreLoc {
@@ -82,13 +82,13 @@ public enum ScoreLoc {
             new SelectCommand<>(
                 Map.of(
                     DriverStation.Alliance.Red,
-                    AutoBuilder.pathfindToPose(
-                        AllianceFlipUtil.flip(node.getPose()),
+                    ScoreAssist.buildOTFPath(
+                        AllianceFlipUtil.flip(node.getRobotAlignmentPose()),
                         Constants.scoreAssistConstraints,
                         0.0),
                     DriverStation.Alliance.Blue,
-                    AutoBuilder.pathfindToPose(
-                        node.getPose(), Constants.scoreAssistConstraints, 0.0)),
+                    ScoreAssist.buildOTFPath(
+                        node.getRobotAlignmentPose(), Constants.scoreAssistConstraints, 0.0)),
                 () -> DriverStation.getAlliance().get()),
             level.getScoreCommand().get()));
   }

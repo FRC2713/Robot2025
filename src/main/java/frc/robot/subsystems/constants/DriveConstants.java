@@ -31,6 +31,7 @@ public class DriveConstants {
         new ControlGains().p(10.0).createPathPlannerGains();
     public static final PIDConstants rotationPID =
         new ControlGains().p(10.0).createPathPlannerGains();
+    public static final double translationTolerance = 0.01;
   }
 
   public final class HeadingControllerConstants {

@@ -3,30 +3,30 @@ package frc.robot.util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.FieldConstants;
 import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.subsystems.constants.DriveConstants;
 
 public enum ScoreNode {
-  // TODO: Ensure these represent the correct poses
   // indexes start at right branch facing driver station and move counterclockwise, which means that
-  // B is
-  // zero
-  A(
-      FieldConstants.Reef.branchPositions2d
-          .get(1)
-          .get(ReefLevel.L2)
-          .transformBy(
-              new Transform2d(FieldConstants.Reef.centerToFaceCenters[0], new Rotation2d())
-                  .div(FieldConstants.Reef.centerToFaceCenters[0].getNorm())
-                  .times(DriveConstants.driveBaseWidthWithBumpersMeters / 2.0))),
+  // B is zero
+  A(FieldConstants.Reef.branchPositions2d.get(1).get(ReefLevel.L2)),
   B(FieldConstants.Reef.branchPositions2d.get(0).get(ReefLevel.L2)),
-  // TODO: Do what we did for A for the other points
   C(FieldConstants.Reef.branchPositions2d.get(11).get(ReefLevel.L2)),
   D(FieldConstants.Reef.branchPositions2d.get(10).get(ReefLevel.L2)),
 
-  E(FieldConstants.Reef.branchPositions2d.get(9).get(ReefLevel.L2)),
-  F(FieldConstants.Reef.branchPositions2d.get(8).get(ReefLevel.L2)),
+  // Some how e and f are too close to generate a valid path between them
+  E(
+      FieldConstants.Reef.branchPositions2d
+          .get(9)
+          .get(ReefLevel.L2)
+          .transformBy(new Transform2d(0, -0.01, new Rotation2d()))),
+  F(
+      FieldConstants.Reef.branchPositions2d
+          .get(8)
+          .get(ReefLevel.L2)
+          .transformBy(new Transform2d(0, 0.01, new Rotation2d()))),
 
   G(FieldConstants.Reef.branchPositions2d.get(7).get(ReefLevel.L2)),
   H(FieldConstants.Reef.branchPositions2d.get(6).get(ReefLevel.L2)),
@@ -45,5 +45,15 @@ public enum ScoreNode {
 
   public Pose2d getPose() {
     return pose;
+  }
+
+  public Pose2d getRobotAlignmentPose() {
+    double xFudge = 0.05;
+    double yFudge = 0.05;
+    return pose.transformBy(
+        new Transform2d(
+            (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0) + xFudge,
+            yFudge,
+            new Rotation2d(Units.degreesToRadians(180))));
   }
 }

@@ -15,15 +15,12 @@ package frc.robot;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
-import choreo.auto.AutoRoutine;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -33,7 +30,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
-import frc.robot.commands.autos.AutoRoutines;
+import frc.robot.commands.autos.AutoRoutinesWithPathFinding;
 import frc.robot.commands.climber.MoveClimber;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
@@ -47,6 +44,7 @@ import frc.robot.subsystems.climber.ClimberIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
+import frc.robot.subsystems.constants.VisionConstants.VisionOptions;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -70,9 +68,11 @@ import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
 import frc.robot.subsystems.shoulder.ShoulderIOSim;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIOLimelights;
 import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.subsystems.vision.VisionIOPoseEstimator;
 import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.RHRHolonomicDriveController;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
 
@@ -91,6 +91,13 @@ public class RobotContainer {
 
   // Dashboard inputs
   public final AutoChooser autoChooser;
+
+  public static final RHRHolonomicDriveController otfController =
+      new RHRHolonomicDriveController(
+          OTFConstants.translationPID, // Translation PID constants
+          OTFConstants.rotationPID, // Rotation PID constants
+          OTFConstants.translationTolerance // Translation Tolerenace
+          );
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
@@ -152,9 +159,14 @@ public class RobotContainer {
     visionsubsystem =
         new Vision(
             // new VisionIO() {}
-            VisionConstants.USE_WHEEL_ODOMETRY
+            VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.WHEEL_ODOMETRY
                 ? new VisionIOOdometry()
-                : new VisionIOPoseEstimator());
+                : (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
+                    ? new VisionIOPoseEstimator()
+                    : new VisionIOLimelights(
+                        VisionConstants.FRONT_LIMELIGHT_INFO,
+                        VisionConstants.BACK_LIMELIGHT_INFO,
+                        driveSubsystem)));
 
     // PathPlanner Config
     AutoBuilder.configure(
@@ -167,11 +179,7 @@ public class RobotContainer {
             driveSubsystem.runVelocity(
                 speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds.
         // Also optionally outputs individual module feedforwards
-        new PPHolonomicDriveController( // PPHolonomicController is the built in path following
-            // controller for holonomic drive trains
-            OTFConstants.translationPID, // Translation PID constants
-            OTFConstants.rotationPID // Rotation PID constants
-            ),
+        RobotContainer.otfController,
         DriveConstants.pathPlannerConfig, // The robot configuration
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -203,31 +211,15 @@ public class RobotContainer {
                       .toArray(Pose2d[]::new));
             });
 
-    AutoRoutines autoRoutines = new AutoRoutines(choreoAutoFactory);
+    AutoRoutinesWithPathFinding autoRoutines = new AutoRoutinesWithPathFinding(choreoAutoFactory);
 
     autoChooser = new AutoChooser();
 
     // Add options to the chooser
-    autoChooser.addRoutine("Coral and Algae Auto", autoRoutines::coralAndAlgaeAuto);
-    autoChooser.addRoutine("Score Lots Of Coral", autoRoutines::scoreLotsOfCoral);
-    autoChooser.addRoutine(
-        "DriveStraight",
-        () -> {
-          AutoRoutine routine = choreoAutoFactory.newRoutine("DriveStraight");
-
-          var startToReefTraj = routine.trajectory("Example");
-
-          // When the routine begins, reset odometry and start the first trajectory
-          routine
-              .active()
-              .onTrue(
-                  Commands.sequence(
-                      new InstantCommand(() -> System.out.println("DriveStraight started")),
-                      startToReefTraj.resetOdometry(),
-                      startToReefTraj.cmd()));
-
-          return routine;
-        });
+    // I add a * to the name when it generates its starting trajectory
+    autoChooser.addRoutine("*Coral and Algae Auto", autoRoutines::coralAndAlgaeAutoGeneratedLeg1);
+    autoChooser.addRoutine("*Score Lots Of Coral", autoRoutines::scoreLotsOfCoralGeneratedLeg1);
+    autoChooser.addRoutine("*Score Once", autoRoutines::scoreOnceGeneratedLeg1);
 
     // Uncomment for swerve drive characterization
     autoChooser.addCmd(

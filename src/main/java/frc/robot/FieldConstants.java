@@ -76,7 +76,6 @@ public class FieldConstants {
 
     public static final Pose2d[] centerFaces =
         new Pose2d[6]; // Starting facing the driver station in clockwise order
-    public static final Translation2d[] centerToFaceCenters = new Translation2d[6];
 
     public static final List<Map<ReefLevel, Pose3d>> branchPositions =
         new ArrayList<>(); // Starting at the right branch facing the driver station in clockwise
@@ -85,14 +84,12 @@ public class FieldConstants {
     static {
       // Initialize faces
       var aprilTagLayout = AprilTagLayoutType.OFFICIAL.getLayout();
-      centerFaces[0] = aprilTagLayout.getTagPose(18).get().toPose2d();
-      centerToFaceCenters[0] = center.minus(centerFaces[0].getTranslation());
-
-      centerFaces[1] = aprilTagLayout.getTagPose(19).get().toPose2d();
-      centerFaces[2] = aprilTagLayout.getTagPose(20).get().toPose2d();
-      centerFaces[3] = aprilTagLayout.getTagPose(21).get().toPose2d();
-      centerFaces[4] = aprilTagLayout.getTagPose(22).get().toPose2d();
-      centerFaces[5] = aprilTagLayout.getTagPose(17).get().toPose2d();
+      centerFaces[0] = aprilTagLayout.getTagPose(18).get().toPose2d(); // blue AB
+      centerFaces[1] = aprilTagLayout.getTagPose(19).get().toPose2d(); // blue KL
+      centerFaces[2] = aprilTagLayout.getTagPose(20).get().toPose2d(); // blue IJ
+      centerFaces[3] = aprilTagLayout.getTagPose(21).get().toPose2d(); // blue GH
+      centerFaces[4] = aprilTagLayout.getTagPose(22).get().toPose2d(); // blue EF
+      centerFaces[5] = aprilTagLayout.getTagPose(17).get().toPose2d(); // blue CD
 
       // Initialize branch positions
       for (int face = 0; face < 6; face++) {
