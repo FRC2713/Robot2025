@@ -14,7 +14,7 @@ import frc.robot.util.LimelightInfo;
 public class VisionConstants {
   // public static double CAMERA_TO_TAG_MAX_DIST_INCHES = 120;
   public static double MAX_POSE_JUMP_METERS = 0.5; // Units.feetToMeters(5);
-  public static double MAX_SPEED = 0.25;
+  public static double MAX_SPEED = 0.02;
 
   public record PoseEstimatorErrorStDevs(double translationalStDev, double rotationalStDev) {
     public PoseEstimatorErrorStDevs multiplyByRange(double range) {
@@ -29,10 +29,12 @@ public class VisionConstants {
 
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_STATE_STDEVS =
       new PoseEstimatorErrorStDevs(1.0, Units.degreesToRadians(1));
-  public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS =
-      new PoseEstimatorErrorStDevs(0.2, Units.degreesToRadians(99999));
+  public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_MAX_SPEED_STDEVS =
+      new PoseEstimatorErrorStDevs(2.0, Units.degreesToRadians(10));
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS =
-      new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(99999));
+      new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(10));
+  public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_DISABLED =
+      new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(1));
 
   public static final double MAX_TIME_DIFFERENCE = 0.5;
 

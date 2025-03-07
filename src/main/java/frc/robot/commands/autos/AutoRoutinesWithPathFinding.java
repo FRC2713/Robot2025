@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
+import frc.robot.SSConstants;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.util.AllianceFlipUtil;
@@ -123,15 +124,14 @@ public class AutoRoutinesWithPathFinding {
             Commands.sequence(
                 Commands.print(name + " started generated leg!"),
                 leg1,
-                Commands.waitSeconds(0.2),
+                Commands.waitSeconds(0.1),
                 Commands.print(name + " started routine!"),
                 // reefDToSource.resetOdometry(),
                 SuperStructure.L4_PREP.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
+                Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 Commands.parallel(
-                    Commands.sequence(
-                        Commands.waitSeconds(0.2), SuperStructure.SOURCE_CORAL_INTAKE.getCommand()),
-                    reefDToSource.cmd())));
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())));
 
     // 2) Run the rest of the routine
 
@@ -141,10 +141,10 @@ public class AutoRoutinesWithPathFinding {
         .onTrue(
             Commands.parallel(
                 SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
-                Commands.sequence(Commands.waitSeconds(0.1), sourceToReefB.cmd())));
+                Commands.sequence(
+                    Commands.waitSeconds(SSConstants.Auto.INTAKE_DELAY.getAsDouble()),
+                    sourceToReefB.cmd())));
 
-    // Prep elevator along the way
-    // sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L3_PREP.getCommand());
     // Once at reef B, score and go to source
     sourceToReefB
         .done()
@@ -152,18 +152,20 @@ public class AutoRoutinesWithPathFinding {
             Commands.sequence(
                 SuperStructure.L4_PREP.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
-                Commands.waitSeconds(0.1),
-                reefBToSource.cmd()));
+                Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                Commands.parallel(
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefBToSource.cmd())));
 
     // When the trajectory is done, intake; then go to reef A
     reefBToSource
         .done()
         .onTrue(
-            Commands.sequence(
-                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), sourceToReefA.cmd()));
+            Commands.parallel(
+                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
+                Commands.sequence(
+                    Commands.waitSeconds(SSConstants.Auto.INTAKE_DELAY.getAsDouble()),
+                    sourceToReefA.cmd())));
 
-    // Prep elevator along the way
-    sourceToReefA.atTime("PrepElevator").onTrue(SuperStructure.L4_PREP.getCommand());
     // Once at reef A, score and go to source
     sourceToReefA
         .done()
@@ -171,7 +173,9 @@ public class AutoRoutinesWithPathFinding {
             Commands.sequence(
                 SuperStructure.L4_PREP.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
-                reefAToSource.cmd()));
+                Commands.waitSeconds(0.2),
+                Commands.parallel(
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefAToSource.cmd())));
 
     reefAToSource.done().onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand());
 

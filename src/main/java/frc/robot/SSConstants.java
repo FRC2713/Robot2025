@@ -132,4 +132,11 @@ public class SSConstants {
     public static final LoggedTunableNumber MAX_ANGLE_CLIMBING =
         new LoggedTunableNumber("Climber/SS/Max Angle Climbing", ClimberConstants.kMaxAngle);
   }
+
+  public class Auto {
+    public static final LoggedTunableNumber INTAKE_DELAY =
+        new LoggedTunableNumber("Auto/Intake Delay", 0.1);
+    public static final LoggedTunableNumber L4_SCORE_DELAY =
+        new LoggedTunableNumber("Auto/Intake Delay", 0.2);
+  }
 }

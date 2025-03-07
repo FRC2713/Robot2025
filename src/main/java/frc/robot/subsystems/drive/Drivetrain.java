@@ -98,9 +98,9 @@ public class Drivetrain extends SubsystemBase {
               VisionConstants.POSE_ESTIMATOR_STATE_STDEVS.translationalStDev(),
               VisionConstants.POSE_ESTIMATOR_STATE_STDEVS.rotationalStDev()),
           VecBuilder.fill(
-              VisionConstants.POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS.translationalStDev(),
-              VisionConstants.POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS.translationalStDev(),
-              VisionConstants.POSE_ESTIMATOR_VISION_SINGLE_TAG_STDEVS.rotationalStDev()));
+              VisionConstants.POSE_ESTIMATOR_MAX_SPEED_STDEVS.translationalStDev(),
+              VisionConstants.POSE_ESTIMATOR_MAX_SPEED_STDEVS.translationalStDev(),
+              VisionConstants.POSE_ESTIMATOR_MAX_SPEED_STDEVS.rotationalStDev()));
 
   private SwerveDrivePoseEstimator odometryPoseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
