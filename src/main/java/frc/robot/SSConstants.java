@@ -88,6 +88,12 @@ public class SSConstants {
     public static final LoggedTunableNumber CLIMB_ANGLE_DEGS =
         new LoggedTunableNumber("Pivot/SS/Climb Angle", -111);
     ;
+
+    public static final LoggedTunableNumber ALGAE_GRAB_ANGLE_DEGS =
+        new LoggedTunableNumber("Pivot/SS/Algae Grab Angle", 35);
+
+    public static final LoggedTunableNumber SAFE_ANGLE_DEGS =
+        new LoggedTunableNumber("Pivot/SS/Safe Angle", 8);
   }
 
   public class Roller {
@@ -131,6 +137,9 @@ public class SSConstants {
         new LoggedTunableNumber("Climber/SS/Min Angle Climbing", 0.0);
     public static final LoggedTunableNumber MAX_ANGLE_CLIMBING =
         new LoggedTunableNumber("Climber/SS/Max Angle Climbing", ClimberConstants.kMaxAngle);
+
+    public static final LoggedTunableNumber CLEARANCE_ANGLE =
+        new LoggedTunableNumber("Climber/SS/Clearance Angle", 180.0);
   }
 
   public class Auto {

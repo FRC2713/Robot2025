@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
+import frc.robot.SSConstants;
 import java.util.function.DoubleSupplier;
 
 public class ClimberCmds {
@@ -45,5 +46,17 @@ public class ClimberCmds {
 
   public static Command setAngleAndWait(DoubleSupplier targetAngle) {
     return Commands.sequence(setAngle(targetAngle), waitUntilAtTarget());
+  }
+
+  // apply voltage to the climber until it reaches the max angle
+  // soft limits will help us here, but also set the voltage to zero when it's reached.
+  public static Command deploy() {
+    return Commands.sequence(
+        setVoltage(() -> 6),
+        Commands.waitUntil(
+            () ->
+                RobotContainer.climber.getCurrentAngle()
+                    >= SSConstants.Climber.MAX_ANGLE_CLIMBING.getAsDouble()),
+        setVoltage(() -> 0));
   }
 }

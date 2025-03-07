@@ -288,10 +288,6 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Intake Coral
-    // driver
-    //     .leftBumper()
-    //     .whileTrue(PivotCmds.setAngle(() -> 90))
-    //     .whileFalse(PivotCmds.setAngle(() -> 35));
     driver
         .leftBumper()
         .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
@@ -304,16 +300,16 @@ public class RobotContainer {
         .onFalse(RollerCmds.setSpeed(() -> 0));
 
     // Grab Algae
-    driver.rightBumper().onTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()));
-    // driver
-    //     .rightBumper()
-    //     .whileTrue(ShoulderCmds.setAngle(() -> -130))
-    //     .whileFalse(ShoulderCmds.setAngle(() -> -90));
+    driver
+        .rightBumper()
+        .onTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()))
+        .onFalse(SuperStructure.ALGAE_SAFE_RETRACT.getCommand());
 
     // Score Algae
+    // just spit the algae, it's up to the operator to put it in processor, intake, or barge pose
     driver
         .rightTrigger(0.25)
-        .onTrue(SuperStructure.PROCESSOR_SCORE.getCommand())
+        .onTrue(AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
         .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
     // Do both!
@@ -428,8 +424,8 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Full Control"));
-    driver.a().onTrue(ClimberCmds.setAngle(90)).onFalse(ClimberCmds.setAngle(-90));
 
+    // Operator Controls
     operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
     operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
     operator.y().onTrue(SuperStructure.L3_PREP.getCommand());
@@ -437,10 +433,7 @@ public class RobotContainer {
     operator.x().onTrue(SuperStructure.BARGE.getCommand());
 
     operator.povLeft().onTrue(SuperStructure.CLIMB.getCommand());
-    operator.povUp().onTrue(Commands.sequence(SuperStructure.CLIMB_PREP.getCommand()));
-    // Commands.runOnce(
-    //     () -> {
-    // System.out.println("Entering Climber Mode");
+    operator.povUp().onTrue(SuperStructure.CLIMB_PREP.getCommand());
     operator
         .leftTrigger(0.1)
         .whileTrue(new MoveClimber(operator::getLeftTriggerAxis, SSConstants.Climber.SERVO_POS_OFF))
@@ -458,7 +451,7 @@ public class RobotContainer {
                 new MoveClimber(
                     () -> -1 * operator.getRightTriggerAxis(), SSConstants.Climber.SERVO_POS_ON)))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
-    // })));
+
     operator.povDown().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
 
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());

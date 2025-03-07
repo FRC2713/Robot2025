@@ -13,11 +13,11 @@ public class ClimberIOSim implements ClimberIO {
   private static final SingleJointedArmSim sim =
       new SingleJointedArmSim(
           DCMotor.getNeoVortex(2),
-          ClimberConstants.kGearing,
+          1 / ClimberConstants.kGearing,
           SingleJointedArmSim.estimateMOI(ClimberConstants.kLength, ClimberConstants.kMass),
           ClimberConstants.kLength,
-          Units.degreesToRadians(0),
-          Units.degreesToRadians(360),
+          Units.degreesToRadians(ClimberConstants.kMinAngle),
+          Units.degreesToRadians(ClimberConstants.kMaxAngle),
           true,
           Units.degreesToRadians(ClimberConstants.kInitialAngle));
 
@@ -36,7 +36,7 @@ public class ClimberIOSim implements ClimberIO {
   @Override
   public void updateInputs(ClimberInputs inputs) {
     double output = 0;
-    if (volts == -1) {
+    if (false) {
       double pidOutput = pid.calculate(sim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
       double feedforwardOutput =
           feedforward.calculate(sim.getAngleRads(), sim.getVelocityRadPerSec());
@@ -51,10 +51,12 @@ public class ClimberIOSim implements ClimberIO {
     inputs.leftAngleDegrees = Units.radiansToDegrees(sim.getAngleRads());
     inputs.leftVelocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
     inputs.leftVoltage = output;
+    inputs.leftAmps = sim.getCurrentDrawAmps();
 
     inputs.rightAngleDegrees = Units.radiansToDegrees(sim.getAngleRads());
     inputs.rightVelocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
     inputs.rightVoltage = output;
+    inputs.rightAmps = sim.getCurrentDrawAmps();
 
     inputs.servoCommandedPos = servoPos;
 

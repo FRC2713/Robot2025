@@ -4,6 +4,9 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.ControlGains;
 import frc.robot.util.LoggedTunableGains;
@@ -13,6 +16,15 @@ public class ClimberConstants {
   public static final int kRightCANId = 6;
   public static final double kLength = 0.1;
   public static final double kInitialAngle = -90;
+
+  public static final Transform3d kInitialTransform =
+      new Transform3d(
+          0.0,
+          Units.inchesToMeters(-11.441),
+          Units.inchesToMeters(15.918),
+          new Rotation3d(0.0, 0.0, 0.0));
+
+  public static final Pose3d kInitialPose = new Pose3d().transformBy(kInitialTransform);
 
   public static final LoggedTunableGains Gains =
       new LoggedTunableGains(
