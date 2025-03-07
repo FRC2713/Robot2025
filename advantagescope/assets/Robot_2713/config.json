@@ -60,6 +60,18 @@
             }
           ],
           "zeroedPosition": [0,0,0]
+        },{
+          "zeroedRotations": [
+            {
+              "axis": "z",
+              "degrees": 90
+            },
+            {
+              "axis": "y",
+              "degrees": 90
+            }
+          ],
+          "zeroedPosition": [0,0,0]
         }
     ]
   }

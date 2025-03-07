@@ -1,5 +1,9 @@
 package frc.robot.subsystems.climber;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,6 +24,9 @@ public class Climber extends SubsystemBase {
 
   private double targetAngleDeg = (ClimberConstants.kInitialAngle);
 
+  public Pose3d pose = ClimberConstants.kInitialPose;
+  public Transform3d transform = new Transform3d();
+
   public Climber(ClimberIO IO) {
     this.inputs = new ClimberInputsAutoLogged();
     IO.updateInputs(inputs);
@@ -33,6 +40,12 @@ public class Climber extends SubsystemBase {
 
     IO.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
+
+    this.transform =
+        new Transform3d(
+            0, 0, 0, new Rotation3d(Units.degreesToRadians(inputs.leftAngleDegrees), 0, 0));
+
+    this.pose = ClimberConstants.kInitialPose.transformBy(this.transform);
   }
 
   public void setTargetAngle(double degrees) {

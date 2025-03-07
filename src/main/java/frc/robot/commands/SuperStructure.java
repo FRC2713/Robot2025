@@ -99,11 +99,17 @@ public enum SuperStructure {
               RollerCmds.setEnableLimitSwitch(false),
               RollerCmds.setSpeed(SSConstants.Roller.L2_PLUS_CORAL_SCORE_SPEED))),
   ALGAE_GRAB(
-      () -> Commands.sequence(AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED))),
+      () ->
+          Commands.sequence(
+              AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
+              PivotCmds.setAngle(SSConstants.Pivot.ALGAE_GRAB_ANGLE_DEGS))),
   ALGAE_GRAB_AND_CORAL_SCORE(
       () ->
           Commands.sequence(
               ALGAE_GRAB.getCommand(), AlgaeClawCmds.waitUntilAlgae(2), CORAL_SCORE.getCommand())),
+  ALGAE_SAFE_RETRACT(
+      () -> Commands.sequence(PivotCmds.setAngle(SSConstants.Pivot.SAFE_ANGLE_DEGS))),
+
   PROCESSOR_PREP(
       () ->
           Commands.sequence(
@@ -125,8 +131,16 @@ public enum SuperStructure {
   CLIMB_PREP(
       () ->
           Commands.sequence(
-              ShoulderCmds.setAngle(SSConstants.Shoulder.PREP_CLIMB_ANGLE_DEGS),
-              PivotCmds.setAngle(SSConstants.Pivot.PREP_CLIMB_ANGLE_DEGS))),
+              // move the arm out of the way
+              Commands.sequence(
+                  ShoulderCmds.setAngle(SSConstants.Shoulder.PREP_CLIMB_ANGLE_DEGS),
+                  PivotCmds.setAngle(SSConstants.Pivot.PREP_CLIMB_ANGLE_DEGS)),
+              // deploy the climber
+              ClimberCmds.deploy(),
+              // tuck the arm back in
+              Commands.sequence(
+                  ShoulderCmds.setAngle(SSConstants.Shoulder.CLIMB_ANGLE_DEGS),
+                  PivotCmds.setAngle(SSConstants.Pivot.CLIMB_ANGLE_DEGS)))),
   BARGE(
       () ->
           Commands.sequence(
