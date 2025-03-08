@@ -440,7 +440,7 @@ public class RobotContainer {
     operator.x().onTrue(SuperStructure.BARGE.getCommand());
 
     operator.povLeft().onTrue(SuperStructure.CLIMB.getCommand());
-    operator.povUp().onTrue(SuperStructure.CLIMB_PREP.getCommand());
+    operator.start().onTrue(SuperStructure.CLIMB_PREP.getCommand());
     operator
         .leftTrigger(0.1)
         .whileTrue(new MoveClimber(operator::getLeftTriggerAxis, SSConstants.Climber.SERVO_POS_OFF))
