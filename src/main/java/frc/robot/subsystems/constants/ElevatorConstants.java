@@ -29,7 +29,7 @@ public class ElevatorConstants {
   public static final double kRotationsToHeightConversion = (Math.PI * kDrumRadius * 2);
 
   public static final double kMinHeight = 0.0; // inches
-  public static final double kMaxHeight = 25.0; // inches
+  public static final double kMaxHeight = 26.0; // inches
   public static final double kInitialHeight = 0;
 
   public static double toInches(double rotations) {

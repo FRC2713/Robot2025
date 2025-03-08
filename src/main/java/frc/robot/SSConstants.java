@@ -28,7 +28,7 @@ public class SSConstants {
         new LoggedTunableNumber("Elevator/SS/Proc Score Height", 10);
 
     public static final LoggedTunableNumber BARGE_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/Barge Height", 20);
+        new LoggedTunableNumber("Elevator/SS/Barge Height", 26);
   }
 
   public class Shoulder {
@@ -57,7 +57,7 @@ public class SSConstants {
         new LoggedTunableNumber("Shoulder/SS/Climb Angle", -147);
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEGREES =
-        new LoggedTunableNumber("Shoulder/SS/Barge Angle", -250 + 360);
+        new LoggedTunableNumber("Shoulder/SS/Barge Angle", 90);
   }
 
   public class Pivot {
@@ -77,7 +77,7 @@ public class SSConstants {
         new LoggedTunableNumber("Pivot/SS/L4 Angle", 55);
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/Barge Angle", 35);
+        new LoggedTunableNumber("Pivot/SS/Barge Angle", -30);
 
     public static final LoggedTunableNumber PREP_CLIMB_ANGLE_DEGS =
         new LoggedTunableNumber("Pivot/SS/Prep Climb Angle", 13);
@@ -115,7 +115,7 @@ public class SSConstants {
         new LoggedTunableNumber("AlgaeClaw/SS/Proc Score Speed", -3000);
 
     public static final DoubleSupplier BARGE_SCORE_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/Barge Score Speed", -3000);
+        new LoggedTunableNumber("AlgaeClaw/SS/Barge Score Speed", -4000);
 
     public static final DoubleSupplier ALGAE_HOLD_SPEED =
         new LoggedTunableNumber("AlgaeClaw/SS/Algae Hold Speed", 2000);
