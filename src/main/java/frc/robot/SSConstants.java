@@ -112,7 +112,7 @@ public class SSConstants {
         new LoggedTunableNumber("AlgaeClaw/SS/Algae Grab Speed", 4000);
 
     public static final DoubleSupplier PROCESSOR_SCORE_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/Proc Score Speed", -3000);
+        new LoggedTunableNumber("AlgaeClaw/SS/Proc Score Speed", -6000);
 
     public static final DoubleSupplier BARGE_SCORE_SPEED =
         new LoggedTunableNumber("AlgaeClaw/SS/Barge Score Speed", -4000);

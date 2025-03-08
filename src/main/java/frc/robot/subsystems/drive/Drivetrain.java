@@ -205,9 +205,8 @@ public class Drivetrain extends SubsystemBase {
         poseEstimator.addVisionMeasurement(
             RobotContainer.visionsubsystem.getPose(),
             RobotContainer.visionsubsystem.getTimestamp());
-      } else {
-        poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
       }
+              poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
 
       odometryPoseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
