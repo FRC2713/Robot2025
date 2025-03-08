@@ -115,9 +115,8 @@ public enum SuperStructure {
   PROCESSOR_SCORE(
       () ->
           Commands.sequence(
-              PROCESSOR_PREP.getCommand(),
-              AlgaeClawCmds.setSpeedAndWaitForNoAlgae(
-                  SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))),
+              PROCESSOR_PREP.getCommand()
+                  )),
   CLIMB(
       () ->
           Commands.sequence(
