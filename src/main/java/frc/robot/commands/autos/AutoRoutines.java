@@ -108,7 +108,7 @@ public class AutoRoutines {
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L2_PREP.getCommand(),
+                SuperStructure.L4_PREP.getCommand(),
                 Commands.waitSeconds(1),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(0.2)
