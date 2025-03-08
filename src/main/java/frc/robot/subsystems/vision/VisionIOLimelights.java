@@ -77,6 +77,10 @@ public class VisionIOLimelights implements VisionIO {
       LimelightHelpers.PoseEstimate secondaryMT2 =
           LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(secondaryInfo.getNtTableName());
 
+      if (primaryMT2 == null || secondaryMT2 == null) {
+        return;
+      }
+
       if (primaryMT2.tagCount > 0) {
         this.state = CombinedMegaTagState.UPDATED_WITH_PRIMARY;
       } else if (secondaryMT2.tagCount > 0) {

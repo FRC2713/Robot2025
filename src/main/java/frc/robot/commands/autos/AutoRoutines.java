@@ -130,9 +130,11 @@ public class AutoRoutines {
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L3_PREP.getCommand(),
+                SuperStructure.L4_PREP.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
-                reefBToSource.cmd()));
+                Commands.parallel(
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
+                reefBToSource.cmd())));
 
     // When the trajectory is done, intake; then go to reef A
     reefBToSource
@@ -141,14 +143,12 @@ public class AutoRoutines {
             Commands.sequence(
                 SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), sourceToReefA.cmd()));
 
-    // Prep elevator along the way
-    sourceToReefA.atTime("PrepElevator").onTrue(SuperStructure.L3_PREP.getCommand());
     // Once at reef A, score and go to source
     sourceToReefA
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L3_PREP.getCommand(),
+                SuperStructure.L4_PREP.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 reefAToSource.cmd()));
 

@@ -36,7 +36,7 @@ public class SSConstants {
         new LoggedTunableNumber("Shoulder/SS/Source Intake Angle", -80);
 
     public static final LoggedTunableNumber L1_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L1 Angle", -130);
+        new LoggedTunableNumber("Shoulder/SS/L1 Angle", -135);
 
     public static final LoggedTunableNumber L2_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/L2 Angle", -150);
@@ -65,7 +65,7 @@ public class SSConstants {
         new LoggedTunableNumber("Pivot/SS/Source Intake Angle", 35);
 
     public static final LoggedTunableNumber L1_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/L1 Angle", 35);
+        new LoggedTunableNumber("Pivot/SS/L1 Angle", 0);
 
     public static final LoggedTunableNumber L2_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/L2 Angle", 8);
@@ -101,7 +101,7 @@ public class SSConstants {
         new LoggedTunableNumber("Roller/SS/L1 Score Speed", 3000);
 
     public static final LoggedTunableNumber L2_PLUS_CORAL_SCORE_SPEED =
-        new LoggedTunableNumber("Roller/SS/L 2+ Score Speed", 6000);
+        new LoggedTunableNumber("Roller/SS/L 2+ Score Speed", 4000);
 
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_SPEED =
         new LoggedTunableNumber("Roller/SS/Source Intake Speed", 4000);
