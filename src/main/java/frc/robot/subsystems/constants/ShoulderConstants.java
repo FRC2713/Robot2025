@@ -19,8 +19,8 @@ public class ShoulderConstants {
   public static final double kMass = 7.094328; // kg
   public static final double kHeight = Units.inchesToMeters(24);
 
-  public static final double kMinAngle = (-280);
-  public static final double kMaxAngle = (280);
+  public static final double kMinAngle = (-345);
+  public static final double kMaxAngle = (227);
 
   public static final double kInitialAngleRad = Units.degreesToRadians(-90);
 
