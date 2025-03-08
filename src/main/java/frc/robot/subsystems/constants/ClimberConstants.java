@@ -78,9 +78,10 @@ public class ClimberConstants {
     config.idleMode(IdleMode.kBrake);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-    config.softLimit.apply(limits);
+    // config.softLimit.apply(limits);
     config.smartCurrentLimit(currentLimitAmps);
     Gains.toControlGains().applyPID(config.closedLoop);
+    config.follow(kLeftCANId);
 
     return config;
   }
