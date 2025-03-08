@@ -52,7 +52,7 @@ public class VisionIOLimelights implements VisionIO {
       this.state = CombinedMegaTagState.REJECTED_DUE_TO_SPIN_BLUR;
     }
 
-    if (DriverStation.isEnabled()) {
+    if (true) {
 
       // https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-robot-localization-megatag2
       // docs say this needs to be called every frame
@@ -79,15 +79,18 @@ public class VisionIOLimelights implements VisionIO {
           LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(secondaryInfo.getNtTableName());
 
       if (primaryMT2 == null || secondaryMT2 == null) {
-        Logger.recordOutput("Vision/limelight state", CombinedMegaTagState.REJECTED_DUE_TO_NULL_MT2);
+        Logger.recordOutput(
+            "Vision/limelight state", CombinedMegaTagState.REJECTED_DUE_TO_NULL_MT2);
         return;
       }
 
       if (primaryMT2.tagCount > 0) {
         this.state = CombinedMegaTagState.UPDATED_WITH_PRIMARY;
-      } else if (secondaryMT2.tagCount > 0) {
-        this.state = CombinedMegaTagState.UPDATED_WITH_SECONDARY;
-      } else {
+      } 
+      // else if (secondaryMT2.tagCount > 0) {
+      //   this.state = CombinedMegaTagState.UPDATED_WITH_SECONDARY;
+      // } 
+      else {
         this.state = CombinedMegaTagState.REJECTED_DUE_TO_NO_TAGS;
       }
 
