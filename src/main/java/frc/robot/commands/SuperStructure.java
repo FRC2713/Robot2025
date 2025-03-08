@@ -127,6 +127,7 @@ public enum SuperStructure {
                   PivotCmds.setAngle(SSConstants.Pivot.PREP_CLIMB_ANGLE_DEGS)),
               // deploy the climber
               ClimberCmds.deploy(),
+              Commands.waitSeconds(0.5),
               // tuck the arm back in
               Commands.sequence(
                   ShoulderCmds.setAngle(SSConstants.Shoulder.CLIMB_ANGLE_DEGS),
