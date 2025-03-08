@@ -134,7 +134,7 @@ public class SSConstants {
         new LoggedTunableNumber("Climber/SS/Servo Pos Off", 0.0);
 
     public static final LoggedTunableNumber MIN_ANGLE_CLIMBING =
-        new LoggedTunableNumber("Climber/SS/Min Angle Climbing", 20);
+        new LoggedTunableNumber("Climber/SS/Min Angle Climbing", 35);
     public static final LoggedTunableNumber MAX_ANGLE_CLIMBING =
         new LoggedTunableNumber("Climber/SS/Max Angle Climbing", ClimberConstants.kMaxAngle);
 
