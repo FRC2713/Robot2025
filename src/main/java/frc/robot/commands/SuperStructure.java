@@ -35,10 +35,6 @@ public enum SuperStructure {
                   PivotCmds.setAngleAndWait(() -> 35),
                   Commands.none(),
                   () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              Commands.either(
-                  PivotCmds.setAngle(0),
-                  Commands.none(),
-                  () -> RobotContainer.shoulder.getCurrentAngle() < -95),
               Commands.parallel(
                   ElevatorCmds.setHeightAndWait(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
                   ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG)),

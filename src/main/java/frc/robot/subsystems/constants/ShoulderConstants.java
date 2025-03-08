@@ -80,5 +80,5 @@ public class ShoulderConstants {
   public static final int mech2dWidth = 10;
   public static final Color8Bit mech2dColor = new Color8Bit(0, 255, 0);
 
-  public static final double AT_TARGET_GIVE_DEGS = 2;
+  public static final double AT_TARGET_GIVE_DEGS = 3;
 }
