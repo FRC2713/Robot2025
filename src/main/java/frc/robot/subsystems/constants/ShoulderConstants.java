@@ -75,7 +75,7 @@ public class ShoulderConstants {
               .expo_kV(kExponential_kV)
               .expo_kA(kExponential_kA));
 
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(-208.388);
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(0);
 
   public static final int mech2dWidth = 10;
   public static final Color8Bit mech2dColor = new Color8Bit(0, 255, 0);

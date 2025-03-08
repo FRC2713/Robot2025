@@ -196,7 +196,12 @@ public class Drivetrain extends SubsystemBase {
 
       // Apply update
       if (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.MEGATAG2) {
-        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.6, .6, 9999999));
+        if (DriverStation.isEnabled()) {
+          poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.6, .6, 9999999));
+        } else {
+          poseEstimator.setVisionMeasurementStdDevs(
+              VecBuilder.fill(.6, .6, Units.degreesToRadians(1)));
+        }
         poseEstimator.addVisionMeasurement(
             RobotContainer.visionsubsystem.getPose(),
             RobotContainer.visionsubsystem.getTimestamp());

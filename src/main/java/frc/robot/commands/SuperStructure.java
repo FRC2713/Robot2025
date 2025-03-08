@@ -15,7 +15,6 @@ public enum SuperStructure {
           Commands.sequence(
               RollerCmds.setEnableLimitSwitch(true),
               RollerCmds.setSpeed(() -> 0),
-              AlgaeClawCmds.setSpeed(() -> 0),
               Commands.either(
                   PivotCmds.setAngleAndWait(() -> 35),
                   Commands.none(),
@@ -148,8 +147,7 @@ public enum SuperStructure {
               PivotCmds.setAngle(SSConstants.Pivot.BARGE_ANGLE_DEG),
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.BARGE_HEIGHT_IN),
               ShoulderCmds.waitUntilAtTarget(),
-              PivotCmds.waitUntilAtTarget(),
-              AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.BARGE_SCORE_SPEED)));
+              PivotCmds.waitUntilAtTarget()));
 
   private Supplier<Command> cmd;
 
