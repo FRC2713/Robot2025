@@ -2,7 +2,6 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.LimelightHelpers;
@@ -86,10 +85,10 @@ public class VisionIOLimelights implements VisionIO {
 
       if (primaryMT2.tagCount > 0) {
         this.state = CombinedMegaTagState.UPDATED_WITH_PRIMARY;
-      } 
+      }
       // else if (secondaryMT2.tagCount > 0) {
       //   this.state = CombinedMegaTagState.UPDATED_WITH_SECONDARY;
-      // } 
+      // }
       else {
         this.state = CombinedMegaTagState.REJECTED_DUE_TO_NO_TAGS;
       }
@@ -100,6 +99,9 @@ public class VisionIOLimelights implements VisionIO {
       } else if (this.state == CombinedMegaTagState.UPDATED_WITH_SECONDARY) {
         this.pose = secondaryMT2.pose;
         this.lastTimestamp = secondaryMT2.timestampSeconds;
+      }
+      else {
+        this.pose = null;
       }
 
       Logger.recordOutput("Vision/" + primaryInfo.getNtTableName() + "/pose", primaryMT2.pose);
