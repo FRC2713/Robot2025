@@ -80,7 +80,7 @@ public class SSConstants {
         new LoggedTunableNumber("Pivot/SS/Barge Angle", -30);
 
     public static final LoggedTunableNumber PREP_CLIMB_ANGLE_DEGS =
-        new LoggedTunableNumber("Pivot/SS/Prep Climb Angle", 13);
+        new LoggedTunableNumber("Pivot/SS/Prep Climb Angle", 30);
 
     public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Proc Score Angle", -180);
