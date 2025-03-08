@@ -81,7 +81,7 @@ public class ClimberConstants {
     // config.softLimit.apply(limits);
     config.smartCurrentLimit(currentLimitAmps);
     Gains.toControlGains().applyPID(config.closedLoop);
-    config.follow(kLeftCANId, kRightMotorInverted);
+    config.follow(kLeftCANId, true);
 
     return config;
   }
