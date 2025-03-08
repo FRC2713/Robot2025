@@ -133,8 +133,7 @@ public class AutoRoutines {
                 SuperStructure.L4_PREP.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.parallel(
-                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
-                reefBToSource.cmd())));
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefBToSource.cmd())));
 
     // When the trajectory is done, intake; then go to reef A
     reefBToSource
@@ -150,7 +149,8 @@ public class AutoRoutines {
             Commands.sequence(
                 SuperStructure.L4_PREP.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
-                reefAToSource.cmd()));
+                Commands.parallel(
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefAToSource.cmd())));
 
     reefAToSource.done().onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand());
 
