@@ -159,6 +159,7 @@ public class AutoRoutines {
 
     return routine;
   }
+
   public AutoRoutine scoreLotsOfCoralAndSource() {
     AutoRoutine routine = m_factory.newRoutine("Score Lots of Coral And Source");
 
@@ -174,7 +175,8 @@ public class AutoRoutines {
         .active()
         .onTrue(
             Commands.sequence(
-                new InstantCommand(() -> System.out.println("Score Lots of Coral And Source started")),
+                new InstantCommand(
+                    () -> System.out.println("Score Lots of Coral And Source started")),
                 startToReefDTraj.resetOdometry(),
                 startToReefDTraj.cmd()));
 
@@ -191,8 +193,7 @@ public class AutoRoutines {
                 Commands.waitSeconds(1),
                 SuperStructure.STARTING_CONF.getCommand(),
                 Commands.parallel(
-                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())
-                ));
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())));
 
     // // When the trajectory is done, intake; then go to reef B
     // reefDToSource

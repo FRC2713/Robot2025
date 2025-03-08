@@ -99,8 +99,7 @@ public class VisionIOLimelights implements VisionIO {
       } else if (this.state == CombinedMegaTagState.UPDATED_WITH_SECONDARY) {
         this.pose = secondaryMT2.pose;
         this.lastTimestamp = secondaryMT2.timestampSeconds;
-      }
-      else {
+      } else {
         this.pose = null;
       }
 
