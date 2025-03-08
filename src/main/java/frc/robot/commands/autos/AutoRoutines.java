@@ -114,8 +114,7 @@ public class AutoRoutines {
                 Commands.waitSeconds(0.2)
                 // Commands.parallel(
                 //     SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd()))
-                    ));
-
+                ));
 
     // // When the trajectory is done, intake; then go to reef B
     // reefDToSource
