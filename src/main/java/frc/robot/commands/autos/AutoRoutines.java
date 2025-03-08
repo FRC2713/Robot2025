@@ -111,7 +111,8 @@ public class AutoRoutines {
                 SuperStructure.L4_PREP.getCommand(),
                 Commands.waitSeconds(1),
                 SuperStructure.CORAL_SCORE.getCommand(),
-                Commands.waitSeconds(0.2)
+                Commands.waitSeconds(1),
+                SuperStructure.STARTING_CONF.getCommand()
                 // Commands.parallel(
                 //     SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd()))
                 ));

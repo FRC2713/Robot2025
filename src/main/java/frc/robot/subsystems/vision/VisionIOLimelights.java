@@ -51,6 +51,7 @@ public class VisionIOLimelights implements VisionIO {
     if (RobotContainer.driveSubsystem.getAngularVelocityRadPerSec() > Units.degreesToRadians(720)) {
       this.state = CombinedMegaTagState.REJECTED_DUE_TO_SPIN_BLUR;
     }
+
     if (DriverStation.isEnabled()) {
 
       // https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-robot-localization-megatag2
@@ -78,6 +79,7 @@ public class VisionIOLimelights implements VisionIO {
           LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(secondaryInfo.getNtTableName());
 
       if (primaryMT2 == null || secondaryMT2 == null) {
+        Logger.recordOutput("Vision/limelight state", CombinedMegaTagState.REJECTED_DUE_TO_NULL_MT2);
         return;
       }
 
@@ -164,6 +166,7 @@ public class VisionIOLimelights implements VisionIO {
 
   private enum CombinedMegaTagState {
     INIT,
+    REJECTED_DUE_TO_NULL_MT2,
     REJECTED_DUE_TO_SPIN_BLUR,
     REJECTED_DUE_TO_NO_TAGS,
     UPDATED_WITH_PRIMARY,

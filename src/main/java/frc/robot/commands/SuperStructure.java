@@ -112,11 +112,7 @@ public enum SuperStructure {
               ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN))),
-  PROCESSOR_SCORE(
-      () ->
-          Commands.sequence(
-              PROCESSOR_PREP.getCommand()
-                  )),
+  PROCESSOR_SCORE(() -> Commands.sequence(PROCESSOR_PREP.getCommand())),
   CLIMB(
       () ->
           Commands.sequence(
