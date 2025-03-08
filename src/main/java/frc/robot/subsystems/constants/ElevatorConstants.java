@@ -63,6 +63,7 @@ public class ElevatorConstants {
               .a(0.0)
               // Motion Magic
               .trapezoidal(
+                // Theoretical Max: ...
                   RHRUtil.modeDependentDouble(4, 0.1),
                   RHRUtil.modeDependentDouble(0.5, 0.1),
                   RHRUtil.modeDependentDouble(0.5, 0.1))
