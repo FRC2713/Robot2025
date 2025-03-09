@@ -20,7 +20,7 @@ public class AlgaeClawIOSparks implements AlgaeClawIO {
   public AlgaeClawIOSparks() {
     this.motor = new SparkFlex(AlgaeClawConstants.kCANId, MotorType.kBrushless);
     motor.configure(
-        AlgaeClawConstants.createConfig(40),
+        AlgaeClawConstants.createConfig(80),
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
     debouncer = new Debouncer(0.25, DebounceType.kBoth);

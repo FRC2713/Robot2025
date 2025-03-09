@@ -71,10 +71,10 @@ public class SSConstants {
         new LoggedTunableNumber("Pivot/SS/L1 Angle", 0);
 
     public static final LoggedTunableNumber L2_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/L2 Angle", 8);
+        new LoggedTunableNumber("Pivot/SS/L2 Angle", 35);
 
     public static final LoggedTunableNumber L3_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/L3 Angle", 15);
+        new LoggedTunableNumber("Pivot/SS/L3 Angle", 35);
 
     public static final LoggedTunableNumber L4_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/L4 Angle", 55);
