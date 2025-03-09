@@ -52,7 +52,7 @@ public class ClimberCmds {
   // soft limits will help us here, but also set the voltage to zero when it's reached.
   public static Command deploy() {
     return Commands.sequence(
-        setVoltage(() -> 6),
+        setVoltage(() -> 10),
         Commands.waitUntil(
             () ->
                 RobotContainer.climber.getCurrentAngle()
