@@ -80,6 +80,7 @@ public class VisionIOLimelights implements VisionIO {
       if (primaryMT2 == null || secondaryMT2 == null) {
         Logger.recordOutput(
             "Vision/limelight state", CombinedMegaTagState.REJECTED_DUE_TO_NULL_MT2);
+            Logger.recordOutput("Vision/limelight state", this.state);
         return;
       }
 
