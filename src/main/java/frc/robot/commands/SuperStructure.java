@@ -43,7 +43,7 @@ public enum SuperStructure {
   L1_PREP(
       () ->
           Commands.sequence(
-            AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
+              AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
               Commands.either(
                   PivotCmds.setAngleAndWait(() -> 35),
                   Commands.none(),
@@ -56,8 +56,7 @@ public enum SuperStructure {
   L2_PREP(
       () ->
           Commands.sequence(
-            AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
-
+              AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
               Commands.either(
                   PivotCmds.setAngleAndWait(() -> 35),
                   Commands.none(),
@@ -70,7 +69,7 @@ public enum SuperStructure {
   L3_PREP(
       () ->
           Commands.sequence(
-            AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
+              AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
               Commands.either(
                   PivotCmds.setAngleAndWait(() -> 35),
                   Commands.none(),
