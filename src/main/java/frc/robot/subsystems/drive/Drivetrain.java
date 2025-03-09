@@ -23,6 +23,8 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -77,6 +79,7 @@ public class Drivetrain extends SubsystemBase {
   private final SysIdRoutine sysId;
   private final Alert gyroDisconnectedAlert =
       new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
+      private final Debouncer debounce = new Debouncer(0.5, DebounceType.kBoth);
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = new Rotation2d();
@@ -196,17 +199,15 @@ public class Drivetrain extends SubsystemBase {
 
       // Apply update
       if (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.MEGATAG2) {
-        if (DriverStation.isEnabled()) {
-          poseEstimator.setVisionMeasurementStdDevs(
-              VecBuilder.fill(.6, .6, 999999999));
+        if (debounce.calculate(DriverStation.isEnabled())) {
+          poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.6, .6, 999999999));
+          if (RobotContainer.visionsubsystem.getPose() != null) {
+            poseEstimator.addVisionMeasurement(
+                RobotContainer.visionsubsystem.getPose(),
+                RobotContainer.visionsubsystem.getTimestamp());
+          }
         } else {
-          poseEstimator.setVisionMeasurementStdDevs(
-              VecBuilder.fill(.6, .6,999999999));
-        }
-        if (RobotContainer.visionsubsystem.getPose() != null) {
-          poseEstimator.addVisionMeasurement(
-              RobotContainer.visionsubsystem.getPose(),
-              RobotContainer.visionsubsystem.getTimestamp());
+          // poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.6, .6, 999999999));
         }
       }
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
