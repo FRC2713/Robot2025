@@ -74,13 +74,12 @@ public class VisionIOLimelights implements VisionIO {
 
       LimelightHelpers.PoseEstimate primaryMT2 =
           LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(primaryInfo.getNtTableName());
-      LimelightHelpers.PoseEstimate secondaryMT2 =
-          LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(secondaryInfo.getNtTableName());
+      // LimelightHelpers.PoseEstimate secondaryMT2 =
+      //     LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(secondaryInfo.getNtTableName());
 
-      if (primaryMT2 == null || secondaryMT2 == null) {
+      if (primaryMT2 == null) {
         Logger.recordOutput(
             "Vision/limelight state", CombinedMegaTagState.REJECTED_DUE_TO_NULL_MT2);
-            Logger.recordOutput("Vision/limelight state", this.state);
         return;
       }
 
@@ -97,10 +96,12 @@ public class VisionIOLimelights implements VisionIO {
       if (this.state == CombinedMegaTagState.UPDATED_WITH_PRIMARY) {
         this.pose = primaryMT2.pose;
         this.lastTimestamp = primaryMT2.timestampSeconds;
-      } else if (this.state == CombinedMegaTagState.UPDATED_WITH_SECONDARY) {
-        this.pose = secondaryMT2.pose;
-        this.lastTimestamp = secondaryMT2.timestampSeconds;
-      } else {
+      } 
+      // else if (this.state == CombinedMegaTagState.UPDATED_WITH_SECONDARY) {
+      //   this.pose = secondaryMT2.pose;
+      //   this.lastTimestamp = secondaryMT2.timestampSeconds;
+      // } 
+      else {
         this.pose = null;
       }
 
@@ -110,11 +111,11 @@ public class VisionIOLimelights implements VisionIO {
       Logger.recordOutput(
           "Vision/" + primaryInfo.getNtTableName() + "/timestamp", primaryMT2.timestampSeconds);
 
-      Logger.recordOutput("Vision/" + secondaryInfo.getNtTableName() + "/pose", secondaryMT2.pose);
-      Logger.recordOutput(
-          "Vision/" + secondaryInfo.getNtTableName() + "/tag count", secondaryMT2.tagCount);
-      Logger.recordOutput(
-          "Vision/" + secondaryInfo.getNtTableName() + "/timestamp", secondaryMT2.timestampSeconds);
+      // Logger.recordOutput("Vision/" + secondaryInfo.getNtTableName() + "/pose", secondaryMT2.pose);
+      // Logger.recordOutput(
+      //     "Vision/" + secondaryInfo.getNtTableName() + "/tag count", secondaryMT2.tagCount);
+      // Logger.recordOutput(
+      //     "Vision/" + secondaryInfo.getNtTableName() + "/timestamp", secondaryMT2.timestampSeconds);
       Logger.recordOutput("Vision/version", "MegaTag2");
     } else {
 
