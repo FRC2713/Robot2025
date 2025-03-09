@@ -305,10 +305,13 @@ public class RobotContainer {
     driver
         .leftTrigger(0.25)
         .onTrue(SuperStructure.CORAL_SCORE.getCommand())
-        .onFalse(RollerCmds.setSpeed(() -> 0));
+        .onFalse(Commands.sequence(RollerCmds.setSpeed(() -> 0), AlgaeClawCmds.setSpeed(() -> 0)));
 
     // Grab Algae
-    driver.rightBumper().onTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand())).onFalse(AlgaeClawCmds.setSpeed(() -> 0));
+    driver
+        .rightBumper()
+        .onTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()))
+        .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
     // Score Algae
     // just spit the algae, it's up to the operator to put it in processor, intake, or barge pose

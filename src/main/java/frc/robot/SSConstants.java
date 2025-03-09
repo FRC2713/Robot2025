@@ -16,7 +16,7 @@ public class SSConstants {
         new LoggedTunableNumber("Elevator/SS/L2 Height", 2);
 
     public static final LoggedTunableNumber L3_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/L3 Height", 17.3);
+        new LoggedTunableNumber("Elevator/SS/L3 Height", 18);
 
     public static final LoggedTunableNumber L4_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L4 Height", 24);
