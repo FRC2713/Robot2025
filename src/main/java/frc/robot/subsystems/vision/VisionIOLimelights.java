@@ -96,11 +96,11 @@ public class VisionIOLimelights implements VisionIO {
       if (this.state == CombinedMegaTagState.UPDATED_WITH_PRIMARY) {
         this.pose = primaryMT2.pose;
         this.lastTimestamp = primaryMT2.timestampSeconds;
-      } 
+      }
       // else if (this.state == CombinedMegaTagState.UPDATED_WITH_SECONDARY) {
       //   this.pose = secondaryMT2.pose;
       //   this.lastTimestamp = secondaryMT2.timestampSeconds;
-      // } 
+      // }
       else {
         this.pose = null;
       }
@@ -111,11 +111,13 @@ public class VisionIOLimelights implements VisionIO {
       Logger.recordOutput(
           "Vision/" + primaryInfo.getNtTableName() + "/timestamp", primaryMT2.timestampSeconds);
 
-      // Logger.recordOutput("Vision/" + secondaryInfo.getNtTableName() + "/pose", secondaryMT2.pose);
+      // Logger.recordOutput("Vision/" + secondaryInfo.getNtTableName() + "/pose",
+      // secondaryMT2.pose);
       // Logger.recordOutput(
       //     "Vision/" + secondaryInfo.getNtTableName() + "/tag count", secondaryMT2.tagCount);
       // Logger.recordOutput(
-      //     "Vision/" + secondaryInfo.getNtTableName() + "/timestamp", secondaryMT2.timestampSeconds);
+      //     "Vision/" + secondaryInfo.getNtTableName() + "/timestamp",
+      // secondaryMT2.timestampSeconds);
       Logger.recordOutput("Vision/version", "MegaTag2");
     } else {
 

@@ -195,20 +195,20 @@ public class Drivetrain extends SubsystemBase {
       }
 
       // Apply update
-      // if (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.MEGATAG2) {
-      //   if (DriverStation.isEnabled()) {
-      //     poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.6, .6, 9999999));
-      //   } else {
-      //     poseEstimator.setVisionMeasurementStdDevs(
-      //         VecBuilder.fill(.6, .6, Units.degreesToRadians(1)));
-      //   }
-      //   if (RobotContainer.visionsubsystem.getPose() != null) {
-      //     poseEstimator.addVisionMeasurement(
-      //         RobotContainer.visionsubsystem.getPose(),
-      //         RobotContainer.visionsubsystem.getTimestamp());
-      //   }
+      if (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.MEGATAG2) {
+        if (DriverStation.isEnabled()) {
+          poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.6, .6, Units.degreesToRadians(20)));
+        } else {
+          poseEstimator.setVisionMeasurementStdDevs(
+              VecBuilder.fill(.6, .6, Units.degreesToRadians(1)));
+        }
+        if (RobotContainer.visionsubsystem.getPose() != null) {
+          poseEstimator.addVisionMeasurement(
+              RobotContainer.visionsubsystem.getPose(),
+              RobotContainer.visionsubsystem.getTimestamp());
+        }
 
-      // }
+      }
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
 
       odometryPoseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
