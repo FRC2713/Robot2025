@@ -329,59 +329,93 @@ public class RobotContainer {
                 AlgaeClawCmds.setSpeedIfNoAlgae(() -> 0), RollerCmds.setSpeed(() -> 0)));
 
     // Heading controller
-    driver
-        .povUp()
-        .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> Rotation2d.fromDegrees(180)),
-                "Heading Controller"))
-        .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Full Control"));
+    // driver
+    //     .povUp()
+    //     .onTrue(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDriveAtAngle(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> Rotation2d.fromDegrees(180)),
+    //             "Heading Controller"))
+    //     .onFalse(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDrive(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> -driver.getRightX()),
+    //             "Full Control"));
 
-    driver
-        .povDown()
-        .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> Rotation2d.fromDegrees(0)),
-                "Heading Controller"))
-        .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Full Control"));
+    // driver
+    //     .povDown()
+    //     .onTrue(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDriveAtAngle(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> Rotation2d.fromDegrees(0)),
+    //             "Heading Controller"))
+    //     .onFalse(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDrive(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> -driver.getRightX()),
+    //             "Full Control"));
+
+    // driver
+    //     .povLeft()
+    //     .onTrue(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDriveAtAngle(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> Rotation2d.fromDegrees(-90)),
+    //             "Heading Controller"))
+    //     .onFalse(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDrive(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> -driver.getRightX()),
+    //             "Full Control"));
 
     driver
         .povLeft()
         .onTrue(
             DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
+                DriveCommands.inch(driveSubsystem, SSConstants.Drive.INCH_SPEED),
+                "Inch Left"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
                     driveSubsystem,
                     () -> -driver.getLeftY(),
                     () -> -driver.getLeftX(),
-                    () -> Rotation2d.fromDegrees(-90)),
-                "Heading Controller"))
+                    () -> -driver.getRightX()),
+                "Full Control"));
+    driver
+        .povRight()
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.inch(
+                    driveSubsystem, () -> -1 * SSConstants.Drive.INCH_SPEED.getAsDouble()),
+                "Inch Right"))
         .onFalse(
             DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem,
@@ -412,26 +446,26 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Full Control"));
-    driver
-        .povRight()
-        .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> Rotation2d.fromDegrees(90)),
-                "Heading Controller"))
-        .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Full Control"));
+    // driver
+    //     .povRight()
+    //     .onTrue(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDriveAtAngle(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> Rotation2d.fromDegrees(90)),
+    //             "Heading Controller"))
+    //     .onFalse(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDrive(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> -driver.getRightX()),
+    //             "Full Control"));
 
     // Operator Controls
     operator.a().onTrue(SuperStructure.L1_PREP.getCommand());

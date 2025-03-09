@@ -122,7 +122,8 @@ public enum SuperStructure {
       () ->
           Commands.sequence(
               // move the arm out of the way
-              Commands.sequence(
+              Commands.parallel(
+                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.CLIMB_PREP_HEIGHT),
                   ShoulderCmds.setAngle(SSConstants.Shoulder.PREP_CLIMB_ANGLE_DEGS),
                   PivotCmds.setAngle(SSConstants.Pivot.PREP_CLIMB_ANGLE_DEGS)),
               // deploy the climber

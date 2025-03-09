@@ -161,6 +161,14 @@ public class DriveCommands {
         drive);
   }
 
+  public static Command inch(Drivetrain drive, DoubleSupplier xSupplier) {
+    return Commands.run(
+        () -> {
+          drive.runVelocity(new ChassisSpeeds(0, xSupplier.getAsDouble(), 0));
+        },
+        drive);
+  }
+
   /**
    * Field relative drive command using joystick for linear control and PID for angular control.
    * Possible use cases include snapping to an angle, aiming at a vision target, or controlling

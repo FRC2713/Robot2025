@@ -29,6 +29,9 @@ public class SSConstants {
 
     public static final LoggedTunableNumber BARGE_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/Barge Height", 26);
+
+    public static final LoggedTunableNumber CLIMB_PREP_HEIGHT =
+        new LoggedTunableNumber("Elevator/SS/Climb Prep Height", 10);
   }
 
   public class Shoulder {
@@ -147,5 +150,10 @@ public class SSConstants {
         new LoggedTunableNumber("Auto/Intake Delay", 1);
     public static final LoggedTunableNumber L4_SCORE_DELAY =
         new LoggedTunableNumber("Auto/Intake Delay", 0.2);
+  }
+
+  public class Drive {
+    public static final LoggedTunableNumber INCH_SPEED =
+        new LoggedTunableNumber("Drive/Inch Speed", 0.1);
   }
 }
