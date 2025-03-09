@@ -93,11 +93,8 @@ public enum SuperStructure {
           Commands.sequence(
               RollerCmds.setEnableLimitSwitch(false),
               RollerCmds.setSpeed(SSConstants.Roller.L2_PLUS_CORAL_SCORE_SPEED))),
-  ALGAE_GRAB(
-      () ->
-         
-              AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED)
-             ),
+  ALGAE_GRAB(() -> AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED)),
+
   ALGAE_GRAB_AND_CORAL_SCORE(
       () ->
           Commands.sequence(
