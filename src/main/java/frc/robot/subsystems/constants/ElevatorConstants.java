@@ -29,7 +29,7 @@ public class ElevatorConstants {
   public static final double kRotationsToHeightConversion = (Math.PI * kDrumRadius * 2);
 
   public static final double kMinHeight = 0.0; // inches
-  public static final double kMaxHeight = 25.0; // inches
+  public static final double kMaxHeight = 26.0; // inches
   public static final double kInitialHeight = 0;
 
   public static double toInches(double rotations) {
@@ -63,6 +63,7 @@ public class ElevatorConstants {
               .a(0.0)
               // Motion Magic
               .trapezoidal(
+                  // Theoretical Max: ...
                   RHRUtil.modeDependentDouble(4, 0.1),
                   RHRUtil.modeDependentDouble(0.5, 0.1),
                   RHRUtil.modeDependentDouble(0.5, 0.1))

@@ -81,7 +81,7 @@ public class ClimberIOSparks implements ClimberIO {
   @Override
   public void setVoltage(double volts) {
     leftMotor.setVoltage(volts);
-    rightMotor.setVoltage(volts);
+    // rightMotor.setVoltage(volts);
   }
 
   @Override

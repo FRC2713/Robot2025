@@ -49,7 +49,7 @@ public class PivotConstants {
   public static final double kS = RHRUtil.modeDependentDouble(0.1, 0.); // Volts
 
   // Theoretical Max: 1.333
-  public static final double kTrapezoidalMaxVelocity = .4;
+  public static final double kTrapezoidalMaxVelocity = .6;
   public static final double kTrapezoidalMaxAcceleration = 60;
   public static final double kTrapezoidalMaxJerk = 300;
   public static final double kExponential_kV = 9.31;

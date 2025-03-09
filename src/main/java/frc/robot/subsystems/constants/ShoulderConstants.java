@@ -19,8 +19,8 @@ public class ShoulderConstants {
   public static final double kMass = 7.094328; // kg
   public static final double kHeight = Units.inchesToMeters(24);
 
-  public static final double kMinAngle = (-280);
-  public static final double kMaxAngle = (280);
+  public static final double kMinAngle = (-345);
+  public static final double kMaxAngle = (227);
 
   public static final double kInitialAngleRad = Units.degreesToRadians(-90);
 
@@ -75,10 +75,10 @@ public class ShoulderConstants {
               .expo_kV(kExponential_kV)
               .expo_kA(kExponential_kA));
 
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(0);
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(163.125);
 
   public static final int mech2dWidth = 10;
   public static final Color8Bit mech2dColor = new Color8Bit(0, 255, 0);
 
-  public static final double AT_TARGET_GIVE_DEGS = 2;
+  public static final double AT_TARGET_GIVE_DEGS = 3;
 }
