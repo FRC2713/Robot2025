@@ -245,8 +245,8 @@ public class RobotContainer {
     // autoChooser.addCmd(
     //     "Drive SysId (Dynamic Backward)",
     //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    // autoChooser.addCmd(
-    //     "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
+    autoChooser.addCmd(
+        "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
 
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
