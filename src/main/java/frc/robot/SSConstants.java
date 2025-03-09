@@ -16,7 +16,7 @@ public class SSConstants {
         new LoggedTunableNumber("Elevator/SS/L2 Height", 2);
 
     public static final LoggedTunableNumber L3_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/L3 Height", 16.3);
+        new LoggedTunableNumber("Elevator/SS/L3 Height", 17.3);
 
     public static final LoggedTunableNumber L4_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L4 Height", 24);
@@ -112,7 +112,7 @@ public class SSConstants {
 
   public class AlgaeClaw {
     public static final LoggedTunableNumber ALGAE_GRAB_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/Algae Grab Speed", 4000);
+        new LoggedTunableNumber("AlgaeClaw/SS/Algae Grab Speed", 6000);
 
     public static final DoubleSupplier PROCESSOR_SCORE_SPEED =
         new LoggedTunableNumber("AlgaeClaw/SS/Proc Score Speed", -6000);

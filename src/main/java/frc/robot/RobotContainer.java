@@ -308,10 +308,7 @@ public class RobotContainer {
         .onFalse(RollerCmds.setSpeed(() -> 0));
 
     // Grab Algae
-    driver
-        .rightBumper()
-        .onTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()));
-        
+    driver.rightBumper().onTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand())).onFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
     // Score Algae
     // just spit the algae, it's up to the operator to put it in processor, intake, or barge pose
