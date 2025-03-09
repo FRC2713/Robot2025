@@ -82,7 +82,7 @@ public enum SuperStructure {
   L4_PREP(
       () ->
           Commands.sequence(
-            AlgaeClawCmds.setSpeed(() -> 0),
+              AlgaeClawCmds.setSpeed(() -> 0),
               Commands.either(
                   PivotCmds.setAngleAndWait(() -> 35),
                   Commands.none(),

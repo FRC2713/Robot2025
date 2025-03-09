@@ -273,26 +273,44 @@ public class RobotContainer {
     driver
         .start()
         .onTrue(
-            Commands.runOnce(
-                    () ->
-                        driveSubsystem.setPose(
-                            new Pose2d(
-                                driveSubsystem.getPose().getTranslation(),
-                                Rotation2d.fromDegrees(0))),
-                    driveSubsystem)
-                .ignoringDisable(true));
+            Commands.parallel(
+                DriveCommands.changeDefaultDriveCommand(
+                    driveSubsystem,
+                    DriveCommands.joystickDrive(
+                        driveSubsystem,
+                        () -> -driver.getLeftY(),
+                        () -> -driver.getLeftX(),
+                        () -> -driver.getRightX()),
+                    "Full Control"),
+                Commands.runOnce(
+                        () ->
+                            driveSubsystem.setPose(
+                                new Pose2d(
+                                    driveSubsystem.getPose().getTranslation(),
+                                    Rotation2d.fromDegrees(0))),
+                        driveSubsystem)
+                    .ignoringDisable(true)));
 
     // Reset gyro to 180 deg when start button is pressed
     driver
         .back()
         .onTrue(
-            Commands.runOnce(
-                    () ->
-                        driveSubsystem.setPose(
-                            new Pose2d(
-                                driveSubsystem.getPose().getTranslation(),
-                                Rotation2d.fromDegrees(180))),
-                    driveSubsystem)
+            Commands.parallel(
+                    DriveCommands.changeDefaultDriveCommand(
+                        driveSubsystem,
+                        DriveCommands.joystickDrive(
+                            driveSubsystem,
+                            () -> -driver.getLeftY(),
+                            () -> -driver.getLeftX(),
+                            () -> -driver.getRightX()),
+                        "Full Control"),
+                    Commands.runOnce(
+                        () ->
+                            driveSubsystem.setPose(
+                                new Pose2d(
+                                    driveSubsystem.getPose().getTranslation(),
+                                    Rotation2d.fromDegrees(180))),
+                        driveSubsystem))
                 .ignoringDisable(true));
 
     // Intake Coral
@@ -475,7 +493,19 @@ public class RobotContainer {
     operator.x().onTrue(SuperStructure.BARGE.getCommand());
 
     operator.povLeft().onTrue(SuperStructure.CLIMB.getCommand());
-    operator.start().onTrue(SuperStructure.CLIMB_PREP.getCommand());
+    operator
+        .start()
+        .onTrue(
+            Commands.parallel(
+                DriveCommands.changeDefaultDriveCommand(
+                    driveSubsystem,
+                    DriveCommands.joystickDriveSlow(
+                        driveSubsystem,
+                        () -> -driver.getLeftY(),
+                        () -> -driver.getLeftX(),
+                        () -> -driver.getRightX()),
+                    "Slow Control"),
+                SuperStructure.CLIMB_PREP.getCommand()));
     operator
         .leftTrigger(0.1)
         .whileTrue(new MoveClimber(operator::getLeftTriggerAxis, SSConstants.Climber.SERVO_POS_OFF))
