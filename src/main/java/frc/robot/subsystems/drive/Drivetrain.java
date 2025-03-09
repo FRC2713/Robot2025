@@ -197,17 +197,17 @@ public class Drivetrain extends SubsystemBase {
       // Apply update
       if (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.MEGATAG2) {
         if (DriverStation.isEnabled()) {
-          poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.6, .6, Units.degreesToRadians(20)));
+          poseEstimator.setVisionMeasurementStdDevs(
+              VecBuilder.fill(.6, .6, 999999999));
         } else {
           poseEstimator.setVisionMeasurementStdDevs(
-              VecBuilder.fill(.6, .6, Units.degreesToRadians(1)));
+              VecBuilder.fill(.6, .6,999999999));
         }
         if (RobotContainer.visionsubsystem.getPose() != null) {
           poseEstimator.addVisionMeasurement(
               RobotContainer.visionsubsystem.getPose(),
               RobotContainer.visionsubsystem.getTimestamp());
         }
-
       }
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
 
