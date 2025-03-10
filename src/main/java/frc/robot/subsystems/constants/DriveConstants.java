@@ -17,6 +17,13 @@ public class DriveConstants {
   public static final double driveBaseWidthWithBumpersMeters =
       edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 7.0);
 
+      public static final ProfiledPIDController scoreAssistController =
+      new ControlGains()
+          .p(1.0)
+          .d(0)
+          .trapezoidal(TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() / 2, 10, 0)
+          .createTrapezoidalPIDController();
+
   public final class AutoConstants {
     public static final PIDController xTrajectoryController =
         new ControlGains().p(10.0).createPIDController();
@@ -50,7 +57,7 @@ public class DriveConstants {
             .p(5.0)
             .d(0.4)
             .trapezoidal(kMaxAngularVelocity, kMaxAngularAcceleration, 0)
-            .createTrapezoidalPIDController();
+            .createAngularTrapezoidalPIDController();
   }
 
   public static RobotConfig pathPlannerConfig;

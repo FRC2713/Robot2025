@@ -3,14 +3,9 @@ package frc.robot.commands.autos;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Constants;
 import frc.robot.SSConstants;
-import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
-import frc.robot.util.AllianceFlipUtil;
 
 public class AutoRoutinesWithPathFinding {
   private final AutoFactory m_factory;
@@ -33,30 +28,31 @@ public class AutoRoutinesWithPathFinding {
     // 1) Generate the a PathPlannerLib trajectory for the first leg. Go to reefD, then score on L4
 
     // when generating leg1, you don't need to reset odemetry at the start
-    Command leg1 =
-        Commands.sequence(
-            ScoreAssist.buildOTFPath(
-                reefDToProcTraj.getInitialPose().get(), Constants.scoreAssistConstraints, 0, false),
-            SuperStructure.L4_PREP.getCommand(),
-            SuperStructure.CORAL_SCORE.getCommand(),
-            Commands.waitSeconds(0.2));
+    // Command leg1 =
+    //     Commands.sequence(
+    //         ScoreAssist.buildOTFPath(
+    //             reefDToProcTraj.getInitialPose().get(), Constants.scoreAssistConstraints, 0,
+    // false),
+    //         SuperStructure.L4_PREP.getCommand(),
+    //         SuperStructure.CORAL_SCORE.getCommand(),
+    //         Commands.waitSeconds(0.2));
 
-    // When the routine begins, reset odometry and start the first trajectory
+    // // When the routine begins, reset odometry and start the first trajectory
 
-    // when the routine starts, first run the path-finding command
-    routine
-        .active()
-        .onTrue(
-            Commands.sequence(
-                Commands.print(name + " started generated leg!"),
-                leg1,
-                Commands.waitSeconds(0.2),
-                Commands.print(name + " started routine!"),
-                // startToReefDTraj.resetOdometry(),
-                SuperStructure.L3_PREP.getCommand(),
-                SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand(),
-                Commands.parallel(
-                    SuperStructure.PROCESSOR_PREP.delayCommand(0.5), reefDToProcTraj.cmd())));
+    // // when the routine starts, first run the path-finding command
+    // routine
+    //     .active()
+    //     .onTrue(
+    //         Commands.sequence(
+    //             Commands.print(name + " started generated leg!"),
+    //             leg1,
+    //             Commands.waitSeconds(0.2),
+    //             Commands.print(name + " started routine!"),
+    //             // startToReefDTraj.resetOdometry(),
+    //             SuperStructure.L3_PREP.getCommand(),
+    //             SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand(),
+    //             Commands.parallel(
+    //                 SuperStructure.PROCESSOR_PREP.delayCommand(0.5), reefDToProcTraj.cmd())));
 
     // When the trajectory is done, score in processor. Then go to source
     reefDToProcTraj
@@ -109,29 +105,30 @@ public class AutoRoutinesWithPathFinding {
     // 1) Generate the a PathPlannerLib trajectory for the first leg. Go to reefD, then score on L4
 
     // when generating leg1, you don't need to reset odemetry at the start
-    Command leg1 =
-        Commands.sequence(
-            ScoreAssist.buildOTFPath(
-                reefDToSource.getInitialPose().get(), Constants.scoreAssistConstraints, 0, false),
-            SuperStructure.L4_PREP.getCommand(),
-            SuperStructure.CORAL_SCORE.getCommand(),
-            Commands.waitSeconds(0.2));
+    // Command leg1 =
+    //     Commands.sequence(
+    //         ScoreAssist.buildOTFPath(
+    //             reefDToSource.getInitialPose().get(), Constants.scoreAssistConstraints, 0,
+    // false),
+    //         SuperStructure.L4_PREP.getCommand(),
+    //         SuperStructure.CORAL_SCORE.getCommand(),
+    //         Commands.waitSeconds(0.2));
 
-    // when the routine starts, first run the path-finding command
-    routine
-        .active()
-        .onTrue(
-            Commands.sequence(
-                Commands.print(name + " started generated leg!"),
-                leg1,
-                Commands.waitSeconds(0.1),
-                Commands.print(name + " started routine!"),
-                // reefDToSource.resetOdometry(),
-                SuperStructure.L4_PREP.getCommand(),
-                SuperStructure.CORAL_SCORE.getCommand(),
-                Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                Commands.parallel(
-                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())));
+    // // when the routine starts, first run the path-finding command
+    // routine
+    //     .active()
+    //     .onTrue(
+    //         Commands.sequence(
+    //             Commands.print(name + " started generated leg!"),
+    //             leg1,
+    //             Commands.waitSeconds(0.1),
+    //             Commands.print(name + " started routine!"),
+    //             // reefDToSource.resetOdometry(),
+    //             SuperStructure.L4_PREP.getCommand(),
+    //             SuperStructure.CORAL_SCORE.getCommand(),
+    //             Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+    //             Commands.parallel(
+    //                 SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())));
 
     // 2) Run the rest of the routine
 
@@ -187,23 +184,23 @@ public class AutoRoutinesWithPathFinding {
     AutoRoutine routine = m_factory.newRoutine("DriveStraight");
 
     var startToReefTraj = routine.trajectory("Example");
-    Command leg1 =
-        Commands.sequence(
-            ScoreAssist.buildOTFPath(
-                AllianceFlipUtil.apply(startToReefTraj.getFinalPose().get()),
-                Constants.scoreAssistConstraints,
-                0,
-                false),
-            SuperStructure.L4_PREP.getCommand(),
-            SuperStructure.CORAL_SCORE.getCommand(),
-            Commands.waitSeconds(0.2));
+    // Command leg1 =
+    //     Commands.sequence(
+    //         ScoreAssist.buildOTFPath(
+    //             AllianceFlipUtil.apply(startToReefTraj.getFinalPose().get()),
+    //             Constants.scoreAssistConstraints,
+    //             0,
+    //             false),
+    //         SuperStructure.L4_PREP.getCommand(),
+    //         SuperStructure.CORAL_SCORE.getCommand(),
+    //         Commands.waitSeconds(0.2));
 
-    // When the routine begins, reset odometry and start the first trajectory
-    routine
-        .active()
-        .onTrue(
-            Commands.sequence(
-                new InstantCommand(() -> System.out.println(name + " started")), leg1));
+    // // When the routine begins, reset odometry and start the first trajectory
+    // routine
+    //     .active()
+    //     .onTrue(
+    //         Commands.sequence(
+    //             new InstantCommand(() -> System.out.println(name + " started")), leg1));
 
     return routine;
   }

@@ -129,6 +129,17 @@ public class ControlGains {
             this.getKTrapezoidalMaxVelocity(), this.getKTrapezoidalMaxAcceleration()));
   }
 
+  public ProfiledPIDController createAngularTrapezoidalPIDController() {
+    var pid = new ProfiledPIDController(
+      this.getKP(),
+      this.getKI(),
+      this.getKD(),
+      new TrapezoidProfile.Constraints(
+          this.getKTrapezoidalMaxVelocity(), this.getKTrapezoidalMaxAcceleration()));
+          pid.enableContinuousInput(-Math.PI, Math.PI);
+    return pid;
+  }
+
   public ElevatorFeedforward createElevatorFF() {
     return new ElevatorFeedforward(this.getKS(), this.getKG(), this.getKV(), this.getKA());
   }

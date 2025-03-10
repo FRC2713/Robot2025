@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.ReefAlign;
+import frc.robot.commands.ScoreAssist;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -132,6 +134,8 @@ public class Robot extends LoggedRobot {
     RobotContainer.algaeClaw.updateMech2D();
     RobotContainer.shoulder.updateMech2D();
     RobotContainer.climber.updateMech2D();
+    ReefAlign.getInstance().periodic();
+    ScoreAssist.getInstance().periodic();
 
     // Record the pose of each subsystem
     // order matters here.

@@ -23,9 +23,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ReefAlign;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
@@ -39,7 +41,6 @@ import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSparks;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
-import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
@@ -88,6 +89,7 @@ public class RobotContainer {
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
   private static final CommandXboxController operator = new CommandXboxController(1);
+  private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
 
   // Dashboard inputs
   public final AutoChooser autoChooser;
@@ -102,6 +104,7 @@ public class RobotContainer {
   // For Choreo
   private final AutoFactory choreoAutoFactory;
   public static Vision visionsubsystem;
+  public static boolean disableReefAlign = true;
 
   public RobotContainer() {
     // Start subsystems
@@ -136,7 +139,7 @@ public class RobotContainer {
         rollers = new Rollers(new RollersIOSim());
         algaeClaw = new AlgaeClaw(new AlgaeClawIOSim());
         shoulder = new Shoulder(new ShoulderIOSim());
-        climber = new Climber(new ClimberIOSim());
+        climber = new Climber(new ClimberIO() {});
         break;
 
       default:
@@ -258,6 +261,26 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    reefAlignTrigger
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> ReefAlign.getInstance().inZone().get()),
+                "Drive Align To Reef"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Default Joystick Drive"));
+
     // Default command, normal field-relative drive
     DriveCommands.setDefaultDriveCommand(
         driveSubsystem,
@@ -313,16 +336,23 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Intake Coral
-    driver
-        .leftBumper()
-        .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
-        .onFalse(RollerCmds.setSpeed(() -> 0));
+    // driver
+    //     .leftBumper()
+    //     .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
+    //     .onFalse(RollerCmds.setSpeed(() -> 0));
 
     // Score Coral
     driver
-        .leftTrigger(0.25)
-        .onTrue(SuperStructure.CORAL_SCORE.getCommand())
-        .onFalse(Commands.sequence(RollerCmds.setSpeed(() -> 0), AlgaeClawCmds.setSpeed(() -> 0)));
+        .leftBumper()
+        .onTrue(DriveCommands.changeDefaultDriveCommand(driveSubsystem, ScoreAssist.getInstance().goClosest(driveSubsystem), "ScoreAssist"))
+        .onFalse(DriveCommands.changeDefaultDriveCommand(
+            driveSubsystem,
+            DriveCommands.joystickDrive(
+                driveSubsystem,
+                () -> -driver.getLeftY(),
+                () -> -driver.getLeftX(),
+                () -> -driver.getRightX()),
+            "Full Control"));
 
     // Grab Algae
     driver
@@ -438,13 +468,6 @@ public class RobotContainer {
         .onFalse(ClimberCmds.setVoltage(() -> 0));
 
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());
-
-    ScoreAssist.getInstance()
-        .getTrigger()
-        .onTrue(
-            ScoreAssist.getInstance()
-                .setActiveCommand(ScoreAssist.getInstance()::networkTablesDrive))
-        .onFalse(ScoreAssist.getInstance().cancelCmd());
   }
 
   public void disabledPeriodic() {
