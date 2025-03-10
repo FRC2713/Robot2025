@@ -26,34 +26,34 @@ public class ReefAlign {
         Rotation2d.fromDegrees(30),
         true,
         ScoreNode.C.getPose().getRotation()),
-        new TrapezoidZone(
-          new Point(4.498320579528809, 3.0688583850860596),
-          new Point(5.305319309234619, 3.494252920150757),
-          1.5,
-          Rotation2d.fromDegrees(30),
-          true,
-          ScoreNode.E.getPose().getRotation()),
-          new TrapezoidZone(
-            new Point(5.305319309234619, 3.494252920150757),
-            new Point(5.305319309234619, 4.495181083679199),
-            1,
-            Rotation2d.fromDegrees(30),
-            true,
-            ScoreNode.G.getPose().getRotation()),
-            new TrapezoidZone(
-            new Point(5.305319309234619, 4.495181083679199),
-            new Point(4.498320579528809, 4.9768781661987305),
-            1.5,
-            Rotation2d.fromDegrees(30),
-            true,
-            ScoreNode.I.getPose().getRotation()),
-            new TrapezoidZone(
-            new Point(4.498320579528809, 4.9768781661987305),
-            new Point(3.595618486404419, 4.509187698364258),
-            2,
-            Rotation2d.fromDegrees(30),
-            true,
-            ScoreNode.K.getPose().getRotation())
+    new TrapezoidZone(
+        new Point(4.498320579528809, 3.0688583850860596),
+        new Point(5.305319309234619, 3.494252920150757),
+        1.5,
+        Rotation2d.fromDegrees(30),
+        true,
+        ScoreNode.E.getPose().getRotation()),
+    new TrapezoidZone(
+        new Point(5.305319309234619, 3.494252920150757),
+        new Point(5.305319309234619, 4.495181083679199),
+        1,
+        Rotation2d.fromDegrees(30),
+        true,
+        ScoreNode.G.getPose().getRotation()),
+    new TrapezoidZone(
+        new Point(5.305319309234619, 4.495181083679199),
+        new Point(4.498320579528809, 4.9768781661987305),
+        1.5,
+        Rotation2d.fromDegrees(30),
+        true,
+        ScoreNode.I.getPose().getRotation()),
+    new TrapezoidZone(
+        new Point(4.498320579528809, 4.9768781661987305),
+        new Point(3.595618486404419, 4.509187698364258),
+        2,
+        Rotation2d.fromDegrees(30),
+        true,
+        ScoreNode.K.getPose().getRotation())
   };
 
   private ReefAlign() {}
@@ -66,8 +66,11 @@ public class ReefAlign {
   }
 
   public boolean shouldDoReefAlign() {
-    return RobotContainer.rollers.hasCoral() && !RobotContainer.disableReefAlign && inZone().isPresent();
+    return RobotContainer.rollers.hasCoral()
+        && !RobotContainer.disableReefAlign
+        && inZone().isPresent();
   }
+
   public Optional<Rotation2d> inZone() {
     var pose = RobotContainer.driveSubsystem.getPose();
     for (TrapezoidZone trapezoid : trapezoids) {

@@ -17,11 +17,11 @@ public class DriveConstants {
   public static final double driveBaseWidthWithBumpersMeters =
       edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 7.0);
 
-      public static final ProfiledPIDController scoreAssistController =
+  public static final ProfiledPIDController scoreAssistController =
       new ControlGains()
-          .p(1.0)
+          .p(10)
           .d(0)
-          .trapezoidal(TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() / 2, 10, 0)
+          .trapezoidal(0.1, 0, 0)
           .createTrapezoidalPIDController();
 
   public final class AutoConstants {

@@ -344,15 +344,18 @@ public class RobotContainer {
     // Score Coral
     driver
         .leftBumper()
-        .onTrue(DriveCommands.changeDefaultDriveCommand(driveSubsystem, ScoreAssist.getInstance().goClosest(driveSubsystem), "ScoreAssist"))
-        .onFalse(DriveCommands.changeDefaultDriveCommand(
-            driveSubsystem,
-            DriveCommands.joystickDrive(
+        .onTrue(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem, ScoreAssist.getInstance().goClosest(driveSubsystem), "ScoreAssist"))
+        .onFalse(
+            DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem,
-                () -> -driver.getLeftY(),
-                () -> -driver.getLeftX(),
-                () -> -driver.getRightX()),
-            "Full Control"));
+                DriveCommands.joystickDrive(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Full Control"));
 
     // Grab Algae
     driver

@@ -23,7 +23,12 @@ public class TrapezoidZone {
   }
 
   public TrapezoidZone(
-      Point baseLeft, Point baseRight, double height, Rotation2d angle, boolean invert, Rotation2d omega) {
+      Point baseLeft,
+      Point baseRight,
+      double height,
+      Rotation2d angle,
+      boolean invert,
+      Rotation2d omega) {
     topLeft = baseLeft;
     topRight = baseRight;
     var top_edge_angle = Math.atan2(topRight.y - topLeft.y, topRight.x - topLeft.x);
@@ -31,26 +36,24 @@ public class TrapezoidZone {
     var left_side_angle = top_edge_angle - Math.PI / 2 + angle_radians;
     var right_side_angle = top_edge_angle + Math.PI / 2 - angle_radians;
 
-
     var left_side_length = height / Math.sin(angle_radians);
     var right_side_length = height / Math.sin(angle_radians);
     bottomLeft =
-    invert ? 
-    new Point(
-      topLeft.x -(left_side_length * Math.cos(right_side_angle)),
-      topLeft.y - (left_side_length * Math.sin(right_side_angle)))
-        : 
-         new Point(
-              topLeft.x - (left_side_length * Math.cos(left_side_angle)),
-              topLeft.y - (left_side_length * Math.sin(left_side_angle)));
+        invert
+            ? new Point(
+                topLeft.x - (left_side_length * Math.cos(right_side_angle)),
+                topLeft.y - (left_side_length * Math.sin(right_side_angle)))
+            : new Point(
+                topLeft.x - (left_side_length * Math.cos(left_side_angle)),
+                topLeft.y - (left_side_length * Math.sin(left_side_angle)));
     bottomRight =
-    invert ? new Point(
-      topRight.x + (right_side_length * Math.cos(left_side_angle)),
-      topRight.y + (right_side_length * Math.sin(left_side_angle))) :
-
-        new Point(
-            topRight.x+ (right_side_length * Math.cos(right_side_angle)),
-            topRight.y +(right_side_length * Math.sin(right_side_angle)));
+        invert
+            ? new Point(
+                topRight.x + (right_side_length * Math.cos(left_side_angle)),
+                topRight.y + (right_side_length * Math.sin(left_side_angle)))
+            : new Point(
+                topRight.x + (right_side_length * Math.cos(right_side_angle)),
+                topRight.y + (right_side_length * Math.sin(right_side_angle)));
     this.omega = omega;
   }
 

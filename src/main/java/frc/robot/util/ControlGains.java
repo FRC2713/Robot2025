@@ -130,13 +130,14 @@ public class ControlGains {
   }
 
   public ProfiledPIDController createAngularTrapezoidalPIDController() {
-    var pid = new ProfiledPIDController(
-      this.getKP(),
-      this.getKI(),
-      this.getKD(),
-      new TrapezoidProfile.Constraints(
-          this.getKTrapezoidalMaxVelocity(), this.getKTrapezoidalMaxAcceleration()));
-          pid.enableContinuousInput(-Math.PI, Math.PI);
+    var pid =
+        new ProfiledPIDController(
+            this.getKP(),
+            this.getKI(),
+            this.getKD(),
+            new TrapezoidProfile.Constraints(
+                this.getKTrapezoidalMaxVelocity(), this.getKTrapezoidalMaxAcceleration()));
+    pid.enableContinuousInput(-Math.PI, Math.PI);
     return pid;
   }
 
