@@ -35,18 +35,10 @@ public class ClimberIOSim implements ClimberIO {
 
   @Override
   public void updateInputs(ClimberInputs inputs) {
-    double output = 0;
-    if (false) {
-      double pidOutput = pid.calculate(sim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
-      double feedforwardOutput =
-          feedforward.calculate(sim.getAngleRads(), sim.getVelocityRadPerSec());
-      output = DriverStation.isEnabled() ? pidOutput + feedforwardOutput : 0;
-    } else {
-      output = volts;
-    }
+ double output = volts;
 
-    sim.setInputVoltage(output);
     sim.update(0.02);
+    sim.setInputVoltage(output);
 
     inputs.leftAngleDegrees = Units.radiansToDegrees(sim.getAngleRads());
     inputs.leftVelocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());

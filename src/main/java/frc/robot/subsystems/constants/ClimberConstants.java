@@ -43,7 +43,7 @@ public class ClimberConstants {
   public static final double AT_TARGET_GIVE_DEGS = 2;
   public static final boolean kLeftMotorInverted = false;
   public static final boolean kRightMotorInverted = true;
-  public static final double kGearing = 1. / (25 * (60 / 40) * (36 / 12));
+  public static final double kGearing = 1. / (25 * (60 / 40) * (36 / 12) * 5);
   public static final int currentLimitAmps = 200;
   public static final double kMinAngle = -95;
   public static final double kMaxAngle = 200;
@@ -78,9 +78,10 @@ public class ClimberConstants {
     config.idleMode(IdleMode.kBrake);
 
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-    config.softLimit.apply(limits);
+    // config.softLimit.apply(limits);
     config.smartCurrentLimit(currentLimitAmps);
     Gains.toControlGains().applyPID(config.closedLoop);
+    config.follow(kLeftCANId, true);
 
     return config;
   }

@@ -2,16 +2,16 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LimelightInfo;
 import org.littletonrobotics.junction.Logger;
 
 public class VisionIOLimelights implements VisionIO {
-  // TODO: totally untested!!!
-
   private final LimelightInfo primaryInfo;
   private final LimelightInfo secondaryInfo;
 
@@ -19,6 +19,7 @@ public class VisionIOLimelights implements VisionIO {
   private double lastTimestamp;
 
   private CombinedMegaTagState state;
+  private Alert alert = new Alert("Null Limelight pose", AlertType.kError);
 
   public VisionIOLimelights(LimelightInfo primary, LimelightInfo secondary, Drivetrain drivetrain) {
     primary.setCameraPose_RobotSpace();
@@ -51,7 +52,8 @@ public class VisionIOLimelights implements VisionIO {
     if (RobotContainer.driveSubsystem.getAngularVelocityRadPerSec() > Units.degreesToRadians(720)) {
       this.state = CombinedMegaTagState.REJECTED_DUE_TO_SPIN_BLUR;
     }
-    if (DriverStation.isEnabled()) {
+
+    if (VisionConstants.ACTIVE_VISION_OPTION == VisionConstants.VisionOptions.MEGATAG2) {
 
       // https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-robot-localization-megatag2
       // docs say this needs to be called every frame
@@ -77,6 +79,17 @@ public class VisionIOLimelights implements VisionIO {
       LimelightHelpers.PoseEstimate secondaryMT2 =
           LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(secondaryInfo.getNtTableName());
 
+      if (primaryMT2 == null) {
+        primaryMT2 = new LimelightHelpers.PoseEstimate();
+        alert.set(true);
+        return;
+      }
+      if (secondaryMT2 == null) {
+        alert.set(true);
+        secondaryMT2 = new LimelightHelpers.PoseEstimate();
+        return;
+      }
+
       if (primaryMT2.tagCount > 0) {
         this.state = CombinedMegaTagState.UPDATED_WITH_PRIMARY;
       } else if (secondaryMT2.tagCount > 0) {
@@ -91,6 +104,8 @@ public class VisionIOLimelights implements VisionIO {
       } else if (this.state == CombinedMegaTagState.UPDATED_WITH_SECONDARY) {
         this.pose = secondaryMT2.pose;
         this.lastTimestamp = secondaryMT2.timestampSeconds;
+      } else {
+        this.pose = null;
       }
 
       Logger.recordOutput("Vision/" + primaryInfo.getNtTableName() + "/pose", primaryMT2.pose);
@@ -106,13 +121,19 @@ public class VisionIOLimelights implements VisionIO {
           "Vision/" + secondaryInfo.getNtTableName() + "/timestamp", secondaryMT2.timestampSeconds);
       Logger.recordOutput("Vision/version", "MegaTag2");
     } else {
-
       LimelightHelpers.PoseEstimate primaryMT =
           LimelightHelpers.getBotPoseEstimate_wpiBlue(primaryInfo.getNtTableName());
       LimelightHelpers.PoseEstimate secondaryMT =
           LimelightHelpers.getBotPoseEstimate_wpiBlue(secondaryInfo.getNtTableName());
 
-      if (primaryMT == null || secondaryMT == null) {
+      if (primaryMT == null) {
+        alert.set(true);
+        primaryMT = new LimelightHelpers.PoseEstimate();
+        return;
+      }
+      if (secondaryMT == null) {
+        alert.set(true);
+        secondaryMT = new LimelightHelpers.PoseEstimate();
         return;
       }
 

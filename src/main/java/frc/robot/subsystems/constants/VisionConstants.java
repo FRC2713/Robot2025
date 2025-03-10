@@ -39,7 +39,7 @@ public class VisionConstants {
   public static final double MAX_TIME_DIFFERENCE = 0.5;
 
   // its probably bad OOD to have this but ¯\_(ツ)_/¯
-  public static final VisionOptions ACTIVE_VISION_OPTION = VisionOptions.MEGATAG2;
+  public static final VisionOptions ACTIVE_VISION_OPTION = VisionOptions.MEGATAG;
 
   public static final String VISION_SERVER_URL =
       Constants.currentMode == Mode.REAL
@@ -77,6 +77,7 @@ public class VisionConstants {
   public enum VisionOptions {
     WHEEL_ODOMETRY,
     SLAMDUNK,
-    MEGATAG2
+    MEGATAG2,
+    MEGATAG
   }
 }
