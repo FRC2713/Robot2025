@@ -1,5 +1,6 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -22,6 +23,10 @@ public class Vision extends SubsystemBase {
 
   public double getTimestamp() {
     return io.getTimestamp();
+  }
+
+  public void updatePoseEstimate(SwerveDrivePoseEstimator poseEstimator) {
+    this.io.updatePoseEstimate(null);
   }
 
   public void resetPose(Pose2d pose) {
