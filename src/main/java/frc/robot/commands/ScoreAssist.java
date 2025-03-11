@@ -58,8 +58,8 @@ public class ScoreAssist {
     return closestNode != null ? AllianceFlipUtil.apply(closestNode.getRobotAlignmentPose()) : null;
   }
 
-  public boolean hasFinished(){
-return error < Units.inchesToMeters(1);
+  public boolean hasFinished() {
+    return error < Units.inchesToMeters(1);
   }
 
   public Command goClosest(Drivetrain drive) {
@@ -108,17 +108,17 @@ return error < Units.inchesToMeters(1);
               error = closest.getTranslation().getDistance(drive.getPose().getTranslation());
               Logger.recordOutput("ScoreAssist/Error", error);
               if (error < Units.inchesToMeters(1)) {
-                
-               
+
                 if (!hasStartedCommand) {
-                 // TODO: Set SuperStrucutre
-                // SuperStructure.L4_PREP
-                //     .getCommand()
-                //     .andThen(
-                //         Commands.sequence(
-                //             Commands.waitSeconds(0.2), SuperStructure.CORAL_SCORE.getCommand()))
-                //     .schedule();
-                 hasStartedCommand = true;
+                  // TODO: Set SuperStrucutre
+                  // SuperStructure.L4_PREP
+                  //     .getCommand()
+                  //     .andThen(
+                  //         Commands.sequence(
+                  //             Commands.waitSeconds(0.2),
+                  // SuperStructure.CORAL_SCORE.getCommand()))
+                  //     .schedule();
+                  hasStartedCommand = true;
                 }
               }
             },

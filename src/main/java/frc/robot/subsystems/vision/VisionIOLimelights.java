@@ -23,6 +23,7 @@ public class VisionIOLimelights implements VisionIO {
   public VisionInputs inputs = new VisionInputsAutoLogged();
 
   private CombinedMegaTagState state;
+  private StddevCalculationState stddevCalcState;
   private Alert alert = new Alert("Null Limelight pose", AlertType.kWarning);
 
   public VisionIOLimelights(LimelightInfo primary, LimelightInfo secondary, Drivetrain drivetrain) {
@@ -49,6 +50,7 @@ public class VisionIOLimelights implements VisionIO {
     this.primaryInfo = primary;
     this.secondaryInfo = secondary;
     this.state = CombinedMegaTagState.INIT;
+    this.stddevCalcState = StddevCalculationState.INVALID_VISION_STATE;
   }
 
   @Override
@@ -96,13 +98,11 @@ public class VisionIOLimelights implements VisionIO {
     if (primaryMT == null) {
       primaryMT = new LimelightHelpers.PoseEstimate();
       alert.set(true);
-      this.state = CombinedMegaTagState.REJECTED_DUE_TO_NO_TAGS;
     }
 
     if (secondaryMT == null) {
       secondaryMT = new LimelightHelpers.PoseEstimate();
       alert.set(true);
-      this.state = CombinedMegaTagState.REJECTED_DUE_TO_NO_TAGS;
     }
 
     if (primaryMT.tagCount > 0) {
@@ -151,7 +151,7 @@ public class VisionIOLimelights implements VisionIO {
 
   public void updatePoseEstimate(SwerveDrivePoseEstimator poseEstimator) {
     this.updateStddevs();
-    if (this.inputs.applyVisionToPoseEstimate) {
+    if (this.stddevCalcState.applyToPoseEstimate()) {
       poseEstimator.setVisionMeasurementStdDevs(
           VecBuilder.fill(
               this.inputs.translationStddev,
@@ -173,7 +173,7 @@ public class VisionIOLimelights implements VisionIO {
    * MegaTag1 and you are disbabled but see a tag, use the the pose with high stddevs
    */
   private void updateStddevs() {
-    this.inputs.applyVisionToPoseEstimate = false;
+    this.stddevCalcState = StddevCalculationState.INVALID_VISION_STATE;
     this.inputs.translationStddev = 0.6;
     this.inputs.rotationStddev = 9999999;
 
@@ -188,9 +188,7 @@ public class VisionIOLimelights implements VisionIO {
                 Math.abs(
                     RobotContainer.visionsubsystem.getPose().getRotation().getDegrees()
                         - this.getPose().getRotation().getDegrees() / 5.0));
-        this.inputs.applyVisionToPoseEstimate = true;
-        Logger.recordOutput("Vision/Deviation Calculation Mode", "Using MT2");
-
+        this.stddevCalcState = StddevCalculationState.MT2_ROTATION_BASED;
       } else if (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.MEGATAG
           && this.inputs.tagCount > 0) {
         double poseDifference =
@@ -200,47 +198,39 @@ public class VisionIOLimelights implements VisionIO {
                 .getDistance(this.getPose().getTranslation());
 
         if (this.inputs.averagTagDistance >= 4.3) {
-          Logger.recordOutput("Vision/Deviation Calculation Mode", "Too far away");
-          this.inputs.applyVisionToPoseEstimate = false;
-          return;
+          this.stddevCalcState = StddevCalculationState.TAGS_TOO_FAR;
 
         } else if (this.inputs.tagCount >= 2) {
-          Logger.recordOutput("Vision/Deviation Calculation Mode", "Multiple Tags Found");
-          this.inputs.applyVisionToPoseEstimate = true;
+          this.stddevCalcState = StddevCalculationState.MULTIPLE_TAGS_FOUND;
           this.inputs.translationStddev = 0.5;
           this.inputs.rotationStddev = 6;
-          return;
 
         } else if (this.inputs.averageTagSize > 0.9 && poseDifference < 0.3) {
-          Logger.recordOutput("Vision/Deviation Calculation Mode", "1 close tag found");
-          this.inputs.applyVisionToPoseEstimate = true;
+          this.stddevCalcState = StddevCalculationState.CLOSE_TAG_CHECKED_AGAINST_ODOMETRY;
           this.inputs.translationStddev = 1.0;
           this.inputs.rotationStddev = 12;
-          return;
 
         } else if (this.inputs.averagTagDistance > 0.1 && poseDifference < 0.3) {
-          Logger.recordOutput("Vision/Deviation Calculation Mode", "1 far tag found");
-          this.inputs.applyVisionToPoseEstimate = true;
+          this.stddevCalcState = StddevCalculationState.FAR_TAG_CHECKED_AGAINST_ODOMETRY;
           this.inputs.translationStddev = 2.0;
           this.inputs.rotationStddev = 30;
-          return;
 
         } else if (DriverStation.isDisabled()) {
-          Logger.recordOutput("Vision/Deviation Calculation Mode", "Robot is disabled");
-          this.inputs.applyVisionToPoseEstimate = true;
+          this.stddevCalcState = StddevCalculationState.ROBOT_DISABLED;
           this.inputs.translationStddev = 2.0;
           this.inputs.rotationStddev = 30;
-          return;
 
         } else {
-          this.inputs.applyVisionToPoseEstimate = false;
-          Logger.recordOutput("Vision/Deviation Calculation Mode", "No good tags or poses");
-          return;
+          this.stddevCalcState = StddevCalculationState.NO_GOOD_TAGS;
         }
+      } else {
+        this.stddevCalcState = StddevCalculationState.INVALID_VISION_STATE;
       }
+    } else {
+      this.stddevCalcState = StddevCalculationState.INVALID_VISION_STATE;
     }
 
-    Logger.recordOutput("Vision/Deviation Calculation Mode", "Vision is not in a valid state");
+    Logger.recordOutput("Vision/Deviation Calculation Mode", this.stddevCalcState);
   }
 
   @Override
@@ -259,5 +249,26 @@ public class VisionIOLimelights implements VisionIO {
     REJECTED_DUE_TO_NO_TAGS,
     UPDATED_WITH_PRIMARY,
     UPDATED_WITH_SECONDARY
+  }
+
+  private enum StddevCalculationState {
+    INVALID_VISION_STATE(false),
+    MT2_ROTATION_BASED(true),
+    TAGS_TOO_FAR(false),
+    MULTIPLE_TAGS_FOUND(true),
+    CLOSE_TAG_CHECKED_AGAINST_ODOMETRY(true),
+    FAR_TAG_CHECKED_AGAINST_ODOMETRY(true),
+    ROBOT_DISABLED(true),
+    NO_GOOD_TAGS(false);
+
+    boolean applyToPoseEstimate;
+
+    StddevCalculationState(boolean applyToPE) {
+      this.applyToPoseEstimate = applyToPE;
+    }
+
+    public boolean applyToPoseEstimate() {
+      return this.applyToPoseEstimate;
+    }
   }
 }
