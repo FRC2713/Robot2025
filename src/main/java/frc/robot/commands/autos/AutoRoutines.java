@@ -160,6 +160,20 @@ public class AutoRoutines {
     return routine;
   }
 
+  public AutoRoutine driveTesting() {
+    AutoRoutine routine = m_factory.newRoutine("DriveTesting");
+    AutoTrajectory driveTesting = routine.trajectory("DriveTesting");
+
+    routine
+        .active()
+        .onTrue(
+            Commands.sequence(
+                new InstantCommand(() -> System.out.println("Drive Testing 3m")),
+                driveTesting.resetOdometry(),
+                driveTesting.cmd()));
+    return routine;
+  }
+
   public AutoRoutine scoreLotsOfCoralAndSource() {
     AutoRoutine routine = m_factory.newRoutine("Score Lots of Coral And Source");
 
