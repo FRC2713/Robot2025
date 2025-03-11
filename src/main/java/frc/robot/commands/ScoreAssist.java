@@ -105,7 +105,9 @@ public class ScoreAssist {
               if (error < Units.inchesToMeters(1) && !hasStartedCommand) {
                 SuperStructure.L4_PREP
                     .getCommand()
-                    .andThen(SuperStructure.CORAL_SCORE.getCommand())
+                    .andThen(
+                        Commands.sequence(
+                            Commands.waitSeconds(0.2), SuperStructure.CORAL_SCORE.getCommand()))
                     .schedule();
                 hasStartedCommand = true;
               }
