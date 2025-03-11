@@ -1,13 +1,5 @@
 package frc.robot.util;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SelectCommand;
-import frc.robot.Constants;
-import frc.robot.commands.ScoreAssist;
-import java.util.Map;
-
 public enum ScoreLoc {
   A_ONE(ScoreNode.A, ScoreLevel.ONE),
   A_TWO(ScoreNode.A, ScoreLevel.TWO),
@@ -73,24 +65,6 @@ public enum ScoreLoc {
   ScoreLoc(ScoreNode node, ScoreLevel level) {
     this.node = node;
     this.level = level;
-  }
-
-  public Command getScoreCommand() {
-    return Commands.parallel(
-        level.getPrepCommand().get(),
-        Commands.sequence(
-            new SelectCommand<>(
-                Map.of(
-                    DriverStation.Alliance.Red,
-                    ScoreAssist.buildOTFPath(
-                        AllianceFlipUtil.flip(node.getRobotAlignmentPose()),
-                        Constants.scoreAssistConstraints,
-                        0.0),
-                    DriverStation.Alliance.Blue,
-                    ScoreAssist.buildOTFPath(
-                        node.getRobotAlignmentPose(), Constants.scoreAssistConstraints, 0.0)),
-                () -> DriverStation.getAlliance().get()),
-            level.getScoreCommand().get()));
   }
 
   public static boolean checkNTValid(String ntloc) {

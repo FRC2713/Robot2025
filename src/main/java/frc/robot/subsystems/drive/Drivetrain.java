@@ -197,21 +197,9 @@ public class Drivetrain extends SubsystemBase {
       }
 
       // Apply update
-      if (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.MEGATAG2) {
-        if (debounce.calculate(DriverStation.isEnabled())) {
-          poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.6, .6, 999999999));
-          if (RobotContainer.visionsubsystem.getPose() != null) {
-            poseEstimator.addVisionMeasurement(
-                RobotContainer.visionsubsystem.getPose(),
-                RobotContainer.visionsubsystem.getTimestamp());
-          }
-        } else {
-          // poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.6, .6, 999999999));
-        }
-      }
-      poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
-
       odometryPoseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+      RobotContainer.visionsubsystem.updatePoseEstimate(poseEstimator);
+      poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
 
     // Update gyro alert

@@ -16,7 +16,7 @@ public class RollersIOSim implements RollersIO {
           motor);
   private double commandedRPM;
 
-  private boolean hasCoral = false;
+  private boolean hasCoral = true;
 
   public void updateInputs(RollersInputs inputs) {
     sim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(commandedRPM));

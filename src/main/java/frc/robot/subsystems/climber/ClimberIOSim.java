@@ -4,7 +4,6 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.subsystems.constants.ClimberConstants;
 import frc.robot.util.LoggedTunableGains;
@@ -35,7 +34,7 @@ public class ClimberIOSim implements ClimberIO {
 
   @Override
   public void updateInputs(ClimberInputs inputs) {
- double output = volts;
+    double output = volts;
 
     sim.update(0.02);
     sim.setInputVoltage(output);

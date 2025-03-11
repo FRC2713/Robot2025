@@ -11,11 +11,15 @@ import edu.wpi.first.units.Units;
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.util.ControlGains;
+import frc.robot.util.LoggedTunableGains;
 
 public class DriveConstants {
   public static final double wheelCOF = 1.1;
   public static final double driveBaseWidthWithBumpersMeters =
       edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 7.0);
+
+  public static final LoggedTunableGains scoreAssistGains =
+      new LoggedTunableGains("ScoreAssist", new ControlGains().p(2).d(0).trapezoidal(0.1, 0, 0));
 
   public final class AutoConstants {
     public static final PIDController xTrajectoryController =
@@ -45,12 +49,19 @@ public class DriveConstants {
             .trapezoidal(kMaxAngularVelocity, kMaxAngularAcceleration, 0)
             .createTrapezoidalPIDController();
 
+    public static final LoggedTunableGains angleGains =
+        new LoggedTunableGains(
+            "Drive/Angle Controller",
+            new ControlGains()
+                .p(8.0)
+                .d(0.4)
+                .trapezoidal(kMaxAngularVelocity, kMaxAngularAcceleration, 0));
     public static final ProfiledPIDController angleController =
         new ControlGains()
-            .p(5.0)
+            .p(8.0)
             .d(0.4)
             .trapezoidal(kMaxAngularVelocity, kMaxAngularAcceleration, 0)
-            .createTrapezoidalPIDController();
+            .createAngularTrapezoidalPIDController();
   }
 
   public static RobotConfig pathPlannerConfig;
