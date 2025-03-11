@@ -1,9 +1,11 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,6 +22,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class ScoreAssist {
   @Getter @Setter private Pose2d closestLocPose = null;
+  public boolean hasStartedCommand = false;
   private static ScoreAssist INSTANCE = null;
 
   public static ScoreAssist getInstance() {
@@ -29,13 +32,22 @@ public class ScoreAssist {
     return INSTANCE;
   }
 
+  private ProfiledPIDController yscoreAssistController =
+      DriveConstants.scoreAssistGains.createTrapezoidalPIDController();
+  private ProfiledPIDController xscoreAssistController =
+      DriveConstants.scoreAssistGains.createTrapezoidalPIDController();
+  private ProfiledPIDController omegascoreAssistController =
+      DriveConstants.HeadingControllerConstants.angleGains.createAngularTrapezoidalPIDController();
+
   public Pose2d getClosest() {
     var pose = RobotContainer.driveSubsystem.getPose();
     ScoreNode closestNode = null;
     double closestDistance = Double.MAX_VALUE;
 
     for (ScoreNode node : ScoreNode.values()) {
-      double distance = pose.getTranslation().getDistance(node.getRobotAlignmentPose().getTranslation());
+      double distance =
+          pose.getTranslation()
+              .getDistance(AllianceFlipUtil.apply(node.getRobotAlignmentPose().getTranslation()));
       if (distance < closestDistance) {
         closestDistance = distance;
         closestNode = node;
@@ -52,51 +64,78 @@ public class ScoreAssist {
               if (getClosestLocPose() == null) {
                 closest = getClosest();
                 setClosestLocPose(closest);
-
               } else {
                 closest = getClosestLocPose();
               }
-              Logger.recordOutput("ScoreAssit/closestsLoc", closest);
+              Logger.recordOutput("ScoreAssist/closestLoc", closest);
+              boolean isFlipped =
+                  DriverStation.getAlliance().isPresent()
+                      && DriverStation.getAlliance().get() == Alliance.Red;
               // Get linear velocity
               Translation2d linearVelocity =
                   new Translation2d(
-                      DriveConstants.scoreAssistController.calculate(
-                          drive.getPose().getTranslation().getX(), closest.getTranslation().getX()),
-                      DriveConstants.scoreAssistController.calculate(
-                          drive.getPose().getTranslation().getY(),
-                          closest.getTranslation().getY()));
+                      (isFlipped ? -1 : 1)
+                          * xscoreAssistController.calculate(
+                              drive.getPose().getTranslation().getX(),
+                              closest.getTranslation().getX()),
+                      (isFlipped ? -1 : 1)
+                          * yscoreAssistController.calculate(
+                              drive.getPose().getTranslation().getY(),
+                              closest.getTranslation().getY()));
 
-            Logger.recordOutput("ScoreAssist/CommandedLinearVelocity", linearVelocity);
+              Logger.recordOutput("ScoreAssist/CommandedLinearVelocity", linearVelocity);
 
               // Calculate angular speed
               double omega =
-                  HeadingControllerConstants.angleController.calculate(
+                  omegascoreAssistController.calculate(
                       drive.getRotation().getRadians(), closest.getRotation().getRadians());
 
               // Convert to field relative speeds & send command
               ChassisSpeeds speeds =
-                  new ChassisSpeeds(
-                      linearVelocity.getX(),
-                      linearVelocity.getY(),
-                      omega);
-              boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
+                  new ChassisSpeeds(linearVelocity.getX(), linearVelocity.getY(), omega);
+
               drive.runVelocity(
                   ChassisSpeeds.fromFieldRelativeSpeeds(
                       speeds,
                       isFlipped
                           ? drive.getRotation().plus(new Rotation2d(Math.PI))
                           : drive.getRotation()));
+              double error = closest.getTranslation().getDistance(drive.getPose().getTranslation());
+              Logger.recordOutput("ScoreAssist/Error", error);
+              if (error < Units.inchesToMeters(1) && !hasStartedCommand) {
+                SuperStructure.L4_PREP
+                    .getCommand()
+                    .andThen(SuperStructure.CORAL_SCORE.getCommand())
+                    .schedule();
+                hasStartedCommand = true;
+              }
             },
             drive)
 
         // Reset PID controller when command starts
         .beforeStarting(
-            () ->
-                HeadingControllerConstants.angleController.reset(drive.getRotation().getRadians()))
-        .finallyDo(() -> setClosestLocPose(null));
+            () -> {
+              xscoreAssistController.reset(drive.getPose().getX());
+              yscoreAssistController.reset(drive.getPose().getY());
+              HeadingControllerConstants.angleController.reset(drive.getRotation().getRadians());
+            })
+        .finallyDo(
+            () -> {
+              setClosestLocPose(null);
+              hasStartedCommand = false;
+            });
   }
 
-  public void periodic() {}
+  public void periodic() {
+    if (DriveConstants.scoreAssistGains.hasChanged(hashCode())) {
+      yscoreAssistController = DriveConstants.scoreAssistGains.createTrapezoidalPIDController();
+      xscoreAssistController = DriveConstants.scoreAssistGains.createTrapezoidalPIDController();
+    }
+    if (DriveConstants.HeadingControllerConstants.angleGains.hasChanged(hashCode())) {
+      omegascoreAssistController =
+          DriveConstants.HeadingControllerConstants.angleGains
+              .createAngularTrapezoidalPIDController();
+      omegascoreAssistController.enableContinuousInput(-Math.PI, Math.PI);
+    }
+  }
 }

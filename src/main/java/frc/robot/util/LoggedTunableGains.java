@@ -158,6 +158,21 @@ public class LoggedTunableGains {
         new TrapezoidProfile.Constraints(KTrapezoidalMaxVelocity, getKTrapezoidalMaxAcceleration));
   }
 
+  public ProfiledPIDController createTrapezoidalPIDController() {
+    return new ProfiledPIDController(
+        this.getKP(),
+        this.getKI(),
+        this.getKD(),
+        new TrapezoidProfile.Constraints(
+            MotionMagicCruiseVelocity.getAsDouble(), MotionMagicAcceleration.getAsDouble()));
+  }
+
+  public ProfiledPIDController createAngularTrapezoidalPIDController() {
+    var pid = createTrapezoidalPIDController();
+    pid.enableContinuousInput(-Math.PI, Math.PI);
+    return pid;
+  }
+
   public PIDController createPIDController() {
     return new PIDController(this.getKP(), this.getKI(), this.getKD());
   }
