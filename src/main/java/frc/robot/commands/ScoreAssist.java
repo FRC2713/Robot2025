@@ -24,6 +24,7 @@ public class ScoreAssist {
   @Getter @Setter private Pose2d closestLocPose = null;
   public boolean hasStartedCommand = false;
   private static ScoreAssist INSTANCE = null;
+  private double error = -1;
 
   public static ScoreAssist getInstance() {
     if (INSTANCE == null) {
@@ -55,6 +56,10 @@ public class ScoreAssist {
     }
 
     return closestNode != null ? AllianceFlipUtil.apply(closestNode.getRobotAlignmentPose()) : null;
+  }
+
+  public boolean hasFinished(){
+return error < Units.inchesToMeters(1);
   }
 
   public Command goClosest(Drivetrain drive) {
@@ -100,16 +105,21 @@ public class ScoreAssist {
                       isFlipped
                           ? drive.getRotation().plus(new Rotation2d(Math.PI))
                           : drive.getRotation()));
-              double error = closest.getTranslation().getDistance(drive.getPose().getTranslation());
+              error = closest.getTranslation().getDistance(drive.getPose().getTranslation());
               Logger.recordOutput("ScoreAssist/Error", error);
-              if (error < Units.inchesToMeters(1) && !hasStartedCommand) {
-                SuperStructure.L4_PREP
-                    .getCommand()
-                    .andThen(
-                        Commands.sequence(
-                            Commands.waitSeconds(0.2), SuperStructure.CORAL_SCORE.getCommand()))
-                    .schedule();
-                hasStartedCommand = true;
+              if (error < Units.inchesToMeters(1)) {
+                
+               
+                if (!hasStartedCommand) {
+                 // TODO: Set SuperStrucutre
+                // SuperStructure.L4_PREP
+                //     .getCommand()
+                //     .andThen(
+                //         Commands.sequence(
+                //             Commands.waitSeconds(0.2), SuperStructure.CORAL_SCORE.getCommand()))
+                //     .schedule();
+                 hasStartedCommand = true;
+                }
               }
             },
             drive)
@@ -124,6 +134,7 @@ public class ScoreAssist {
         .finallyDo(
             () -> {
               setClosestLocPose(null);
+              error = -1;
               hasStartedCommand = false;
             });
   }

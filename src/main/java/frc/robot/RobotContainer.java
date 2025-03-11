@@ -33,6 +33,7 @@ import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutines;
 import frc.robot.commands.autos.AutoRoutinesWithPathFinding;
+import frc.robot.commands.autos.ScoreLotsOfCoral;
 import frc.robot.commands.climber.MoveClimber;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
@@ -223,7 +224,9 @@ public class RobotContainer {
     // Add options to the chooser
     // I add a * to the name when it generates its starting trajectory
     autoChooser.addRoutine("Coral and Algae Auto", autoRoutines::coralAndAlgaeAuto);
-    autoChooser.addRoutine("Score Lots Of Coral", autoRoutines::scoreLotsOfCoral);
+    autoChooser.addRoutine(
+        "Score Lots Of Coral",
+        () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));
     autoChooser.addRoutine(
         "Score Lots of Coral And Score", autoRoutines::scoreLotsOfCoralAndSource);
     autoChooser.addRoutine(

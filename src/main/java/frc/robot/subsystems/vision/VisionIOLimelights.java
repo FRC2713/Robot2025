@@ -162,14 +162,15 @@ public class VisionIOLimelights implements VisionIO {
   }
 
   /**
-   * With MegaTag1 and 2, there are certain conditions where you should not use the pose for pose estimation, or use it with a higher standard deviation
-   * 
-   * 1) If using MegaTag 2, always use the pose and apply a std deviation based on the difference on the pose's rotation and the gyros
-   * 2) If using MegaTag1 and you see no tags, do not use the pose
-   * 3) If using MegaTag1 and you see 2 or more poses, use the pose with low stddevs
-   * 4) If using MegaTag1 and you see 1 pose that is large/close, use the pose with medium stddevs
-   * 5) If using MegaTag1 and you see 1 pose that is far, use the pose with high stddevs
-   * 6) If using MegaTag1 and you are disbabled but see a tag, use the the pose with high stddevs
+   * With MegaTag1 and 2, there are certain conditions where you should not use the pose for pose
+   * estimation, or use it with a higher standard deviation
+   *
+   * <p>1) If using MegaTag 2, always use the pose and apply a std deviation based on the difference
+   * on the pose's rotation and the gyros 2) If using MegaTag1 and you see no tags, do not use the
+   * pose 3) If using MegaTag1 and you see 2 or more poses, use the pose with low stddevs 4) If
+   * using MegaTag1 and you see 1 pose that is large/close, use the pose with medium stddevs 5) If
+   * using MegaTag1 and you see 1 pose that is far, use the pose with high stddevs 6) If using
+   * MegaTag1 and you are disbabled but see a tag, use the the pose with high stddevs
    */
   private void updateStddevs() {
     this.inputs.applyVisionToPoseEstimate = false;

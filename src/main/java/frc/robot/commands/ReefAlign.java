@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotContainer;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreNode;
@@ -66,7 +67,8 @@ public class ReefAlign {
   }
 
   public boolean shouldDoReefAlign() {
-    return RobotContainer.rollers.hasCoral()
+    return DriverStation.isTeleopEnabled()
+        && RobotContainer.rollers.hasCoral()
         && !RobotContainer.disableReefAlign
         && inZone().isPresent();
   }
