@@ -104,7 +104,7 @@ public class RobotContainer {
   // For Choreo
   private final AutoFactory choreoAutoFactory;
   public static Vision visionsubsystem;
-  public static boolean disableReefAlign = true;
+  public static boolean disableReefAlign = false;
 
   public RobotContainer() {
     // Start subsystems
@@ -336,39 +336,46 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Intake Coral
-    // driver
-    //     .leftBumper()
-    //     .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
-    //     .onFalse(RollerCmds.setSpeed(() -> 0));
+    driver
+        .leftBumper()
+        .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
+        .onFalse(RollerCmds.setSpeed(() -> 0));
 
     // Score Coral
     driver
-        .leftBumper()
+        .rightBumper()
         .onTrue(
             DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem, ScoreAssist.getInstance().goClosest(driveSubsystem), "ScoreAssist"))
         .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
+            Commands.sequence(
+                Commands.runOnce(
+                        () -> {
+                          ScoreAssist.getInstance().setClosestLocPose(null);
+                          ScoreAssist.getInstance().hasStartedCommand = false;
+                        })
+                    .ignoringDisable(true),
+                DriveCommands.changeDefaultDriveCommand(
                     driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Full Control"));
+                    DriveCommands.joystickDrive(
+                        driveSubsystem,
+                        () -> -driver.getLeftY(),
+                        () -> -driver.getLeftX(),
+                        () -> -driver.getRightX()),
+                    "Full Control")));
 
     // Grab Algae
     driver
-        .rightBumper()
-        .onTrue(Commands.sequence(SuperStructure.ALGAE_GRAB.getCommand()))
-        .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
+        .rightTrigger(0.2)
+        .onTrue(Commands.sequence(SuperStructure.CORAL_SCORE.getCommand()))
+        .onFalse(RollerCmds.setSpeed(() -> 0));
 
-    // Score Algae
-    // just spit the algae, it's up to the operator to put it in processor, intake, or barge pose
-    driver
-        .rightTrigger(0.25)
-        .onTrue(AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
-        .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
+    // // Score Algae
+    // // just spit the algae, it's up to the operator to put it in processor, intake, or barge pose
+    // driver
+    //     .rightTrigger(0.25)
+    //     .onTrue(AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
+    //     .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
     // Do both!
     driver
@@ -377,14 +384,21 @@ public class RobotContainer {
         .onFalse(
             Commands.sequence(
                 AlgaeClawCmds.setSpeedIfNoAlgae(() -> 0), RollerCmds.setSpeed(() -> 0)));
-
     driver
         .povLeft()
         .onTrue(
+            // DriveCommands.changeDefaultDriveCommand(
+            //     driveSubsystem,
+            //     DriveCommands.inch(driveSubsystem, SSConstants.Drive.INCH_SPEED),
+            //     "Inch Left"))
             DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem,
-                DriveCommands.inch(driveSubsystem, SSConstants.Drive.INCH_SPEED),
-                "Inch Left"))
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(180)),
+                "Heading Controller"))
         .onFalse(
             DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem,
@@ -397,11 +411,19 @@ public class RobotContainer {
     driver
         .povRight()
         .onTrue(
+            // DriveCommands.changeDefaultDriveCommand(
+            //     driveSubsystem,
+            //     DriveCommands.inch(
+            //         driveSubsystem, () -> -1 * SSConstants.Drive.INCH_SPEED.getAsDouble()),
+            //     "Inch Right"))
             DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem,
-                DriveCommands.inch(
-                    driveSubsystem, () -> -1 * SSConstants.Drive.INCH_SPEED.getAsDouble()),
-                "Inch Right"))
+                DriveCommands.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> Rotation2d.fromDegrees(0)),
+                "Heading Controller"))
         .onFalse(
             DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem,
@@ -411,6 +433,40 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Full Control"));
+
+    // driver
+    //     .povLeft()
+    //     .onTrue(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.inch(driveSubsystem, SSConstants.Drive.INCH_SPEED),
+    //             "Inch Left"))
+    //     .onFalse(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDrive(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> -driver.getRightX()),
+    //             "Full Control"));
+    // driver
+    //     .povRight()
+    //     .onTrue(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.inch(
+    //                 driveSubsystem, () -> -1 * SSConstants.Drive.INCH_SPEED.getAsDouble()),
+    //             "Inch Right"))
+    //     .onFalse(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDrive(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> -driver.getRightX()),
+    //             "Full Control"));
 
     driver
         .x()
@@ -479,5 +535,8 @@ public class RobotContainer {
     pivot.setTargetAngle(pivot.getCurrentAngle());
     rollers.setRPM(0);
     shoulder.setTargetAngle(shoulder.getCurrentAngle());
+    if (visionsubsystem.getPose() != null) {
+      driveSubsystem.setPose(visionsubsystem.getPose());
+    }
   }
 }

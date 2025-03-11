@@ -139,9 +139,11 @@ public class VisionIOLimelights implements VisionIO {
 
       if (primaryMT.tagCount > 0) {
         this.state = CombinedMegaTagState.UPDATED_WITH_PRIMARY;
-      } else if (secondaryMT.tagCount > 0) {
-        this.state = CombinedMegaTagState.UPDATED_WITH_SECONDARY;
-      } else {
+      }
+      // else if (secondaryMT.tagCount > 0) {
+      //   this.state = CombinedMegaTagState.UPDATED_WITH_SECONDARY;
+      // }
+      else {
         this.state = CombinedMegaTagState.REJECTED_DUE_TO_NO_TAGS;
       }
 
