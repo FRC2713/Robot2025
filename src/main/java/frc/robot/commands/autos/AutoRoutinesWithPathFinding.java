@@ -71,14 +71,14 @@ public class AutoRoutinesWithPathFinding {
                 SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), sourceToReefB.cmd()));
 
     // Prep elevator along the way
-    sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L3_PREP.getCommand());
+    sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L3.getCommand());
 
     // Once at reef B, score and pick up algae; then go to processor
     sourceToReefB
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L3_PREP.getCommand(),
+                SuperStructure.L3.getCommand(),
                 SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand(),
                 Commands.parallel(
                     SuperStructure.PROCESSOR_PREP.delayCommand(0.5), reefBToProcessor.cmd())));
@@ -147,7 +147,7 @@ public class AutoRoutinesWithPathFinding {
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L4_PREP.getCommand(),
+                SuperStructure.L4.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 Commands.parallel(
@@ -168,7 +168,7 @@ public class AutoRoutinesWithPathFinding {
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L4_PREP.getCommand(),
+                SuperStructure.L4.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(0.2),
                 Commands.parallel(
