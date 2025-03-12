@@ -26,7 +26,7 @@ public class Vision extends SubsystemBase {
   }
 
   public void updatePoseEstimate(SwerveDrivePoseEstimator poseEstimator) {
-    this.io.updatePoseEstimate(null);
+    this.io.updatePoseEstimate(poseEstimator);
   }
 
   public void resetPose(Pose2d pose) {
