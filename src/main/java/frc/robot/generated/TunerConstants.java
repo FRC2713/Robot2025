@@ -19,9 +19,9 @@ import frc.robot.util.LoggedTunableGains;
 // https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
 public class TunerConstants {
   public static final LoggedTunableGains steerGainsPID =
-      new LoggedTunableGains("Module/Steer", new ControlGains().p(100.).d(0.5).s(0.1).v(2.66));
+      new LoggedTunableGains("Module/Steer", new ControlGains().p(500.).d(50).s(0.8595).v(1.438));
   public static final LoggedTunableGains driveGainsPID =
-      new LoggedTunableGains("Module/Drive", new ControlGains().p(2.5).d(0.).s(0.21478).v(0.82837));
+      new LoggedTunableGains("Module/Drive", new ControlGains().p(60).d(0.).s(5.0).v(0));
 
   // Both sets of gains need to be tuned to your individual robot.
 
@@ -29,24 +29,26 @@ public class TunerConstants {
   // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
   private static final Slot0Configs steerGains =
       new Slot0Configs()
-          .withKP(100)
+          .withKP(500)
           .withKI(0)
-          .withKD(0.5)
-          .withKS(0.1)
-          .withKV(2.66)
+          .withKD(50)
+          .withKS(0.8595)
+          .withKV(1.438)
           .withKA(0)
           .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
   // When using closed-loop control, the drive motor uses the control
   // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
   private static final Slot0Configs driveGains =
-      new Slot0Configs().withKP(2.5).withKI(0).withKD(0).withKS(0.21478).withKV(0.82837);
+      new Slot0Configs().withKP(60).withKI(0).withKD(0).withKS(5.0).withKV(0);
 
   // The closed-loop output type to use for the steer motors;
   // This affects the PID/FF gains for the steer motors
-  private static final ClosedLoopOutputType kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
+  private static final ClosedLoopOutputType kSteerClosedLoopOutput =
+      ClosedLoopOutputType.TorqueCurrentFOC;
   // The closed-loop output type to use for the drive motors;
   // This affects the PID/FF gains for the drive motors
-  private static final ClosedLoopOutputType kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
+  private static final ClosedLoopOutputType kDriveClosedLoopOutput =
+      ClosedLoopOutputType.TorqueCurrentFOC;
 
   // The type of motor used for the drive motor
   private static final DriveMotorArrangement kDriveMotorType =
@@ -85,7 +87,7 @@ public class TunerConstants {
 
   // Theoretical free speed (m/s) at 12 V applied output;
   // This needs to be tuned to your individual robot
-  public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.37 / 2);
+  public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.49);
 
   // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
   // This may need to be tuned to your individual robot
@@ -93,7 +95,7 @@ public class TunerConstants {
 
   private static final double kDriveGearRatio = 6.746031746031747;
   private static final double kSteerGearRatio = 21.428571428571427;
-  public static final Distance kWheelRadius = Inches.of(2.089);
+  public static final Distance kWheelRadius = Inches.of(1.819);
 
   private static final boolean kInvertLeftSide = false;
   private static final boolean kInvertRightSide = true;
