@@ -23,11 +23,11 @@ public class DriveConstants {
 
   public final class AutoConstants {
     public static final PIDController xTrajectoryController =
-        new ControlGains().p(10.0).createPIDController();
+        new LoggedTunableGains("xTraj", new ControlGains().p(1.0)).createPIDController();
     public static final PIDController yTrajectoryController =
-        new ControlGains().p(10.0).createPIDController();
+        new LoggedTunableGains("yTraj", new ControlGains().p(1.0)).createPIDController();
     public static final PIDController headingTrajectoryController =
-        new ControlGains().p(5.0).createPIDController();
+        new LoggedTunableGains("headingTraj", new ControlGains().p(1.0)).createPIDController();
   }
 
   public final class OTFConstants {
