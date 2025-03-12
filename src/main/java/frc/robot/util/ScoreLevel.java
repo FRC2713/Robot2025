@@ -1,15 +1,16 @@
 package frc.robot.util;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.SuperStructure;
 import java.util.function.Supplier;
 import lombok.Getter;
 
 public enum ScoreLevel {
-  ONE(SuperStructure.L1_PREP::getCommand, SuperStructure.L1_PREP::getCommand),
-  TWO(SuperStructure.L1_PREP::getCommand, SuperStructure.L2_PREP::getCommand),
-  THREE(SuperStructure.L1_PREP::getCommand, SuperStructure.L3_PREP::getCommand),
-  FOUR(SuperStructure.L1_PREP::getCommand, SuperStructure.L4_PREP::getCommand);
+  ONE(Commands::none, SuperStructure.L1::getCommand),
+  TWO(SuperStructure.L2::getCommand, SuperStructure.L2::getCommand),
+  THREE(SuperStructure.L3::getCommand, SuperStructure.L3::getCommand),
+  FOUR(SuperStructure.L4_PREP::getCommand, SuperStructure.L4::getCommand);
 
   @Getter private Supplier<Command> prepCommand;
   @Getter private Supplier<Command> scoreCommand;

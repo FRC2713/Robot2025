@@ -6,16 +6,22 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StringSubscriber;
+import edu.wpi.first.networktables.StringTopic;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
+import frc.robot.SSConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.HeadingControllerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.ScoreLoc;
 import frc.robot.util.ScoreNode;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.Logger;
@@ -25,6 +31,14 @@ public class ScoreAssist {
   public boolean hasStartedCommand = false;
   private static ScoreAssist INSTANCE = null;
   private double error = -1;
+  private NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  private StringTopic topic = inst.getStringTopic("/scoreassist/goto");
+  private StringSubscriber sub;
+  private Optional<ScoreLoc> reefTrackerLoc = Optional.empty();
+
+  private ScoreAssist() {
+    sub = topic.subscribe("none");
+  }
 
   public static ScoreAssist getInstance() {
     if (INSTANCE == null) {
@@ -62,67 +76,76 @@ public class ScoreAssist {
     return error < Units.inchesToMeters(1);
   }
 
-  public Command goClosest(Drivetrain drive) {
-    return Commands.run(
-            () -> {
-              Pose2d closest = null;
-              if (getClosestLocPose() == null) {
-                closest = getClosest();
-                setClosestLocPose(closest);
-              } else {
-                closest = getClosestLocPose();
-              }
-              Logger.recordOutput("ScoreAssist/closestLoc", closest);
-              boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
-              // Get linear velocity
-              Translation2d linearVelocity =
-                  new Translation2d(
-                      (isFlipped ? -1 : 1)
-                          * xscoreAssistController.calculate(
-                              drive.getPose().getTranslation().getX(),
-                              closest.getTranslation().getX()),
-                      (isFlipped ? -1 : 1)
-                          * yscoreAssistController.calculate(
-                              drive.getPose().getTranslation().getY(),
-                              closest.getTranslation().getY()));
+  public Command alignTo(Drivetrain drive, boolean closest, ScoreLoc loc) {
+    return Commands.parallel(
+            loc.getLevel().getPrepCommand().get(),
+            Commands.run(
+                () -> {
+                  RobotContainer.disableReefAlign = true;
+                  Pose2d pose = null;
+                  if (closest) {
+                    if (getClosestLocPose() == null) {
+                      pose = getClosest();
+                      setClosestLocPose(pose);
+                    } else {
+                      pose = getClosestLocPose();
+                    }
+                  } else {
+                    pose = loc.getNode().getRobotAlignmentPose();
+                  }
+                  Logger.recordOutput("ScoreAssist/alignToLoc", pose);
+                  boolean isFlipped =
+                      DriverStation.getAlliance().isPresent()
+                          && DriverStation.getAlliance().get() == Alliance.Red;
+                  // Get linear velocity
+                  Translation2d linearVelocity =
+                      new Translation2d(
+                          (isFlipped ? -1 : 1)
+                              * xscoreAssistController.calculate(
+                                  drive.getPose().getTranslation().getX(),
+                                  pose.getTranslation().getX()),
+                          (isFlipped ? -1 : 1)
+                              * yscoreAssistController.calculate(
+                                  drive.getPose().getTranslation().getY(),
+                                  pose.getTranslation().getY()));
 
-              Logger.recordOutput("ScoreAssist/CommandedLinearVelocity", linearVelocity);
+                  Logger.recordOutput("ScoreAssist/CommandedLinearVelocity", linearVelocity);
 
-              // Calculate angular speed
-              double omega =
-                  omegascoreAssistController.calculate(
-                      drive.getRotation().getRadians(), closest.getRotation().getRadians());
+                  // Calculate angular speed
+                  double omega =
+                      omegascoreAssistController.calculate(
+                          drive.getRotation().getRadians(), pose.getRotation().getRadians());
 
-              // Convert to field relative speeds & send command
-              ChassisSpeeds speeds =
-                  new ChassisSpeeds(linearVelocity.getX(), linearVelocity.getY(), omega);
+                  // Convert to field relative speeds & send command
+                  ChassisSpeeds speeds =
+                      new ChassisSpeeds(linearVelocity.getX(), linearVelocity.getY(), omega);
 
-              drive.runVelocity(
-                  ChassisSpeeds.fromFieldRelativeSpeeds(
-                      speeds,
-                      isFlipped
-                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                          : drive.getRotation()));
-              error = closest.getTranslation().getDistance(drive.getPose().getTranslation());
-              Logger.recordOutput("ScoreAssist/Error", error);
-              if (error < Units.inchesToMeters(1)) {
-
-                if (!hasStartedCommand) {
-                  // TODO: Set SuperStrucutre
-                  // SuperStructure.L4_PREP
-                  //     .getCommand()
-                  //     .andThen(
-                  //         Commands.sequence(
-                  //             Commands.waitSeconds(0.2),
-                  // SuperStructure.CORAL_SCORE.getCommand()))
-                  //     .schedule();
-                  hasStartedCommand = true;
-                }
-              }
-            },
-            drive)
+                  drive.runVelocity(
+                      ChassisSpeeds.fromFieldRelativeSpeeds(
+                          speeds,
+                          isFlipped
+                              ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                              : drive.getRotation()));
+                  error = pose.getTranslation().getDistance(drive.getPose().getTranslation());
+                  Logger.recordOutput("ScoreAssist/Error", error);
+                  if (error < Units.inchesToMeters(1)) {
+                    if (!hasStartedCommand) {
+                      hasStartedCommand = true;
+                      if (!closest) {}
+                      loc.getLevel()
+                          .getScoreCommand()
+                          .get()
+                          .andThen(
+                              Commands.sequence(
+                                  Commands.waitSeconds(
+                                      SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                                  SuperStructure.CORAL_SCORE.getCommand()))
+                          .schedule();
+                    }
+                    
+                  }
+                },
+                drive))
 
         // Reset PID controller when command starts
         .beforeStarting(
@@ -139,6 +162,18 @@ public class ScoreAssist {
             });
   }
 
+  public Command goClosest(Drivetrain drive) {
+    return alignTo(drive, true, ScoreLoc.A_ONE);
+  }
+
+  public Command goReefTracker(Drivetrain drive) {
+    if (reefTrackerLoc.isPresent()) {
+      return alignTo(drive, false, reefTrackerLoc.get());
+    } else {
+      return goClosest(drive);
+    }
+  }
+
   public void periodic() {
     if (DriveConstants.scoreAssistGains.hasChanged(hashCode())) {
       yscoreAssistController = DriveConstants.scoreAssistGains.createTrapezoidalPIDController();
@@ -149,6 +184,14 @@ public class ScoreAssist {
           DriveConstants.HeadingControllerConstants.angleGains
               .createAngularTrapezoidalPIDController();
       omegascoreAssistController.enableContinuousInput(-Math.PI, Math.PI);
+    }
+    var loc = ScoreLoc.parseFromNT(sub.get("none"));
+    if (loc != null) {
+      Logger.recordOutput("ScoreAssist/ReefTrackerLoc", loc.toString());
+      reefTrackerLoc = Optional.of(loc);
+    } else {
+      reefTrackerLoc = Optional.empty();
+      Logger.recordOutput("ScoreAssist/ReefTrackerLoc", "none");
     }
   }
 }

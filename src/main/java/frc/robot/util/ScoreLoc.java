@@ -90,7 +90,7 @@ public enum ScoreLoc {
     var level = -1;
     try {
       index = Integer.parseInt(ntloc.substring(0, split));
-      level = Integer.parseInt(ntloc.substring(split + 1)) + 1;
+      level = Integer.parseInt(ntloc.substring(split + 1));
     } catch (Exception e) {
       return null;
     }
