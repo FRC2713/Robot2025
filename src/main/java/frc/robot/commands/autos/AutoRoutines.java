@@ -35,14 +35,14 @@ public class AutoRoutines {
                 startToReefDTraj.cmd()));
 
     // Go from start to reef D, preping the elevator along the way
-    startToReefDTraj.atTime("PrepElevator").onTrue(SuperStructure.L3_PREP.getCommand());
+    startToReefDTraj.atTime("PrepElevator").onTrue(SuperStructure.L3.getCommand());
 
     // When at the reef, score and pick up algae; then go to the processor
     startToReefDTraj
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L3_PREP.getCommand(),
+                SuperStructure.L3.getCommand(),
                 SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand(),
                 Commands.parallel(
                     SuperStructure.PROCESSOR_PREP.delayCommand(0.5), reefDToProcTraj.cmd())));
@@ -64,14 +64,14 @@ public class AutoRoutines {
                 SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), sourceToReefB.cmd()));
 
     // Prep elevator along the way
-    sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L3_PREP.getCommand());
+    sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L3.getCommand());
 
     // Once at reef B, score and pick up algae; then go to processor
     sourceToReefB
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L3_PREP.getCommand(),
+                SuperStructure.L3.getCommand(),
                 SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand(),
                 Commands.parallel(
                     SuperStructure.PROCESSOR_PREP.delayCommand(0.5), reefBToProcessor.cmd())));
@@ -108,7 +108,7 @@ public class AutoRoutines {
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L4_PREP.getCommand(),
+                SuperStructure.L4.getCommand(),
                 Commands.waitSeconds(1),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(1),
@@ -201,7 +201,7 @@ public class AutoRoutines {
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L4_PREP.getCommand(),
+                SuperStructure.L4.getCommand(),
                 Commands.waitSeconds(1),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(1),
@@ -225,7 +225,7 @@ public class AutoRoutines {
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L4_PREP.getCommand(),
+                SuperStructure.L4.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.parallel(
                     SuperStructure.SOURCE_CORAL_INTAKE.getCommand()

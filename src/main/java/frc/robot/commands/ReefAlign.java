@@ -60,6 +60,7 @@ public class ReefAlign {
   private ReefAlign() {}
 
   public void periodic() {
+    Logger.recordOutput("ReefAlign/disabled", RobotContainer.disableReefAlign);
     int index = 0;
     for (TrapezoidZone trapezoid : trapezoids) {
       Logger.recordOutput("ReefAlign/trap" + (index++), trapezoid.toPose2dArray());

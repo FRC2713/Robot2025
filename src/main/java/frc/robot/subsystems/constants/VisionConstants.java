@@ -75,7 +75,7 @@ public class VisionConstants {
           .build();
 
   public enum VisionOptions {
-    WHEEL_ODOMETRY,
+    SLAMDUNK_WHEEL_ODOMETRY,
     SLAMDUNK,
     MEGATAG2,
     MEGATAG

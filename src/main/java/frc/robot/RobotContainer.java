@@ -163,7 +163,7 @@ public class RobotContainer {
     visionsubsystem =
         new Vision(
             // new VisionIO() {}
-            VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.WHEEL_ODOMETRY
+            VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK_WHEEL_ODOMETRY
                 ? new VisionIOOdometry()
                 : (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
                     ? new VisionIOPoseEstimator()
@@ -275,14 +275,14 @@ public class RobotContainer {
                     () -> ReefAlign.getInstance().inZone().get()),
                 "Drive Align To Reef"))
         .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
+            Commands.either(Commands.none(),            DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem,
                 DriveCommands.joystickDrive(
                     driveSubsystem,
                     () -> -driver.getLeftY(),
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
-                "Default Joystick Drive"));
+                "Default Joystick Drive"), ()-> RobotContainer.disableReefAlign));
 
     // Default command, normal field-relative drive
     DriveCommands.setDefaultDriveCommand(
@@ -349,13 +349,16 @@ public class RobotContainer {
         .rightBumper()
         .onTrue(
             DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem, ScoreAssist.getInstance().goClosest(driveSubsystem), "ScoreAssist"))
+                driveSubsystem,
+                ScoreAssist.getInstance().goReefTracker(driveSubsystem),
+                "ScoreAssist"))
         .onFalse(
             Commands.sequence(
                 Commands.runOnce(
                         () -> {
                           ScoreAssist.getInstance().setClosestLocPose(null);
                           ScoreAssist.getInstance().hasStartedCommand = false;
+                          RobotContainer.disableReefAlign = false;
                         })
                     .ignoringDisable(true),
                 DriveCommands.changeDefaultDriveCommand(
@@ -493,10 +496,10 @@ public class RobotContainer {
                 "Full Control"));
 
     // Operator Controls
-    operator.a().onTrue(SuperStructure.L1_PREP.getCommand());
-    operator.b().onTrue(SuperStructure.L2_PREP.getCommand());
-    operator.y().onTrue(SuperStructure.L3_PREP.getCommand());
-    operator.rightBumper().onTrue(SuperStructure.L4_PREP.getCommand());
+    operator.a().onTrue(SuperStructure.L1.getCommand());
+    operator.b().onTrue(SuperStructure.L2.getCommand());
+    operator.y().onTrue(SuperStructure.L3.getCommand());
+    operator.rightBumper().onTrue(SuperStructure.L4.getCommand());
 
     operator
         .start()

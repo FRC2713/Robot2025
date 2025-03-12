@@ -49,7 +49,7 @@ public class ScoreLotsOfCoral {
                     "ScoreAssist"),
                 new WaitUntilCommand(ScoreAssist.getInstance()::hasFinished),
                 Commands.print("ScoreAssit finished"),
-                SuperStructure.L4_PREP.getCommand(),
+                SuperStructure.L4.getCommand(),
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
@@ -72,7 +72,7 @@ public class ScoreLotsOfCoral {
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L4_PREP.getCommand(),
+                SuperStructure.L4.getCommand(),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.parallel(
                     SuperStructure.SOURCE_CORAL_INTAKE.getCommand()
