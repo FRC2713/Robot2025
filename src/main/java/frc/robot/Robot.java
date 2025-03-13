@@ -42,6 +42,7 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   private Mechanism2d mech2d;
+  private boolean hadDisabledReefAlign = false;
 
   public Robot() {
     // Record metadata
@@ -109,6 +110,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
     Pathfinding.setPathfinder(new LocalADStarAK());
+    SmartDashboard.putBoolean("Disable ReefAlign", false);
   }
 
   /** This function is called periodically during all modes. */
@@ -146,6 +148,12 @@ public class Robot extends LoggedRobot {
       RobotContainer.climber.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
+    var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
+    RobotContainer.disableReefAlign = disableReefAlign;
+    if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
+      robotContainer.normalDrive();
+    }
+    hadDisabledReefAlign = disableReefAlign;
   }
 
   /** This function is called once when the robot is disabled. */
@@ -176,7 +184,7 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    robotContainer.teleopInit();
+    robotContainer.normalDrive();
   }
 
   /** This function is called periodically during operator control. */

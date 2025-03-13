@@ -84,9 +84,9 @@ public enum SuperStructure {
                   Commands.none(),
                   () -> RobotContainer.pivot.getCurrentAngle() < -120),
               Commands.parallel(
-                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_PREP_HEIGHT_IN),
+                  ElevatorCmds.setHeight(SSConstants.Elevator.L4_PREP_HEIGHT_IN),
                   PivotCmds.setAngle(SSConstants.Pivot.L4_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L4_PREP_ANGLE_DEG)))),
+                  ShoulderCmds.setAngle(SSConstants.Shoulder.L4_PREP_ANGLE_DEG)))),
   L4(
       () ->
           Commands.sequence(

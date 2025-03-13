@@ -49,7 +49,7 @@ public enum ScoreNode {
 
   public Pose2d getRobotAlignmentPose() {
     double xFudge = 0.15;
-    double yFudge = -0.18;
+    double yFudge = -0.25;
     return pose.transformBy(
         new Transform2d(
             (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0) + xFudge,

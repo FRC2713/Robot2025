@@ -174,7 +174,7 @@ public class VisionIOLimelights implements VisionIO {
    */
   private void updateStddevs() {
     this.stddevCalcState = StddevCalculationState.INVALID_VISION_STATE;
-    this.inputs.translationStddev = 0.6;
+    this.inputs.translationStddev = 0.01;
     this.inputs.rotationStddev = 9999999;
 
     if (this.state == CombinedMegaTagState.UPDATED_WITH_PRIMARY

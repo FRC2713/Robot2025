@@ -564,7 +564,7 @@ public class RobotContainer {
     }
   }
 
-  public void teleopInit() {
+  public void normalDrive() {
     DriveCommands.setDefaultDriveCommand(
         driveSubsystem,
         DriveCommands.joystickDrive(

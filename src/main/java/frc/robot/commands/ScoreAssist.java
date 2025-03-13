@@ -34,7 +34,7 @@ public class ScoreAssist {
   private NetworkTableInstance inst = NetworkTableInstance.getDefault();
   private StringTopic topic = inst.getStringTopic("/scoreassist/goto");
   private StringSubscriber sub;
-  private Optional<ScoreLoc> reefTrackerLoc = Optional.empty();
+  public Optional<ScoreLoc> reefTrackerLoc = Optional.empty();
 
   private ScoreAssist() {
     sub = topic.subscribe("none");
@@ -72,8 +72,10 @@ public class ScoreAssist {
     return closestNode != null ? AllianceFlipUtil.apply(closestNode.getRobotAlignmentPose()) : null;
   }
 
+  private boolean isFinished = false;
+
   public boolean hasFinished() {
-    return error < Units.inchesToMeters(0.1);
+    return error < Units.inchesToMeters(1);
   }
 
   public Command alignTo(Drivetrain drive) {
@@ -136,6 +138,7 @@ public class ScoreAssist {
                   error = pose.getTranslation().getDistance(drive.getPose().getTranslation());
                   Logger.recordOutput("ScoreAssist/Error", error);
                   if (error < Units.inchesToMeters(1)) {
+                    isFinished = true;
                     if (!hasStartedCommand) {
                       hasStartedCommand = true;
                       if (reefTrackerLoc.isPresent()) {
@@ -156,6 +159,7 @@ public class ScoreAssist {
                       }
                     }
                   }
+                  Logger.recordOutput("ScoreAssist/isFinished", isFinished);
                 },
                 drive))
 
@@ -171,6 +175,7 @@ public class ScoreAssist {
               setClosestLocPose(null);
               error = -1;
               hasStartedCommand = false;
+              isFinished = false;
             });
   }
 
