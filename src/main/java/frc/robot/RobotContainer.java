@@ -563,4 +563,15 @@ public class RobotContainer {
       }
     }
   }
+
+  public void teleopInit() {
+    DriveCommands.setDefaultDriveCommand(
+        driveSubsystem,
+        DriveCommands.joystickDrive(
+            driveSubsystem,
+            () -> -driver.getLeftY(),
+            () -> -driver.getLeftX(),
+            () -> -driver.getRightX()),
+        "Default Joystick Drive");
+  }
 }

@@ -9,7 +9,10 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.SSConstants;
+import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
@@ -44,19 +47,32 @@ public class ScoreLotsOfCoral {
     startToReefDTraj
         .done()
         .onTrue(
-            Commands.sequence(
-                //     DriveCommands.changeDefaultDriveCommand(
-                //         driveSubsystem,
-                //         ScoreAssist.getInstance().goClosest(driveSubsystem),
-                //         "ScoreAssist"),
-                //     new WaitUntilCommand(ScoreAssist.getInstance()::hasFinished),
-                Commands.print("ScoreAssit finished"),
-                SuperStructure.L4.getCommand(),
-                Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                SuperStructure.CORAL_SCORE.getCommand(),
-                Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
-                Commands.parallel(
-                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())));
+            // Enable ScoreAssist
+            DriveCommands.changeDefaultDriveCommand(
+                    driveSubsystem,
+                    ScoreAssist.getInstance().goClosest(driveSubsystem),
+                    "ScoreAssist")
+                .alongWith(
+                    Commands.print("Waiting on Score Assist"),
+                    new WaitUntilCommand(ScoreAssist.getInstance()::hasFinished),
+                    Commands.print("Score Assist Done!"),
+                    SuperStructure.L4.getCommand(),
+                    Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                    SuperStructure.CORAL_SCORE.getCommand(),
+                    Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()))
+            // Wait Until Score Assist is Done
+            //     Commands.sequence(
+            //       Commands.print("Scoreassist started!"),
+            // new WaitUntilCommand(
+            //   () -> ScoreAssist.getInstance().error < 1),
+            // Commands.print("ScoreAssit finished"),
+            // SuperStructure.L4.getCommand(),
+            // Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+            // SuperStructure.CORAL_SCORE.getCommand(),
+            // Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+            // Commands.parallel(
+            //     SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())))
+            );
 
     // // // When the trajectory is done, intake; then go to reef B
     // reefDToSource

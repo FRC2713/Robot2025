@@ -23,7 +23,7 @@ public class VisionIOPoseEstimator implements VisionIO {
   private Pose2d pose2d = new Pose2d();
   @Setter @Getter private boolean allowJumps = true;
   private double lastTimestamp = -1;
-  private final double[] defaultPose = {0, 0, 0, 0, 0, 0, 0};
+  private final double[] defaultPose = {0, 0, 0, 0, 0, 0, 0, -1};
 
   // IMPORTANT: Vision must be initialized after the drive subsystem
   public VisionIOPoseEstimator() {
@@ -50,7 +50,7 @@ public class VisionIOPoseEstimator implements VisionIO {
     Logger.recordOutput("Odometry/Vision3d", pose);
     Logger.recordOutput("Odometry/Vision", pose2d);
 
-    var rawTime = table.getEntry("timeLeave").getDouble(0.0);
+    var rawTime = poseArray[7];
 
     var time = rawTime / 1e6;
     Logger.recordOutput("Vision/timeLeaveSec", time);

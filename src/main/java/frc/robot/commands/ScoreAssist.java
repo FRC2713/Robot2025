@@ -30,7 +30,7 @@ public class ScoreAssist {
   @Getter @Setter private Pose2d closestLocPose = null;
   public boolean hasStartedCommand = false;
   private static ScoreAssist INSTANCE = null;
-  private double error = -1;
+  public double error = -1;
   private NetworkTableInstance inst = NetworkTableInstance.getDefault();
   private StringTopic topic = inst.getStringTopic("/scoreassist/goto");
   private StringSubscriber sub;
@@ -73,17 +73,22 @@ public class ScoreAssist {
   }
 
   public boolean hasFinished() {
-    return error < Units.inchesToMeters(1);
+    return error < Units.inchesToMeters(0.1);
   }
 
-  public Command alignTo(Drivetrain drive, boolean closest, ScoreLoc loc) {
+  public Command alignTo(Drivetrain drive) {
     return Commands.parallel(
-            loc.getLevel().getPrepCommand().get(),
+            Commands.runOnce(
+                () -> {
+                  if (reefTrackerLoc.isPresent()) {
+                    reefTrackerLoc.get().getLevel().getPrepCommand().get().schedule();
+                  }
+                }),
             Commands.run(
                 () -> {
                   RobotContainer.disableReefAlign = true;
                   Pose2d pose = null;
-                  if (closest) {
+                  if (reefTrackerLoc.isEmpty()) {
                     if (getClosestLocPose() == null) {
                       pose = getClosest();
                       setClosestLocPose(pose);
@@ -91,7 +96,9 @@ public class ScoreAssist {
                       pose = getClosestLocPose();
                     }
                   } else {
-                    pose = loc.getNode().getRobotAlignmentPose();
+                    pose =
+                        AllianceFlipUtil.apply(
+                            reefTrackerLoc.get().getNode().getRobotAlignmentPose());
                   }
                   Logger.recordOutput("ScoreAssist/alignToLoc", pose);
                   boolean isFlipped =
@@ -131,16 +138,22 @@ public class ScoreAssist {
                   if (error < Units.inchesToMeters(1)) {
                     if (!hasStartedCommand) {
                       hasStartedCommand = true;
-                      if (!closest) {}
-                      loc.getLevel()
-                          .getScoreCommand()
-                          .get()
-                          .andThen(
-                              Commands.sequence(
-                                  Commands.waitSeconds(
-                                      SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                                  SuperStructure.CORAL_SCORE.getCommand()))
-                          .schedule();
+                      if (reefTrackerLoc.isPresent()) {
+                        reefTrackerLoc
+                            .get()
+                            .getLevel()
+                            .getScoreCommand()
+                            .get()
+                            .andThen(
+                                Commands.sequence(
+                                    Commands.waitSeconds(
+                                        SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                                    SuperStructure.CORAL_SCORE.getCommand(),
+                                    Commands.waitSeconds(
+                                        SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+                                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand()))
+                            .schedule();
+                      }
                     }
                   }
                 },
@@ -162,17 +175,11 @@ public class ScoreAssist {
   }
 
   public Command goClosest(Drivetrain drive) {
-    return alignTo(drive, true, ScoreLoc.A_ONE);
+    return alignTo(drive);
   }
 
   public Command goReefTracker(Drivetrain drive) {
-    var present = reefTrackerLoc.orElse(null) != null;
-    Logger.recordOutput("ScoreAssist/reefTrackerLocPresent", present);
-    if (present) {
-      return alignTo(drive, false, reefTrackerLoc.get());
-    } else {
-      return goClosest(drive);
-    }
+    return alignTo(drive);
   }
 
   public void periodic() {
