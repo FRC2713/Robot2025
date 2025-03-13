@@ -3,7 +3,6 @@ package frc.robot.subsystems.constants;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -22,12 +21,12 @@ public class DriveConstants {
       new LoggedTunableGains("ScoreAssist", new ControlGains().p(2).d(0).trapezoidal(0.1, 0, 0));
 
   public final class AutoConstants {
-    public static final PIDController xTrajectoryController =
-        new LoggedTunableGains("xTraj", new ControlGains().p(1.0)).createPIDController();
-    public static final PIDController yTrajectoryController =
-        new LoggedTunableGains("yTraj", new ControlGains().p(1.0)).createPIDController();
-    public static final PIDController headingTrajectoryController =
-        new LoggedTunableGains("headingTraj", new ControlGains().p(1.0)).createPIDController();
+    public static final LoggedTunableGains xTrajectoryController =
+        new LoggedTunableGains("xTraj", new ControlGains().p(2.0));
+    public static final LoggedTunableGains yTrajectoryController =
+        new LoggedTunableGains("yTraj", new ControlGains().p(2.0));
+    public static final LoggedTunableGains headingTrajectoryController =
+        new LoggedTunableGains("headingTraj", new ControlGains().p(1.5).d(0.0));
   }
 
   public final class OTFConstants {

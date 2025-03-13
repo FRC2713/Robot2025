@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -91,6 +92,7 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(0);
   private static final CommandXboxController operator = new CommandXboxController(1);
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
+  private static boolean hasRanAuto = false;
 
   // Dashboard inputs
   public final AutoChooser autoChooser;
@@ -257,7 +259,12 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
     // Schedule the auto
-    RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+    RobotModeTriggers.autonomous()
+        .whileTrue(
+            Commands.sequence(
+                    new InstantCommand(() -> RobotContainer.hasRanAuto = false),
+                    autoChooser.selectedCommandScheduler())
+                .finallyDo(() -> RobotContainer.hasRanAuto = true));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -275,14 +282,17 @@ public class RobotContainer {
                     () -> ReefAlign.getInstance().inZone().get()),
                 "Drive Align To Reef"))
         .onFalse(
-            Commands.either(Commands.none(),            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
+            Commands.either(
+                Commands.none(),
+                DriveCommands.changeDefaultDriveCommand(
                     driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Default Joystick Drive"), ()-> RobotContainer.disableReefAlign));
+                    DriveCommands.joystickDrive(
+                        driveSubsystem,
+                        () -> -driver.getLeftY(),
+                        () -> -driver.getLeftX(),
+                        () -> -driver.getRightX()),
+                    "Default Joystick Drive"),
+                () -> RobotContainer.disableReefAlign));
 
     // Default command, normal field-relative drive
     DriveCommands.setDefaultDriveCommand(
@@ -542,7 +552,15 @@ public class RobotContainer {
     rollers.setRPM(0);
     shoulder.setTargetAngle(shoulder.getCurrentAngle());
     if (visionsubsystem.getPose() != null) {
-      driveSubsystem.setPose(visionsubsystem.getPose());
+      if (!hasRanAuto) {
+        driveSubsystem.setPose(
+            new Pose2d(
+                visionsubsystem.getPose().getTranslation(),
+                AllianceFlipUtil.apply(Rotation2d.fromRadians(Math.PI))));
+      } else {
+        driveSubsystem.setPose(
+            new Pose2d(visionsubsystem.getPose().getTranslation(), driveSubsystem.getRotation()));
+      }
     }
   }
 }

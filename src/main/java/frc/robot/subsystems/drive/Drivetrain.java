@@ -198,7 +198,7 @@ public class Drivetrain extends SubsystemBase {
 
       // Apply update
       odometryPoseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
-      RobotContainer.visionsubsystem.updatePoseEstimate(poseEstimator);
+      // RobotContainer.visionsubsystem.updatePoseEstimate(poseEstimator);
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
 
@@ -257,20 +257,34 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void followTrajectory(SwerveSample sample) {
-    AutoConstants.headingTrajectoryController.enableContinuousInput(-Math.PI, Math.PI);
-
     // Get the current pose of the robot
     Pose2d pose = getPose();
 
+    Logger.recordOutput("TrajectoryFollowing/posex", pose.getX());
+    Logger.recordOutput("TrajectoryFollowing/samplex", sample.x);
+    Logger.recordOutput("TrajectoryFollowing/posey", pose.getY());
+    Logger.recordOutput("TrajectoryFollowing/sampley", sample.y);
+    Logger.recordOutput(
+        "TrajectoryFollowing/heading", pose.getRotation().getRadians() + Math.PI * 2);
+    Logger.recordOutput(
+        "TrajectoryFollowing/sampleheading", Rotation2d.fromRadians(sample.heading).getRadians());
     // Generate the next speeds for the robot
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            sample.vx + AutoConstants.xTrajectoryController.calculate(pose.getX(), sample.x),
-            sample.vy + AutoConstants.yTrajectoryController.calculate(pose.getY(), sample.y),
+            sample.vx
+                + AutoConstants.xTrajectoryController
+                    .createPIDController()
+                    .calculate(pose.getX(), sample.x),
+            sample.vy
+                + AutoConstants.yTrajectoryController
+                    .createPIDController()
+                    .calculate(pose.getY(), sample.y),
             sample.omega
-                + AutoConstants.headingTrajectoryController.calculate(
-                    pose.getRotation().getRadians(),
-                    Rotation2d.fromRadians(sample.heading).getRadians()));
+                + AutoConstants.headingTrajectoryController
+                    .createAngularPIDController()
+                    .calculate(
+                        pose.getRotation().getRadians(),
+                        Rotation2d.fromRadians(sample.heading).getRadians()));
 
     this.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, this.getRotation()));
   }

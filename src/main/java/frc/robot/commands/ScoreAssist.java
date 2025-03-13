@@ -142,7 +142,6 @@ public class ScoreAssist {
                                   SuperStructure.CORAL_SCORE.getCommand()))
                           .schedule();
                     }
-                    
                   }
                 },
                 drive))
