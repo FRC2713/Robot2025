@@ -275,14 +275,17 @@ public class RobotContainer {
                     () -> ReefAlign.getInstance().inZone().get()),
                 "Drive Align To Reef"))
         .onFalse(
-            Commands.either(Commands.none(),            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
+            Commands.either(
+                Commands.none(),
+                DriveCommands.changeDefaultDriveCommand(
                     driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Default Joystick Drive"), ()-> RobotContainer.disableReefAlign));
+                    DriveCommands.joystickDrive(
+                        driveSubsystem,
+                        () -> -driver.getLeftY(),
+                        () -> -driver.getLeftX(),
+                        () -> -driver.getRightX()),
+                    "Default Joystick Drive"),
+                () -> RobotContainer.disableReefAlign));
 
     // Default command, normal field-relative drive
     DriveCommands.setDefaultDriveCommand(
@@ -494,7 +497,7 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Full Control"));
-
+    driver.a().onTrue(ScoreAssist.getInstance().goReefTracker(RobotContainer.driveSubsystem));
     // Operator Controls
     operator.a().onTrue(SuperStructure.L1.getCommand());
     operator.b().onTrue(SuperStructure.L2.getCommand());

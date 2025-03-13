@@ -142,7 +142,6 @@ public class ScoreAssist {
                                   SuperStructure.CORAL_SCORE.getCommand()))
                           .schedule();
                     }
-                    
                   }
                 },
                 drive))
@@ -167,7 +166,8 @@ public class ScoreAssist {
   }
 
   public Command goReefTracker(Drivetrain drive) {
-    if (reefTrackerLoc.isPresent()) {
+    Logger.recordOutput("ScoreAssist/reefTrackerLocPresent", reefTrackerLoc.orElse(null) == null);
+    if (reefTrackerLoc.orElse(null) == null) {
       return alignTo(drive, false, reefTrackerLoc.get());
     } else {
       return goClosest(drive);
@@ -191,7 +191,7 @@ public class ScoreAssist {
       reefTrackerLoc = Optional.of(loc);
     } else {
       reefTrackerLoc = Optional.empty();
-      Logger.recordOutput("ScoreAssist/ReefTrackerLoc", "none");
+      Logger.recordOutput("ScoreAssist/ReefTrackerLoc", "null");
     }
   }
 }
