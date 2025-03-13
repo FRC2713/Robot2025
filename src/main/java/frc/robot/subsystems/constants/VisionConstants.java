@@ -30,16 +30,16 @@ public class VisionConstants {
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_STATE_STDEVS =
       new PoseEstimatorErrorStDevs(1.0, Units.degreesToRadians(1));
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_MAX_SPEED_STDEVS =
-      new PoseEstimatorErrorStDevs(2.0, Units.degreesToRadians(10));
+      new PoseEstimatorErrorStDevs(2.0, Units.degreesToRadians(999999));
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS =
-      new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(10));
+      new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(999999));
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_DISABLED =
-      new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(1));
+      new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(999999));
 
   public static final double MAX_TIME_DIFFERENCE = 0.5;
 
   // its probably bad OOD to have this but ¯\_(ツ)_/¯
-  public static final VisionOptions ACTIVE_VISION_OPTION = VisionOptions.MEGATAG2;
+  public static final VisionOptions ACTIVE_VISION_OPTION = VisionOptions.SLAMDUNK;
 
   public static final String VISION_SERVER_URL =
       Constants.currentMode == Mode.REAL

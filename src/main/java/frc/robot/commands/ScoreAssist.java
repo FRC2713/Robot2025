@@ -166,8 +166,9 @@ public class ScoreAssist {
   }
 
   public Command goReefTracker(Drivetrain drive) {
-    Logger.recordOutput("ScoreAssist/reefTrackerLocPresent", reefTrackerLoc.orElse(null) == null);
-    if (reefTrackerLoc.orElse(null) == null) {
+    var present = reefTrackerLoc.orElse(null) != null;
+    Logger.recordOutput("ScoreAssist/reefTrackerLocPresent", present);
+    if (present) {
       return alignTo(drive, false, reefTrackerLoc.get());
     } else {
       return goClosest(drive);
