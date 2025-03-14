@@ -201,6 +201,7 @@ public class ScoreAssist {
     var loc = ScoreLoc.parseFromNT(sub.get("none"));
     if (loc != null) {
       Logger.recordOutput("ScoreAssist/ReefTrackerLoc", loc.toString());
+      Logger.recordOutput("ScoreAssist/ReefTrackerPose", loc.getNode().getPose());
       reefTrackerLoc = Optional.of(loc);
     } else {
       reefTrackerLoc = Optional.empty();

@@ -11,9 +11,13 @@ import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.util.ControlGains;
 import frc.robot.util.LoggedTunableGains;
+import frc.robot.util.LoggedTunableNumber;
 
 public class DriveConstants {
   public static final double wheelCOF = 1.1;
+  public static final LoggedTunableNumber coralOffsetFromCenter =
+      new LoggedTunableNumber(
+          "Drive/coralOffsetFromCenter", edu.wpi.first.math.util.Units.inchesToMeters(2));
   public static final double driveBaseWidthWithBumpersMeters =
       edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 7.0);
 

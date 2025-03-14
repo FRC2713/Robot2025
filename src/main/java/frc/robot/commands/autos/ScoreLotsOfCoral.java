@@ -9,7 +9,6 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.SSConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
@@ -69,9 +68,9 @@ public class ScoreLotsOfCoral {
                         // ),
                         Commands.print("Score Assist Done!"),
                         // SuperStructure.L4.getCommand(),
-                        Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                        SuperStructure.CORAL_SCORE.getCommand(),
-                        Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+                        // Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                        // SuperStructure.CORAL_SCORE.getCommand(),
+                        // Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                         Commands.parallel(
                             SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())))
                 .finallyDo(() -> System.out.println("Command has ended")));
