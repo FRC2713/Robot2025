@@ -9,13 +9,14 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.DriveCommands;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.RobotContainer;
+import frc.robot.SSConstants;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
 import frc.robot.util.ScoreLoc;
-import java.util.Optional;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ScoreLotsOfCoral {
@@ -48,55 +49,59 @@ public class ScoreLotsOfCoral {
     startToReefDTraj
         .done()
         .onTrue(
-            Commands.parallel(
+            Commands.sequence(
+                // 1) Finish off trajectory with score assist, in parallel move SS to L4
+                Commands.parallel(
                     Commands.sequence(
                         new InstantCommand(
-                            () ->
-                                ScoreAssist.getInstance().reefTrackerLoc =
-                                    Optional.of(ScoreLoc.C_FOUR)),
-                        // Enable ScoreAssist
-                        DriveCommands.changeDefaultDriveCommand(
-                            driveSubsystem,
-                            ScoreAssist.getInstance().goClosest(driveSubsystem),
-                            "ScoreAssist"),
-                        Commands.print("Here!")),
-                    Commands.sequence(
-                        Commands.print("Waiting on Score Assist"),
-                        // Commands.race(
-                        // new WaitUntilCommand(ScoreAssist.getInstance()::hasFinished),
-                        // Commands.waitSeconds(1.5),
-                        // ),
-                        Commands.print("Score Assist Done!"),
-                        // SuperStructure.L4.getCommand(),
-                        // Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                        // SuperStructure.CORAL_SCORE.getCommand(),
-                        // Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
-                        Commands.parallel(
-                            SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())))
-                .finallyDo(() -> System.out.println("Command has ended")));
+                            () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.A_FOUR)),
+                        ScoreAssist.getInstance()
+                            .goReefTracker(driveSubsystem)
+                            .withDeadline(ScoreAssist.getInstance().waitUntilFinishedDebug(1.0)),
+                        new InstantCommand(() -> driveSubsystem.stop())),
+                    SuperStructure.L4.getCommand()),
+                // 2) Score Coral
+                ScoreAssist.getInstance().waitUntilFinished(1.6),
+                Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                SuperStructure.CORAL_SCORE.getCommand(),
+                Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+                // 3) Begin driving to source
+                Commands.parallel(
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())));
 
-    // // // When the trajectory is done, intake; then go to reef B
+    // When the trajectory is done, intake; then go to reef B
     reefDToSource
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.SOURCE_CORAL_INTAKE.getCommand()
-                // sourceToReefB.cmd()
-                ));
+                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
+                Commands.race(
+                    new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral()),
+                    Commands.waitSeconds(1.0)),
+                sourceToReefB.cmd()));
 
-    // // // Prep elevator along the way
-    // // // sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L3_PREP.getCommand());
-    // // // Once at reef B, score and go to source
-    // sourceToReefB
-    //     .done()
-    //     .onTrue(
-    //         Commands.sequence(
-    //             SuperStructure.L4.getCommand(),
-    //             SuperStructure.CORAL_SCORE.getCommand(),
-    //             Commands.parallel(
-    //                 SuperStructure.SOURCE_CORAL_INTAKE.getCommand()
-    //                 // , reefBToSource.cmd()
-    //                 )));
+    // Prep elevator along the way
+    // sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L4_PREP.getCommand());
+    // Once at reef B, score and go to source
+    sourceToReefB
+        .done()
+        .onTrue(
+            Commands.sequence(
+                // 1) Finish off trajectory with score assist, in parallel move SS to L4
+                Commands.parallel(
+                    Commands.sequence(
+                        new InstantCommand(
+                            () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.I_FOUR)),
+                        ScoreAssist.getInstance()
+                            .goReefTracker(driveSubsystem)
+                            .withDeadline(ScoreAssist.getInstance().waitUntilFinishedDebug(1.0)),
+                        new InstantCommand(() -> driveSubsystem.stop())),
+                    SuperStructure.L4.getCommand()),
+                // 2) Score Coral
+                SuperStructure.CORAL_SCORE.getCommand(),
+                // 3) Begin driving to source
+                Commands.parallel(
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefBToSource.cmd())));
 
     return routine;
   }

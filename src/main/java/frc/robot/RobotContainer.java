@@ -505,6 +505,7 @@ public class RobotContainer {
                     () -> -driver.getRightX()),
                 "Full Control"));
     driver.a().onTrue(ScoreAssist.getInstance().goReefTracker(RobotContainer.driveSubsystem));
+
     // Operator Controls
     operator.a().onTrue(SuperStructure.L1.getCommand());
     operator.b().onTrue(SuperStructure.L2.getCommand());

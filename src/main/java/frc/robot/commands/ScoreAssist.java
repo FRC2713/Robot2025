@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
 import frc.robot.subsystems.constants.DriveConstants;
@@ -79,6 +80,30 @@ public class ScoreAssist {
     return error < Units.inchesToMeters(1);
   }
 
+  public Command waitUntilFinished(double timeoutSeconds) {
+    return Commands.race(
+        new WaitUntilCommand(ScoreAssist.getInstance()::hasFinished),
+        Commands.waitSeconds(timeoutSeconds));
+  }
+
+  public Command waitUntilFinishedDebug(double timeoutSeconds) {
+    return Commands.race(
+        Commands.parallel(
+            new WaitUntilCommand(ScoreAssist.getInstance()::hasFinished),
+            Commands.print("score assist finished")),
+        Commands.parallel(
+            Commands.waitSeconds(timeoutSeconds), Commands.print("score assist timed out")));
+  }
+
+  public void setReefTrackerLoc(ScoreLoc loc) {
+    this.reefTrackerLoc = Optional.of(loc);
+    this.error = 999;
+    System.out.println("setting reef tracker manually: " + this.reefTrackerLoc.get());
+    Logger.recordOutput(
+        "ScoreAssist/alignToLoc",
+        AllianceFlipUtil.apply(reefTrackerLoc.get().getNode().getRobotAlignmentPose()));
+  }
+
   public Command alignTo(Drivetrain drive) {
     return Commands.parallel(
             Commands.runOnce(
@@ -92,11 +117,12 @@ public class ScoreAssist {
                   RobotContainer.disableReefAlign = true;
                   Pose2d pose = null;
                   if (reefTrackerLoc.isEmpty()) {
-                    if (getClosestLocPose() == null) {
+                    Pose2d currentClosest = getClosestLocPose();
+                    if (currentClosest == null) {
                       pose = getClosest();
                       setClosestLocPose(pose);
                     } else {
-                      pose = getClosestLocPose();
+                      pose = currentClosest;
                     }
                   } else {
                     pose = reefTrackerLoc.get().getNode().getRobotAlignmentPose();
@@ -207,9 +233,17 @@ public class ScoreAssist {
       Logger.recordOutput("ScoreAssist/ReefTrackerLoc", loc.toString());
       Logger.recordOutput("ScoreAssist/ReefTrackerPose", loc.getNode().getRobotAlignmentPose());
       reefTrackerLoc = Optional.of(loc);
+    } else if (DriverStation.isAutonomous()) {
+      Logger.recordOutput(
+          "ScoreAssist/ReefTrackerLoc", reefTrackerLoc.isEmpty() ? "null" : "SET BY AUTO");
+      Logger.recordOutput(
+          "ScoreAssist/ReefTrackerPose",
+          reefTrackerLoc.isEmpty() ? new Pose2d() : reefTrackerLoc.get().getNode().getPose());
     } else {
       reefTrackerLoc = Optional.empty();
       Logger.recordOutput("ScoreAssist/ReefTrackerLoc", "null");
     }
+
+    Logger.recordOutput("ScoreAssist/closestLocPose", closestLocPose);
   }
 }
