@@ -16,6 +16,7 @@ package frc.robot;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -42,8 +43,10 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   private Mechanism2d mech2d;
+  private boolean hadDisabledReefAlign = false;
 
   public Robot() {
+    PortForwarder.add(5810, "localhost", 4173);
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -104,11 +107,16 @@ public class Robot extends LoggedRobot {
             .append(RobotContainer.algaeClaw.mech2d);
     mech2d.getRoot("climber", 2, Units.inchesToMeters(10)).append(RobotContainer.climber.mech2d);
     SmartDashboard.putData("Mech2d", mech2d);
+
+    Logger.recordOutput(
+        "FieldConstants/BranchAPose",
+        FieldConstants.Reef.branchPositions2d.get(1).get(FieldConstants.ReefLevel.L2));
   }
 
   @Override
   public void robotInit() {
     Pathfinding.setPathfinder(new LocalADStarAK());
+    SmartDashboard.putBoolean("Disable ReefAlign", false);
   }
 
   /** This function is called periodically during all modes. */
@@ -146,6 +154,12 @@ public class Robot extends LoggedRobot {
       RobotContainer.climber.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
+    var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
+    RobotContainer.disableReefAlign = disableReefAlign;
+    if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
+      robotContainer.normalDrive();
+    }
+    hadDisabledReefAlign = disableReefAlign;
   }
 
   /** This function is called once when the robot is disabled. */
@@ -176,6 +190,7 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    robotContainer.normalDrive();
   }
 
   /** This function is called periodically during operator control. */

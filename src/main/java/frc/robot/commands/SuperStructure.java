@@ -36,7 +36,7 @@ public enum SuperStructure {
                   ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG)),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
               RollerCmds.waitUntilCoral(2))),
-  L1_PREP(
+  L1(
       () ->
           Commands.sequence(
               AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
@@ -49,7 +49,7 @@ public enum SuperStructure {
                   PivotCmds.setAngle(SSConstants.Pivot.L1_ANGLE_DEG),
                   ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L1_ANGLE_DEG)),
               PivotCmds.waitUntilAtTarget())),
-  L2_PREP(
+  L2(
       () ->
           Commands.sequence(
               AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
@@ -62,7 +62,7 @@ public enum SuperStructure {
                   PivotCmds.setAngle(SSConstants.Pivot.L2_ANGLE_DEG),
                   ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L2_ANGLE_DEG)),
               PivotCmds.waitUntilAtTarget())),
-  L3_PREP(
+  L3(
       () ->
           Commands.sequence(
               AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
@@ -76,6 +76,18 @@ public enum SuperStructure {
                   ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L3_ANGLE_DEG)),
               PivotCmds.waitUntilAtTarget())),
   L4_PREP(
+      () ->
+          Commands.sequence(
+              AlgaeClawCmds.setSpeed(() -> 0),
+              Commands.either(
+                  PivotCmds.setAngleAndWait(() -> 35),
+                  Commands.none(),
+                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              Commands.parallel(
+                  ElevatorCmds.setHeight(SSConstants.Elevator.L4_PREP_HEIGHT_IN),
+                  PivotCmds.setAngle(SSConstants.Pivot.L4_ANGLE_DEG),
+                  ShoulderCmds.setAngle(SSConstants.Shoulder.L4_PREP_ANGLE_DEG)))),
+  L4(
       () ->
           Commands.sequence(
               AlgaeClawCmds.setSpeed(() -> 0),

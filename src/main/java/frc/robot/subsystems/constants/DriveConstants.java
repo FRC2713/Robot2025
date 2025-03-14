@@ -3,7 +3,6 @@ package frc.robot.subsystems.constants;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -12,9 +11,15 @@ import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.util.ControlGains;
 import frc.robot.util.LoggedTunableGains;
+import frc.robot.util.LoggedTunableNumber;
 
 public class DriveConstants {
   public static final double wheelCOF = 1.1;
+
+  // positive values adjust the robots scoring pose to the right.
+  public static final LoggedTunableNumber coralOffsetFromCenter =
+      new LoggedTunableNumber(
+          "Drive/coralOffsetFromCenter", edu.wpi.first.math.util.Units.inchesToMeters(2));
   public static final double driveBaseWidthWithBumpersMeters =
       edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 7.0);
 
@@ -22,12 +27,12 @@ public class DriveConstants {
       new LoggedTunableGains("ScoreAssist", new ControlGains().p(2).d(0).trapezoidal(0.1, 0, 0));
 
   public final class AutoConstants {
-    public static final PIDController xTrajectoryController =
-        new ControlGains().p(10.0).createPIDController();
-    public static final PIDController yTrajectoryController =
-        new ControlGains().p(10.0).createPIDController();
-    public static final PIDController headingTrajectoryController =
-        new ControlGains().p(5.0).createPIDController();
+    public static final LoggedTunableGains xTrajectoryController =
+        new LoggedTunableGains("xTraj", new ControlGains().p(2.0));
+    public static final LoggedTunableGains yTrajectoryController =
+        new LoggedTunableGains("yTraj", new ControlGains().p(2.0));
+    public static final LoggedTunableGains headingTrajectoryController =
+        new LoggedTunableGains("headingTraj", new ControlGains().p(1.5).d(0.0));
   }
 
   public final class OTFConstants {

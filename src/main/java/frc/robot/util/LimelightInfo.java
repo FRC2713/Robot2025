@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -29,8 +30,8 @@ public class LimelightInfo {
         this.location.getX(),
         this.location.getY(),
         this.location.getZ(),
-        this.location.getRotation().getX(),
-        this.location.getRotation().getY(),
-        this.location.getRotation().getZ());
+        Units.radiansToDegrees(this.location.getRotation().getX()),
+        Units.radiansToDegrees(this.location.getRotation().getY()),
+        Units.radiansToDegrees(this.location.getRotation().getZ()));
   }
 }

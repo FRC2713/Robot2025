@@ -20,16 +20,15 @@ import org.littletonrobotics.junction.Logger;
 public class VisionIOPoseEstimator implements VisionIO {
   private NetworkTableInstance inst;
   private NetworkTable table;
-  private Pose3d pose;
-  private Pose2d pose2d;
+  private Pose2d pose2d = new Pose2d();
   @Setter @Getter private boolean allowJumps = true;
   private double lastTimestamp = -1;
+  private final double[] defaultPose = {0, 0, 0, 0, 0, 0, 0, -1};
 
   // IMPORTANT: Vision must be initialized after the drive subsystem
   public VisionIOPoseEstimator() {
     inst = NetworkTableInstance.getDefault();
     table = inst.getTable("slamdunk");
-    RobotContainer.driveSubsystem.resetOdometry(new Pose2d());
   }
 
   @Override
@@ -37,18 +36,12 @@ public class VisionIOPoseEstimator implements VisionIO {
     var speed = RHRUtil.speed(RobotContainer.driveSubsystem.getChassisSpeeds().toTwist2d(0.02));
     Logger.recordOutput("Vision/Speed", speed);
 
-    pose =
+    var poseArray = table.getEntry("pose").getDoubleArray(defaultPose);
+    var pose =
         new Pose3d(
-            new Translation3d(
-                table.getEntry("pose/translation/x").getDouble(0.0),
-                table.getEntry("pose/translation/y").getDouble(0.0),
-                table.getEntry("pose/translation/z").getDouble(0.0)),
-            new Rotation3d(
-                new Quaternion(
-                    table.getEntry("pose/rotation/q/w").getDouble(0.0),
-                    table.getEntry("pose/rotation/q/x").getDouble(0.0),
-                    table.getEntry("pose/rotation/q/y").getDouble(0.0),
-                    table.getEntry("pose/rotation/q/z").getDouble(0.0))));
+            new Translation3d(poseArray[0], poseArray[1], poseArray[2]),
+            new Rotation3d(new Quaternion(poseArray[6], poseArray[3], poseArray[4], poseArray[5])));
+
     pose =
         pose.transformBy(new Transform3d(new Translation3d(), new Rotation3d(0, 0, Math.PI / 2)));
 
@@ -57,7 +50,7 @@ public class VisionIOPoseEstimator implements VisionIO {
     Logger.recordOutput("Odometry/Vision3d", pose);
     Logger.recordOutput("Odometry/Vision", pose2d);
 
-    var rawTime = table.getEntry("timeLeave").getDouble(0.0);
+    var rawTime = poseArray[7];
 
     var time = rawTime / 1e6;
     Logger.recordOutput("Vision/timeLeaveSec", time);
@@ -124,5 +117,10 @@ public class VisionIOPoseEstimator implements VisionIO {
 
     Logger.recordOutput("Vision/Adding Measurement", false);
     Logger.recordOutput("Vision/Reasoning", "No pose data");
+  }
+
+  @Override
+  public Pose2d getPose() {
+    return this.pose2d.getTranslation().getX() != 0 ? this.pose2d : null;
   }
 }

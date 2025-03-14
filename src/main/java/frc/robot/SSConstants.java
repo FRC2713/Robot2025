@@ -20,6 +20,8 @@ public class SSConstants {
 
     public static final LoggedTunableNumber L4_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L4 Height", 24);
+    public static final LoggedTunableNumber L4_PREP_HEIGHT_IN =
+        new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 0);
 
     public static final LoggedTunableNumber PROCESSOR_PREP_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/Proc Prep Height", 10);
@@ -48,7 +50,9 @@ public class SSConstants {
         new LoggedTunableNumber("Shoulder/SS/L3 Angle", -150);
 
     public static final LoggedTunableNumber L4_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L4 Prep Angle", 130);
+        new LoggedTunableNumber("Shoulder/SS/L4 Angle", 130);
+    public static final LoggedTunableNumber L4_PREP_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/L4 Prep Angle", 90);
 
     public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/Proc Score Angle", -30);
@@ -149,9 +153,9 @@ public class SSConstants {
     public static final LoggedTunableNumber INTAKE_DELAY =
         new LoggedTunableNumber("Auto/Intake Delay", 1);
     public static final LoggedTunableNumber L4_SCORE_DELAY =
-        new LoggedTunableNumber("Auto/L4 Score Delay", 0.2);
+        new LoggedTunableNumber("Auto/L4 Score Delay", 0.7);
     public static final LoggedTunableNumber L4_POST_SCORE_DELAY =
-        new LoggedTunableNumber("Auto/L4 Post-Score Delay", 0.2);
+        new LoggedTunableNumber("Auto/L4 Post-Score Delay", 2);
   }
 
   public class Drive {

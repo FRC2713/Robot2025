@@ -177,6 +177,12 @@ public class LoggedTunableGains {
     return new PIDController(this.getKP(), this.getKI(), this.getKD());
   }
 
+  public PIDController createAngularPIDController() {
+    var pid = new PIDController(this.getKP(), this.getKI(), this.getKD());
+    pid.enableContinuousInput(-Math.PI, Math.PI);
+    return pid;
+  }
+
   public ArmFeedforward createArmFF() {
     return new ArmFeedforward(this.getKS(), this.getKG(), this.getKV(), this.getKA());
   }
