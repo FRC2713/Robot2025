@@ -109,7 +109,7 @@ public class RobotContainer {
   // For Choreo
   private final AutoFactory choreoAutoFactory;
   public static Vision visionsubsystem;
-  public static boolean disableReefAlign = false;
+  public static boolean disableReefAlign = true;
 
   public RobotContainer() {
     // Start subsystems
@@ -360,6 +360,12 @@ public class RobotContainer {
         .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
         .onFalse(RollerCmds.setSpeed(() -> 0));
 
+    // Enable/disable reefalign
+    driver
+        .leftTrigger(0.25)
+        .onTrue(Commands.runOnce(() -> RobotContainer.disableReefAlign = false))
+        .onFalse(Commands.runOnce(() -> RobotContainer.disableReefAlign = true));
+
     // Score Coral
     driver
         .rightBumper()
@@ -374,7 +380,6 @@ public class RobotContainer {
                         () -> {
                           ScoreAssist.getInstance().setClosestLocPose(null);
                           ScoreAssist.getInstance().hasStartedCommand = false;
-                          RobotContainer.disableReefAlign = false;
                         })
                     .ignoringDisable(true),
                 DriveCommands.changeDefaultDriveCommand(

@@ -58,10 +58,9 @@ public class ScoreLotsOfCoral {
                         ScoreAssist.getInstance()
                             .goReefTracker(driveSubsystem)
                             .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
-                        new InstantCommand(() -> driveSubsystem.stop())),
-                    SuperStructure.L4.getCommand()),
+                        new InstantCommand(() -> driveSubsystem.stop()))),
+                SuperStructure.L4.getCommand(),
                 // 2) Score Coral
-                ScoreAssist.getInstance().waitUntilFinished(1.6),
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
@@ -95,8 +94,8 @@ public class ScoreLotsOfCoral {
                         ScoreAssist.getInstance()
                             .goReefTracker(driveSubsystem)
                             .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
-                        new InstantCommand(() -> driveSubsystem.stop())),
-                    SuperStructure.L4.getCommand()),
+                        new InstantCommand(() -> driveSubsystem.stop()))),
+                SuperStructure.L4.getCommand(),
                 // 2) Score Coral
                 SuperStructure.CORAL_SCORE.getCommand(),
                 // 3) Begin driving to source

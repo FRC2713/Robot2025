@@ -63,15 +63,14 @@ public class ScoreAssist {
 
     for (ScoreNode node : ScoreNode.values()) {
       double distance =
-          pose.getTranslation()
-              .getDistance(AllianceFlipUtil.apply(node.getRobotAlignmentPose().getTranslation()));
+          pose.getTranslation().getDistance(node.getRobotAlignmentPose().getTranslation());
       if (distance < closestDistance) {
         closestDistance = distance;
         closestNode = node;
       }
     }
 
-    return closestNode != null ? AllianceFlipUtil.apply(closestNode.getRobotAlignmentPose()) : null;
+    return closestNode != null ? closestNode.getRobotAlignmentPose() : null;
   }
 
   private boolean isFinished = false;
