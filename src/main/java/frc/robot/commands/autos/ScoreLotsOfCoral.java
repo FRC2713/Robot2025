@@ -94,7 +94,7 @@ public class ScoreLotsOfCoral {
                             () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.C_FOUR)),
                         ScoreAssist.getInstance()
                             .goReefTracker(driveSubsystem)
-                            .withDeadline(ScoreAssist.getInstance().waitUntilFinishedDebug(1.0)),
+                            .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
                         new InstantCommand(() -> driveSubsystem.stop())),
                     SuperStructure.L4.getCommand()),
                 // 2) Score Coral

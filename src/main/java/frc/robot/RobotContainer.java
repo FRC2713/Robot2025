@@ -285,7 +285,7 @@ public class RobotContainer {
                     driveSubsystem,
                     () -> -driver.getLeftY(),
                     () -> -driver.getLeftX(),
-                    () -> ReefAlign.getInstance().inZone().get()),
+                    () -> ReefAlign.getInstance().inZone().orElse(driveSubsystem.getRotation())),
                 "Drive Align To Reef"))
         .onFalse(
             Commands.either(

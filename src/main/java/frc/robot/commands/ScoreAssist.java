@@ -86,15 +86,6 @@ public class ScoreAssist {
         Commands.waitSeconds(timeoutSeconds));
   }
 
-  public Command waitUntilFinishedDebug(double timeoutSeconds) {
-    return Commands.race(
-        Commands.parallel(
-            new WaitUntilCommand(ScoreAssist.getInstance()::hasFinished),
-            Commands.print("score assist finished")),
-        Commands.parallel(
-            Commands.waitSeconds(timeoutSeconds), Commands.print("score assist timed out")));
-  }
-
   public void setReefTrackerLoc(ScoreLoc loc) {
     this.reefTrackerLoc = Optional.of(loc);
     this.error = 999;
