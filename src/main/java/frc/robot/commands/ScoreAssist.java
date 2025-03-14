@@ -35,6 +35,7 @@ public class ScoreAssist {
   private StringTopic topic = inst.getStringTopic("/scoreassist/goto");
   private StringSubscriber sub;
   public Optional<ScoreLoc> reefTrackerLoc = Optional.empty();
+  private String lastGotoReceived = "none";
 
   private ScoreAssist() {
     sub = topic.subscribe("none");
@@ -98,9 +99,7 @@ public class ScoreAssist {
                       pose = getClosestLocPose();
                     }
                   } else {
-                    pose =
-                        AllianceFlipUtil.apply(
-                            reefTrackerLoc.get().getNode().getRobotAlignmentPose());
+                    pose = reefTrackerLoc.get().getNode().getRobotAlignmentPose();
                   }
                   Logger.recordOutput("ScoreAssist/alignToLoc", pose);
                   boolean isFlipped =
@@ -198,10 +197,15 @@ public class ScoreAssist {
               .createAngularTrapezoidalPIDController();
       omegascoreAssistController.enableContinuousInput(-Math.PI, Math.PI);
     }
-    var loc = ScoreLoc.parseFromNT(sub.get("none"));
+    String gotoLocation = sub.get("none");
+    if (gotoLocation == this.lastGotoReceived) {
+      return;
+    }
+    this.lastGotoReceived = gotoLocation;
+    var loc = ScoreLoc.parseFromNT(gotoLocation);
     if (loc != null) {
       Logger.recordOutput("ScoreAssist/ReefTrackerLoc", loc.toString());
-      Logger.recordOutput("ScoreAssist/ReefTrackerPose", loc.getNode().getPose());
+      Logger.recordOutput("ScoreAssist/ReefTrackerPose", loc.getNode().getRobotAlignmentPose());
       reefTrackerLoc = Optional.of(loc);
     } else {
       reefTrackerLoc = Optional.empty();
