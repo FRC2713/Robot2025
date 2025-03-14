@@ -15,6 +15,8 @@ import frc.robot.util.LoggedTunableNumber;
 
 public class DriveConstants {
   public static final double wheelCOF = 1.1;
+
+  // positive values adjust the robots scoring pose to the right.
   public static final LoggedTunableNumber coralOffsetFromCenter =
       new LoggedTunableNumber(
           "Drive/coralOffsetFromCenter", edu.wpi.first.math.util.Units.inchesToMeters(2));
