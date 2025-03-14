@@ -3,9 +3,12 @@ package frc.robot.util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
 import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.subsystems.constants.DriveConstants;
+import java.util.Optional;
 
 public enum ScoreNode {
   // indexes start at right branch facing driver station and move clockwise, which means that
@@ -39,12 +42,18 @@ public enum ScoreNode {
   }
 
   public Pose2d getRobotAlignmentPose() {
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+
     Transform2d robotOffset =
         new Transform2d(
             (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0),
             DriveConstants.coralOffsetFromCenter
                 .getAsDouble(), // offset of scoring mechanism from center of robot
             new Rotation2d(Math.PI));
-    return pose.transformBy(robotOffset);
+    Pose2d alignmentPose = pose.transformBy(robotOffset);
+    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+      return AllianceFlipUtil.flip(alignmentPose);
+    }
+    return alignmentPose;
   }
 }

@@ -98,9 +98,7 @@ public class ScoreAssist {
                       pose = getClosestLocPose();
                     }
                   } else {
-                    pose =
-                        AllianceFlipUtil.apply(
-                            reefTrackerLoc.get().getNode().getRobotAlignmentPose());
+                    pose = reefTrackerLoc.get().getNode().getRobotAlignmentPose();
                   }
                   Logger.recordOutput("ScoreAssist/alignToLoc", pose);
                   boolean isFlipped =
@@ -200,8 +198,9 @@ public class ScoreAssist {
     }
     var loc = ScoreLoc.parseFromNT(sub.get("none"));
     if (loc != null) {
+
       Logger.recordOutput("ScoreAssist/ReefTrackerLoc", loc.toString());
-      Logger.recordOutput("ScoreAssist/ReefTrackerPose", loc.getNode().getPose());
+      Logger.recordOutput("ScoreAssist/ReefTrackerPose", loc.getNode().getRobotAlignmentPose());
       reefTrackerLoc = Optional.of(loc);
     } else {
       reefTrackerLoc = Optional.empty();

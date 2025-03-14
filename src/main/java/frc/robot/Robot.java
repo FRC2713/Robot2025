@@ -107,6 +107,10 @@ public class Robot extends LoggedRobot {
             .append(RobotContainer.algaeClaw.mech2d);
     mech2d.getRoot("climber", 2, Units.inchesToMeters(10)).append(RobotContainer.climber.mech2d);
     SmartDashboard.putData("Mech2d", mech2d);
+
+    Logger.recordOutput(
+        "FieldConstants/BranchAPose",
+        FieldConstants.Reef.branchPositions2d.get(1).get(FieldConstants.ReefLevel.L2));
   }
 
   @Override
