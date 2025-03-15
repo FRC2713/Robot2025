@@ -228,7 +228,7 @@ public class ScoreAssist {
           "ScoreAssist/ReefTrackerLoc", reefTrackerLoc.isEmpty() ? "null" : "SET BY AUTO");
       Logger.recordOutput(
           "ScoreAssist/ReefTrackerPose",
-          reefTrackerLoc.isEmpty() ? new Pose2d() : reefTrackerLoc.get().getNode().getPose());
+          reefTrackerLoc.isEmpty() ? new Pose2d() : reefTrackerLoc.get().getNode().getRobotAlignmentPose());
     } else {
       reefTrackerLoc = Optional.empty();
       Logger.recordOutput("ScoreAssist/ReefTrackerLoc", "null");
