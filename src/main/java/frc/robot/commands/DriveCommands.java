@@ -180,7 +180,7 @@ public class DriveCommands {
 
           // Square rotation value for more precise control
           omega = Math.copySign(omega * omega, omega);
-          double maxSpeed = 0.1;
+          double maxSpeed = 0.5;
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds =
               new ChassisSpeeds(

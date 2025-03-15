@@ -39,7 +39,7 @@ public enum SuperStructure {
   L1(
       () ->
           Commands.sequence(
-              AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
+              AlgaeClawCmds.setSpeed(() -> 0),
               Commands.either(
                   PivotCmds.setAngleAndWait(() -> 35),
                   Commands.none(),

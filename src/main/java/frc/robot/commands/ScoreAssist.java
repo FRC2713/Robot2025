@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.DriveConstants;
-import frc.robot.subsystems.constants.DriveConstants.HeadingControllerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLoc;
@@ -147,12 +146,12 @@ public class ScoreAssist {
                     }
                   }
 
-                  if (pose.getTranslation().getDistance(drive.getPose().getTranslation()) > 1
-                      && DriverStation.isAutonomous()) {
-                    System.out.println(
-                        "Pose too far away to be compatable with ScoreAssist in Auto.");
-                    return;
-                  }
+                  // if (pose.getTranslation().getDistance(drive.getPose().getTranslation()) > 1
+                  //     && DriverStation.isAutonomous()) {
+                  //   System.out.println(
+                  //       "Pose too far away to be compatable with ScoreAssist in Auto.");
+                  //   return;
+                  // }
                   Logger.recordOutput("ScoreAssist/alignToLoc", pose);
                   boolean isFlipped =
                       DriverStation.getAlliance().isPresent()
@@ -222,7 +221,7 @@ public class ScoreAssist {
             () -> {
               xscoreAssistController.reset(drive.getPose().getX());
               yscoreAssistController.reset(drive.getPose().getY());
-              HeadingControllerConstants.angleController.reset(drive.getRotation().getRadians());
+              omegascoreAssistController.reset(drive.getRotation().getRadians());
             })
         .finallyDo(
             () -> {

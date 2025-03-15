@@ -155,7 +155,7 @@ public class SSConstants {
     public static final LoggedTunableNumber L4_SCORE_DELAY =
         new LoggedTunableNumber("Auto/L4 Score Delay", 0.7);
     public static final LoggedTunableNumber L4_POST_SCORE_DELAY =
-        new LoggedTunableNumber("Auto/L4 Post-Score Delay", 2);
+        new LoggedTunableNumber("Auto/L4 Post-Score Delay", 0.7);
   }
 
   public class Drive {
