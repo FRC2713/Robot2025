@@ -138,6 +138,7 @@ public class ScoreAssist {
                         && pose.getTranslation().getDistance(FieldConstants.Reef.center)
                             > distFromReefThreshMeters) {
                       System.out.println("Target Pose expected to be in Red but is not.");
+                      // return;
                     } else if (DriverStation.getAlliance().get() == Alliance.Blue
                         && pose.getTranslation()
                                 .getDistance(AllianceFlipUtil.flip(FieldConstants.Reef.center))
