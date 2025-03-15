@@ -76,7 +76,7 @@ public class ScoreAssist {
   private boolean isFinished = false;
 
   public boolean hasFinished() {
-    return error < Units.inchesToMeters(1);
+    return error < Units.inchesToMeters(2.5);
   }
 
   public Command waitUntilFinished(double timeoutSeconds) {
@@ -152,7 +152,7 @@ public class ScoreAssist {
                               : drive.getRotation()));
                   error = pose.getTranslation().getDistance(drive.getPose().getTranslation());
                   Logger.recordOutput("ScoreAssist/Error", error);
-                  if (error < Units.inchesToMeters(1)) {
+                  if (error < Units.inchesToMeters(5)) {
                     isFinished = true;
                     if (!hasStartedCommand) {
                       hasStartedCommand = true;
@@ -162,14 +162,14 @@ public class ScoreAssist {
                             .getLevel()
                             .getScoreCommand()
                             .get()
-                            .andThen(
-                                Commands.sequence(
-                                    Commands.waitSeconds(
-                                        SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                                    SuperStructure.CORAL_SCORE.getCommand(),
-                                    Commands.waitSeconds(
-                                        SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
-                                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand()))
+                            // .andThen(
+                            //     Commands.sequence(
+                            //         Commands.waitSeconds(
+                            //             SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                            //         SuperStructure.CORAL_SCORE.getCommand(),
+                            //         Commands.waitSeconds(
+                            //             SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+                            //         SuperStructure.SOURCE_CORAL_INTAKE.getCommand()))
                             .schedule();
                       }
                     }
@@ -228,7 +228,9 @@ public class ScoreAssist {
           "ScoreAssist/ReefTrackerLoc", reefTrackerLoc.isEmpty() ? "null" : "SET BY AUTO");
       Logger.recordOutput(
           "ScoreAssist/ReefTrackerPose",
-          reefTrackerLoc.isEmpty() ? new Pose2d() : reefTrackerLoc.get().getNode().getRobotAlignmentPose());
+          reefTrackerLoc.isEmpty()
+              ? new Pose2d()
+              : reefTrackerLoc.get().getNode().getRobotAlignmentPose());
     } else {
       reefTrackerLoc = Optional.empty();
       Logger.recordOutput("ScoreAssist/ReefTrackerLoc", "null");
