@@ -87,6 +87,7 @@ public class ScoreLotsOfCoral {
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 Commands.print("Scoring Coral"),
                 SuperStructure.CORAL_SCORE.getCommand(),
+                // TODO: Tune down
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(
@@ -98,10 +99,11 @@ public class ScoreLotsOfCoral {
         .onTrue(
             Commands.sequence(
                 new InstantCommand(() -> driveSubsystem.stop()),
-                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
                 Commands.race(
-                    new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral()),
-                    Commands.waitSeconds(2.0)),
+                    Commands.parallel(
+                        SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
+                        new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral())),
+                    Commands.waitSeconds(3.0)),
                 sourceToReefC.cmd()));
 
     // Prep elevator along the way
@@ -111,6 +113,7 @@ public class ScoreLotsOfCoral {
         .done()
         .onTrue(
             Commands.sequence(
+                new InstantCommand(() -> driveSubsystem.stop()),
                 // 1) Finish off trajectory with score assist, in parallel move SS to L4
                 new ParallelDeadlineGroup(
                     Commands.waitSeconds(2),
@@ -121,7 +124,7 @@ public class ScoreLotsOfCoral {
                             Commands.print("2Waiting for ScoreAssist"),
                             ScoreAssist.getInstance()
                                 .goReefTracker(driveSubsystem)
-                                .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
+                                .withDeadline(ScoreAssist.getInstance().waitUntilFinished(2.0)),
                             Commands.print("2ScoreAssist Done")))),
                 new InstantCommand(() -> driveSubsystem.stop()),
                 Commands.print("2driveSubsystem stop thing Done"),
@@ -132,10 +135,37 @@ public class ScoreLotsOfCoral {
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 Commands.print("2Scoring Coral"),
                 SuperStructure.CORAL_SCORE.getCommand(),
+                // TODO: Tune down
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(
                     SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefCToSource.cmd())));
+    // Commands.sequence(
+    //     // 1) Finish off trajectory with score assist, in parallel move SS to L4
+    //     new ParallelDeadlineGroup(
+    //         Commands.waitSeconds(2),
+    //         Commands.parallel(
+    //             Commands.sequence(
+    //                 new InstantCommand(
+    //                     () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.C_FOUR)),
+    //                 Commands.print("2Waiting for ScoreAssist"),
+    //                 ScoreAssist.getInstance()
+    //                     .goReefTracker(driveSubsystem)
+    //                     .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
+    //                 Commands.print("2ScoreAssist Done")))),
+    //     new InstantCommand(() -> driveSubsystem.stop()),
+    //     Commands.print("2driveSubsystem stop thing Done"),
+    //     Commands.print("2L4"),
+    //     SuperStructure.L4.getCommand().withDeadline(Commands.waitSeconds(2)),
+    //     Commands.print("2L4 Done"),
+    //     // 2) Score Coral
+    //     Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+    //     Commands.print("2Scoring Coral"),
+    //     SuperStructure.CORAL_SCORE.getCommand(),
+    //     Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+    //     // 3) Begin driving to source
+    //     Commands.parallel(
+    //         SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefCToSource.cmd())));
     // Commands.sequence(
     //     // 1) Finish off trajectory with score assist, in parallel move SS to L4
     //     Commands.parallel(
