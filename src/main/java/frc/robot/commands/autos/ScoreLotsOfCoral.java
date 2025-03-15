@@ -65,6 +65,7 @@ public class ScoreLotsOfCoral {
         .done()
         .onTrue(
             Commands.sequence(
+                new InstantCommand(() -> driveSubsystem.stop()),
                 // 1) Finish off trajectory with score assist, in parallel move SS to L4
                 new ParallelDeadlineGroup(
                     Commands.waitSeconds(2),

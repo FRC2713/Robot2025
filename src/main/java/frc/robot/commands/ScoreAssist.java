@@ -149,9 +149,9 @@ public class ScoreAssist {
                   Logger.recordOutput("ScoreAssist/CommandedLinearVelocity", linearVelocity);
 
                   // Calculate angular speed
-                  double omega =
+                  double omega = DriverStation.isTeleop() ? 
                       omegascoreAssistController.calculate(
-                          drive.getRotation().getRadians(), pose.getRotation().getRadians());
+                          drive.getRotation().getRadians(), pose.getRotation().getRadians()) : 0;
 
                   // Convert to field relative speeds & send command
                   ChassisSpeeds speeds =
