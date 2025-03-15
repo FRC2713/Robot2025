@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.HeadingControllerConstants;
@@ -130,6 +131,27 @@ public class ScoreAssist {
                   } else {
                     pose = reefTrackerLoc.get().getNode().getRobotAlignmentPose();
                   }
+
+                  if (DriverStation.getAlliance().isPresent()) {
+                    double distFromReefThreshMeters = 2;
+                    if (DriverStation.getAlliance().get() == Alliance.Red
+                        && pose.getTranslation().getDistance(FieldConstants.Reef.center)
+                            > distFromReefThreshMeters) {
+                      System.out.println("Target Pose expected to be in Red but is not.");
+                    } else if (DriverStation.getAlliance().get() == Alliance.Blue
+                        && pose.getTranslation()
+                                .getDistance(AllianceFlipUtil.flip(FieldConstants.Reef.center))
+                            > distFromReefThreshMeters) {
+                      System.out.println("Target Pose expected to be in Blue but is not.");
+                    }
+                  }
+
+                  if (pose.getTranslation().getDistance(drive.getPose().getTranslation()) > 1
+                      && DriverStation.isAutonomous()) {
+                    System.out.println(
+                        "Pose too far away to be compatable with ScoreAssist in Auto.");
+                    return;
+                  }
                   Logger.recordOutput("ScoreAssist/alignToLoc", pose);
                   boolean isFlipped =
                       DriverStation.getAlliance().isPresent()
@@ -149,9 +171,12 @@ public class ScoreAssist {
                   Logger.recordOutput("ScoreAssist/CommandedLinearVelocity", linearVelocity);
 
                   // Calculate angular speed
-                  double omega = DriverStation.isTeleop() ? 
+                  double omega =
+                      // DriverStation.isTeleop()
+                      // ?
                       omegascoreAssistController.calculate(
-                          drive.getRotation().getRadians(), pose.getRotation().getRadians()) : 0;
+                          drive.getRotation().getRadians(), pose.getRotation().getRadians());
+                  // : 0;
 
                   // Convert to field relative speeds & send command
                   ChassisSpeeds speeds =

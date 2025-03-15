@@ -65,7 +65,7 @@ public class DriveCommands {
     Rotation2d linearDirection = new Rotation2d(Math.atan2(y, x));
 
     // Square magnitude for more precise control
-    linearMagnitude = linearMagnitude * linearMagnitude;
+    linearMagnitude = Math.abs(linearMagnitude * linearMagnitude * linearMagnitude);
 
     // Return new linear velocity
     return new Pose2d(new Translation2d(), linearDirection)
@@ -145,8 +145,8 @@ public class DriveCommands {
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds =
               new ChassisSpeeds(
-                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getX() * (drive.getMaxLinearSpeedMetersPerSec() * 0.8),
+                  linearVelocity.getY() * (drive.getMaxLinearSpeedMetersPerSec() * 0.8),
                   omega * drive.getMaxAngularSpeedRadPerSec());
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()

@@ -33,6 +33,7 @@ import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.AutoRoutinesWithPathFinding;
+import frc.robot.commands.autos.CenterAutoPineTree;
 import frc.robot.commands.autos.CoralAndAlgaeAuto;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
@@ -228,6 +229,9 @@ public class RobotContainer {
 
     // Add options to the chooser
     // I add a * to the name when it generates its starting trajectory
+    autoChooser.addRoutine(
+        "Center Pine Tree",
+        () -> CenterAutoPineTree.getRoutine(choreoAutoFactory, driveSubsystem));
     autoChooser.addRoutine(
         "Score Lots Of Coral",
         () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));
