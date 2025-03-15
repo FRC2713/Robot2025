@@ -365,9 +365,9 @@ public class RobotContainer {
         .a()
         .onTrue(Commands.runOnce(() -> RobotContainer.disableReefAlign = false))
         .onFalse(Commands.runOnce(() -> RobotContainer.disableReefAlign = true));
-    
-        // Climber
-        driver
+
+    // Climber
+    driver
         .leftTrigger(0.1)
         .whileTrue(
             Commands.sequence(
@@ -378,7 +378,7 @@ public class RobotContainer {
                     Commands.none(),
                     () -> climber.getCurrentAngle() > 100),
                 new MoveClimber(
-                    () -> -1 * operator.getRightTriggerAxis(), SSConstants.Climber.SERVO_POS_ON)))
+                    () -> -1 * driver.getLeftTriggerAxis(), SSConstants.Climber.SERVO_POS_ON)))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
 
     // Score Coral
