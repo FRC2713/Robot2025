@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
-import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.ScoreAssistV2;
 import frc.robot.commands.SuperStructure;
@@ -69,7 +68,8 @@ public class ScoreLotsOfCoralV2 {
             Commands.sequence(
                 new InstantCommand(() -> driveSubsystem.stop()),
                 // 1) Finish off trajectory with score assist, in parallel move SS to L4
-               new ParallelDeadlineGroup(                Commands.waitSeconds(2),
+                new ParallelDeadlineGroup(
+                    Commands.waitSeconds(2),
                     ScoreAssistV2.goScoreAssistV2(ScoreLoc.E_FOUR.getNode(), driveSubsystem)),
                 new InstantCommand(() -> driveSubsystem.stop()),
                 SuperStructure.L4.getCommand().withDeadline(Commands.waitSeconds(2)),

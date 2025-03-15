@@ -4,7 +4,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,17 +39,21 @@ public class ScoreAssistV2 {
                       * yscoreAssistController.calculate(
                           drive.getPose().getTranslation().getY(), pose.getTranslation().getY()));
 
-          var angularError = omegascoreAssistController.getPositionError();
           double omega = 0;
-          if (angularError > Units.degreesToRadians(5)) {
-            omega =
-                omegascoreAssistController.calculate(
-                    drive.getRotation().getRadians(), pose.getRotation().getRadians());
-            Logger.recordOutput("ScoreAssistV2/atAngularTarget", false);
+      
+          //   if (angularError > Units.degreesToRadians(5)) {
+          omega =
+              omegascoreAssistController.calculate(
+                  drive.getRotation().getRadians(), pose.getRotation().getRadians());
+          var angularError = omegascoreAssistController.getPositionError();
+        //   Logger.recordOutput("ScoreAssistV2/angularMeasure", drive.getRotation().getRadians());
+        //   Logger.recordOutput("ScoreAssistV2/angularSetpoint", omegascoreAssistController.getGoal());
 
-          } else {
-            Logger.recordOutput("ScoreAssistV2/atAngularTarget", true);
-          }
+          // Logger.recordOutput("ScoreAssistV2/atAngularTarget", false);
+
+          //   } else {
+          // Logger.recordOutput("ScoreAssistV2/atAngularTarget", true);
+          //   }
 
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds =

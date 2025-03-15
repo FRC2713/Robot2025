@@ -180,12 +180,12 @@ public class DriveCommands {
 
           // Square rotation value for more precise control
           omega = Math.copySign(omega * omega, omega);
-
+          double maxSpeed = 0.1;
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds =
               new ChassisSpeeds(
-                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec() * 0.3,
-                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec() * 0.3,
+                  linearVelocity.getX() * maxSpeed,
+                  linearVelocity.getY() * maxSpeed,
                   omega * drive.getMaxAngularSpeedRadPerSec() * 0.3);
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()
