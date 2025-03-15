@@ -6,6 +6,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.BooleanSubscriber;
+import edu.wpi.first.networktables.BooleanTopic;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.networktables.StringTopic;
@@ -32,13 +34,25 @@ public class ScoreAssist {
   private static ScoreAssist INSTANCE = null;
   public double error = -1;
   private NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  private StringTopic topic = inst.getStringTopic("/scoreassist/goto");
-  private StringSubscriber sub;
+  private StringTopic gotoTopic = inst.getStringTopic("/scoreassist/goto");
+  private StringSubscriber gotoSub;
+  private BooleanTopic climbTopic = inst.getBooleanTopic("/scoreassist/climbPrep");
+  private BooleanSubscriber climbSub;
   public Optional<ScoreLoc> reefTrackerLoc = Optional.empty();
   private String lastGotoReceived = "none";
+  private boolean climbPrep = false;
+
+  public boolean shouldClimbPrep() {
+    return climbPrep;
+  }
+
+  // public Trigger climbPrepTrigger = new Trigger(climbSub);
 
   private ScoreAssist() {
-    sub = topic.subscribe("none");
+    gotoSub = gotoTopic.subscribe("none");
+    climbSub = climbTopic.subscribe(false);
+
+    // climbPrepTrigger.onTrue(SuperStructure.CLIMB_PREP.getCommand());
   }
 
   public static ScoreAssist getInstance() {
@@ -212,7 +226,9 @@ public class ScoreAssist {
               .createAngularTrapezoidalPIDController();
       omegascoreAssistController.enableContinuousInput(-Math.PI, Math.PI);
     }
-    String gotoLocation = sub.get("none");
+    this.climbPrep = climbSub.get(false);
+
+    String gotoLocation = gotoSub.get("none");
     if (gotoLocation == this.lastGotoReceived) {
       return;
     }

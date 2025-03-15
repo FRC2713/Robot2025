@@ -95,6 +95,7 @@ public class RobotContainer {
   private static final CommandXboxController operator = new CommandXboxController(1);
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
   private static boolean hasRanAuto = false;
+  private Trigger climbPrepTrigger = new Trigger(ScoreAssist.getInstance()::shouldClimbPrep);
 
   // Dashboard inputs
   public final AutoChooser autoChooser;
@@ -268,9 +269,8 @@ public class RobotContainer {
     RobotModeTriggers.autonomous()
         .whileTrue(
             Commands.sequence(
-                    new InstantCommand(() -> RobotContainer.hasRanAuto = false),
-                    autoChooser.selectedCommandScheduler())
-                .finallyDo(() -> RobotContainer.hasRanAuto = true));
+                new InstantCommand(() -> RobotContainer.hasRanAuto = true),
+                autoChooser.selectedCommandScheduler()));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -523,6 +523,18 @@ public class RobotContainer {
     operator.y().onTrue(SuperStructure.L3.getCommand());
     operator.rightBumper().onTrue(SuperStructure.L4.getCommand());
 
+    climbPrepTrigger.onTrue(
+        Commands.parallel(
+            DriveCommands.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCommands.joystickDriveSlow(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> -driver.getRightX()),
+                "Slow Control"),
+            SuperStructure.CLIMB_PREP.getCommand()));
+
     operator
         .start()
         .onTrue(
@@ -569,10 +581,12 @@ public class RobotContainer {
             new Pose2d(
                 visionsubsystem.getPose().getTranslation(),
                 AllianceFlipUtil.apply(Rotation2d.fromRadians(Math.PI))));
-      } else {
-        driveSubsystem.setPose(
-            new Pose2d(visionsubsystem.getPose().getTranslation(), driveSubsystem.getRotation()));
       }
+      //   else {
+      //     driveSubsystem.setPose(
+      //         new Pose2d(visionsubsystem.getPose().getTranslation(),
+      // driveSubsystem.getRotation()));
+      //   }
     }
   }
 
