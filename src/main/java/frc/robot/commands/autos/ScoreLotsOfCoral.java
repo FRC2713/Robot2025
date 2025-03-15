@@ -75,7 +75,7 @@ public class ScoreLotsOfCoral {
                             Commands.print("Waiting for ScoreAssist"),
                             ScoreAssist.getInstance()
                                 .goReefTracker(driveSubsystem)
-                                .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
+                                .withDeadline(ScoreAssist.getInstance().waitUntilFinished(2.0)),
                             Commands.print("ScoreAssist Done")))),
                 new InstantCommand(() -> driveSubsystem.stop()),
                 Commands.print("driveSubsystem stop thing Done"),
@@ -96,10 +96,11 @@ public class ScoreLotsOfCoral {
         .done()
         .onTrue(
             Commands.sequence(
+                new InstantCommand(() -> driveSubsystem.stop()),
                 SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
                 Commands.race(
                     new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral()),
-                    Commands.waitSeconds(1.0)),
+                    Commands.waitSeconds(2.0)),
                 sourceToReefC.cmd()));
 
     // Prep elevator along the way
