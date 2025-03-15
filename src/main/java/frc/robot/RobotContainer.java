@@ -576,7 +576,7 @@ public class RobotContainer {
     rollers.setRPM(0);
     shoulder.setTargetAngle(shoulder.getCurrentAngle());
     if (visionsubsystem.getPose() != null) {
-      if (!hasRanAuto) {
+      if (!hasRanAuto && visionsubsystem.getPose().getTranslation().getX() != 0) {
         driveSubsystem.setPose(
             new Pose2d(
                 visionsubsystem.getPose().getTranslation(),

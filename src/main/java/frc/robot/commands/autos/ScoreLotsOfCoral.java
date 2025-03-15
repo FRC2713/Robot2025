@@ -43,6 +43,20 @@ public class ScoreLotsOfCoral {
             Commands.sequence(
                 new InstantCommand(() -> System.out.println("Score Lots of Coral started")),
                 RHRUtil.resetRotationIfReal(startToReefETraj.getInitialPose().get()),
+                new InstantCommand(
+                    () -> {
+                      if (RobotContainer.driveSubsystem.getPose().getTranslation().getX() == 0
+                          || RobotContainer.driveSubsystem
+                                  .getPose()
+                                  .getTranslation()
+                                  .getDistance(
+                                      startToReefETraj.getInitialPose().get().getTranslation())
+                              > 1) {
+                        System.out.println("Hard reset odom");
+                        RobotContainer.driveSubsystem.resetOdometry(
+                            startToReefETraj.getInitialPose().get());
+                      }
+                    }),
                 Commands.parallel(SuperStructure.L4_PREP.getCommand(), startToReefETraj.cmd()),
                 Commands.print("Shoulder in position & trajectory started")));
 
