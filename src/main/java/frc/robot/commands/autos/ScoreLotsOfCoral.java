@@ -81,7 +81,7 @@ public class ScoreLotsOfCoral {
                 new InstantCommand(() -> driveSubsystem.stop()),
                 Commands.print("driveSubsystem stop thing Done"),
                 Commands.print("L4"),
-                SuperStructure.L4.getCommand().withDeadline(Commands.waitSeconds(2)),
+                SuperStructure.L4.getCommand().withDeadline(Commands.waitSeconds(0.5)),
                 Commands.print("L4 Done"),
                 // 2) Score Coral
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
@@ -103,7 +103,7 @@ public class ScoreLotsOfCoral {
                     Commands.parallel(
                         SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
                         new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral())),
-                    Commands.waitSeconds(3.0)),
+                    Commands.waitSeconds(2.0)),
                 sourceToReefC.cmd()));
 
     // Prep elevator along the way
@@ -128,11 +128,11 @@ public class ScoreLotsOfCoral {
                             Commands.print("2ScoreAssist Done")))),
                 new InstantCommand(() -> driveSubsystem.stop()),
                 Commands.print("2driveSubsystem stop thing Done"),
-                Commands.print("2L4"),
-                SuperStructure.L4.getCommand().withDeadline(Commands.waitSeconds(2)),
-                Commands.print("2L4 Done"),
+                // Commands.print("2L4"),
+                // SuperStructure.L4.getCommand().withDeadline(Commands.waitSeconds(0.5)),
+                // Commands.print("2L4 Done"),
                 // 2) Score Coral
-                Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                // Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 Commands.print("2Scoring Coral"),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 // TODO: Tune down
