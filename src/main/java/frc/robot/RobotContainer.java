@@ -75,6 +75,7 @@ import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
 import frc.robot.subsystems.shoulder.ShoulderIOSim;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelights;
 import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.subsystems.vision.VisionIOPoseEstimator;
@@ -171,15 +172,16 @@ public class RobotContainer {
     }
     visionsubsystem =
         new Vision(
-            // new VisionIO() {}
-            VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK_WHEEL_ODOMETRY
-                ? new VisionIOOdometry()
-                : (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
-                    ? new VisionIOPoseEstimator()
-                    : new VisionIOLimelights(
-                        VisionConstants.FRONT_LIMELIGHT_INFO,
-                        VisionConstants.BACK_LIMELIGHT_INFO,
-                        driveSubsystem)));
+            new VisionIO() {}
+            // VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK_WHEEL_ODOMETRY
+            //     ? new VisionIOOdometry()
+            //     : (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
+            //         ? new VisionIOPoseEstimator()
+            //         : new VisionIOLimelights(
+            //             VisionConstants.FRONT_LIMELIGHT_INFO,
+            //             VisionConstants.BACK_LIMELIGHT_INFO,
+            //             driveSubsystem))
+                        );
 
     // PathPlanner Config
     AutoBuilder.configure(
