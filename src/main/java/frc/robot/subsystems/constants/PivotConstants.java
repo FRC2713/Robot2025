@@ -75,7 +75,7 @@ public class PivotConstants {
               .expo_kA(kExponential_kA));
 
   //   175.166
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(290.1953125);
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(290.1953125 + 2);
   public static final double humanOffsetDegs = -55;
 
   public static final int mech2dWidth = 10;
