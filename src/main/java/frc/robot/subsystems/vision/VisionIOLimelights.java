@@ -157,7 +157,7 @@ public class VisionIOLimelights implements VisionIO {
               this.inputs.translationStddev,
               this.inputs.translationStddev,
               this.inputs.rotationStddev));
-      // poseEstimator.addVisionMeasurement(this.inputs.pose, this.inputs.timestamp);
+      poseEstimator.addVisionMeasurement(this.inputs.pose, this.inputs.timestamp);
     }
   }
 

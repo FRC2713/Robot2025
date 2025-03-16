@@ -172,16 +172,16 @@ public class RobotContainer {
     }
     visionsubsystem =
         new Vision(
-            new VisionIO() {}
-            // VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK_WHEEL_ODOMETRY
-            //     ? new VisionIOOdometry()
-            //     : (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
-            //         ? new VisionIOPoseEstimator()
-            //         : new VisionIOLimelights(
-            //             VisionConstants.FRONT_LIMELIGHT_INFO,
-            //             VisionConstants.BACK_LIMELIGHT_INFO,
-            //             driveSubsystem))
-                        );
+            // new VisionIO() {}
+            VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK_WHEEL_ODOMETRY
+                ? new VisionIOOdometry()
+                : (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
+                    ? new VisionIOPoseEstimator()
+                    : new VisionIOLimelights(
+                        VisionConstants.FRONT_LIMELIGHT_INFO,
+                        VisionConstants.BACK_LIMELIGHT_INFO,
+                        driveSubsystem))
+            );
 
     // PathPlanner Config
     AutoBuilder.configure(
