@@ -7,7 +7,7 @@ import java.util.function.DoubleSupplier;
 public class SSConstants {
   public class Elevator {
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/Source Coral Intake Height", 6);
+        new LoggedTunableNumber("Elevator/SS/Source Coral Intake Height", 6 + 2);
 
     public static final LoggedTunableNumber L1_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L1 Height", 0);

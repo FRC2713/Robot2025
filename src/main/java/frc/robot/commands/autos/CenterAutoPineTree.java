@@ -32,7 +32,7 @@ public class CenterAutoPineTree {
     // StartRoReefE starts square to the starting line, Start2RoReefE starts pre-aligned to the EF
     // reef face
     AutoTrajectory startToReefETraj = routine.trajectory("CenterPineTree");
-    // AutoTrajectory reefEToSource = routine.trajectory("ReefEToSource");
+    AutoTrajectory reefEToSource = routine.trajectory("PineTreePrepSource");
     // AutoTrajectory sourceToReefC = routine.trajectory("SourceToReefC");
     // AutoTrajectory reefCToSource = routine.trajectory("ReefCToSource");
 
@@ -89,7 +89,7 @@ public class CenterAutoPineTree {
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(
-                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), Commands.print("Done :)"))));
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefEToSource.cmd())));
 
     // When the trajectory is done, intake; then go to reef B
     // reefEToSource
