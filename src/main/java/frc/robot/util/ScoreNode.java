@@ -57,7 +57,7 @@ public enum ScoreNode {
     return alignmentPose;
   }
 
-  public Pose2d getAutoScorePose() {
+  public Pose2d getPathScorePose() {
 
     Optional<Alliance> alliance = DriverStation.getAlliance();
     double AUTO_SCORE_OFFSET = 0.5;

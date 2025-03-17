@@ -19,7 +19,7 @@ public class PathScore extends Command {
   private Drivetrain drive;
   private Command pathfindingCommand;
 
-  /** Creates a new AutoScore. */
+  /** Creates a new PathScore. */
   public PathScore(Drivetrain drive, ScoreNode node) {
     addRequirements(drive);
     this.drive = drive;
@@ -30,7 +30,7 @@ public class PathScore extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Pose2d targetPose = node.getAutoScorePose();
+    Pose2d targetPose = node.getPathScorePose();
     Logger.recordOutput("ScoreAssit/PathScore/targetPose", targetPose);
 
     // Create the constraints to use while pathfinding
