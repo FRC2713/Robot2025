@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ReefAlign;
-import frc.robot.commands.ScoreAssist;
+import frc.robot.commands.ScoreAssistOld;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -143,7 +143,7 @@ public class Robot extends LoggedRobot {
     RobotContainer.shoulder.updateMech2D();
     RobotContainer.climber.updateMech2D();
     ReefAlign.getInstance().periodic();
-    ScoreAssist.getInstance().periodic();
+    ScoreAssistOld.getInstance().periodic();
 
     // Record the pose of each subsystem
     // order matters here.
@@ -154,12 +154,12 @@ public class Robot extends LoggedRobot {
       RobotContainer.climber.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
-    var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
-    RobotContainer.disableReefAlign = disableReefAlign;
-    if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
-      robotContainer.normalDrive();
-    }
-    hadDisabledReefAlign = disableReefAlign;
+    // var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
+    // RobotContainer.disableReefAlign = disableReefAlign;
+    // if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
+    //   robotContainer.normalDrive();
+    // }
+    // hadDisabledReefAlign = disableReefAlign;
   }
 
   /** This function is called once when the robot is disabled. */

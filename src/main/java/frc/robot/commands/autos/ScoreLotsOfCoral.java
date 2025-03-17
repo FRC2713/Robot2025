@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
-import frc.robot.commands.ScoreAssist;
+import frc.robot.commands.ScoreAssistOld;
 import frc.robot.commands.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
@@ -54,14 +54,14 @@ public class ScoreLotsOfCoral {
                 Commands.parallel(
                     Commands.sequence(
                         new InstantCommand(
-                            () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.E_FOUR)),
-                        ScoreAssist.getInstance()
+                            () -> ScoreAssistOld.getInstance().setReefTrackerLoc(ScoreLoc.E_FOUR)),
+                        ScoreAssistOld.getInstance()
                             .goReefTracker(driveSubsystem)
-                            .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
+                            .withDeadline(ScoreAssistOld.getInstance().waitUntilFinished(1.0)),
                         new InstantCommand(() -> driveSubsystem.stop())),
                     SuperStructure.L4.getCommand()),
                 // 2) Score Coral
-                ScoreAssist.getInstance().waitUntilFinished(1.6),
+                ScoreAssistOld.getInstance().waitUntilFinished(1.6),
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
@@ -91,10 +91,10 @@ public class ScoreLotsOfCoral {
                 Commands.parallel(
                     Commands.sequence(
                         new InstantCommand(
-                            () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.C_FOUR)),
-                        ScoreAssist.getInstance()
+                            () -> ScoreAssistOld.getInstance().setReefTrackerLoc(ScoreLoc.C_FOUR)),
+                        ScoreAssistOld.getInstance()
                             .goReefTracker(driveSubsystem)
-                            .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
+                            .withDeadline(ScoreAssistOld.getInstance().waitUntilFinished(1.0)),
                         new InstantCommand(() -> driveSubsystem.stop())),
                     SuperStructure.L4.getCommand()),
                 // 2) Score Coral

@@ -56,4 +56,22 @@ public enum ScoreNode {
     }
     return alignmentPose;
   }
+
+  public Pose2d getAutoScorePose() {
+
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+    double AUTO_SCORE_OFFSET = 0.5;
+
+    Transform2d robotOffset =
+        new Transform2d(
+            (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0) + AUTO_SCORE_OFFSET,
+            DriveConstants.coralOffsetFromCenter
+                .getAsDouble(), // offset of scoring mechanism from center of robot
+            new Rotation2d(Math.PI));
+    Pose2d autoScorePose = pose.transformBy(robotOffset);
+    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+      return AllianceFlipUtil.flip(autoScorePose);
+    }
+    return autoScorePose;
+  }
 }
