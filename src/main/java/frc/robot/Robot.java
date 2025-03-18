@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ReefAlign;
-import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SourceAlign;
 import frc.robot.commands.ScoreAssistOld;
 import frc.robot.util.LocalADStarAK;
@@ -145,7 +144,6 @@ public class Robot extends LoggedRobot {
     RobotContainer.shoulder.updateMech2D();
     RobotContainer.climber.updateMech2D();
     ReefAlign.getInstance().periodic();
-    ScoreAssist.getInstance().periodic();
     SourceAlign.getInstance().periodic();
     ScoreAssistOld.getInstance().periodic();
 

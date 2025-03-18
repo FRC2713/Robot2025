@@ -101,7 +101,7 @@ public class RobotContainer {
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
   private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
   private static boolean hasRanAuto = false;
-  private Trigger climbPrepTrigger = new Trigger(ScoreAssist.getInstance()::shouldClimbPrep);
+//   private Trigger climbPrepTrigger = new Trigger(ScoreAssistOld.getInstance()::shouldClimbPrep);
 
   // Dashboard inputs
   public final AutoChooser autoChooser;
@@ -555,17 +555,17 @@ public class RobotContainer {
     operator.y().onTrue(SuperStructure.L3.getCommand());
     operator.rightBumper().onTrue(SuperStructure.L4.getCommand());
 
-    climbPrepTrigger.onTrue(
-        Commands.parallel(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDriveSlow(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Slow Control"),
-            SuperStructure.CLIMB_PREP.getCommand()));
+    // climbPrepTrigger.onTrue(
+    //     Commands.parallel(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDriveSlow(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> -driver.getRightX()),
+    //             "Slow Control"),
+    //         SuperStructure.CLIMB_PREP.getCommand()));
 
     operator
         .start()

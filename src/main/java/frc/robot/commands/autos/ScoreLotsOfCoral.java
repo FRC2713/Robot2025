@@ -72,12 +72,12 @@ public class ScoreLotsOfCoral {
                     Commands.parallel(
                         Commands.sequence(
                             new InstantCommand(
-                                () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.E_FOUR)),
-                            Commands.print("Waiting for ScoreAssist"),
-                            ScoreAssist.getInstance()
+                                () -> ScoreAssistOld.getInstance().setReefTrackerLoc(ScoreLoc.E_FOUR)),
+                            Commands.print("Waiting for ScoreAssistOld"),
+                            ScoreAssistOld.getInstance()
                                 .goReefTracker(driveSubsystem)
-                                .withDeadline(ScoreAssist.getInstance().waitUntilFinished(2.0)),
-                            Commands.print("ScoreAssist Done")))),
+                                .withDeadline(ScoreAssistOld.getInstance().waitUntilFinished(2.0)),
+                            Commands.print("ScoreAssistOld Done")))),
                 new InstantCommand(() -> driveSubsystem.stop()),
                 Commands.print("driveSubsystem stop thing Done"),
                 Commands.print("L4"),
@@ -120,12 +120,12 @@ public class ScoreLotsOfCoral {
                     Commands.parallel(
                         Commands.sequence(
                             new InstantCommand(
-                                () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.C_FOUR)),
-                            Commands.print("2Waiting for ScoreAssist"),
-                            ScoreAssist.getInstance()
+                                () -> ScoreAssistOld.getInstance().setReefTrackerLoc(ScoreLoc.C_FOUR)),
+                            Commands.print("2Waiting for ScoreAssistOld"),
+                            ScoreAssistOld.getInstance()
                                 .goReefTracker(driveSubsystem)
-                                .withDeadline(ScoreAssist.getInstance().waitUntilFinished(2.0)),
-                            Commands.print("2ScoreAssist Done")))),
+                                .withDeadline(ScoreAssistOld.getInstance().waitUntilFinished(2.0)),
+                            Commands.print("2ScoreAssistOld Done")))),
                 new InstantCommand(() -> driveSubsystem.stop()),
                 Commands.print("2driveSubsystem stop thing Done"),
                 // Commands.print("2L4"),
@@ -147,12 +147,12 @@ public class ScoreLotsOfCoral {
     //         Commands.parallel(
     //             Commands.sequence(
     //                 new InstantCommand(
-    //                     () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.C_FOUR)),
-    //                 Commands.print("2Waiting for ScoreAssist"),
-    //                 ScoreAssist.getInstance()
+    //                     () -> ScoreAssistOld.getInstance().setReefTrackerLoc(ScoreLoc.C_FOUR)),
+    //                 Commands.print("2Waiting for ScoreAssistOld"),
+    //                 ScoreAssistOld.getInstance()
     //                     .goReefTracker(driveSubsystem)
-    //                     .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
-    //                 Commands.print("2ScoreAssist Done")))),
+    //                     .withDeadline(ScoreAssistOld.getInstance().waitUntilFinished(1.0)),
+    //                 Commands.print("2ScoreAssistOld Done")))),
     //     new InstantCommand(() -> driveSubsystem.stop()),
     //     Commands.print("2driveSubsystem stop thing Done"),
     //     Commands.print("2L4"),
@@ -171,10 +171,10 @@ public class ScoreLotsOfCoral {
     //     Commands.parallel(
     //         Commands.sequence(
     //             new InstantCommand(
-    //                 () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.C_FOUR)),
-    //             ScoreAssist.getInstance()
+    //                 () -> ScoreAssistOld.getInstance().setReefTrackerLoc(ScoreLoc.C_FOUR)),
+    //             ScoreAssistOld.getInstance()
     //                 .goReefTracker(driveSubsystem)
-    //                 .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
+    //                 .withDeadline(ScoreAssistOld.getInstance().waitUntilFinished(1.0)),
     //             new InstantCommand(() -> driveSubsystem.stop()))),
     //     SuperStructure.L4.getCommand(),
     //     // 2) Score Coral
