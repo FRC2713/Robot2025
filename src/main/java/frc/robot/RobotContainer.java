@@ -39,6 +39,7 @@ import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
 import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.commands.autos.ScoreLotsOfCoralV2;
+import frc.robot.commands.climber.Climb;
 import frc.robot.commands.climber.MoveClimber;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
@@ -407,15 +408,7 @@ public class RobotContainer {
     driver
         .leftTrigger(0.1)
         .whileTrue(
-            Commands.sequence(
-                Commands.either(
-                    ClimberCmds.configureSoftLimits(
-                        SSConstants.Climber.MIN_ANGLE_CLIMBING,
-                        SSConstants.Climber.MAX_ANGLE_CLIMBING),
-                    Commands.none(),
-                    () -> climber.getCurrentAngle() > 100),
-                new MoveClimber(
-                    () -> -1 * driver.getLeftTriggerAxis(), SSConstants.Climber.SERVO_POS_ON)))
+            new Climb(() -> -1 * driver.getLeftTriggerAxis(), SSConstants.Climber.SERVO_POS_ON))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
 
     // Score Coral
