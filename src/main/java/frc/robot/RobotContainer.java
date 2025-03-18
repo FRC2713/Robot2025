@@ -30,18 +30,13 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ReefAlign;
 import frc.robot.commands.ReefTracker;
 import frc.robot.commands.RollerCmds;
-import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SourceAlign;
 import frc.robot.commands.SuperStructure;
-import frc.robot.commands.autos.AutoRoutinesWithPathFinding;
 import frc.robot.commands.autos.CenterAutoPineTree;
-import frc.robot.commands.ScoreAssistOld;
-import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.CoralAndAlgaeAuto;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
 import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
-import frc.robot.commands.autos.ScoreLotsOfCoralV2;
 import frc.robot.commands.climber.MoveClimber;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
@@ -101,7 +96,8 @@ public class RobotContainer {
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
   private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
   private static boolean hasRanAuto = false;
-//   private Trigger climbPrepTrigger = new Trigger(ScoreAssistOld.getInstance()::shouldClimbPrep);
+  //   private Trigger climbPrepTrigger = new
+  // Trigger(ScoreAssistOld.getInstance()::shouldClimbPrep);
 
   // Dashboard inputs
   public final AutoChooser autoChooser;

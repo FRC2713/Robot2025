@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
-import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.ScoreAssistOld;
 import frc.robot.commands.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
@@ -72,7 +71,9 @@ public class CenterAutoPineTree {
                     Commands.parallel(
                         Commands.sequence(
                             new InstantCommand(
-                                () -> ScoreAssistOld.getInstance().setReefTrackerLoc(ScoreLoc.G_FOUR)),
+                                () ->
+                                    ScoreAssistOld.getInstance()
+                                        .setReefTrackerLoc(ScoreLoc.G_FOUR)),
                             Commands.print("Waiting for ScoreAssist"),
                             ScoreAssistOld.getInstance()
                                 .goReefTracker(driveSubsystem)

@@ -105,7 +105,9 @@ public class ScoreLotsOfCoralV2 {
                     Commands.parallel(
                         Commands.sequence(
                             new InstantCommand(
-                                () -> ScoreAssistOld.getInstance().setReefTrackerLoc(ScoreLoc.C_FOUR)),
+                                () ->
+                                    ScoreAssistOld.getInstance()
+                                        .setReefTrackerLoc(ScoreLoc.C_FOUR)),
                             Commands.print("2Waiting for ScoreAssist"),
                             ScoreAssistOld.getInstance()
                                 .goReefTracker(driveSubsystem)
