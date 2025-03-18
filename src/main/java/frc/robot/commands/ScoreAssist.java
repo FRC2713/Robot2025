@@ -6,6 +6,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.BooleanSubscriber;
+import edu.wpi.first.networktables.BooleanTopic;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.networktables.StringTopic;
@@ -14,10 +16,9 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
-import frc.robot.SSConstants;
 import frc.robot.subsystems.constants.DriveConstants;
-import frc.robot.subsystems.constants.DriveConstants.HeadingControllerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLoc;
@@ -33,13 +34,25 @@ public class ScoreAssist {
   private static ScoreAssist INSTANCE = null;
   public double error = -1;
   private NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  private StringTopic topic = inst.getStringTopic("/scoreassist/goto");
-  private StringSubscriber sub;
+  private StringTopic gotoTopic = inst.getStringTopic("/scoreassist/goto");
+  private StringSubscriber gotoSub;
+  private BooleanTopic climbTopic = inst.getBooleanTopic("/scoreassist/climbPrep");
+  private BooleanSubscriber climbSub;
   public Optional<ScoreLoc> reefTrackerLoc = Optional.empty();
   private String lastGotoReceived = "none";
+  private boolean climbPrep = false;
+
+  public boolean shouldClimbPrep() {
+    return climbPrep;
+  }
+
+  // public Trigger climbPrepTrigger = new Trigger(climbSub);
 
   private ScoreAssist() {
-    sub = topic.subscribe("none");
+    gotoSub = gotoTopic.subscribe("none");
+    climbSub = climbTopic.subscribe(false);
+
+    // climbPrepTrigger.onTrue(SuperStructure.CLIMB_PREP.getCommand());
   }
 
   public static ScoreAssist getInstance() {
@@ -63,21 +76,20 @@ public class ScoreAssist {
 
     for (ScoreNode node : ScoreNode.values()) {
       double distance =
-          pose.getTranslation()
-              .getDistance(AllianceFlipUtil.apply(node.getRobotAlignmentPose().getTranslation()));
+          pose.getTranslation().getDistance(node.getRobotAlignmentPose().getTranslation());
       if (distance < closestDistance) {
         closestDistance = distance;
         closestNode = node;
       }
     }
 
-    return closestNode != null ? AllianceFlipUtil.apply(closestNode.getRobotAlignmentPose()) : null;
+    return closestNode != null ? closestNode.getRobotAlignmentPose() : null;
   }
 
   private boolean isFinished = false;
 
   public boolean hasFinished() {
-    return error < Units.inchesToMeters(1);
+    return error < Units.inchesToMeters(2.5);
   }
 
   public Command waitUntilFinished(double timeoutSeconds) {
@@ -118,6 +130,28 @@ public class ScoreAssist {
                   } else {
                     pose = reefTrackerLoc.get().getNode().getRobotAlignmentPose();
                   }
+
+                  if (DriverStation.getAlliance().isPresent()) {
+                    double distFromReefThreshMeters = 2;
+                    if (DriverStation.getAlliance().get() == Alliance.Red
+                        && pose.getTranslation().getDistance(FieldConstants.Reef.center)
+                            > distFromReefThreshMeters) {
+                      System.out.println("Target Pose expected to be in Red but is not.");
+                      // return;
+                    } else if (DriverStation.getAlliance().get() == Alliance.Blue
+                        && pose.getTranslation()
+                                .getDistance(AllianceFlipUtil.flip(FieldConstants.Reef.center))
+                            > distFromReefThreshMeters) {
+                      System.out.println("Target Pose expected to be in Blue but is not.");
+                    }
+                  }
+
+                  // if (pose.getTranslation().getDistance(drive.getPose().getTranslation()) > 1
+                  //     && DriverStation.isAutonomous()) {
+                  //   System.out.println(
+                  //       "Pose too far away to be compatable with ScoreAssist in Auto.");
+                  //   return;
+                  // }
                   Logger.recordOutput("ScoreAssist/alignToLoc", pose);
                   boolean isFlipped =
                       DriverStation.getAlliance().isPresent()
@@ -138,8 +172,11 @@ public class ScoreAssist {
 
                   // Calculate angular speed
                   double omega =
+                      // DriverStation.isTeleop()
+                      // ?
                       omegascoreAssistController.calculate(
                           drive.getRotation().getRadians(), pose.getRotation().getRadians());
+                  // : 0;
 
                   // Convert to field relative speeds & send command
                   ChassisSpeeds speeds =
@@ -153,7 +190,7 @@ public class ScoreAssist {
                               : drive.getRotation()));
                   error = pose.getTranslation().getDistance(drive.getPose().getTranslation());
                   Logger.recordOutput("ScoreAssist/Error", error);
-                  if (error < Units.inchesToMeters(1)) {
+                  if (error < Units.inchesToMeters(5)) {
                     isFinished = true;
                     if (!hasStartedCommand) {
                       hasStartedCommand = true;
@@ -163,14 +200,14 @@ public class ScoreAssist {
                             .getLevel()
                             .getScoreCommand()
                             .get()
-                            .andThen(
-                                Commands.sequence(
-                                    Commands.waitSeconds(
-                                        SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                                    SuperStructure.CORAL_SCORE.getCommand(),
-                                    Commands.waitSeconds(
-                                        SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
-                                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand()))
+                            // .andThen(
+                            //     Commands.sequence(
+                            //         Commands.waitSeconds(
+                            //             SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                            //         SuperStructure.CORAL_SCORE.getCommand(),
+                            //         Commands.waitSeconds(
+                            //             SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+                            //         SuperStructure.SOURCE_CORAL_INTAKE.getCommand()))
                             .schedule();
                       }
                     }
@@ -184,7 +221,7 @@ public class ScoreAssist {
             () -> {
               xscoreAssistController.reset(drive.getPose().getX());
               yscoreAssistController.reset(drive.getPose().getY());
-              HeadingControllerConstants.angleController.reset(drive.getRotation().getRadians());
+              omegascoreAssistController.reset(drive.getRotation().getRadians());
             })
         .finallyDo(
             () -> {
@@ -214,7 +251,9 @@ public class ScoreAssist {
               .createAngularTrapezoidalPIDController();
       omegascoreAssistController.enableContinuousInput(-Math.PI, Math.PI);
     }
-    String gotoLocation = sub.get("none");
+    this.climbPrep = climbSub.get(false);
+
+    String gotoLocation = gotoSub.get("none");
     if (gotoLocation == this.lastGotoReceived) {
       return;
     }
@@ -229,7 +268,9 @@ public class ScoreAssist {
           "ScoreAssist/ReefTrackerLoc", reefTrackerLoc.isEmpty() ? "null" : "SET BY AUTO");
       Logger.recordOutput(
           "ScoreAssist/ReefTrackerPose",
-          reefTrackerLoc.isEmpty() ? new Pose2d() : reefTrackerLoc.get().getNode().getPose());
+          reefTrackerLoc.isEmpty()
+              ? new Pose2d()
+              : reefTrackerLoc.get().getNode().getRobotAlignmentPose());
     } else {
       reefTrackerLoc = Optional.empty();
       Logger.recordOutput("ScoreAssist/ReefTrackerLoc", "null");

@@ -26,7 +26,7 @@ public class ScoreLotsOfCoralFlipped {
    * @return
    */
   public static AutoRoutine getRoutine(AutoFactory factory, Drivetrain driveSubsystem) {
-    AutoRoutine routine = factory.newRoutine("Score Lots of Coral");
+    AutoRoutine routine = factory.newRoutine("Score Lots of Coral Flipped");
 
     // Load the routine's trajectories
     AutoTrajectory startToReefJTraj = routine.trajectory("StartToReefJ");
