@@ -13,6 +13,11 @@ public class PivotCmds {
     return setAngle(() -> targetAngle);
   }
 
+  public static Command avoidSelfCollision() {
+    return Commands.either(
+        setAngleAndWait(35), Commands.none(), () -> RobotContainer.pivot.getCurrentAngle() < -120);
+  }
+
   public static Command setAngle(DoubleSupplier targetAngle) {
     return new InstantCommand(() -> RobotContainer.pivot.setTargetAngle(targetAngle.getAsDouble()));
   }

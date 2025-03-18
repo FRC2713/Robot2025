@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.scoreassist;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;

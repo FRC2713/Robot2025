@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.scoreassist;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringSubscriber;
@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
+import frc.robot.commands.PathScore;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.ScoreLevel;
 import frc.robot.util.ScoreLoc;
