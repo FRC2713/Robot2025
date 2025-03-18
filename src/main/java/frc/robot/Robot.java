@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ReefAlign;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SourceAlign;
+import frc.robot.commands.ScoreAssistOld;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -146,6 +147,7 @@ public class Robot extends LoggedRobot {
     ReefAlign.getInstance().periodic();
     ScoreAssist.getInstance().periodic();
     SourceAlign.getInstance().periodic();
+    ScoreAssistOld.getInstance().periodic();
 
     // Record the pose of each subsystem
     // order matters here.
