@@ -1,4 +1,4 @@
-package frc.robot.commands.drive;
+package frc.robot.commands.scoreassist;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 

@@ -154,6 +154,7 @@ public class Robot extends LoggedRobot {
       RobotContainer.climber.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
+    RobotContainer.scoreAssist.periodic();
     // var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
     // RobotContainer.disableReefAlign = disableReefAlign;
     // if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
@@ -190,7 +191,7 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    robotContainer.normalDrive();
+    robotContainer.setToNormalDrive();
   }
 
   /** This function is called periodically during operator control. */

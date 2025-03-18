@@ -26,18 +26,18 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.CoralAndAlgaeAuto;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
 import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
-import frc.robot.commands.drive.DriveCommands;
+import frc.robot.commands.scoreassist.ScoreAssistCmds;
+import frc.robot.commands.scoreassist.SuperStructure;
 import frc.robot.commands.subsystemCmds.AlgaeClawCmds;
 import frc.robot.commands.subsystemCmds.ClimberCmds;
+import frc.robot.commands.subsystemCmds.DriveCmds;
 import frc.robot.commands.subsystemCmds.RollerCmds;
 import frc.robot.generated.TunerConstants;
 import frc.robot.scoreassist.ReefAlign;
-import frc.robot.scoreassist.ReefTracker;
 import frc.robot.scoreassist.ScoreAssist;
 import frc.robot.scoreassist.ScoreAssistOld;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
@@ -109,7 +109,7 @@ public class RobotContainer {
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
-  private ReefTracker reefTracker;
+  public static ScoreAssist scoreAssist;
   public static Vision visionsubsystem;
   public static boolean disableReefAlign = true;
 
@@ -253,8 +253,7 @@ public class RobotContainer {
     // autoChooser.addCmd(
     //     "Drive SysId (Dynamic Backward)",
     //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addCmd(
-        "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
+    autoChooser.addCmd("Wheel Radius", () -> DriveCmds.wheelRadiusCharacterization(driveSubsystem));
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -266,7 +265,7 @@ public class RobotContainer {
                     autoChooser.selectedCommandScheduler())
                 .finallyDo(() -> RobotContainer.hasRanAuto = true));
 
-    reefTracker = new ReefTracker(driveSubsystem);
+    scoreAssist = new ScoreAssist();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -275,9 +274,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
     reefAlignTrigger
         .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
+            DriveCmds.changeDefaultDriveCommand(
                 driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
+                DriveCmds.joystickDriveAtAngle(
                     driveSubsystem,
                     () -> -driver.getLeftY(),
                     () -> -driver.getLeftX(),
@@ -286,9 +285,9 @@ public class RobotContainer {
         .onFalse(
             Commands.either(
                 Commands.none(),
-                DriveCommands.changeDefaultDriveCommand(
+                DriveCmds.changeDefaultDriveCommand(
                     driveSubsystem,
-                    DriveCommands.joystickDrive(
+                    DriveCmds.joystickDrive(
                         driveSubsystem,
                         () -> -driver.getLeftY(),
                         () -> -driver.getLeftX(),
@@ -297,14 +296,14 @@ public class RobotContainer {
                 () -> RobotContainer.disableReefAlign));
 
     // Default command, normal field-relative drive
-    normalDrive();
+    setToNormalDrive();
 
     // Reset gyro to 0 deg when start button is pressed
     driver
         .start()
         .onTrue(
             Commands.parallel(
-                normalDriveCmd(),
+                setToNormalDriveCmd(),
                 Commands.runOnce(
                         () ->
                             driveSubsystem.setPose(
@@ -319,7 +318,7 @@ public class RobotContainer {
         .back()
         .onTrue(
             Commands.parallel(
-                    normalDriveCmd(),
+                    setToNormalDriveCmd(),
                     Commands.runOnce(
                         () ->
                             driveSubsystem.setPose(
@@ -338,10 +337,10 @@ public class RobotContainer {
     // Score Assist
     driver
         .rightBumper()
-        .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem, reefTracker, "ScoreAssistReefTracker"))
-        .onFalse(normalDriveCmd());
+        .onTrue(ScoreAssistCmds.exectuteAllTargets(normalDriveCmd()))
+        .onFalse(Commands.parallel(ScoreAssistCmds.deactivate(), normalDriveCmd()));
+
+    scoreAssist.levelTrigger().onTrue(ScoreAssistCmds.executeSS());
 
     // Grab Algae
     driver
@@ -394,37 +393,35 @@ public class RobotContainer {
     driver
         .povLeft()
         .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
+            DriveCmds.changeDefaultDriveCommand(
                 driveSubsystem,
-                DriveCommands.inch(driveSubsystem, SSConstants.Drive.INCH_SPEED),
+                DriveCmds.inch(driveSubsystem, SSConstants.Drive.INCH_SPEED),
                 "Inch Left"))
-        .onFalse(
-            normalDriveCmd());
+        .onFalse(setToNormalDriveCmd());
     driver
         .povRight()
         .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
+            DriveCmds.changeDefaultDriveCommand(
                 driveSubsystem,
-                DriveCommands.inch(
+                DriveCmds.inch(
                     driveSubsystem, () -> -1 * SSConstants.Drive.INCH_SPEED.getAsDouble()),
                 "Inch Right"))
-        .onFalse(normalDriveCmd());
+        .onFalse(setToNormalDriveCmd());
 
     driver
         .x()
         .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
+            DriveCmds.changeDefaultDriveCommand(
                 driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
+                DriveCmds.joystickDriveAtAngle(
                     driveSubsystem,
                     () -> -driver.getLeftY(),
                     () -> -driver.getLeftX(),
                     () -> Rotation2d.fromDegrees(RobotContainer.driveSubsystem.getAngleToReef())),
                 "Heading Controller"))
-        .onFalse(normalDriveCmd());
+        .onFalse(setToNormalDriveCmd());
     driver.a().onTrue(ScoreAssistOld.getInstance().goReefTracker(RobotContainer.driveSubsystem));
 
-    
     // Operator Controls
     operator.a().onTrue(SuperStructure.L1.getCommand());
     operator.b().onTrue(SuperStructure.L2.getCommand());
@@ -436,9 +433,9 @@ public class RobotContainer {
         .onTrue(
             // Set driving to slow mode first
             Commands.parallel(
-                DriveCommands.changeDefaultDriveCommand(
+                DriveCmds.changeDefaultDriveCommand(
                     driveSubsystem,
-                    DriveCommands.joystickDriveSlow(
+                    DriveCmds.joystickDriveSlow(
                         driveSubsystem,
                         () -> -driver.getLeftY(),
                         () -> -driver.getLeftX(),
@@ -447,12 +444,15 @@ public class RobotContainer {
                 SuperStructure.CLIMB_PREP.getCommand()));
     operator
         .leftTrigger(0.1)
-        .whileTrue(ClimberCmds.moveClimber(operator::getLeftTriggerAxis,  SSConstants.Climber.SERVO_POS_OFF, false))
+        .whileTrue(
+            ClimberCmds.moveClimber(
+                operator::getLeftTriggerAxis, SSConstants.Climber.SERVO_POS_OFF, false))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
     operator
         .rightTrigger(0.1)
         .whileTrue(
-            ClimberCmds.moveClimber(() -> -1 * operator.getRightTriggerAxis(), SSConstants.Climber.SERVO_POS_ON, true))
+            ClimberCmds.moveClimber(
+                () -> -1 * operator.getRightTriggerAxis(), SSConstants.Climber.SERVO_POS_ON, true))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
 
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());
@@ -477,10 +477,21 @@ public class RobotContainer {
     }
   }
 
-  public void normalDrive() {
-    DriveCommands.setDefaultDriveCommand(
+  public void setToNormalDrive() {
+    DriveCmds.setDefaultDriveCommand(
         driveSubsystem,
-        DriveCommands.joystickDrive(
+        DriveCmds.joystickDrive(
+            driveSubsystem,
+            () -> -driver.getLeftY(),
+            () -> -driver.getLeftX(),
+            () -> -driver.getRightX()),
+        "Default Joystick Drive");
+  }
+
+  public Command setToNormalDriveCmd() {
+    return DriveCmds.changeDefaultDriveCommand(
+        driveSubsystem,
+        DriveCmds.joystickDrive(
             driveSubsystem,
             () -> -driver.getLeftY(),
             () -> -driver.getLeftX(),
@@ -489,13 +500,10 @@ public class RobotContainer {
   }
 
   public Command normalDriveCmd() {
-    return DriveCommands.changeDefaultDriveCommand(
+    return DriveCmds.joystickDrive(
         driveSubsystem,
-        DriveCommands.joystickDrive(
-            driveSubsystem,
-            () -> -driver.getLeftY(),
-            () -> -driver.getLeftX(),
-            () -> -driver.getRightX()),
-        "Default Joystick Drive");
+        () -> -driver.getLeftY(),
+        () -> -driver.getLeftX(),
+        () -> -driver.getRightX());
   }
 }

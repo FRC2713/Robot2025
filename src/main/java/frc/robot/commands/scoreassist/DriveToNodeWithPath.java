@@ -2,25 +2,24 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.scoreassist;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.subsystemCmds.DriveCmds;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.ScoreNode;
 import org.littletonrobotics.junction.Logger;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class PathScore extends Command {
+public class DriveToNodeWithPath extends Command {
   private ScoreNode node;
   private Drivetrain drive;
   private Command pathfindingCommand;
 
   /** Creates a new PathScore. */
-  public PathScore(Drivetrain drive, ScoreNode node) {
+  public DriveToNodeWithPath(Drivetrain drive, ScoreNode node) {
     addRequirements(drive);
     this.drive = drive;
     this.node = node;
@@ -39,10 +38,7 @@ public class PathScore extends Command {
             2.0, 1.0, drive.getMaxAngularSpeedRadPerSec(), Units.degreesToRadians(720));
 
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
-    pathfindingCommand =
-        AutoBuilder.pathfindToPose(
-            targetPose, constraints, 0.4 // Goal end velocity in meters/sec
-            );
+    pathfindingCommand = DriveCmds.buildOTFPath(targetPose, constraints, 0.4);
     pathfindingCommand.initialize();
   }
 

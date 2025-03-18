@@ -64,16 +64,19 @@ public class ClimberCmds {
     return moveClimber(input, servoPos, true);
   }
 
-  public static Command moveClimber(DoubleSupplier input, DoubleSupplier servoPos, boolean resetLimitsWhenInRange) {
+  public static Command moveClimber(
+      DoubleSupplier input, DoubleSupplier servoPos, boolean resetLimitsWhenInRange) {
     return Commands.sequence(
-      Commands.either(
-        ClimberCmds.configureSoftLimits(
-            SSConstants.Climber.MIN_ANGLE_CLIMBING,
-            SSConstants.Climber.MAX_ANGLE_CLIMBING),
-        Commands.none(),
-        () -> (RobotContainer.climber.getCurrentAngle() > 100) && resetLimitsWhenInRange),
-      new InstantCommand(() -> RobotContainer.climber.setServoPos(servoPos.getAsDouble())),
-      Commands.run(() -> RobotContainer.climber.setVoltage(input.getAsDouble() * SSConstants.Climber.INP_TO_VOLTS.getAsDouble()), RobotContainer.climber)
-    );
+        Commands.either(
+            ClimberCmds.configureSoftLimits(
+                SSConstants.Climber.MIN_ANGLE_CLIMBING, SSConstants.Climber.MAX_ANGLE_CLIMBING),
+            Commands.none(),
+            () -> (RobotContainer.climber.getCurrentAngle() > 100) && resetLimitsWhenInRange),
+        new InstantCommand(() -> RobotContainer.climber.setServoPos(servoPos.getAsDouble())),
+        Commands.run(
+            () ->
+                RobotContainer.climber.setVoltage(
+                    input.getAsDouble() * SSConstants.Climber.INP_TO_VOLTS.getAsDouble()),
+            RobotContainer.climber));
   }
 }

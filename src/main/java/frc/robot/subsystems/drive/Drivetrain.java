@@ -417,6 +417,10 @@ public class Drivetrain extends SubsystemBase {
     return odometryPoseEstimator.getEstimatedPosition();
   }
 
+  public Translation2d getTranslation() {
+    return getPose().getTranslation();
+  }
+
   /** Returns the current odometry rotation. */
   public Rotation2d getRotation() {
     return getPose().getRotation();

@@ -11,8 +11,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.commands.drive;
+package frc.robot.commands.subsystemCmds;
 
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,6 +27,9 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.RobotContainer;
+import frc.robot.commands.scoreassist.RHRPathFindingCommand;
+import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.HeadingControllerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import java.text.DecimalFormat;
@@ -36,14 +40,14 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-public class DriveCommands {
+public class DriveCmds {
   private static final double DEADBAND = 0.05;
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
-  private DriveCommands() {}
+  private DriveCmds() {}
 
   public static void setDefaultDriveCommand(Drivetrain drive, Command cmd, String name) {
     Logger.recordOutput("CurrentDriveCommand", name);
@@ -252,6 +256,29 @@ public class DriveCommands {
         .beforeStarting(
             () ->
                 HeadingControllerConstants.angleController.reset(drive.getRotation().getRadians()));
+  }
+
+  public static Command buildOTFPath(
+      Pose2d targetPose, PathConstraints constraints, double goalEndVel, boolean disableTimeout) {
+    RHRPathFindingCommand cmd =
+        new RHRPathFindingCommand(
+            targetPose,
+            constraints,
+            RobotContainer.driveSubsystem::getPose,
+            RobotContainer.driveSubsystem::getChassisSpeeds,
+            (speeds, feedforwards) -> RobotContainer.driveSubsystem.runVelocity(speeds),
+            RobotContainer.otfController,
+            DriveConstants.pathPlannerConfig,
+            RobotContainer.driveSubsystem);
+
+    if (disableTimeout) cmd.disableTimeOut();
+
+    return cmd;
+  }
+
+  public static Command buildOTFPath(
+      Pose2d targetPose, PathConstraints constraints, double goalEndVel) {
+    return buildOTFPath(targetPose, constraints, goalEndVel, false);
   }
 
   /**

@@ -23,9 +23,6 @@ public class DriveConstants {
   public static final double driveBaseWidthWithBumpersMeters =
       edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 7.0);
 
-  public static final LoggedTunableGains scoreAssistGains =
-      new LoggedTunableGains("ScoreAssist", new ControlGains().p(2).d(0).trapezoidal(0.1, 0, 0));
-
   public final class AutoConstants {
     public static final LoggedTunableGains xTrajectoryController =
         new LoggedTunableGains("xTraj", new ControlGains().p(2.0));

@@ -1,99 +1,123 @@
 package frc.robot.scoreassist;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.constants.DriveConstants;
-import frc.robot.subsystems.drive.Drivetrain;
-import frc.robot.util.ScoreNode;
-import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ScoreAssist extends Command {
-  @Getter private boolean readyForPrep = false;
-  @Getter private boolean readyForScore = false;
-  @Getter private double error = Double.MAX_VALUE;
-  private ScoreNode node;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StringSubscriber;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.constants.ScoreAssistConstants;
+import frc.robot.util.ScoreLevel;
+import frc.robot.util.ScoreLoc;
+import frc.robot.util.ScoreNode;
+import lombok.Getter;
 
-  private ProfiledPIDController yscoreAssistController =
-      DriveConstants.scoreAssistGains.createTrapezoidalPIDController();
-  private ProfiledPIDController xscoreAssistController =
-      DriveConstants.scoreAssistGains.createTrapezoidalPIDController();
-  private ProfiledPIDController omegascoreAssistController =
-      DriveConstants.HeadingControllerConstants.angleGains.createAngularTrapezoidalPIDController();
-  private Drivetrain drive;
+/**
+ * Manages subscribing to network tables UI and maintaining the most up-to-date pose and
+ * superstructure target
+ */
+public class ScoreAssist {
 
-  /** Creates a new ScoreAssist. */
-  public ScoreAssist(ScoreNode node, Drivetrain drive) {
-    this.node = node;
-    this.drive = drive;
-    addRequirements(drive);
-  }
+  private final StringSubscriber reefTrackerSub =
+      NetworkTableInstance.getDefault().getStringTopic("/scoreassist/goto").subscribe("none");
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    xscoreAssistController.reset(drive.getPose().getX());
-    yscoreAssistController.reset(drive.getPose().getY());
-    omegascoreAssistController.reset(drive.getRotation().getRadians());
-  }
+  @Getter private ScoreNode currentNodeTarget;
+  @Getter private ScoreLevel currentLevelTarget;
+  private boolean updatedNodeTarget;
+  private boolean updatedLevelTarget;
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    var pose = node.getRobotAlignmentPose();
-    readyForPrep = true;
-    Logger.recordOutput("ScoreAssist/alignToLoc", pose);
+  public boolean isActive = false;
 
-    boolean isFlipped =
-        DriverStation.getAlliance().isPresent()
-            && DriverStation.getAlliance().get() == Alliance.Red;
-    // Get linear velocity
-    Translation2d linearVelocity =
-        new Translation2d(
-            (isFlipped ? -1 : 1)
-                * xscoreAssistController.calculate(
-                    drive.getPose().getTranslation().getX(), pose.getTranslation().getX()),
-            (isFlipped ? -1 : 1)
-                * yscoreAssistController.calculate(
-                    drive.getPose().getTranslation().getY(), pose.getTranslation().getY()));
-
-    // Calculate angular speed
-    double omega =
-        omegascoreAssistController.calculate(
-            drive.getRotation().getRadians(), pose.getRotation().getRadians());
-
-    // Convert to field relative speeds & send command
-    ChassisSpeeds speeds = new ChassisSpeeds(linearVelocity.getX(), linearVelocity.getY(), omega);
-
-    Logger.recordOutput("ScoreAssist/CommandedSpeeds", speeds);
-
-    drive.runVelocity(
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            speeds,
-            isFlipped ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation()));
-
-    error = pose.getTranslation().getDistance(drive.getPose().getTranslation());
-    Logger.recordOutput("ScoreAssist/Error", error);
-
-    if (error < Units.inchesToMeters(1)) {
-      readyForScore = true;
+  public void periodic() {
+    if (isActive && !DriverStation.isAutonomous()) {
+      this.updateWithNT();
     }
+
+    Logger.recordOutput("ScoreAssist/isActive", this.isActive);
+    Logger.recordOutput("ScoreAssist/updatedNodeTarget", this.currentNodeTarget.getRobotAlignmentPose());
+    Logger.recordOutput("ScoreAssist/updatedLevelTarget", this.currentLevelTarget.name());
+    Logger.recordOutput("ScoreAssist/updatedNodeTarget", updatedNodeTarget);
+    Logger.recordOutput("ScoreAssist/updatedLevelTarget", updatedLevelTarget);
+
   }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+  public void updateManually(ScoreLoc commandedScoreLoc) {
+    this.updatedLevelTarget = true;
+    this.updatedNodeTarget = true;
+    this.currentNodeTarget = commandedScoreLoc.getNode();
+    this.currentLevelTarget = commandedScoreLoc.getLevel();
+  }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+  public void updateWithNT() {
+    String reefTrackerInput = reefTrackerSub.get();
+    var loc = ScoreLoc.parseFromNT(reefTrackerInput);
+    Logger.recordOutput("ScoreAssist/reefTrackerInput", reefTrackerInput);
+    if (loc == null) {
+      return;
+    }
+
+    this.updatedNodeTarget = this.currentNodeTarget != loc.getNode();
+    this.updatedLevelTarget = this.currentLevelTarget != loc.getLevel();
+
+    this.currentLevelTarget = loc.getLevel();
+    this.currentNodeTarget = loc.getNode();
+  }
+
+  public void updateWithClosest() {
+    var loc = ScoreLoc.parseFromNT(reefTrackerSub.get());
+    if (loc != null) {
+      this.updatedLevelTarget = this.currentLevelTarget != loc.getLevel();
+      this.currentLevelTarget = loc.getLevel();
+    }
+
+    ScoreNode closestNode = this.getClosestNode();
+    this.updatedNodeTarget = this.currentNodeTarget != closestNode;
+    this.currentNodeTarget = closestNode;
+  }
+
+  public Trigger nodeTrigger() {
+    return new Trigger(() -> updatedNodeTarget && isActive);
+  }
+
+  public Trigger levelTrigger() {
+    return new Trigger(() -> updatedLevelTarget && isActive);
+  }
+
+  private ScoreNode getClosestNode() {
+    var pose = RobotContainer.driveSubsystem.getPose();
+    ScoreNode closestNode = ScoreNode.A;
+    double closestDistance = Double.MAX_VALUE;
+
+    for (ScoreNode node : ScoreNode.values()) {
+      double distance =
+          pose.getTranslation().getDistance(node.getRobotAlignmentPose().getTranslation());
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestNode = node;
+      }
+    }
+
+    return closestNode;
+  }
+
+  public boolean readyToAutoDrive() {
+    // Only use score assist automated driving when close enough to targets
+    return isActive
+        && currentNodeTarget != null
+        && RobotContainer.driveSubsystem
+                .getTranslation()
+                .getDistance(currentNodeTarget.getRobotAlignmentPose().getTranslation())
+            < ScoreAssistConstants.scoreAsssistActivationThreshold.getAsDouble();
+  }
+
+  public boolean readyToAlignSS() {
+    // Only align the super structure when the close enough to targets
+    return isActive
+        && currentNodeTarget != null
+        && RobotContainer.driveSubsystem
+                .getTranslation()
+                .getDistance(currentNodeTarget.getRobotAlignmentPose().getTranslation())
+            < ScoreAssistConstants.scoreAsssistTolerance.getAsDouble();
   }
 }
