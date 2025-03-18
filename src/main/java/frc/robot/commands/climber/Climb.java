@@ -12,9 +12,9 @@ import java.util.function.DoubleSupplier;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Climb extends SequentialCommandGroup {
   /** Creates a new Climb. */
-  public Climb(DoubleSupplier input, DoubleSupplier servoPos) {
+  public Climb(DoubleSupplier input) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new PrepClimber(), new MoveClimber(input, servoPos));
+    addCommands(new PrepClimber(), new MoveClimber(input));
   }
 }

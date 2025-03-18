@@ -399,8 +399,7 @@ public class RobotContainer {
     // Climber
     driver
         .leftTrigger(0.1)
-        .whileTrue(
-            new Climb(() -> -1 * driver.getLeftTriggerAxis(), SSConstants.Climber.SERVO_POS_ON))
+        .whileTrue(new Climb(() -> -1 * driver.getLeftTriggerAxis()))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
 
     // Score Coral
@@ -581,7 +580,7 @@ public class RobotContainer {
                 SuperStructure.CLIMBING_CONF.getCommand()));
     operator
         .leftTrigger(0.1)
-        .whileTrue(new MoveClimber(operator::getLeftTriggerAxis, SSConstants.Climber.SERVO_POS_OFF))
+        .whileTrue(new MoveClimber(operator::getLeftTriggerAxis))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
     operator
         .rightTrigger(0.1)
@@ -593,8 +592,7 @@ public class RobotContainer {
                         SSConstants.Climber.MAX_ANGLE_CLIMBING),
                     Commands.none(),
                     () -> climber.getCurrentAngle() > 100),
-                new MoveClimber(
-                    () -> -1 * operator.getRightTriggerAxis(), SSConstants.Climber.SERVO_POS_ON)))
+                new MoveClimber(() -> -1 * operator.getRightTriggerAxis())))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
 
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());

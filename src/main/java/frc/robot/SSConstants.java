@@ -146,11 +146,6 @@ public class SSConstants {
     public static final LoggedTunableNumber INP_TO_VOLTS =
         new LoggedTunableNumber("Climber/SS/Inputs to Volts", 10);
 
-    public static final LoggedTunableNumber SERVO_POS_ON =
-        new LoggedTunableNumber("Climber/SS/Servo Pos On", 0.5);
-    public static final LoggedTunableNumber SERVO_POS_OFF =
-        new LoggedTunableNumber("Climber/SS/Servo Pos Off", 0.0);
-
     public static final LoggedTunableNumber MIN_ANGLE_CLIMBING =
         new LoggedTunableNumber("Climber/SS/Min Angle Climbing", 35);
     public static final LoggedTunableNumber MAX_ANGLE_CLIMBING =
