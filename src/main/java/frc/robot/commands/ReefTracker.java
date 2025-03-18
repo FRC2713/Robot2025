@@ -22,6 +22,9 @@ public class ReefTracker extends Command {
   private ScoreAssist scoreAsist = null;
   private PathScore pathScore;
 
+  private boolean hasScored = false;
+  private boolean hasPrepped = false;
+
   enum ScoreMode {
     ASSIST,
     PATH,
@@ -40,6 +43,8 @@ public class ReefTracker extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    hasPrepped = false;
+    hasScored = false;
     var loc = ScoreLoc.parseFromNT(sub.get());
     if (loc != null) {
       reefTrackerLoc = loc;
@@ -77,9 +82,15 @@ public class ReefTracker extends Command {
     if (mode == ScoreMode.ASSIST) {
       scoreAsist.execute();
       if (scoreAsist.isReadyForScore()) {
-        reefTrackerLoc.getLevel().getScoreCommand().get().schedule();
+        if (!hasScored) {
+          reefTrackerLoc.getLevel().getScoreCommand().get().schedule();
+          hasScored = true;
+        }
       } else if (scoreAsist.isReadyForPrep()) {
-        reefTrackerLoc.getLevel().getPrepCommand().get().schedule();
+        if (!hasPrepped) {
+          reefTrackerLoc.getLevel().getPrepCommand().get().schedule();
+          hasPrepped = true;
+        }
       }
     }
   }
