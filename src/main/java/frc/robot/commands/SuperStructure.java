@@ -3,134 +3,84 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public enum SuperStructure {
-  // Loc_GamePiece_Action
   STARTING_CONF(
       () ->
-          Commands.sequence(
-              RollerCmds.setEnableLimitSwitch(true),
-              RollerCmds.setSpeed(() -> 0),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              Commands.parallel(
-                  ElevatorCmds.setHeightAndWait(() -> 0), ShoulderCmds.setAngleAndWait(() -> -90)),
-              PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG))),
+          new SetAllDOFS(
+              () -> true, // ready for coral-ing
+              () -> 0, // not actually coral-ing
+              () -> 0, // not actually algae-ing
+              SSConstants.Elevator.STARTING_HEIGHT,
+              SSConstants.Shoulder.STARTING_ANGLE,
+              SSConstants.Pivot.STARTING_ANGLE)),
+
   SOURCE_CORAL_INTAKE(
       () ->
-          Commands.sequence(
-              RollerCmds.setEnableLimitSwitch(true),
-              RollerCmds.setSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              Commands.parallel(
-                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG)),
-              PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
-              RollerCmds.waitUntilCoral(2))),
+          new SetAllDOFS(
+                  () -> true, // ready for coral-ing
+                  SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED, // start coral-ing
+                  () -> 0, // not actually algae-ing
+                  SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN,
+                  SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG,
+                  SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG)
+              .andThen(RollerCmds.waitUntilCoral(2.0))),
+
   L1(
       () ->
-          Commands.sequence(
-              AlgaeClawCmds.setSpeed(() -> 0),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_HEIGHT_IN),
-              Commands.parallel(
-                  PivotCmds.setAngle(SSConstants.Pivot.L1_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L1_ANGLE_DEG)),
-              PivotCmds.waitUntilAtTarget())),
+          new SetAllDOFS(
+              SSConstants.Elevator.L1_HEIGHT_IN,
+              SSConstants.Shoulder.L1_ANGLE_DEG,
+              SSConstants.Pivot.L1_ANGLE_DEG)),
+
   L2(
       () ->
-          Commands.sequence(
-              AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_HEIGHT_IN),
-              Commands.parallel(
-                  PivotCmds.setAngle(SSConstants.Pivot.L2_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L2_ANGLE_DEG)),
-              PivotCmds.waitUntilAtTarget())),
+          new SetAllDOFS(
+              SSConstants.Elevator.L2_HEIGHT_IN,
+              SSConstants.Shoulder.L2_ANGLE_DEG,
+              SSConstants.Pivot.L2_ANGLE_DEG)),
   L3(
       () ->
-          Commands.sequence(
-              AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L3_HEIGHT_IN),
-              Commands.parallel(
-                  PivotCmds.setAngle(SSConstants.Pivot.L3_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L3_ANGLE_DEG)),
-              PivotCmds.waitUntilAtTarget())),
+          new SetAllDOFS(
+              SSConstants.Elevator.L3_HEIGHT_IN,
+              SSConstants.Shoulder.L3_ANGLE_DEG,
+              SSConstants.Pivot.L3_ANGLE_DEG)),
+
   L4_PREP(
       () ->
-          Commands.sequence(
-              AlgaeClawCmds.setSpeed(() -> 0),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              Commands.parallel(
-                  ElevatorCmds.setHeight(SSConstants.Elevator.L4_PREP_HEIGHT_IN),
-                  PivotCmds.setAngle(SSConstants.Pivot.L4_ANGLE_DEG),
-                  ShoulderCmds.setAngle(SSConstants.Shoulder.L4_PREP_ANGLE_DEG)))),
+          new SetAllDOFS(
+              () -> 0, // stop algae claw
+              SSConstants.Elevator.L4_PREP_HEIGHT_IN,
+              SSConstants.Shoulder.L4_ANGLE_DEG,
+              SSConstants.Pivot.L4_ANGLE_DEG)),
+
   L4(
       () ->
-          Commands.sequence(
-              AlgaeClawCmds.setSpeed(() -> 0),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              Commands.parallel(
-                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_HEIGHT_IN),
-                  PivotCmds.setAngle(SSConstants.Pivot.L4_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L4_ANGLE_DEG)),
-              PivotCmds.waitUntilAtTarget())),
-  CORAL_SCORE(
-      () ->
-          Commands.sequence(
-              RollerCmds.setEnableLimitSwitch(false),
-              RollerCmds.setSpeed(SSConstants.Roller.L2_PLUS_CORAL_SCORE_SPEED))),
-  ALGAE_GRAB(() -> AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED)),
+          new SetAllDOFS(
+              () -> 0, // stop algae claw
+              SSConstants.Elevator.L4_HEIGHT_IN,
+              SSConstants.Shoulder.L4_ANGLE_DEG,
+              SSConstants.Pivot.L4_ANGLE_DEG)),
 
-  ALGAE_GRAB_AND_CORAL_SCORE(
+  PROCESSOR(
       () ->
-          Commands.sequence(
-              ALGAE_GRAB.getCommand(), AlgaeClawCmds.waitUntilAlgae(2), CORAL_SCORE.getCommand())),
-  ALGAE_SAFE_RETRACT(
-      () -> Commands.sequence(PivotCmds.setAngle(SSConstants.Pivot.SAFE_ANGLE_DEGS))),
+          new SetDOFSOneAtATime(
+                  SSConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
+                  SSConstants.Elevator.PROCESSOR_PREP_HEIGHT_IN,
+                  SSConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG,
+                  SSConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG)
+              .andThen(
+                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN))),
 
-  PROCESSOR_PREP(
+  ALGAE_SAFE_RETRACT(() -> PivotCmds.setAngle(SSConstants.Pivot.SAFE_ANGLE_DEGS)),
+
+  CLIMBING_CONF(
       () ->
           Commands.sequence(
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_PREP_HEIGHT_IN),
-              ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG),
-              PivotCmds.setAngleAndWait(SSConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN))),
-  PROCESSOR_SCORE(() -> Commands.sequence(PROCESSOR_PREP.getCommand())),
-  CLIMB(
-      () ->
-          Commands.sequence(
-              ShoulderCmds.setAngle(SSConstants.Shoulder.CLIMB_ANGLE_DEGS),
-              PivotCmds.setAngle(SSConstants.Pivot.CLIMB_ANGLE_DEGS))),
-  CLIMB_PREP(
-      () ->
-          Commands.sequence(
-              // move the arm out of the way
+              // move the arm out of the way, elevator first
               Commands.parallel(
                   ElevatorCmds.setHeightAndWait(SSConstants.Elevator.CLIMB_PREP_HEIGHT),
                   ShoulderCmds.setAngle(SSConstants.Shoulder.PREP_CLIMB_ANGLE_DEGS),
@@ -145,12 +95,11 @@ public enum SuperStructure {
                   ElevatorCmds.setHeight(0)))),
   BARGE(
       () ->
-          Commands.sequence(
-              ShoulderCmds.setAngle(SSConstants.Shoulder.BARGE_ANGLE_DEGREES),
-              PivotCmds.setAngle(SSConstants.Pivot.BARGE_ANGLE_DEG),
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.BARGE_HEIGHT_IN),
-              ShoulderCmds.waitUntilAtTarget(),
-              PivotCmds.waitUntilAtTarget()));
+          new SetAllDOFS(
+              SSConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
+              SSConstants.Elevator.BARGE_HEIGHT_IN,
+              SSConstants.Shoulder.BARGE_ANGLE_DEGREES,
+              SSConstants.Pivot.BARGE_ANGLE_DEG));
 
   private Supplier<Command> cmd;
 

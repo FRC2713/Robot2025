@@ -6,6 +6,9 @@ import java.util.function.DoubleSupplier;
 
 public class SSConstants {
   public class Elevator {
+    public static final LoggedTunableNumber STARTING_HEIGHT =
+        new LoggedTunableNumber("Elevator/SS/Starting Height", 0);
+
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/Source Coral Intake Height", 6 + 2 + 0.5);
 
@@ -37,6 +40,10 @@ public class SSConstants {
   }
 
   public class Shoulder {
+
+    public static final LoggedTunableNumber STARTING_ANGLE =
+        new LoggedTunableNumber("Shoulder/SS/Starting Angle", -90);
+
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/Source Intake Angle", -80);
 
@@ -68,6 +75,10 @@ public class SSConstants {
   }
 
   public class Pivot {
+
+    public static final LoggedTunableNumber STARTING_ANGLE =
+        new LoggedTunableNumber("Pivot/SS/Starting Angle", 0);
+
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Source Intake Angle", 35);
 

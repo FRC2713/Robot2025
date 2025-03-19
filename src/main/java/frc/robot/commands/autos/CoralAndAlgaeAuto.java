@@ -4,6 +4,7 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.EndEffector;
 import frc.robot.commands.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 
@@ -38,16 +39,17 @@ public class CoralAndAlgaeAuto {
         .onTrue(
             Commands.sequence(
                 SuperStructure.L3.getCommand(),
-                SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand(),
+                EndEffector.ALGAE_GRAB_AND_CORAL_SCORE.getCommand(),
                 Commands.parallel(
-                    SuperStructure.PROCESSOR_PREP.delayCommand(0.5), reefEToProcTraj.cmd())));
+                    SuperStructure.PROCESSOR.delayCommand(0.5), reefEToProcTraj.cmd())));
 
     // When the trajectory is done, score in processor. Then go to source
     reefEToProcTraj
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.PROCESSOR_SCORE.getCommand(),
+                SuperStructure.PROCESSOR.getCommand(),
+                EndEffector.PROCESSOR_SCORE.getCommand(),
                 Commands.parallel(
                     procToSourceTraj.cmd(), SuperStructure.STARTING_CONF.getCommand())));
 
@@ -67,12 +69,12 @@ public class CoralAndAlgaeAuto {
         .onTrue(
             Commands.sequence(
                 SuperStructure.L3.getCommand(),
-                SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand(),
+                EndEffector.ALGAE_GRAB_AND_CORAL_SCORE.getCommand(),
                 Commands.parallel(
-                    SuperStructure.PROCESSOR_PREP.delayCommand(0.5), reefCToProcessor.cmd())));
+                    SuperStructure.PROCESSOR.delayCommand(0.5), reefCToProcessor.cmd())));
 
     // When at the processor, score!
-    reefCToProcessor.done().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
+    reefCToProcessor.done().onTrue(EndEffector.PROCESSOR_SCORE.getCommand());
 
     return routine;
   }

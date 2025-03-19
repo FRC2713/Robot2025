@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
+import frc.robot.commands.EndEffector;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
@@ -61,7 +62,7 @@ public class ScoreLotsOfCoralFlipped {
                 // 2) Score Coral
                 ScoreAssist.getInstance().waitUntilFinished(1.6),
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                SuperStructure.CORAL_SCORE.getCommand(),
+                EndEffector.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(
@@ -96,7 +97,7 @@ public class ScoreLotsOfCoralFlipped {
                         new InstantCommand(() -> driveSubsystem.stop())),
                     SuperStructure.L4.getCommand()),
                 // 2) Score Coral
-                SuperStructure.CORAL_SCORE.getCommand(),
+                EndEffector.CORAL_SCORE.getCommand(),
                 // 3) Begin driving to source
                 Commands.parallel(
                     SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefLToSource.cmd())));
