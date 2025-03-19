@@ -10,20 +10,22 @@ import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.ScoreLevel;
 import frc.robot.util.ScoreLoc;
 import frc.robot.util.ScoreNode;
+import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 
 public class ReefTracker extends Command {
 
   private StringSubscriber sub =
       NetworkTableInstance.getDefault().getStringTopic("/scoreassist/goto").subscribe("none");
-  private ScoreLoc reefTrackerLoc = null;
+  @Getter private ScoreLoc reefTrackerLoc = null;
   private Alert alert = new Alert("Using closest location", AlertType.kWarning);
 
   private ScoreAssist scoreAsist = null;
   private PathScore pathScore;
 
-  private boolean hasScored = false;
-  private boolean hasPrepped = false;
+  @Getter private boolean doSS = false;
+  @Getter private boolean doScore = false;
+  @Getter private boolean doPrep = false;
 
   enum ScoreMode {
     ASSIST,
@@ -43,8 +45,9 @@ public class ReefTracker extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    hasPrepped = false;
-    hasScored = false;
+    doPrep = false;
+    doScore = false;
+    doSS = false;
     var loc = ScoreLoc.parseFromNT(sub.get());
     if (loc != null) {
       reefTrackerLoc = loc;
@@ -82,15 +85,28 @@ public class ReefTracker extends Command {
     if (mode == ScoreMode.ASSIST) {
       scoreAsist.execute();
       if (scoreAsist.isReadyForScore()) {
-        if (!hasScored) {
-          reefTrackerLoc.getLevel().getScoreCommand().get().schedule();
-          hasScored = true;
-        }
+        // if (!hasScored) {
+        //   Commands.sequence(
+        //           reefTrackerLoc.getLevel().getSsCommand().get(),
+        //           Commands.print("SS Done! HERE! LOL!"),
+        //           RollerCmds.setSpeed(SSConstants.Roller.L2_PLUS_CORAL_SCORE_SPEED),
+        //           Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+        //           RollerCmds.setSpeed(() -> 0))
+        //       .schedule();
+        doScore = true;
+        // }
+      } else if (scoreAsist.isReadyForScoreSS()) {
+        // if (!hasScoredSS) {
+        //   reefTrackerLoc.getLevel().getSsCommand().get().schedule();
+        //   hasScoredSS = true;
+        // }
+        doSS = true;
       } else if (scoreAsist.isReadyForPrep()) {
-        if (!hasPrepped) {
-          reefTrackerLoc.getLevel().getPrepCommand().get().schedule();
-          hasPrepped = true;
-        }
+        // if (!hasPrepped) {
+        //   reefTrackerLoc.getLevel().getPrepCommand().get().schedule();
+        //   hasPrepped = true;
+        // }
+        doPrep = true;
       }
     }
   }
@@ -117,6 +133,7 @@ public class ReefTracker extends Command {
   public void end(boolean interrupted) {
     scoreAsist.end(interrupted);
     pathScore.end(interrupted);
+    super.end(interrupted);
   }
 
   // Returns true when the command should end.

@@ -112,6 +112,7 @@ public class RobotContainer {
   // For Choreo
   private final AutoFactory choreoAutoFactory;
   private ReefTracker reefTracker;
+  private Trigger doScoreTrigger;
   public static Vision visionsubsystem;
   public static boolean disableReefAlign = true;
   public static boolean disableSourceAlign = true;
@@ -271,12 +272,22 @@ public class RobotContainer {
                 autoChooser.selectedCommandScheduler()));
 
     reefTracker = new ReefTracker(driveSubsystem);
+    doScoreTrigger = new Trigger(() -> reefTracker.isDoScore());
 
     // Configure the button bindings
     configureButtonBindings();
   }
 
   private void configureButtonBindings() {
+    doScoreTrigger.onTrue(
+        Commands.sequence(
+            // reefTracker.getReefTrackerLoc().getLevel().getSsCommand().get(),
+            SuperStructure.L3.getCommand(),
+            Commands.print("SS Done! HERE! LOL!"),
+            RollerCmds.setSpeed(SSConstants.Roller.L2_PLUS_CORAL_SCORE_SPEED),
+            Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+            RollerCmds.setSpeed(() -> 0)));
+
     reefAlignTrigger
         .onTrue(
             DriveCommands.changeDefaultDriveCommand(
@@ -416,14 +427,16 @@ public class RobotContainer {
             DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem, reefTracker, "ScoreAssistReefTracker"))
         .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
+            Commands.parallel(
+                Commands.runOnce(() -> reefTracker.end(false)),
+                DriveCommands.changeDefaultDriveCommand(
                     driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Full Control"));
+                    DriveCommands.joystickDrive(
+                        driveSubsystem,
+                        () -> -driver.getLeftY(),
+                        () -> -driver.getLeftX(),
+                        () -> -driver.getRightX()),
+                    "Full Control")));
 
     // Grab Algae
     driver

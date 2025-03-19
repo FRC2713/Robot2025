@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,8 +22,10 @@ import org.littletonrobotics.junction.Logger;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ScoreAssist extends Command {
   @Getter private boolean readyForPrep = false;
+  @Getter private boolean readyForScoreSS = false;
   @Getter private boolean readyForScore = false;
-  @Getter private double error = Double.MAX_VALUE;
+
+  @Getter private Pose2d error = null;
   private ScoreNode node;
 
   private ProfiledPIDController yscoreAssistController =
@@ -83,12 +86,24 @@ public class ScoreAssist extends Command {
             speeds,
             isFlipped ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation()));
 
-    error = pose.getTranslation().getDistance(drive.getPose().getTranslation());
+    error = scoreAssistDistance(drive.getPose(), pose);
     Logger.recordOutput("ScoreAssist/Error", error);
 
-    if (error < Units.inchesToMeters(1)) {
+    if (Math.hypot(error.getX(), error.getY()) < Units.inchesToMeters(8)) {
+      readyForScoreSS = true;
+    }
+    if (Math.abs(error.getX()) < Units.inchesToMeters(0.75)
+        && Math.abs(error.getY()) < Units.inchesToMeters(2.5)
+        && Math.abs(error.getRotation().getDegrees()) < 2) {
       readyForScore = true;
     }
+    Logger.recordOutput("ScoreAssist/readyForPrep", readyForPrep);
+    Logger.recordOutput("ScoreAssist/readyForScoreSS", readyForScoreSS);
+    Logger.recordOutput("ScoreAssist/readyForScore", readyForScore);
+  }
+
+  private static Pose2d scoreAssistDistance(Pose2d robot, Pose2d target) {
+    return target.relativeTo(robot);
   }
 
   // Called once the command ends or is interrupted.

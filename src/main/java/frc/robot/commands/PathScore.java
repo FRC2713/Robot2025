@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drivetrain;
+import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.ScoreNode;
 import org.littletonrobotics.junction.Logger;
 
@@ -18,6 +19,10 @@ public class PathScore extends Command {
   private ScoreNode node;
   private Drivetrain drive;
   private Command pathfindingCommand;
+  private LoggedTunableNumber pathConstraintVelocityMPS =
+      new LoggedTunableNumber("ScoreAssist/maxVelocityMPS", 2.75);
+  private LoggedTunableNumber pathConstraintaccel =
+      new LoggedTunableNumber("ScoreAssist/pathConstraintAccel", 5.0);
 
   /** Creates a new PathScore. */
   public PathScore(Drivetrain drive, ScoreNode node) {
@@ -31,17 +36,20 @@ public class PathScore extends Command {
   @Override
   public void initialize() {
     Pose2d targetPose = node.getPathScorePose();
-    Logger.recordOutput("ScoreAssit/PathScore/targetPose", targetPose);
+    Logger.recordOutput("ScoreAssist/PathScore/targetPose", targetPose);
 
     // Create the constraints to use while pathfinding
     PathConstraints constraints =
         new PathConstraints(
-            2.0, 1.0, drive.getMaxAngularSpeedRadPerSec(), Units.degreesToRadians(720));
+            pathConstraintVelocityMPS.getAsDouble(),
+            pathConstraintaccel.getAsDouble(),
+            drive.getMaxAngularSpeedRadPerSec(),
+            Units.degreesToRadians(720));
 
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
     pathfindingCommand =
         AutoBuilder.pathfindToPose(
-            targetPose, constraints, 0.4 // Goal end velocity in meters/sec
+            targetPose, constraints, 0.2 // Goal end velocity in meters/sec
             );
     pathfindingCommand.initialize();
   }

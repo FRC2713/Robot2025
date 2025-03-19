@@ -161,7 +161,7 @@ public class ScoreAssistOld {
                         reefTrackerLoc
                             .get()
                             .getLevel()
-                            .getScoreCommand()
+                            .getSsCommand()
                             .get()
                             .andThen(
                                 Commands.sequence(

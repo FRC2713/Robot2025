@@ -89,17 +89,11 @@ public enum SuperStructure {
                   ShoulderCmds.setAngle(SSConstants.Shoulder.L4_PREP_ANGLE_DEG)))),
   L4(
       () ->
-          Commands.sequence(
+          Commands.parallel(
               AlgaeClawCmds.setSpeed(() -> 0),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              Commands.parallel(
-                  ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_HEIGHT_IN),
-                  PivotCmds.setAngle(SSConstants.Pivot.L4_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L4_ANGLE_DEG)),
-              PivotCmds.waitUntilAtTarget())),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_HEIGHT_IN),
+              PivotCmds.setAngleAndWait(SSConstants.Pivot.L4_ANGLE_DEG),
+              ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L4_ANGLE_DEG))),
   CORAL_SCORE(
       () ->
           Commands.sequence(
