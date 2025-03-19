@@ -439,7 +439,7 @@ public class RobotContainer {
     // Grab Algae
     driver
         .rightTrigger(0.2)
-        .onTrue(Commands.sequence(SuperStructure.PROCESSOR_SCORE.getCommand()))
+        .onTrue(Commands.sequence(SuperStructure.ALGAE_GRAB_L3.getCommand()))
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
     // // Score Algae

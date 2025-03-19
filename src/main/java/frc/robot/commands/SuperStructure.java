@@ -133,6 +133,19 @@ public enum SuperStructure {
                   PivotCmds.setAngle(SSConstants.Pivot.L3_ANGLE_DEG),
                   ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L3_ANGLE_DEG)),
               PivotCmds.waitUntilAtTarget())),
+  ALGAE_GRAB_GROUND(
+      () ->
+          Commands.sequence(
+              SuperStructure.ALGAE_GRAB.getCommand(),
+              Commands.either(
+                  PivotCmds.setAngleAndWait(() -> 35),
+                  Commands.none(),
+                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_HEIGHT_IN),
+              Commands.parallel(
+                  PivotCmds.setAngle(SSConstants.Pivot.L2_ANGLE_DEG),
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L2_ANGLE_DEG)),
+              PivotCmds.waitUntilAtTarget())),
 
   ALGAE_GRAB_AND_CORAL_SCORE(
       () ->
