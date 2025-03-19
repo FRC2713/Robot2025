@@ -346,8 +346,8 @@ public class RobotContainer {
     // Score Assist
     driver
         .rightBumper()
-        .onTrue(ScoreAssistCmds.exectuteAllTargets())
-        .onFalse(Commands.sequence(ScoreAssistCmds.stop()));
+        .onTrue(ScoreAssistCmds.exectuteCoralScore())
+        .onFalse(ScoreAssistCmds.stop());
 
     // Enable/disable sourcealign
     driver

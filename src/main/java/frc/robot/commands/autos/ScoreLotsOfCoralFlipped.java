@@ -49,7 +49,7 @@ public class ScoreLotsOfCoralFlipped {
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, in parallel move SS to L4
-                ScoreAssistCmds.exectuteInAuto(ScoreLoc.J_FOUR),
+                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLoc.J_FOUR),
                 // 2) Score Coral
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
@@ -76,7 +76,7 @@ public class ScoreLotsOfCoralFlipped {
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, in parallel move SS to L4
-                ScoreAssistCmds.exectuteInAuto(ScoreLoc.L_FOUR),
+                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLoc.L_FOUR),
                 // 2) Score Coral
                 SuperStructure.CORAL_SCORE.getCommand(),
                 // 3) Begin driving to source

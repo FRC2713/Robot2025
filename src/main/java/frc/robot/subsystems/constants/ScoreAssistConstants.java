@@ -29,5 +29,5 @@ public class ScoreAssistConstants {
       new LoggedTunableNumber("ScoreAssist/Theta Tolerance", 2); // degrees
 
   public static final LoggedTunableNumber pathDistTolerance =
-      new LoggedTunableNumber("ScoreAssist/Activation Threshold", Units.inchesToMeters(8));
+      new LoggedTunableNumber("ScoreAssist/Activation Threshold", Units.inchesToMeters(1.25));
 }

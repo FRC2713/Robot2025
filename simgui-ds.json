@@ -16,20 +16,26 @@
           "incKey": 87
         },
         {},
+        {},
         {
           "decKey": 80,
           "incKey": 79
         }
       ],
-      "axisCount": 4,
-      "buttonCount": 6,
+      "axisCount": 5,
+      "buttonCount": 11,
       "buttonKeys": [
         90,
         88,
         67,
         86,
         78,
-        77
+        77,
+        44,
+        46,
+        47,
+        45,
+        61
       ],
       "povConfig": [
         {
@@ -60,9 +66,9 @@
       "buttonCount": 4,
       "buttonKeys": [
         -1,
-        44,
-        46,
-        47
+        -1,
+        -1,
+        -1
       ],
       "povCount": 0
     },

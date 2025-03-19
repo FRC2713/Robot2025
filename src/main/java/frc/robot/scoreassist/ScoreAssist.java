@@ -149,6 +149,18 @@ public class ScoreAssist {
         && withinTheta;
   }
 
+  public boolean shouldUsePath() {
+    return RobotContainer.driveSubsystem
+            .getPose()
+            .getTranslation()
+            .getDistance(
+                RobotContainer.scoreAssist
+                    .getCurrentNodeTarget()
+                    .getRobotAlignmentPose()
+                    .getTranslation())
+        > ScoreAssistConstants.pathDistTolerance.getAsDouble();
+  }
+
   public static enum ScoreDrivingMode {
     PATH,
     ASSIST,

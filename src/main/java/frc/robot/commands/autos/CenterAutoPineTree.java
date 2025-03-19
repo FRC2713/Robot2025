@@ -65,7 +65,7 @@ public class CenterAutoPineTree {
             Commands.sequence(
                 new InstantCommand(() -> driveSubsystem.stop()),
                 // 1) Finish off trajectory with score assist, in parallel move SS to L4
-                ScoreAssistCmds.exectuteInAuto(ScoreLoc.G_FOUR),
+                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLoc.G_FOUR),
                 Commands.print("ScoreAssist Done"),
                 SuperStructure.L4.getCommand().withDeadline(Commands.waitSeconds(2)),
                 Commands.print("L4 Done"),

@@ -192,6 +192,8 @@ public class Robot extends LoggedRobot {
       autonomousCommand.cancel();
     }
     robotContainer.setToNormalDrive();
+
+    robotContainer.scoreAssist.updateWithNT();
   }
 
   /** This function is called periodically during operator control. */

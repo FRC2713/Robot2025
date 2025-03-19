@@ -13,6 +13,7 @@ import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLoc;
 
 public class ScoreAssistCmds {
+
   public static Command intake() {
     return Commands.parallel(
         SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
@@ -24,55 +25,28 @@ public class ScoreAssistCmds {
                     Rotation2d.fromRadians(0.996491486039043)))));
   }
 
-  public static Command exectuteAllTargets() {
+  public static Command exectuteCoralScore() {
     return Commands.sequence(
         Commands.parallel(
-            // 1) Activate
-            start(),
-            // 2) Drive to target in two parts
-            Commands.either(
-                Commands.sequence(
-                    // a) drive close to target with path finding
-                    executePath(),
-                    // b) drive to given target
-                    exectuteDrive()),
-                exectuteDrive(),
-                ScoreAssistCmds::shouldUsePath),
-            // 3) move ss for given location
-            new InstantCommand(
-                () ->
-                    RobotContainer.scoreAssist
-                        .getCurrentLevelTarget()
-                        .getPrepCommand()
-                        .get()
-                        .schedule())),
-        // 4) Finish ScoreAssist and Score!
+            start(), // 1) activate score assist
+            Commands.sequence(
+                executePath(), // 2a) path-find close to target
+                exectuteDrive()), // 2b) drive to target
+            executePrep()), // 3) execute prep
         stop(),
-        new InstantCommand(
-            () ->
-                RobotContainer.scoreAssist
-                    .getCurrentLevelTarget()
-                    .getSsCommand()
-                    .get()
-                    .andThen(SuperStructure.CORAL_SCORE.getCommand())
-                    .schedule()));
+        executeSS());
   }
 
-  public static Command exectuteInAuto(ScoreLoc scoreLoc) {
+  public static Command exectuteCoralScoreInAuto(ScoreLoc scoreLoc) {
     // Note that during autonomous, ScoreAssist does not update via NT
     return Commands.sequence(
         Commands.runOnce(() -> RobotContainer.scoreAssist.updateManually(scoreLoc)),
         Commands.parallel(
-            // 1) Activate
-            start(),
-            // 2) Drive to given target
-            exectuteDrive(),
-            // 3) move ss for given location
-            RobotContainer.scoreAssist.getCurrentLevelTarget().getPrepCommand().get()),
-        // 4) Finish ScoreAssist and Score!
+            start(), // 1) activate score assist
+            exectuteDrive(), // 2) drive to target
+            executePrep()), // 3) execute prep
         stop(),
-        RobotContainer.scoreAssist.getCurrentLevelTarget().getSsCommand().get(),
-        SuperStructure.CORAL_SCORE.getCommand());
+        executeSS());
   }
 
   public static Command start() {
@@ -102,20 +76,16 @@ public class ScoreAssistCmds {
     return Commands.sequence(
         Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.ASSIST),
         new DriveToPose(
-                () -> RobotContainer.scoreAssist.getCurrentNodeTarget().getRobotAlignmentPose(),
-                RobotContainer.driveSubsystem)
-            .until(() -> RobotContainer.scoreAssist.driveAssistIsDone()));
+            () -> RobotContainer.scoreAssist.getCurrentNodeTarget().getRobotAlignmentPose(),
+            RobotContainer.driveSubsystem));
   }
 
-  public static boolean shouldUsePath() {
-    return RobotContainer.driveSubsystem
-            .getPose()
-            .getTranslation()
-            .getDistance(
-                RobotContainer.scoreAssist
-                    .getCurrentNodeTarget()
-                    .getRobotAlignmentPose()
-                    .getTranslation())
-        > 1.25;
+  public static Command executePrep() {
+    return new MoveSSToTarget(RobotContainer.scoreAssist::getCurrentLevelTarget);
+  }
+
+  public static Command executeSS() {
+    return new MoveSSToTarget(
+        RobotContainer.scoreAssist::getCurrentLevelTarget, SuperStructure.CORAL_SCORE.getCommand());
   }
 }

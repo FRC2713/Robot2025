@@ -65,7 +65,7 @@ public class ScoreLotsOfCoral {
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS
-                ScoreAssistCmds.exectuteInAuto(ScoreLoc.E_FOUR),
+                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLoc.E_FOUR),
                 // 2) Score Coral
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 Commands.print("Scoring Coral"),
@@ -97,7 +97,7 @@ public class ScoreLotsOfCoral {
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS
-                ScoreAssistCmds.exectuteInAuto(ScoreLoc.C_FOUR),
+                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLoc.C_FOUR),
                 // 2) Score Coral
                 // Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 Commands.print("2Scoring Coral"),
