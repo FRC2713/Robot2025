@@ -38,7 +38,7 @@ import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.commands.scoreassist.ScoreAssistCmds;
 import frc.robot.generated.TunerConstants;
 import frc.robot.scoreassist.ReefAlign;
-import frc.robot.scoreassist.ScoreAssist3;
+import frc.robot.scoreassist.ScoreAssist;
 import frc.robot.scoreassist.SourceAlign;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
@@ -111,7 +111,7 @@ public class RobotContainer {
   private final AutoFactory choreoAutoFactory;
 
   // For teleop automation
-  public static ScoreAssist3 scoreAssist;
+  public static ScoreAssist scoreAssist;
   public static Vision visionsubsystem;
   public static boolean disableReefAlign = true;
   public static boolean disableSourceAlign = true;
@@ -273,7 +273,7 @@ public class RobotContainer {
                 new InstantCommand(() -> RobotContainer.hasRanAuto = true),
                 autoChooser.selectedCommandScheduler()));
 
-    scoreAssist = new ScoreAssist3();
+    scoreAssist = new ScoreAssist();
 
     // Configure the button bindings
     configureButtonBindings();

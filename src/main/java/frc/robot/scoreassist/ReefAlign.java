@@ -3,7 +3,7 @@ package frc.robot.scoreassist;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotContainer;
-import frc.robot.scoreassist.ScoreAssist3.ScoreDrivingMode;
+import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreNode;
 import frc.robot.util.TrapezoidZone;
@@ -69,11 +69,11 @@ public class ReefAlign {
     //   Logger.recordOutput("ReefAlign/trap" + (index++), trapezoid.toPose2dArray());
     // }
 
-      boolean nextTriggerState =
+    boolean nextTriggerState =
         DriverStation.isTeleopEnabled()
-        && RobotContainer.rollers.hasCoral()
-        && !RobotContainer.disableReefAlign
-        && inZone().isPresent();
+            && RobotContainer.rollers.hasCoral()
+            && !RobotContainer.disableReefAlign
+            && inZone().isPresent();
 
     // Don't update the default command during ScoreAssist
     if (RobotContainer.scoreAssist.mode == ScoreDrivingMode.INACTIVE)

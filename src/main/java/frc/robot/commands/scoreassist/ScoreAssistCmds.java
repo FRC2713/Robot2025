@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.SuperStructure;
-import frc.robot.scoreassist.ScoreAssist3.ScoreDrivingMode;
+import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.util.ScoreLoc;
 
 public class ScoreAssistCmds {
@@ -16,11 +16,14 @@ public class ScoreAssistCmds {
             // 1) Activate
             start(),
             // 2) Drive to target in two parts
-            Commands.sequence(
-                // a) drive close to target with path finding
-                executePath(),
-                // b) drive to given target
-                exectuteDrive()),
+            Commands.either(
+                Commands.sequence(
+                    // a) drive close to target with path finding
+                    executePath(),
+                    // b) drive to given target
+                    exectuteDrive()),
+                exectuteDrive(),
+                ScoreAssistCmds::shouldUsePath),
             // 3) move ss for given location
             RobotContainer.scoreAssist.getCurrentLevelTarget().getPrepCommand().get()),
         // 4) Finish ScoreAssist and Score!
@@ -63,11 +66,10 @@ public class ScoreAssistCmds {
 
   public static Command executePath() {
     return Commands.sequence(
-            Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.PATH),
-            new PathfindToPose(
-                RobotContainer.driveSubsystem,
-                () -> RobotContainer.scoreAssist.getCurrentNodeTarget()))
-        .until(() -> RobotContainer.scoreAssist.drivePathIsDone());
+        Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.PATH),
+        new PathfindToPose(
+            RobotContainer.driveSubsystem,
+            () -> RobotContainer.scoreAssist.getCurrentNodeTarget()));
   }
 
   public static Command exectuteDrive() {
@@ -77,5 +79,17 @@ public class ScoreAssistCmds {
                 () -> RobotContainer.scoreAssist.getCurrentNodeTarget().getRobotAlignmentPose(),
                 RobotContainer.driveSubsystem)
             .until(() -> RobotContainer.scoreAssist.driveAssistIsDone()));
+  }
+
+  public static boolean shouldUsePath() {
+    return RobotContainer.driveSubsystem
+            .getPose()
+            .getTranslation()
+            .getDistance(
+                RobotContainer.scoreAssist
+                    .getCurrentNodeTarget()
+                    .getRobotAlignmentPose()
+                    .getTranslation())
+        > 1.25;
   }
 }

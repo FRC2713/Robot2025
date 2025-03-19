@@ -3,7 +3,7 @@ package frc.robot.scoreassist;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotContainer;
-import frc.robot.scoreassist.ScoreAssist3.ScoreDrivingMode;
+import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.TrapezoidZone;
 import frc.robot.util.TrapezoidZone.Point;

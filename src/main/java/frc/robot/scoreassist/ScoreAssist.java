@@ -4,6 +4,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringSubscriber;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.ScoreAssistConstants;
@@ -17,7 +19,7 @@ import org.littletonrobotics.junction.Logger;
  * Manages subscribing to network tables UI and maintaining the most up-to-date pose and
  * superstructure target
  */
-public class ScoreAssist3 {
+public class ScoreAssist {
 
   private final StringSubscriber reefTrackerSub =
       NetworkTableInstance.getDefault().getStringTopic("/scoreassist/goto").subscribe("none");
@@ -32,12 +34,13 @@ public class ScoreAssist3 {
   private double thetaError = Double.MAX_VALUE;
   private double pathTargetError = Double.MAX_VALUE;
 
+  private Alert usingClosest = new Alert("Using Closest Node", AlertType.kWarning);
+
   public ScoreDrivingMode mode = ScoreDrivingMode.INACTIVE;
 
   public void periodic() {
-    if (!DriverStation.isAutonomous()) {
-      this.updateWithClosest();
-      // this.updateWithNT();
+    if (DriverStation.isTeleop()) {
+      this.updateWithNT();
     }
 
     Pose2d targetToRobotError =
@@ -82,8 +85,11 @@ public class ScoreAssist3 {
     var loc = ScoreLoc.parseFromNT(reefTrackerInput);
     Logger.recordOutput("ScoreAssist/reefTrackerInput", reefTrackerInput);
     if (loc == null) {
+      updateWithClosest();
+      usingClosest.set(true);
       return;
     }
+    usingClosest.set(false);
 
     this.updatedNodeTarget = this.currentNodeTarget != loc.getNode();
     this.updatedLevelTarget = this.currentLevelTarget != loc.getLevel();
@@ -126,13 +132,6 @@ public class ScoreAssist3 {
     }
 
     return closestNode;
-  }
-
-  // ScoreAssist will be done path finding when the robot gets close enough
-  public boolean drivePathIsDone() {
-    return this.mode == ScoreDrivingMode.PATH
-        && currentNodeTarget != null
-        && this.pathTargetError < ScoreAssistConstants.pathDistTolerance.getAsDouble();
   }
 
   // ScoreAssist will be done "assisting" when the robot gets close enough

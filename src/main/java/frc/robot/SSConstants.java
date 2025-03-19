@@ -21,7 +21,7 @@ public class SSConstants {
     public static final LoggedTunableNumber L4_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L4 Height", 23);
     public static final LoggedTunableNumber L4_PREP_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 0);
+        new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 7);
 
     public static final LoggedTunableNumber PROCESSOR_PREP_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/Proc Prep Height", 10);
