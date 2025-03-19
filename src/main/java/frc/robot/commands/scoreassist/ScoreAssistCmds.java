@@ -1,14 +1,28 @@
 package frc.robot.commands.scoreassist;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.SuperStructure;
 import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
+import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLoc;
 
 public class ScoreAssistCmds {
+  public static Command intake() {
+    return Commands.parallel(
+        SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
+        new PathfindToPose(
+            RobotContainer.driveSubsystem,
+            () ->
+               AllianceFlipUtil.apply(new Pose2d(
+                    new Translation2d(0.4480087459087372, 1.305626749992370),
+                    Rotation2d.fromRadians(0.996491486039043)))));
+  }
 
   public static Command exectuteAllTargets() {
     return Commands.sequence(
@@ -40,7 +54,8 @@ public class ScoreAssistCmds {
                     .getCurrentLevelTarget()
                     .getSsCommand()
                     .get()
-                    .andThen(SuperStructure.CORAL_SCORE.getCommand()).schedule()));
+                    .andThen(SuperStructure.CORAL_SCORE.getCommand())
+                    .schedule()));
   }
 
   public static Command exectuteInAuto(ScoreLoc scoreLoc) {
@@ -80,7 +95,7 @@ public class ScoreAssistCmds {
         Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.PATH),
         new PathfindToPose(
             RobotContainer.driveSubsystem,
-            () -> RobotContainer.scoreAssist.getCurrentNodeTarget()));
+            () -> RobotContainer.scoreAssist.getCurrentNodeTarget().getPathScorePose()));
   }
 
   public static Command exectuteDrive() {

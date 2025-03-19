@@ -340,8 +340,8 @@ public class RobotContainer {
     // Intake Coral
     driver
         .leftBumper()
-        .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
-        .onFalse(RollerCmds.setSpeed(() -> 0));
+        .onTrue(ScoreAssistCmds.intake())
+        .onFalse(Commands.sequence(ScoreAssistCmds.stop()));
 
     // Score Assist
     driver

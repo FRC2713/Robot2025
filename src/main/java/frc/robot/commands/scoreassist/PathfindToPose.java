@@ -11,12 +11,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.LoggedTunableNumber;
-import frc.robot.util.ScoreNode;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class PathfindToPose extends Command {
-  private Supplier<ScoreNode> node;
+  private Supplier<Pose2d> node;
   private Drivetrain drive;
   private Command pathfindingCommand;
   private LoggedTunableNumber pathConstraintVelocityMPS =
@@ -25,7 +24,7 @@ public class PathfindToPose extends Command {
       new LoggedTunableNumber("ScoreAssist/Pathfind/constraintAccel", 5.0);
 
   /** Creates a new PathScore. */
-  public PathfindToPose(Drivetrain drive, Supplier<ScoreNode> node) {
+  public PathfindToPose(Drivetrain drive, Supplier<Pose2d> node) {
     addRequirements(drive);
     this.drive = drive;
     this.node = node;
@@ -35,7 +34,7 @@ public class PathfindToPose extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Pose2d targetPose = node.get().getPathScorePose();
+    Pose2d targetPose = node.get();
     Logger.recordOutput("ScoreAssist/Pathfind/targetPose", targetPose);
 
     // Create the constraints to use while pathfinding
