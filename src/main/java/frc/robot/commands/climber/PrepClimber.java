@@ -6,7 +6,7 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
-import frc.robot.SSConstants;
+import frc.robot.SetpointConstants;
 import frc.robot.commands.ClimberCmds;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -21,7 +21,7 @@ public class PrepClimber extends Command {
   public void initialize() {
     if (RobotContainer.climber.getCurrentAngle() > 100) {
       ClimberCmds.configureSoftLimits(
-          SSConstants.Climber.MIN_ANGLE_CLIMBING, SSConstants.Climber.MAX_ANGLE_CLIMBING);
+          SetpointConstants.Climber.MIN_ANGLE_CLIMBING, SetpointConstants.Climber.MAX_ANGLE_CLIMBING);
     }
   }
 

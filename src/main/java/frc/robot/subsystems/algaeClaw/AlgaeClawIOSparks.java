@@ -7,7 +7,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.util.Units;
-import frc.robot.SSConstants;
+import frc.robot.SetpointConstants;
 import frc.robot.subsystems.constants.AlgaeClawConstants;
 
 /** For the first implementation, the robot controls AlgaeClaw and Algae with a single NEO */
@@ -49,6 +49,6 @@ public class AlgaeClawIOSparks implements AlgaeClawIO {
   private boolean hasAlgae() {
     return debouncer.calculate(
         motor.getOutputCurrent()
-            > SSConstants.AlgaeClaw.ALGAE_DETECTED_CURRENT_LIMIT.getAsDouble());
+            > SetpointConstants.AlgaeClaw.ALGAE_DETECTED_CURRENT_LIMIT.getAsDouble());
   }
 }

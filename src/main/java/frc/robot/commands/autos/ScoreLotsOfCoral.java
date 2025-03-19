@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
-import frc.robot.SSConstants;
+import frc.robot.SetpointConstants;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
@@ -85,11 +85,11 @@ public class ScoreLotsOfCoral {
                 SuperStructure.L4.withDeadline(Commands.waitSeconds(0.5)),
                 Commands.print("L4 Done"),
                 // 2) Score Coral
-                Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                Commands.waitSeconds(SetpointConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 Commands.print("Scoring Coral"),
                 EndEffector.CORAL_SCORE,
                 // TODO: Tune down
-                Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+                Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE, reefEToSource.cmd())));
 
@@ -136,7 +136,7 @@ public class ScoreLotsOfCoral {
                 Commands.print("2Scoring Coral"),
                 EndEffector.CORAL_SCORE,
                 // TODO: Tune down
-                Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+                Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE, reefCToSource.cmd())));
     // Commands.sequence(

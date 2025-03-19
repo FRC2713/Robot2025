@@ -400,7 +400,7 @@ public class RobotContainer {
     driver
         .leftTrigger(0.1)
         .whileTrue(
-            new Climb(() -> -1 * driver.getLeftTriggerAxis(), SSConstants.Climber.SERVO_POS_ON))
+            new Climb(() -> -1 * driver.getLeftTriggerAxis(), SetpointConstants.Climber.SERVO_POS_ON))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
 
     // Score Coral
@@ -446,7 +446,7 @@ public class RobotContainer {
         .onTrue(
             DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem,
-                DriveCommands.inch(driveSubsystem, SSConstants.Drive.INCH_SPEED),
+                DriveCommands.inch(driveSubsystem, SetpointConstants.Drive.INCH_SPEED),
                 "Inch Left"))
         // DriveCommands.changeDefaultDriveCommand(
         //     driveSubsystem,
@@ -471,7 +471,7 @@ public class RobotContainer {
             DriveCommands.changeDefaultDriveCommand(
                 driveSubsystem,
                 DriveCommands.inch(
-                    driveSubsystem, () -> -1 * SSConstants.Drive.INCH_SPEED.getAsDouble()),
+                    driveSubsystem, () -> -1 * SetpointConstants.Drive.INCH_SPEED.getAsDouble()),
                 "Inch Right"))
         // DriveCommands.changeDefaultDriveCommand(
         //     driveSubsystem,
@@ -581,7 +581,7 @@ public class RobotContainer {
                 SuperStructure.CLIMBING_CONF));
     operator
         .leftTrigger(0.1)
-        .whileTrue(new MoveClimber(operator::getLeftTriggerAxis, SSConstants.Climber.SERVO_POS_OFF))
+        .whileTrue(new MoveClimber(operator::getLeftTriggerAxis, SetpointConstants.Climber.SERVO_POS_OFF))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
     operator
         .rightTrigger(0.1)
@@ -589,12 +589,12 @@ public class RobotContainer {
             Commands.sequence(
                 Commands.either(
                     ClimberCmds.configureSoftLimits(
-                        SSConstants.Climber.MIN_ANGLE_CLIMBING,
-                        SSConstants.Climber.MAX_ANGLE_CLIMBING),
+                        SetpointConstants.Climber.MIN_ANGLE_CLIMBING,
+                        SetpointConstants.Climber.MAX_ANGLE_CLIMBING),
                     Commands.none(),
                     () -> climber.getCurrentAngle() > 100),
                 new MoveClimber(
-                    () -> -1 * operator.getRightTriggerAxis(), SSConstants.Climber.SERVO_POS_ON)))
+                    () -> -1 * operator.getRightTriggerAxis(), SetpointConstants.Climber.SERVO_POS_ON)))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
 
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF);

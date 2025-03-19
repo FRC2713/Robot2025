@@ -4,7 +4,7 @@ import frc.robot.subsystems.constants.ClimberConstants;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 
-public class SSConstants {
+public class SetpointConstants {
   public class Elevator {
     public static final LoggedTunableNumber STARTING_HEIGHT =
         new LoggedTunableNumber("Elevator/SS/Starting Height", 0);

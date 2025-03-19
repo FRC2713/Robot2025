@@ -2,7 +2,7 @@ package frc.robot.commands.superstructure;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.SSConstants;
+import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
@@ -57,7 +57,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
         name,
         () -> false,
         () -> 0,
-        SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
+        SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
         elevatorTarget,
         shoulderTarget,
         wristTarget);
