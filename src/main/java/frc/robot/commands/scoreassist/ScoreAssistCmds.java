@@ -25,11 +25,22 @@ public class ScoreAssistCmds {
                 exectuteDrive(),
                 ScoreAssistCmds::shouldUsePath),
             // 3) move ss for given location
-            RobotContainer.scoreAssist.getCurrentLevelTarget().getPrepCommand().get()),
+            new InstantCommand(
+                () ->
+                    RobotContainer.scoreAssist
+                        .getCurrentLevelTarget()
+                        .getPrepCommand()
+                        .get()
+                        .schedule())),
         // 4) Finish ScoreAssist and Score!
         stop(),
-        RobotContainer.scoreAssist.getCurrentLevelTarget().getSsCommand().get(),
-        SuperStructure.CORAL_SCORE.getCommand());
+        new InstantCommand(
+            () ->
+                RobotContainer.scoreAssist
+                    .getCurrentLevelTarget()
+                    .getSsCommand()
+                    .get()
+                    .andThen(SuperStructure.CORAL_SCORE.getCommand()).schedule()));
   }
 
   public static Command exectuteInAuto(ScoreLoc scoreLoc) {
