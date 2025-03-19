@@ -1,9 +1,17 @@
-package frc.robot.commands;
+package frc.robot.commands.superstructure;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.SSConstants;
+import frc.robot.commands.AlgaeClawCmds;
+import frc.robot.commands.ElevatorCmds;
+import frc.robot.commands.PivotCmds;
+import frc.robot.commands.RollerCmds;
+import frc.robot.commands.ShoulderCmds;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import org.littletonrobotics.junction.Logger;
 
 public class SetAllDOFS extends ParallelCommandGroup {
 
@@ -17,6 +25,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
    * @param wristTarget
    */
   public SetAllDOFS(
+      String name,
       BooleanSupplier intakingCoral,
       DoubleSupplier coralSpeed,
       DoubleSupplier algaeSpeed,
@@ -24,6 +33,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
       DoubleSupplier shoulderTarget,
       DoubleSupplier wristTarget) {
     this.addCommands(
+        new InstantCommand(() -> Logger.recordOutput("Active SS", name)),
         RollerCmds.setEnableLimitSwitch(intakingCoral),
         RollerCmds.setSpeedAndWait(coralSpeed),
         AlgaeClawCmds.setSpeedAndWait(algaeSpeed),
@@ -39,8 +49,12 @@ public class SetAllDOFS extends ParallelCommandGroup {
    * @param wristTarget
    */
   public SetAllDOFS(
-      DoubleSupplier elevatorTarget, DoubleSupplier shoulderTarget, DoubleSupplier wristTarget) {
+      String name,
+      DoubleSupplier elevatorTarget,
+      DoubleSupplier shoulderTarget,
+      DoubleSupplier wristTarget) {
     this(
+        name,
         () -> false,
         () -> 0,
         SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
@@ -57,10 +71,11 @@ public class SetAllDOFS extends ParallelCommandGroup {
    * @param wristTarget
    */
   public SetAllDOFS(
+      String name,
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
       DoubleSupplier shoulderTarget,
       DoubleSupplier wristTarget) {
-    this(() -> false, () -> 0, algaeSpeed, elevatorTarget, shoulderTarget, wristTarget);
+    this(name, () -> false, () -> 0, algaeSpeed, elevatorTarget, shoulderTarget, wristTarget);
   }
 }

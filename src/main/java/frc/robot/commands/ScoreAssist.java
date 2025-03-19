@@ -204,10 +204,10 @@ public class ScoreAssist {
                             //     Commands.sequence(
                             //         Commands.waitSeconds(
                             //             SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                            //         SuperStructure.CORAL_SCORE.getCommand(),
+                            //         SuperStructure.CORAL_SCORE,
                             //         Commands.waitSeconds(
                             //             SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
-                            //         SuperStructure.SOURCE_CORAL_INTAKE.getCommand()))
+                            //         SuperStructure.SOURCE_CORAL_INTAKE))
                             .schedule();
                       }
                     }

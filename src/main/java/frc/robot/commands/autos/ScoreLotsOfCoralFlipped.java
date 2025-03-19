@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
-import frc.robot.commands.EndEffector;
 import frc.robot.commands.ScoreAssist;
-import frc.robot.commands.SuperStructure;
+import frc.robot.commands.superstructure.EndEffector;
+import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
 import frc.robot.util.ScoreLoc;
@@ -41,7 +41,7 @@ public class ScoreLotsOfCoralFlipped {
             Commands.sequence(
                 new InstantCommand(() -> System.out.println("Score Lots of Coral started")),
                 RHRUtil.resetRotationIfReal(startToReefJTraj.getInitialPose().get()),
-                Commands.parallel(SuperStructure.L4_PREP.getCommand(), startToReefJTraj.cmd()),
+                Commands.parallel(SuperStructure.L4_PREP, startToReefJTraj.cmd()),
                 Commands.print("Shoulder in position & trajectory started")));
 
     // When at the reef, score and go to source
@@ -58,29 +58,28 @@ public class ScoreLotsOfCoralFlipped {
                             .goReefTracker(driveSubsystem)
                             .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
                         new InstantCommand(() -> driveSubsystem.stop())),
-                    SuperStructure.L4.getCommand()),
+                    SuperStructure.L4),
                 // 2) Score Coral
                 ScoreAssist.getInstance().waitUntilFinished(1.6),
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                EndEffector.CORAL_SCORE.getCommand(),
+                EndEffector.CORAL_SCORE,
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
-                Commands.parallel(
-                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefJToSource.cmd())));
+                Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE, reefJToSource.cmd())));
 
     // When the trajectory is done, intake; then go to reef B
     reefJToSource
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
+                SuperStructure.SOURCE_CORAL_INTAKE,
                 Commands.race(
                     new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral()),
                     Commands.waitSeconds(1.0)),
                 sourceToReefL.cmd()));
 
     // Prep elevator along the way
-    // sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L4_PREP.getCommand());
+    // sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L4_PREP);
     // Once at reef B, score and go to source
     sourceToReefL
         .done()
@@ -95,12 +94,11 @@ public class ScoreLotsOfCoralFlipped {
                             .goReefTracker(driveSubsystem)
                             .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
                         new InstantCommand(() -> driveSubsystem.stop())),
-                    SuperStructure.L4.getCommand()),
+                    SuperStructure.L4),
                 // 2) Score Coral
-                EndEffector.CORAL_SCORE.getCommand(),
+                EndEffector.CORAL_SCORE,
                 // 3) Begin driving to source
-                Commands.parallel(
-                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefLToSource.cmd())));
+                Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE, reefLToSource.cmd())));
 
     return routine;
   }

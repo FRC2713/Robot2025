@@ -27,12 +27,10 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.EndEffector;
 import frc.robot.commands.ReefAlign;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SourceAlign;
-import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.CenterAutoPineTree;
 import frc.robot.commands.autos.CoralAndAlgaeAuto;
 import frc.robot.commands.autos.DriveTesting;
@@ -41,6 +39,8 @@ import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.commands.autos.ScoreLotsOfCoralV2;
 import frc.robot.commands.climber.Climb;
 import frc.robot.commands.climber.MoveClimber;
+import frc.robot.commands.superstructure.EndEffector;
+import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
@@ -375,7 +375,7 @@ public class RobotContainer {
     // Intake Coral
     driver
         .leftBumper()
-        .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
+        .onTrue(SuperStructure.SOURCE_CORAL_INTAKE)
         .onFalse(RollerCmds.setSpeed(() -> 0));
 
     // Enable/disable sourcealign
@@ -384,7 +384,7 @@ public class RobotContainer {
         .onTrue(
             Commands.parallel(
                 Commands.runOnce(() -> RobotContainer.disableSourceAlign = false),
-                SuperStructure.SOURCE_CORAL_INTAKE.getCommand()))
+                SuperStructure.SOURCE_CORAL_INTAKE))
         .onFalse(
             Commands.parallel(
                 Commands.runOnce(() -> RobotContainer.disableSourceAlign = true),
@@ -431,8 +431,8 @@ public class RobotContainer {
     // Grab Algae
     driver
         .rightTrigger(0.2)
-        .onTrue(Commands.sequence(EndEffector.CORAL_SCORE.getCommand()))
-        .onFalse(SuperStructure.STARTING_CONF.getCommand());
+        .onTrue(Commands.sequence(EndEffector.CORAL_SCORE))
+        .onFalse(SuperStructure.STARTING_CONF);
 
     // // Score Algae
     // // just spit the algae, it's up to the operator to put it in processor, intake, or barge pose
@@ -549,10 +549,10 @@ public class RobotContainer {
     // driver.a().onTrue(ScoreAssist.getInstance().goReefTracker(RobotContainer.driveSubsystem));
 
     // Operator Controls
-    operator.a().onTrue(SuperStructure.L1.getCommand());
-    operator.b().onTrue(SuperStructure.L2.getCommand());
-    operator.y().onTrue(SuperStructure.L3.getCommand());
-    operator.rightBumper().onTrue(SuperStructure.L4.getCommand());
+    operator.a().onTrue(SuperStructure.L1);
+    operator.b().onTrue(SuperStructure.L2);
+    operator.y().onTrue(SuperStructure.L3);
+    operator.rightBumper().onTrue(SuperStructure.L4);
 
     climbPrepTrigger.onTrue(
         Commands.parallel(
@@ -564,7 +564,7 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Slow Control"),
-            SuperStructure.CLIMBING_CONF.getCommand()));
+            SuperStructure.CLIMBING_CONF));
 
     operator
         .start()
@@ -578,7 +578,7 @@ public class RobotContainer {
                         () -> -driver.getLeftX(),
                         () -> -driver.getRightX()),
                     "Slow Control"),
-                SuperStructure.CLIMBING_CONF.getCommand()));
+                SuperStructure.CLIMBING_CONF));
     operator
         .leftTrigger(0.1)
         .whileTrue(new MoveClimber(operator::getLeftTriggerAxis, SSConstants.Climber.SERVO_POS_OFF))
@@ -597,7 +597,7 @@ public class RobotContainer {
                     () -> -1 * operator.getRightTriggerAxis(), SSConstants.Climber.SERVO_POS_ON)))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
 
-    operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());
+    operator.leftBumper().onTrue(SuperStructure.STARTING_CONF);
   }
 
   public void disabledPeriodic() {

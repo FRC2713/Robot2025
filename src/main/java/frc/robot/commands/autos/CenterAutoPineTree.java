@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
-import frc.robot.commands.EndEffector;
 import frc.robot.commands.ScoreAssist;
-import frc.robot.commands.SuperStructure;
+import frc.robot.commands.superstructure.EndEffector;
+import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
 import frc.robot.util.ScoreLoc;
@@ -57,7 +57,7 @@ public class CenterAutoPineTree {
                             startToReefETraj.getInitialPose().get());
                       }
                     }),
-                Commands.parallel(SuperStructure.L4_PREP.getCommand(), startToReefETraj.cmd()),
+                Commands.parallel(SuperStructure.L4_PREP, startToReefETraj.cmd()),
                 Commands.print("Shoulder in position & trajectory started")));
 
     // When at the reef, score and go to source
@@ -81,16 +81,15 @@ public class CenterAutoPineTree {
                 new InstantCommand(() -> driveSubsystem.stop()),
                 Commands.print("driveSubsystem stop thing Done"),
                 Commands.print("L4"),
-                SuperStructure.L4.getCommand().withDeadline(Commands.waitSeconds(2)),
+                SuperStructure.L4.withDeadline(Commands.waitSeconds(2)),
                 Commands.print("L4 Done"),
                 // 2) Score Coral
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 Commands.print("Scoring Coral"),
-                EndEffector.CORAL_SCORE.getCommand(),
+                EndEffector.CORAL_SCORE,
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
-                Commands.parallel(
-                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefEToSource.cmd())));
+                Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE, reefEToSource.cmd())));
 
     // When the trajectory is done, intake; then go to reef B
     // reefEToSource
@@ -98,14 +97,14 @@ public class CenterAutoPineTree {
     //     .onTrue(
     //         Commands.sequence(
     //             new InstantCommand(() -> driveSubsystem.stop()),
-    //             SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
+    //             SuperStructure.SOURCE_CORAL_INTAKE,
     //             Commands.race(
     //                 new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral()),
     //                 Commands.waitSeconds(2.0)),
     //             sourceToReefC.cmd()));
 
     // Prep elevator along the way
-    // sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L4_PREP.getCommand());
+    // sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L4_PREP);
     // Once at reef B, score and go to source
     // sourceToReefC
     //     .done()
@@ -127,16 +126,16 @@ public class CenterAutoPineTree {
     //             new InstantCommand(() -> driveSubsystem.stop()),
     //             Commands.print("2driveSubsystem stop thing Done"),
     //             Commands.print("2L4"),
-    //             SuperStructure.L4.getCommand().withDeadline(Commands.waitSeconds(2)),
+    //             SuperStructure.L4.withDeadline(Commands.waitSeconds(2)),
     //             Commands.print("2L4 Done"),
     //             // 2) Score Coral
     //             Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
     //             Commands.print("2Scoring Coral"),
-    //             SuperStructure.CORAL_SCORE.getCommand(),
+    //             SuperStructure.CORAL_SCORE,
     //             Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
     //             // 3) Begin driving to source
     //             Commands.parallel(
-    //                 SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefCToSource.cmd())));
+    //                 SuperStructure.SOURCE_CORAL_INTAKE, reefCToSource.cmd())));
     // Commands.sequence(
     //     // 1) Finish off trajectory with score assist, in parallel move SS to L4
     //     Commands.parallel(
@@ -147,12 +146,12 @@ public class CenterAutoPineTree {
     //                 .goReefTracker(driveSubsystem)
     //                 .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
     //             new InstantCommand(() -> driveSubsystem.stop()))),
-    //     SuperStructure.L4.getCommand(),
+    //     SuperStructure.L4,
     //     // 2) Score Coral
-    //     SuperStructure.CORAL_SCORE.getCommand(),
+    //     SuperStructure.CORAL_SCORE,
     //     // 3) Begin driving to source
     //     Commands.parallel(
-    //         SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefCToSource.cmd())));
+    //         SuperStructure.SOURCE_CORAL_INTAKE, reefCToSource.cmd())));
 
     return routine;
   }
