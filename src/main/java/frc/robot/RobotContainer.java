@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AutoScore;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ReefAlign;
@@ -116,6 +117,7 @@ public class RobotContainer {
   public static Vision visionsubsystem;
   public static boolean disableReefAlign = true;
   public static boolean disableSourceAlign = true;
+  private AutoScore autoScore;
 
   public RobotContainer() {
     // Start subsystems
@@ -273,6 +275,7 @@ public class RobotContainer {
 
     reefTracker = new ReefTracker(driveSubsystem);
     doScoreTrigger = new Trigger(() -> reefTracker.isDoScore());
+    autoScore = new AutoScore(driveSubsystem);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -423,12 +426,10 @@ public class RobotContainer {
     // Score Coral
     driver
         .rightBumper()
-        .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem, reefTracker, "ScoreAssistReefTracker"))
+        .onTrue(new InstantCommand(() -> autoScore.getCommand().schedule()))
         .onFalse(
             Commands.parallel(
-                Commands.runOnce(() -> reefTracker.end(false)),
+                // Commands.runOnce(() -> reefTracker.end(false)),
                 DriveCommands.changeDefaultDriveCommand(
                     driveSubsystem,
                     DriveCommands.joystickDrive(

@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.ScoreLevel;
@@ -148,5 +149,22 @@ public class ReefTracker extends Command {
             .getTranslation()
             .getDistance(reefTrackerLoc.getNode().getRobotAlignmentPose().getTranslation())
         < 1.25;
+  }
+
+  private static boolean shouldDoScoreAssist(ScoreNode node) {
+    return RobotContainer.driveSubsystem
+            .getPose()
+            .getTranslation()
+            .getDistance(node.getRobotAlignmentPose().getTranslation())
+        < 1.25;
+  }
+
+  public static Command create(ScoreLoc loc) {
+    return Commands.either(
+        new ScoreAssist(loc.getNode(), RobotContainer.driveSubsystem),
+        Commands.sequence(
+            new PathScore(RobotContainer.driveSubsystem, loc.getNode()),
+            new ScoreAssist(loc.getNode(), RobotContainer.driveSubsystem)),
+        () -> shouldDoScoreAssist(loc.getNode()));
   }
 }
