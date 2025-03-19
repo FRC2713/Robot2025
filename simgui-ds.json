@@ -15,10 +15,9 @@
           "decKey": 83,
           "incKey": 87
         },
+        {},
         {
-          "incKey": 80
-        },
-        {
+          "decKey": 80,
           "incKey": 79
         }
       ],

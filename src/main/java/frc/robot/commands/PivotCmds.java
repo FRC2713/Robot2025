@@ -13,7 +13,7 @@ public class PivotCmds {
     return setAngle(() -> targetAngle);
   }
 
-  public static Command avoidSelfCollision() {
+  public static Command avoidReefCollision() {
     return Commands.either(
         setAngleAndWait(35), Commands.none(), () -> RobotContainer.pivot.getCurrentAngle() < -120);
   }

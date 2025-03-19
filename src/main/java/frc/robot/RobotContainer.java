@@ -26,11 +26,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.SuperStructure;
+import frc.robot.commands.autos.CenterAutoPineTree;
 import frc.robot.commands.autos.CoralAndAlgaeAuto;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
@@ -38,8 +38,8 @@ import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.commands.scoreassist.ScoreAssistCmds;
 import frc.robot.generated.TunerConstants;
 import frc.robot.scoreassist.ReefAlign;
-import frc.robot.scoreassist.ScoreAssist;
-import frc.robot.scoreassist.ScoreAssistOld;
+import frc.robot.scoreassist.ScoreAssist3;
+import frc.robot.scoreassist.SourceAlign;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
@@ -91,14 +91,14 @@ public class RobotContainer {
   public static Rollers rollers;
   public static AlgaeClaw algaeClaw;
   public static Climber climber;
+
   // Xbox Controllers
   private final CommandXboxController driver = new CommandXboxController(0);
   private static final CommandXboxController operator = new CommandXboxController(1);
-  private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
-  private static boolean hasRanAuto = false;
 
   // Dashboard inputs
   public final AutoChooser autoChooser;
+  private static boolean hasRanAuto = false;
 
   public static final RHRHolonomicDriveController otfController =
       new RHRHolonomicDriveController(
@@ -109,9 +109,16 @@ public class RobotContainer {
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
-  public static ScoreAssist scoreAssist;
+
+  // For teleop automation
+  public static ScoreAssist3 scoreAssist;
   public static Vision visionsubsystem;
   public static boolean disableReefAlign = true;
+  public static boolean disableSourceAlign = true;
+  private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
+  private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
+  // private Trigger climbPrepTrigger = new
+  // Trigger(ScoreAssistOld.getInstance()::shouldClimbPrep);
 
   public RobotContainer() {
     // Start subsystems
@@ -226,6 +233,8 @@ public class RobotContainer {
     // Add options to the chooser
     // I add a * to the name when it generates its starting trajectory
     autoChooser.addRoutine(
+        "Center Pine Tree", () -> CenterAutoPineTree.getRoutine(choreoAutoFactory, driveSubsystem));
+    autoChooser.addRoutine(
         "Score Lots Of Coral",
         () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));
     autoChooser.addRoutine(
@@ -261,17 +270,19 @@ public class RobotContainer {
     RobotModeTriggers.autonomous()
         .whileTrue(
             Commands.sequence(
-                    new InstantCommand(() -> RobotContainer.hasRanAuto = false),
-                    autoChooser.selectedCommandScheduler())
-                .finallyDo(() -> RobotContainer.hasRanAuto = true));
+                new InstantCommand(() -> RobotContainer.hasRanAuto = true),
+                autoChooser.selectedCommandScheduler()));
 
-    scoreAssist = new ScoreAssist();
+    scoreAssist = new ScoreAssist3();
 
     // Configure the button bindings
     configureButtonBindings();
   }
 
   private void configureButtonBindings() {
+    // Default command, normal field-relative drive
+    setToNormalDrive();
+
     reefAlignTrigger
         .onTrue(
             DriveCmds.changeDefaultDriveCommand(
@@ -281,22 +292,20 @@ public class RobotContainer {
                     () -> -driver.getLeftY(),
                     () -> -driver.getLeftX(),
                     () -> ReefAlign.getInstance().inZone().orElse(driveSubsystem.getRotation())),
-                "Drive Align To Reef"))
-        .onFalse(
-            Commands.either(
-                Commands.none(),
-                DriveCmds.changeDefaultDriveCommand(
-                    driveSubsystem,
-                    DriveCmds.joystickDrive(
-                        driveSubsystem,
-                        () -> -driver.getLeftY(),
-                        () -> -driver.getLeftX(),
-                        () -> -driver.getRightX()),
-                    "Default Joystick Drive"),
-                () -> RobotContainer.disableReefAlign));
+                "Align To Reef"))
+        .onFalse(setToNormalDriveCmd());
 
-    // Default command, normal field-relative drive
-    setToNormalDrive();
+    sourceAlignTrigger
+        .onTrue(
+            DriveCmds.changeDefaultDriveCommand(
+                driveSubsystem,
+                DriveCmds.joystickDriveAtAngle(
+                    driveSubsystem,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX(),
+                    () -> SourceAlign.getInstance().inZone().orElse(driveSubsystem.getRotation())),
+                "Align To Source"))
+        .onFalse(setToNormalDriveCmd());
 
     // Reset gyro to 0 deg when start button is pressed
     driver
@@ -340,6 +349,39 @@ public class RobotContainer {
         .onTrue(ScoreAssistCmds.exectuteAllTargets())
         .onFalse(Commands.sequence(ScoreAssistCmds.stop()));
 
+    // Enable/disable sourcealign
+    driver
+        .a()
+        .onTrue(
+            Commands.parallel(
+                Commands.runOnce(() -> RobotContainer.disableSourceAlign = false),
+                SuperStructure.SOURCE_CORAL_INTAKE.getCommand()))
+        .onFalse(
+            Commands.parallel(
+                Commands.runOnce(() -> RobotContainer.disableSourceAlign = true),
+                RollerCmds.setSpeed(() -> 0)));
+
+    // Enable/disable reefalign
+    driver
+        .b()
+        .onTrue(Commands.runOnce(() -> RobotContainer.disableReefAlign = false))
+        .onFalse(Commands.runOnce(() -> RobotContainer.disableReefAlign = true));
+
+    // Climber
+    driver
+        .leftTrigger(0.1)
+        .whileTrue(
+            Commands.sequence(
+                Commands.either(
+                    ClimberCmds.configureSoftLimits(
+                        SSConstants.Climber.MIN_ANGLE_CLIMBING,
+                        SSConstants.Climber.MAX_ANGLE_CLIMBING),
+                    Commands.none(),
+                    () -> climber.getCurrentAngle() > 100),
+                ClimberCmds.moveClimber(
+                    () -> -1 * driver.getLeftTriggerAxis(), SSConstants.Climber.SERVO_POS_ON)))
+        .onFalse(ClimberCmds.setVoltage(() -> 0));
+
     // Grab Algae
     driver
         .rightTrigger(0.2)
@@ -353,17 +395,9 @@ public class RobotContainer {
     //     .onTrue(AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
     //     .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
-    // Do both!
-    driver
-        .x()
-        .onTrue(SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand())
-        .onFalse(
-            Commands.sequence(
-                AlgaeClawCmds.setSpeedIfNoAlgae(() -> 0), RollerCmds.setSpeed(() -> 0)));
-
     // Uncomment to use POV buttons for heading controller testing
     // driver
-    //     .povLeft()
+    //     .x()
     //     .onTrue(
     //         DriveCommands.changeDefaultDriveCommand(
     //             driveSubsystem,
@@ -375,7 +409,7 @@ public class RobotContainer {
     //             "Heading Controller"))
     //     .onFalse(normalDriveCmd());
     // driver
-    //     .povRight()
+    //     .a()
     //     .onTrue(
     //         DriveCommands.changeDefaultDriveCommand(
     //             driveSubsystem,
@@ -406,25 +440,23 @@ public class RobotContainer {
                 "Inch Right"))
         .onFalse(setToNormalDriveCmd());
 
-    driver
-        .x()
-        .onTrue(
-            DriveCmds.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCmds.joystickDriveAtAngle(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> Rotation2d.fromDegrees(RobotContainer.driveSubsystem.getAngleToReef())),
-                "Heading Controller"))
-        .onFalse(setToNormalDriveCmd());
-    driver.a().onTrue(ScoreAssistOld.getInstance().goReefTracker(RobotContainer.driveSubsystem));
-
     // Operator Controls
     operator.a().onTrue(SuperStructure.L1.getCommand());
     operator.b().onTrue(SuperStructure.L2.getCommand());
     operator.y().onTrue(SuperStructure.L3.getCommand());
     operator.rightBumper().onTrue(SuperStructure.L4.getCommand());
+
+    // climbPrepTrigger.onTrue(
+    //     Commands.parallel(
+    //         DriveCommands.changeDefaultDriveCommand(
+    //             driveSubsystem,
+    //             DriveCommands.joystickDriveSlow(
+    //                 driveSubsystem,
+    //                 () -> -driver.getLeftY(),
+    //                 () -> -driver.getLeftX(),
+    //                 () -> -driver.getRightX()),
+    //             "Slow Control"),
+    //         SuperStructure.CLIMB_PREP.getCommand()));
 
     operator
         .start()
@@ -463,15 +495,17 @@ public class RobotContainer {
     rollers.setRPM(0);
     shoulder.setTargetAngle(shoulder.getCurrentAngle());
     if (visionsubsystem.getPose() != null) {
-      if (!hasRanAuto) {
+      if (!hasRanAuto && visionsubsystem.getPose().getTranslation().getX() != 0) {
         driveSubsystem.setPose(
             new Pose2d(
                 visionsubsystem.getPose().getTranslation(),
                 AllianceFlipUtil.apply(Rotation2d.fromRadians(Math.PI))));
-      } else {
-        driveSubsystem.setPose(
-            new Pose2d(visionsubsystem.getPose().getTranslation(), driveSubsystem.getRotation()));
       }
+      //   else {
+      //     driveSubsystem.setPose(
+      //         new Pose2d(visionsubsystem.getPose().getTranslation(),
+      // driveSubsystem.getRotation()));
+      //   }
     }
   }
 

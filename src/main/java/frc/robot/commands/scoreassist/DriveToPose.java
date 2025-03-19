@@ -12,13 +12,9 @@ import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ScoreAssistConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import java.util.function.Supplier;
-import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 
 public class DriveToPose extends Command {
-
-  @Getter private double error = Double.MAX_VALUE;
-  @Getter private double rotError = Double.MAX_VALUE;
 
   private Supplier<Pose2d> targetPose;
 

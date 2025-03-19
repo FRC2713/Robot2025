@@ -13,7 +13,6 @@
 
 package frc.robot.commands;
 
-import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -27,8 +26,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.HeadingControllerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import java.text.DecimalFormat;
@@ -68,7 +65,7 @@ public class DriveCmds {
     Rotation2d linearDirection = new Rotation2d(Math.atan2(y, x));
 
     // Square magnitude for more precise control
-    linearMagnitude = linearMagnitude * linearMagnitude;
+    linearMagnitude = Math.abs(linearMagnitude * linearMagnitude * linearMagnitude);
 
     // Return new linear velocity
     return new Pose2d(new Translation2d(), linearDirection)
@@ -148,8 +145,8 @@ public class DriveCmds {
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds =
               new ChassisSpeeds(
-                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getX() * (drive.getMaxLinearSpeedMetersPerSec() * 0.8),
+                  linearVelocity.getY() * (drive.getMaxLinearSpeedMetersPerSec() * 0.8),
                   omega * drive.getMaxAngularSpeedRadPerSec());
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()
@@ -183,13 +180,13 @@ public class DriveCmds {
 
           // Square rotation value for more precise control
           omega = Math.copySign(omega * omega, omega);
-
+          double maxSpeed = 0.5;
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds =
               new ChassisSpeeds(
-                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec() * 0.5,
-                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec() * 0.5,
-                  omega * drive.getMaxAngularSpeedRadPerSec() * 0.5);
+                  linearVelocity.getX() * maxSpeed,
+                  linearVelocity.getY() * maxSpeed,
+                  omega * drive.getMaxAngularSpeedRadPerSec() * 0.3);
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Red;
@@ -236,8 +233,8 @@ public class DriveCmds {
               // Convert to field relative speeds & send command
               ChassisSpeeds speeds =
                   new ChassisSpeeds(
-                      linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                      linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                      linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec() * 0.8,
+                      linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec() * 0.8,
                       omega);
               boolean isFlipped =
                   DriverStation.getAlliance().isPresent()
@@ -255,29 +252,6 @@ public class DriveCmds {
         .beforeStarting(
             () ->
                 HeadingControllerConstants.angleController.reset(drive.getRotation().getRadians()));
-  }
-
-  public static Command buildOTFPath(
-      Pose2d targetPose, PathConstraints constraints, double goalEndVel, boolean disableTimeout) {
-    RHRPathFindingCommand cmd =
-        new RHRPathFindingCommand(
-            targetPose,
-            constraints,
-            RobotContainer.driveSubsystem::getPose,
-            RobotContainer.driveSubsystem::getChassisSpeeds,
-            (speeds, feedforwards) -> RobotContainer.driveSubsystem.runVelocity(speeds),
-            RobotContainer.otfController,
-            DriveConstants.pathPlannerConfig,
-            RobotContainer.driveSubsystem);
-
-    if (disableTimeout) cmd.disableTimeOut();
-
-    return cmd;
-  }
-
-  public static Command buildOTFPath(
-      Pose2d targetPose, PathConstraints constraints, double goalEndVel) {
-    return buildOTFPath(targetPose, constraints, goalEndVel, false);
   }
 
   /**

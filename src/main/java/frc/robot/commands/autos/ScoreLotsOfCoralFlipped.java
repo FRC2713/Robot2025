@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
 import frc.robot.commands.SuperStructure;
-import frc.robot.scoreassist.ScoreAssistOld;
+import frc.robot.commands.scoreassist.ScoreAssistCmds;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
 import frc.robot.util.ScoreLoc;
@@ -26,7 +26,7 @@ public class ScoreLotsOfCoralFlipped {
    * @return
    */
   public static AutoRoutine getRoutine(AutoFactory factory, Drivetrain driveSubsystem) {
-    AutoRoutine routine = factory.newRoutine("Score Lots of Coral");
+    AutoRoutine routine = factory.newRoutine("Score Lots of Coral Flipped");
 
     // Load the routine's trajectories
     AutoTrajectory startToReefJTraj = routine.trajectory("StartToReefJ");
@@ -49,18 +49,8 @@ public class ScoreLotsOfCoralFlipped {
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, in parallel move SS to L4
-                Commands.parallel(
-                    Commands.sequence(
-                        new InstantCommand(
-                            () -> ScoreAssistOld.getInstance().setReefTrackerLoc(ScoreLoc.J_FOUR)),
-                        ScoreAssistOld.getInstance()
-                            .goReefTracker(driveSubsystem)
-                            .withDeadline(ScoreAssistOld.getInstance().waitUntilFinished(1.0)),
-                        new InstantCommand(() -> driveSubsystem.stop())),
-                    SuperStructure.L4.getCommand()),
+                ScoreAssistCmds.exectuteInAuto(ScoreLoc.J_FOUR),
                 // 2) Score Coral
-                ScoreAssistOld.getInstance().waitUntilFinished(1.6),
-                Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
@@ -86,15 +76,7 @@ public class ScoreLotsOfCoralFlipped {
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, in parallel move SS to L4
-                Commands.parallel(
-                    Commands.sequence(
-                        new InstantCommand(
-                            () -> ScoreAssistOld.getInstance().setReefTrackerLoc(ScoreLoc.L_FOUR)),
-                        ScoreAssistOld.getInstance()
-                            .goReefTracker(driveSubsystem)
-                            .withDeadline(ScoreAssistOld.getInstance().waitUntilFinished(1.0)),
-                        new InstantCommand(() -> driveSubsystem.stop())),
-                    SuperStructure.L4.getCommand()),
+                ScoreAssistCmds.exectuteInAuto(ScoreLoc.L_FOUR),
                 // 2) Score Coral
                 SuperStructure.CORAL_SCORE.getCommand(),
                 // 3) Begin driving to source

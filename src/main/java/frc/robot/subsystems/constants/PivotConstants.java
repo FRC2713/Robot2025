@@ -74,11 +74,12 @@ public class PivotConstants {
               .expo_kV(kExponential_kV)
               .expo_kA(kExponential_kA));
 
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(175.166);
+  //   175.166
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(290.1953125 + 2);
   public static final double humanOffsetDegs = -55;
 
   public static final int mech2dWidth = 10;
   public static final Color8Bit mech2dColor = new Color8Bit(0, 0, 255);
 
-  public static final double AT_TARGET_GIVE_DEGS = 1;
+  public static final double AT_TARGET_GIVE_DEGS = 3;
 }

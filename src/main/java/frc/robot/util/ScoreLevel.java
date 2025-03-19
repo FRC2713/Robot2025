@@ -13,11 +13,11 @@ public enum ScoreLevel {
   FOUR(SuperStructure.L4_PREP::getCommand, SuperStructure.L4::getCommand);
 
   @Getter private Supplier<Command> prepCommand;
-  @Getter private Supplier<Command> scoreCommand;
+  @Getter private Supplier<Command> ssCommand;
 
-  private ScoreLevel(Supplier<Command> prepCommand, Supplier<Command> scoreCommand) {
+  private ScoreLevel(Supplier<Command> prepCommand, Supplier<Command> ssCommand) {
     this.prepCommand = prepCommand;
-    this.scoreCommand = scoreCommand;
+    this.ssCommand = ssCommand;
   }
 
   // public static Map<ScoreLevel, Command> createPrepCommandsMap() {

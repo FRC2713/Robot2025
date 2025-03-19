@@ -17,7 +17,7 @@ import org.littletonrobotics.junction.Logger;
  * Manages subscribing to network tables UI and maintaining the most up-to-date pose and
  * superstructure target
  */
-public class ScoreAssist {
+public class ScoreAssist3 {
 
   private final StringSubscriber reefTrackerSub =
       NetworkTableInstance.getDefault().getStringTopic("/scoreassist/goto").subscribe("none");

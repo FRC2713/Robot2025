@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.SuperStructure;
-import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
+import frc.robot.scoreassist.ScoreAssist3.ScoreDrivingMode;
 import frc.robot.util.ScoreLoc;
 
 public class ScoreAssistCmds {
@@ -15,7 +15,6 @@ public class ScoreAssistCmds {
         Commands.parallel(
             // 1) Activate
             start(),
-
             // 2) Drive to target in two parts
             Commands.sequence(
                 // a) drive close to target with path finding
@@ -26,7 +25,7 @@ public class ScoreAssistCmds {
             RobotContainer.scoreAssist.getCurrentLevelTarget().getPrepCommand().get()),
         // 4) Finish ScoreAssist and Score!
         stop(),
-        RobotContainer.scoreAssist.getCurrentLevelTarget().getScoreCommand().get(),
+        RobotContainer.scoreAssist.getCurrentLevelTarget().getSsCommand().get(),
         SuperStructure.CORAL_SCORE.getCommand());
   }
 
@@ -35,15 +34,15 @@ public class ScoreAssistCmds {
     return Commands.sequence(
         Commands.runOnce(() -> RobotContainer.scoreAssist.updateManually(scoreLoc)),
         Commands.parallel(
-            // Activate
+            // 1) Activate
             start(),
-            // Drive to given target
+            // 2) Drive to given target
             exectuteDrive(),
-            // move ss for given location
+            // 3) move ss for given location
             RobotContainer.scoreAssist.getCurrentLevelTarget().getPrepCommand().get()),
         // 4) Finish ScoreAssist and Score!
         stop(),
-        RobotContainer.scoreAssist.getCurrentLevelTarget().getScoreCommand().get(),
+        RobotContainer.scoreAssist.getCurrentLevelTarget().getSsCommand().get(),
         SuperStructure.CORAL_SCORE.getCommand());
   }
 

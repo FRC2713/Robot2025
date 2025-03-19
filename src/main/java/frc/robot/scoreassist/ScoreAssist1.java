@@ -29,10 +29,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.Logger;
 
-public class ScoreAssistOld {
+public class ScoreAssist1 {
   @Getter @Setter private Pose2d closestLocPose = null;
   public boolean hasStartedCommand = false;
-  private static ScoreAssistOld INSTANCE = null;
+  private static ScoreAssist1 INSTANCE = null;
   public double error = -1;
   private NetworkTableInstance inst = NetworkTableInstance.getDefault();
   private StringTopic topic = inst.getStringTopic("/scoreassist/goto");
@@ -40,13 +40,13 @@ public class ScoreAssistOld {
   public Optional<ScoreLoc> reefTrackerLoc = Optional.empty();
   private String lastGotoReceived = "none";
 
-  private ScoreAssistOld() {
+  private ScoreAssist1() {
     sub = topic.subscribe("none");
   }
 
-  public static ScoreAssistOld getInstance() {
+  public static ScoreAssist1 getInstance() {
     if (INSTANCE == null) {
-      INSTANCE = new ScoreAssistOld();
+      INSTANCE = new ScoreAssist1();
     }
     return INSTANCE;
   }
@@ -84,7 +84,7 @@ public class ScoreAssistOld {
 
   public Command waitUntilFinished(double timeoutSeconds) {
     return Commands.race(
-        new WaitUntilCommand(ScoreAssistOld.getInstance()::hasFinished),
+        new WaitUntilCommand(ScoreAssist1.getInstance()::hasFinished),
         Commands.waitSeconds(timeoutSeconds));
   }
 
@@ -163,7 +163,7 @@ public class ScoreAssistOld {
                         reefTrackerLoc
                             .get()
                             .getLevel()
-                            .getScoreCommand()
+                            .getSsCommand()
                             .get()
                             .andThen(
                                 Commands.sequence(

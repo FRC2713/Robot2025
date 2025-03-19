@@ -14,7 +14,7 @@ public enum SuperStructure {
           Commands.sequence(
               RollerCmds.setEnableLimitSwitch(true),
               RollerCmds.setSpeed(() -> 0),
-              PivotCmds.avoidSelfCollision(),
+              //   PivotCmds.avoidReefCollision(),
               Commands.parallel(
                   ElevatorCmds.setHeightAndWait(() -> 0), ShoulderCmds.setAngleAndWait(() -> -90)),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG))),
@@ -24,7 +24,7 @@ public enum SuperStructure {
           Commands.sequence(
               RollerCmds.setEnableLimitSwitch(true),
               RollerCmds.setSpeed(SSConstants.Roller.SOURCE_CORAL_INTAKE_SPEED),
-              PivotCmds.avoidSelfCollision(),
+              //   PivotCmds.avoidReefCollision(),
               Commands.parallel(
                   ElevatorCmds.setHeightAndWait(SSConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN),
                   ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG),
@@ -34,7 +34,7 @@ public enum SuperStructure {
       () ->
           Commands.sequence(
               AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
-              PivotCmds.avoidSelfCollision(),
+              //   PivotCmds.avoidReefCollision(),
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L1_HEIGHT_IN),
               Commands.parallel(
                   PivotCmds.setAngleAndWait(SSConstants.Pivot.L1_ANGLE_DEG),
@@ -43,7 +43,7 @@ public enum SuperStructure {
       () ->
           Commands.sequence(
               AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
-              PivotCmds.avoidSelfCollision(),
+              //   PivotCmds.avoidReefCollision(),
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_HEIGHT_IN),
               Commands.parallel(
                   PivotCmds.setAngleAndWait(SSConstants.Pivot.L2_ANGLE_DEG),
@@ -52,7 +52,7 @@ public enum SuperStructure {
       () ->
           Commands.sequence(
               AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
-              PivotCmds.avoidSelfCollision(),
+              //   PivotCmds.avoidReefCollision(),
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L3_HEIGHT_IN),
               Commands.parallel(
                   PivotCmds.setAngleAndWait(SSConstants.Pivot.L3_ANGLE_DEG),
@@ -61,16 +61,16 @@ public enum SuperStructure {
       () ->
           Commands.sequence(
               AlgaeClawCmds.setSpeed(() -> 0),
-              PivotCmds.avoidSelfCollision(),
+              //   PivotCmds.avoidReefCollision(),
               Commands.parallel(
                   ElevatorCmds.setHeight(SSConstants.Elevator.L4_PREP_HEIGHT_IN),
                   PivotCmds.setAngle(SSConstants.Pivot.L4_ANGLE_DEG),
                   ShoulderCmds.setAngle(SSConstants.Shoulder.L4_PREP_ANGLE_DEG)))),
   L4(
       () ->
-          Commands.sequence(
+          Commands.parallel(
               AlgaeClawCmds.setSpeed(() -> 0),
-              PivotCmds.avoidSelfCollision(),
+              //   PivotCmds.avoidReefCollision(),
               Commands.parallel(
                   ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L4_HEIGHT_IN),
                   PivotCmds.setAngleAndWait(SSConstants.Pivot.L4_ANGLE_DEG),

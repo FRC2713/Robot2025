@@ -18,10 +18,9 @@ public class DriveConstants {
 
   // positive values adjust the robots scoring pose to the right.
   public static final LoggedTunableNumber coralOffsetFromCenter =
-      new LoggedTunableNumber(
-          "Drive/coralOffsetFromCenter", edu.wpi.first.math.util.Units.inchesToMeters(2));
+      new LoggedTunableNumber("Drive/coralOffsetFromCenter", 0.05);
   public static final double driveBaseWidthWithBumpersMeters =
-      edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 7.0);
+      edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 9.0 + 4.5);
 
   public final class AutoConstants {
     public static final LoggedTunableGains xTrajectoryController =
@@ -34,9 +33,9 @@ public class DriveConstants {
 
   public final class OTFConstants {
     public static final PIDConstants translationPID =
-        new ControlGains().p(10.0).createPathPlannerGains();
+        new ControlGains().p(2.0).createPathPlannerGains();
     public static final PIDConstants rotationPID =
-        new ControlGains().p(10.0).createPathPlannerGains();
+        new ControlGains().p(1.5).createPathPlannerGains();
     public static final double translationTolerance = 0.01;
   }
 
