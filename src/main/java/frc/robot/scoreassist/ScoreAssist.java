@@ -136,7 +136,7 @@ public class ScoreAssist {
 
   // ScoreAssist will be done "assisting" when the robot gets close enough
   public boolean driveAssistIsDone() {
-    // TODO: also add min speed check
+    boolean slow = RobotContainer.driveSubsystem.getSpeed() < 0.1;
     boolean withinX = Math.abs(this.xError) < ScoreAssistConstants.assistXTolerance.getAsDouble();
     boolean withinY = Math.abs(this.yError) < ScoreAssistConstants.assistYTolerance.getAsDouble();
     boolean withinTheta =
@@ -146,7 +146,8 @@ public class ScoreAssist {
         && currentNodeTarget != null
         && withinX
         && withinY
-        && withinTheta;
+        && withinTheta
+        && slow;
   }
 
   public boolean shouldUsePath() {

@@ -19,9 +19,9 @@ public class PathfindToPose extends Command {
   private Drivetrain drive;
   private Command pathfindingCommand;
   private LoggedTunableNumber pathConstraintVelocityMPS =
-      new LoggedTunableNumber("ScoreAssist/Pathfind/maxVelocityMPS", 2.75);
+      new LoggedTunableNumber("ScoreAssist/Pathfind/maxVelocityMPS", 2.5);
   private LoggedTunableNumber pathConstraintaccel =
-      new LoggedTunableNumber("ScoreAssist/Pathfind/constraintAccel", 5.0);
+      new LoggedTunableNumber("ScoreAssist/Pathfind/constraintAccel", 4.0);
 
   /** Creates a new PathScore. */
   public PathfindToPose(Drivetrain drive, Supplier<Pose2d> node) {

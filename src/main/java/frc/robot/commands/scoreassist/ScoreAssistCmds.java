@@ -29,30 +29,32 @@ public class ScoreAssistCmds {
 
   public static Command exectuteCoralScore() {
     return Commands.sequence(
-        Commands.parallel(
-            start(), // 1) activate score assist
-            Commands.either(
-                Commands.sequence(
-                    executePath(), // 2a) path-find close to target
-                    exectuteDrive() // 2b) drive to target
-                    ),
-                exectuteDrive(),
-                RobotContainer.scoreAssist::shouldUsePath),
-            executePrep()), // 3) execute prep
-        stop(),
-        executeSS());
+            Commands.parallel(
+                start(), // 1) activate score assist
+                Commands.either(
+                    Commands.sequence(
+                        executePath(), // 2a) path-find close to target
+                        exectuteDrive() // 2b) drive to target
+                        ),
+                    exectuteDrive(),
+                    RobotContainer.scoreAssist::shouldUsePath),
+                executePrep()), // 3) execute prep
+            stop(),
+            executeSS())
+        .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
   public static Command exectuteCoralScoreInAuto(ScoreLoc scoreLoc) {
     // Note that during autonomous, ScoreAssist does not update via NT
     return Commands.sequence(
-        Commands.runOnce(() -> RobotContainer.scoreAssist.updateManually(scoreLoc)),
-        Commands.parallel(
-            start(), // 1) activate score assist
-            exectuteDrive(), // 2) drive to target
-            executePrep()), // 3) execute prep
-        stop(),
-        executeSS());
+            Commands.runOnce(() -> RobotContainer.scoreAssist.updateManually(scoreLoc)),
+            Commands.parallel(
+                start(), // 1) activate score assist
+                exectuteDrive(), // 2) drive to target
+                executePrep()), // 3) execute prep
+            stop(),
+            executeSS())
+        .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
   public static Command start() {

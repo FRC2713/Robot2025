@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCmds;
+import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.CenterAutoPineTree;
@@ -113,7 +114,7 @@ public class RobotContainer {
   // For teleop automation
   public static ScoreAssist scoreAssist;
   public static Vision visionsubsystem;
-  public static boolean disableReefAlign = true;
+  public static boolean disableReefAlign = false;
   public static boolean disableSourceAlign = true;
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
   private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
@@ -441,6 +442,9 @@ public class RobotContainer {
                     driveSubsystem, () -> -1 * SSConstants.Drive.INCH_SPEED.getAsDouble()),
                 "Inch Right"))
         .onFalse(setToNormalDriveCmd());
+
+    operator.povUp().onTrue(ElevatorCmds.setHeight(20));
+    operator.povDown().onTrue(ElevatorCmds.setHeight(5));
 
     // Operator Controls
     operator.a().onTrue(SuperStructure.L1.getCommand());

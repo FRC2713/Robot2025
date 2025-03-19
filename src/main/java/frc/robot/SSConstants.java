@@ -19,7 +19,7 @@ public class SSConstants {
         new LoggedTunableNumber("Elevator/SS/L3 Height", 18);
 
     public static final LoggedTunableNumber L4_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/L4 Height", 23);
+        new LoggedTunableNumber("Elevator/SS/L4 Height", 24);
     public static final LoggedTunableNumber L4_PREP_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 7);
 
@@ -81,7 +81,7 @@ public class SSConstants {
         new LoggedTunableNumber("Pivot/SS/L3 Angle", 35);
 
     public static final LoggedTunableNumber L4_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/L4 Angle", 32);
+        new LoggedTunableNumber("Pivot/SS/L4 Angle", 55);
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Barge Angle", -30);

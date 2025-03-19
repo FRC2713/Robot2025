@@ -17,10 +17,10 @@ public class ScoreAssistConstants {
           Units.degreesToRadians(720));
 
   public static final LoggedTunableGains assistGains =
-      new LoggedTunableGains("ScoreAssist", new ControlGains().p(2).d(0).trapezoidal(0.1, 0, 0));
+      new LoggedTunableGains("ScoreAssist", new ControlGains().p(7).d(0).trapezoidal(2.5, 5, 0));
 
   public static final LoggedTunableNumber assistXTolerance =
-      new LoggedTunableNumber("ScoreAssist/X Tolerance", Units.inchesToMeters(0.75));
+      new LoggedTunableNumber("ScoreAssist/X Tolerance", Units.inchesToMeters(1));
 
   public static final LoggedTunableNumber assistYTolerance =
       new LoggedTunableNumber("ScoreAssist/Y Tolerance", Units.inchesToMeters(2.5));

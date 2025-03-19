@@ -443,6 +443,12 @@ public class Drivetrain extends SubsystemBase {
     return gyroInputs.yawVelocityRadPerSec;
   }
 
+  @AutoLogOutput(key = "SwerveChassisSpeeds/speed")
+  public double getSpeed() {
+    var speeds = getChassisSpeeds().toTwist2d(0.02);
+    return Math.hypot(speeds.dx, speeds.dy);
+  }
+
   /** Returns the maximum linear speed in meters per sec. */
   public double getMaxLinearSpeedMetersPerSec() {
     return TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);

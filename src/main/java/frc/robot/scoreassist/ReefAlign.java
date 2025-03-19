@@ -73,6 +73,7 @@ public class ReefAlign {
         DriverStation.isTeleopEnabled()
             && RobotContainer.rollers.hasCoral()
             && !RobotContainer.disableReefAlign
+            && (RobotContainer.scoreAssist.mode == ScoreDrivingMode.INACTIVE)
             && inZone().isPresent();
 
     // Don't update the default command during ScoreAssist

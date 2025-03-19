@@ -20,20 +20,20 @@ public class DriveConstants {
   public static final LoggedTunableNumber coralOffsetFromCenter =
       new LoggedTunableNumber("Drive/coralOffsetFromCenter", 0.05);
   public static final double driveBaseWidthWithBumpersMeters =
-      edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 9.0 + 4.5);
+      edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 9.0 + 4.75);
 
   public final class AutoConstants {
     public static final LoggedTunableGains xTrajectoryController =
-        new LoggedTunableGains("xTraj", new ControlGains().p(2.0));
+        new LoggedTunableGains("xTraj", new ControlGains().p(1.0));
     public static final LoggedTunableGains yTrajectoryController =
-        new LoggedTunableGains("yTraj", new ControlGains().p(2.0));
+        new LoggedTunableGains("yTraj", new ControlGains().p(1.0));
     public static final LoggedTunableGains headingTrajectoryController =
         new LoggedTunableGains("headingTraj", new ControlGains().p(1.5).d(0.0));
   }
 
   public final class OTFConstants {
     public static final PIDConstants translationPID =
-        new ControlGains().p(2.0).createPathPlannerGains();
+        new ControlGains().p(1.5).createPathPlannerGains();
     public static final PIDConstants rotationPID =
         new ControlGains().p(1.5).createPathPlannerGains();
     public static final double translationTolerance = 0.01;
