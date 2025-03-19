@@ -26,16 +26,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AlgaeClawCmds;
+import frc.robot.commands.ClimberCmds;
+import frc.robot.commands.DriveCmds;
+import frc.robot.commands.RollerCmds;
+import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.CoralAndAlgaeAuto;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
 import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.commands.scoreassist.ScoreAssistCmds;
-import frc.robot.commands.scoreassist.SuperStructure;
-import frc.robot.commands.subsystemCmds.AlgaeClawCmds;
-import frc.robot.commands.subsystemCmds.ClimberCmds;
-import frc.robot.commands.subsystemCmds.DriveCmds;
-import frc.robot.commands.subsystemCmds.RollerCmds;
 import frc.robot.generated.TunerConstants;
 import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.ScoreAssist;
@@ -337,10 +337,8 @@ public class RobotContainer {
     // Score Assist
     driver
         .rightBumper()
-        .onTrue(ScoreAssistCmds.exectuteAllTargets(normalDriveCmd()))
-        .onFalse(Commands.parallel(ScoreAssistCmds.deactivate(), normalDriveCmd()));
-
-    scoreAssist.levelTrigger().onTrue(ScoreAssistCmds.executeSS());
+        .onTrue(ScoreAssistCmds.exectuteAllTargets())
+        .onFalse(Commands.sequence(ScoreAssistCmds.stop()));
 
     // Grab Algae
     driver

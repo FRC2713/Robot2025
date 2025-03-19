@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
-import frc.robot.commands.scoreassist.SuperStructure;
+import frc.robot.commands.SuperStructure;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.HeadingControllerConstants;
 import frc.robot.subsystems.constants.ScoreAssistConstants;
@@ -52,9 +52,9 @@ public class ScoreAssistOld {
   }
 
   private ProfiledPIDController yscoreAssistController =
-      ScoreAssistConstants.scoreAssistGains.createTrapezoidalPIDController();
+      ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
   private ProfiledPIDController xscoreAssistController =
-      ScoreAssistConstants.scoreAssistGains.createTrapezoidalPIDController();
+      ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
   private ProfiledPIDController omegascoreAssistController =
       DriveConstants.HeadingControllerConstants.angleGains.createAngularTrapezoidalPIDController();
 

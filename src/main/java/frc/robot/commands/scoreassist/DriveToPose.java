@@ -23,9 +23,9 @@ public class DriveToPose extends Command {
   private Supplier<Pose2d> targetPose;
 
   private ProfiledPIDController yscoreAssistController =
-      ScoreAssistConstants.scoreAssistGains.createTrapezoidalPIDController();
+      ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
   private ProfiledPIDController xscoreAssistController =
-      ScoreAssistConstants.scoreAssistGains.createTrapezoidalPIDController();
+      ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
   private ProfiledPIDController omegascoreAssistController =
       DriveConstants.HeadingControllerConstants.angleGains.createAngularTrapezoidalPIDController();
   private Drivetrain drive;
@@ -76,13 +76,8 @@ public class DriveToPose extends Command {
             speeds,
             isFlipped ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation()));
 
-    error = targetPose.get().getTranslation().getDistance(drive.getPose().getTranslation());
-    rotError = targetPose.get().getRotation().getDegrees() - drive.getPose().getRotation().getDegrees();
-
     Logger.recordOutput("ScoreAssist/Driving/TargetPose", targetPose.get());
     Logger.recordOutput("ScoreAssist/Driving/CommandedSpeeds", speeds);
-    Logger.recordOutput("ScoreAssist/Driving/Translation Error", error);
-    Logger.recordOutput("ScoreAssist/Driving/Rotation Error", rotError);
     Logger.recordOutput(
         "ScoreAssist/Driving/X Current Setpoint",
         this.xscoreAssistController.getSetpoint().position);

@@ -1,4 +1,4 @@
-package frc.robot.commands.scoreassist;
+package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
@@ -238,6 +238,27 @@ public class RHRPathFindingCommand extends Command {
       Subsystem... requirements) {
     this(
         targetPose,
+        constraints,
+        0.0,
+        poseSupplier,
+        speedsSupplier,
+        output,
+        controller,
+        robotConfig,
+        requirements);
+  }
+
+  public RHRPathFindingCommand(
+      Supplier<Pose2d> targetPose,
+      PathConstraints constraints,
+      Supplier<Pose2d> poseSupplier,
+      Supplier<ChassisSpeeds> speedsSupplier,
+      BiConsumer<ChassisSpeeds, DriveFeedforwards> output,
+      PathFollowingController controller,
+      RobotConfig robotConfig,
+      Subsystem... requirements) {
+    this(
+        targetPose.get(),
         constraints,
         0.0,
         poseSupplier,

@@ -1,15 +1,9 @@
-package frc.robot.commands.scoreassist;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.SSConstants;
-import frc.robot.commands.subsystemCmds.AlgaeClawCmds;
-import frc.robot.commands.subsystemCmds.ClimberCmds;
-import frc.robot.commands.subsystemCmds.ElevatorCmds;
-import frc.robot.commands.subsystemCmds.PivotCmds;
-import frc.robot.commands.subsystemCmds.RollerCmds;
-import frc.robot.commands.subsystemCmds.ShoulderCmds;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 

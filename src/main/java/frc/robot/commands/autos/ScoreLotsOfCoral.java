@@ -12,9 +12,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
+import frc.robot.commands.SuperStructure;
 import frc.robot.commands.scoreassist.ScoreAssistCmds;
-import frc.robot.commands.scoreassist.SuperStructure;
-import frc.robot.scoreassist.ScoreAssistOld;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
 import frc.robot.util.ScoreLoc;
@@ -51,14 +50,9 @@ public class ScoreLotsOfCoral {
         .done()
         .onTrue(
             Commands.sequence(
-                // 1) Finish off trajectory with score assist, in parallel move SS to L4
-                ScoreAssistCmds.manuallySetTarget(ScoreLoc.E_FOUR),
-                Commands.parallel(
-                    ScoreAssistCmds.exectuteDriveUntilAtTarget()
-                        .withDeadline(new WaitUntilCommand(1.5)),
-                    SuperStructure.L4.getCommand()),
+                // 1) Finish off trajectory with score assist, which also moves the SS
+                ScoreAssistCmds.exectuteInAuto(ScoreLoc.E_FOUR),
                 // 2) Score Coral
-                ScoreAssistOld.getInstance().waitUntilFinished(1.6),
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 SuperStructure.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
@@ -84,12 +78,8 @@ public class ScoreLotsOfCoral {
         .done()
         .onTrue(
             Commands.sequence(
-                // 1) Finish off trajectory with score assist, in parallel move SS to L4
-                ScoreAssistCmds.manuallySetTarget(ScoreLoc.C_FOUR),
-                Commands.parallel(
-                    ScoreAssistCmds.exectuteDriveUntilAtTarget()
-                        .withDeadline(new WaitUntilCommand(1.5)),
-                    SuperStructure.L4.getCommand()),
+                // 1) Finish off trajectory with score assist, which also moves the SS
+                ScoreAssistCmds.exectuteInAuto(ScoreLoc.C_FOUR),
                 // 2) Score Coral
                 SuperStructure.CORAL_SCORE.getCommand(),
                 // 3) Begin driving to source

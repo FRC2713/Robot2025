@@ -4,22 +4,28 @@
 
 package frc.robot.commands.scoreassist;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.subsystemCmds.DriveCmds;
 import frc.robot.subsystems.drive.Drivetrain;
+import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.ScoreNode;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-public class DriveToNodeWithPath extends Command {
-  private ScoreNode node;
+public class PathfindToPose extends Command {
+  private Supplier<ScoreNode> node;
   private Drivetrain drive;
   private Command pathfindingCommand;
+  private LoggedTunableNumber pathConstraintVelocityMPS =
+      new LoggedTunableNumber("ScoreAssist/Pathfind/maxVelocityMPS", 2.75);
+  private LoggedTunableNumber pathConstraintaccel =
+      new LoggedTunableNumber("ScoreAssist/Pathfind/constraintAccel", 5.0);
 
   /** Creates a new PathScore. */
-  public DriveToNodeWithPath(Drivetrain drive, ScoreNode node) {
+  public PathfindToPose(Drivetrain drive, Supplier<ScoreNode> node) {
     addRequirements(drive);
     this.drive = drive;
     this.node = node;
@@ -29,16 +35,22 @@ public class DriveToNodeWithPath extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Pose2d targetPose = node.getPathScorePose();
-    Logger.recordOutput("ScoreAssit/PathScore/targetPose", targetPose);
+    Pose2d targetPose = node.get().getPathScorePose();
+    Logger.recordOutput("ScoreAssist/Pathfind/targetPose", targetPose);
 
     // Create the constraints to use while pathfinding
     PathConstraints constraints =
         new PathConstraints(
-            2.0, 1.0, drive.getMaxAngularSpeedRadPerSec(), Units.degreesToRadians(720));
+            pathConstraintVelocityMPS.getAsDouble(),
+            pathConstraintaccel.getAsDouble(),
+            drive.getMaxAngularSpeedRadPerSec(),
+            Units.degreesToRadians(720));
 
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
-    pathfindingCommand = DriveCmds.buildOTFPath(targetPose, constraints, 0.4);
+    pathfindingCommand =
+        AutoBuilder.pathfindToPose(
+            targetPose, constraints, 0.2 // Goal end velocity in meters/sec
+            );
     pathfindingCommand.initialize();
   }
 

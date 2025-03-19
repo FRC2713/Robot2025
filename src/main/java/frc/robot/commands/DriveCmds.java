@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.commands.subsystemCmds;
+package frc.robot.commands;
 
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.MathUtil;
@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
-import frc.robot.commands.scoreassist.RHRPathFindingCommand;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.HeadingControllerConstants;
 import frc.robot.subsystems.drive.Drivetrain;

@@ -5,7 +5,7 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.SSConstants;
-import frc.robot.commands.scoreassist.SuperStructure;
+import frc.robot.commands.SuperStructure;
 
 /**
  * @deprecated not using PathPlannerLib anymore. Also moving forward we should define each auto in
