@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
+import frc.robot.commands.MoveSSToTarget;
 import frc.robot.commands.SuperStructure;
 import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.util.AllianceFlipUtil;
@@ -20,18 +21,23 @@ public class ScoreAssistCmds {
         new PathfindToPose(
             RobotContainer.driveSubsystem,
             () ->
-               AllianceFlipUtil.apply(new Pose2d(
-                    new Translation2d(0.4480087459087372, 1.305626749992370),
-                    Rotation2d.fromRadians(0.996491486039043)))));
+                AllianceFlipUtil.apply(
+                    new Pose2d(
+                        new Translation2d(0.4480087459087372, 1.305626749992370),
+                        Rotation2d.fromRadians(0.996491486039043)))));
   }
 
   public static Command exectuteCoralScore() {
     return Commands.sequence(
         Commands.parallel(
             start(), // 1) activate score assist
-            Commands.sequence(
-                executePath(), // 2a) path-find close to target
-                exectuteDrive()), // 2b) drive to target
+            Commands.either(
+                Commands.sequence(
+                    executePath(), // 2a) path-find close to target
+                    exectuteDrive() // 2b) drive to target
+                    ),
+                exectuteDrive(),
+                RobotContainer.scoreAssist::shouldUsePath),
             executePrep()), // 3) execute prep
         stop(),
         executeSS());

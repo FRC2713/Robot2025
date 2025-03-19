@@ -67,9 +67,9 @@ public class ScoreLotsOfCoral {
                 // 1) Finish off trajectory with score assist, which also moves the SS
                 ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLoc.E_FOUR),
                 // 2) Score Coral
-                Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                Commands.print("Scoring Coral"),
-                SuperStructure.CORAL_SCORE.getCommand(),
+                // Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                // Commands.print("Scoring Coral"),
+                // SuperStructure.CORAL_SCORE.getCommand(),
                 // TODO: Tune down
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source

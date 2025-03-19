@@ -31,9 +31,10 @@ public class SourceAlign {
         Rotation2d.fromDegrees(55))
   };
 
-  public static Pose2d centeredLeft = new Pose2d(
-                        new Translation2d(0.4480087459087372, 1.305626749992370),
-                        Rotation2d.fromRadians(0.996491486039043)); 
+  public static Pose2d centeredLeft =
+      new Pose2d(
+          new Translation2d(0.4480087459087372, 1.305626749992370),
+          Rotation2d.fromRadians(0.996491486039043));
 
   private boolean lastTriggerState = false;
 
