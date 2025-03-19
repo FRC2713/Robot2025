@@ -429,7 +429,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> autoScore.getCommand().schedule()))
         .onFalse(
             Commands.parallel(
-                // Commands.runOnce(() -> reefTracker.end(false)),
+                Commands.runOnce(() -> autoScore.cancel()),
                 DriveCommands.changeDefaultDriveCommand(
                     driveSubsystem,
                     DriveCommands.joystickDrive(

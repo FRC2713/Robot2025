@@ -11,6 +11,7 @@ import frc.robot.util.ScoreNode;
 
 public class AutoScore {
   private static ScoreLoc loc = ScoreLoc.A_FOUR;
+  private Command cmd = null;
 
   private static boolean shouldDoScoreAssist(ScoreNode node) {
     return RobotContainer.driveSubsystem
@@ -35,11 +36,20 @@ public class AutoScore {
             RollerCmds.setSpeed(SSConstants.Roller.L2_PLUS_CORAL_SCORE_SPEED)));
   }
 
+  public void cancel() {
+    if (cmd != null) {
+      cmd.cancel();
+    }
+  }
+
   public Command getCommand() {
-    return Commands.either(
-        scoreAssist(),
-        Commands.sequence(
-            new PathScore(RobotContainer.driveSubsystem, loc.getNode()), scoreAssist()),
-        () -> shouldDoScoreAssist(loc.getNode()));
+    cancel();
+    cmd =
+        Commands.either(
+            scoreAssist(),
+            Commands.sequence(
+                new PathScore(RobotContainer.driveSubsystem, loc.getNode()), scoreAssist()),
+            () -> shouldDoScoreAssist(loc.getNode()));
+    return cmd;
   }
 }
