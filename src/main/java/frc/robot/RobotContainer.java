@@ -22,27 +22,20 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.EndEffector;
 import frc.robot.commands.ReefAlign;
-import frc.robot.commands.RollerCmds;
-import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SourceAlign;
-import frc.robot.commands.SuperStructure;
 import frc.robot.commands.autos.CenterAutoPineTree;
 import frc.robot.commands.autos.CoralAndAlgaeAuto;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
 import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.commands.autos.ScoreLotsOfCoralV2;
-import frc.robot.commands.climber.Climb;
-import frc.robot.commands.climber.MoveClimber;
 import frc.robot.generated.TunerConstants;
 import frc.robot.oi.DriverControls;
+import frc.robot.oi.OperatorControls;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
@@ -95,12 +88,11 @@ public class RobotContainer {
   public static AlgaeClaw algaeClaw;
   public static Climber climber;
   // Xbox Controllers
-  private final CommandXboxController driver = new CommandXboxController(0);
-  private static final CommandXboxController operator = new CommandXboxController(1);
+  private DriverControls driverControls = new DriverControls();
+  private OperatorControls operatorControls = new OperatorControls(driverControls, climber);
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
   private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
   private static boolean hasRanAuto = false;
-  private Trigger climbPrepTrigger = new Trigger(ScoreAssist.getInstance()::shouldClimbPrep);
 
   // Dashboard inputs
   public final AutoChooser autoChooser;
@@ -276,13 +268,13 @@ public class RobotContainer {
                 autoChooser.selectedCommandScheduler()));
 
     // Configure the button bindings
-    configureButtonBindings();
-    
-    DriverControls driverControls = new DriverControls();
     driverControls.configureButtonBindings();
+    operatorControls.configureButtonBindings();
+
+    configureButtonBindings(driverControls);
   }
 
-  private void configureButtonBindings() {
+  private void configureButtonBindings(DriverControls driver) {
     reefAlignTrigger
         .onTrue(
             DriveCommands.changeDefaultDriveCommand(
@@ -331,56 +323,6 @@ public class RobotContainer {
             () -> -driver.getLeftX(),
             () -> -driver.getRightX()),
         "Default Joystick Drive");
-
-    // Operator Controls
-    operator.a().onTrue(SuperStructure.L1.getCommand());
-    operator.b().onTrue(SuperStructure.L2.getCommand());
-    operator.y().onTrue(SuperStructure.L3.getCommand());
-    operator.rightBumper().onTrue(SuperStructure.L4.getCommand());
-
-    climbPrepTrigger.onTrue(
-        Commands.parallel(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDriveSlow(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Slow Control"),
-            SuperStructure.CLIMBING_CONF.getCommand()));
-
-    operator
-        .start()
-        .onTrue(
-            Commands.parallel(
-                DriveCommands.changeDefaultDriveCommand(
-                    driveSubsystem,
-                    DriveCommands.joystickDriveSlow(
-                        driveSubsystem,
-                        () -> -driver.getLeftY(),
-                        () -> -driver.getLeftX(),
-                        () -> -driver.getRightX()),
-                    "Slow Control"),
-                SuperStructure.CLIMBING_CONF.getCommand()));
-    operator
-        .leftTrigger(0.1)
-        .whileTrue(new MoveClimber(operator::getLeftTriggerAxis))
-        .onFalse(ClimberCmds.setVoltage(() -> 0));
-    operator
-        .rightTrigger(0.1)
-        .whileTrue(
-            Commands.sequence(
-                Commands.either(
-                    ClimberCmds.configureSoftLimits(
-                        SSConstants.Climber.MIN_ANGLE_CLIMBING,
-                        SSConstants.Climber.MAX_ANGLE_CLIMBING),
-                    Commands.none(),
-                    () -> climber.getCurrentAngle() > 100),
-                new MoveClimber(() -> -1 * operator.getRightTriggerAxis())))
-        .onFalse(ClimberCmds.setVoltage(() -> 0));
-
-    operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.getCommand());
   }
 
   public void disabledPeriodic() {
@@ -409,9 +351,9 @@ public class RobotContainer {
         driveSubsystem,
         DriveCommands.joystickDrive(
             driveSubsystem,
-            () -> -driver.getLeftY(),
-            () -> -driver.getLeftX(),
-            () -> -driver.getRightX()),
+            () -> -driverControls.getLeftY(),
+            () -> -driverControls.getLeftX(),
+            () -> -driverControls.getRightX()),
         "Default Joystick Drive");
   }
 }

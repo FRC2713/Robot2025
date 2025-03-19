@@ -8,6 +8,7 @@ import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.EndEffector;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.SuperStructure;
@@ -120,15 +121,8 @@ public class DriverControls {
     // Grab Algae
     driver
         .rightTrigger(0.2)
-        .onTrue(Commands.sequence(SuperStructure.CORAL_SCORE.getCommand()))
+        .onTrue(Commands.sequence(EndEffector.CORAL_SCORE.getCommand()))
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
-
-    // // Score Algae
-    // // just spit the algae, it's up to the operator to put it in processor, intake, or barge pose
-    // driver
-    //     .rightTrigger(0.25)
-    //     .onTrue(AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED))
-    //     .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
     driver
         .povLeft()
@@ -137,14 +131,6 @@ public class DriverControls {
                 RobotContainer.driveSubsystem,
                 DriveCommands.inch(RobotContainer.driveSubsystem, SSConstants.Drive.INCH_SPEED),
                 "Inch Left"))
-        // DriveCommands.changeDefaultDriveCommand(
-        //     RobotContainer.driveSubsystem,
-        //     DriveCommands.joystickDriveAtAngle(
-        //         RobotContainer.driveSubsystem,
-        //         () -> -driver.getLeftY(),
-        //         () -> -driver.getLeftX(),
-        //         () -> Rotation2d.fromDegrees(180)),
-        //     "Heading Controller"))
         .onFalse(
             DriveCommands.changeDefaultDriveCommand(
                 RobotContainer.driveSubsystem,
@@ -238,5 +224,17 @@ public class DriverControls {
     //                 () -> -driver.getRightX()),
     //             "Full Control"));
 
+  }
+
+  public double getLeftY() {
+    return driver.getLeftY();
+  }
+
+  public double getLeftX() {
+    return driver.getLeftX();
+  }
+
+  public double getRightX() {
+    return driver.getRightX();
   }
 }
