@@ -439,7 +439,7 @@ public class RobotContainer {
     // Grab Algae
     driver
         .rightTrigger(0.2)
-        .onTrue(Commands.sequence(SuperStructure.CORAL_SCORE.getCommand()))
+        .onTrue(Commands.sequence(SuperStructure.PROCESSOR_SCORE.getCommand()))
         .onFalse(SuperStructure.STARTING_CONF.getCommand());
 
     // // Score Algae
@@ -555,7 +555,8 @@ public class RobotContainer {
     //                 () -> -driver.getRightX()),
     //             "Full Control"));
     // driver.a().onTrue(ScoreAssist.getInstance().goReefTracker(RobotContainer.driveSubsystem));
-
+    Logger.recordOutput("FieldConstants/centerFaces", FieldConstants.Reef.centerFaces);
+    Logger.recordOutput("FieldConstants/processorFace", FieldConstants.Processor.centerFace);
     // Operator Controls
     operator.a().onTrue(SuperStructure.L1.getCommand());
     operator.b().onTrue(SuperStructure.L2.getCommand());
