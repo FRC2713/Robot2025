@@ -445,8 +445,8 @@ public class Drivetrain extends SubsystemBase {
 
   @AutoLogOutput(key = "SwerveChassisSpeeds/speed")
   public double getSpeed() {
-    var speeds = getChassisSpeeds().toTwist2d(0.02);
-    return Math.hypot(speeds.dx, speeds.dy);
+    var speeds = getChassisSpeeds();
+    return Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
   }
 
   /** Returns the maximum linear speed in meters per sec. */

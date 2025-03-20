@@ -33,9 +33,8 @@ public class DriveConstants {
 
   public final class OTFConstants {
     public static final PIDConstants translationPID =
-        new ControlGains().p(1.5).createPathPlannerGains();
-    public static final PIDConstants rotationPID =
-        new ControlGains().p(1.5).createPathPlannerGains();
+        new ControlGains().p(0.5).createPathPlannerGains();
+    public static final PIDConstants rotationPID = new ControlGains().p(1).createPathPlannerGains();
     public static final double translationTolerance = 0.01;
   }
 

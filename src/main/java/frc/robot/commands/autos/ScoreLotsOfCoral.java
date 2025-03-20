@@ -87,7 +87,7 @@ public class ScoreLotsOfCoral {
                     Commands.parallel(
                         SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
                         new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral())),
-                    Commands.waitSeconds(2.0)),
+                    Commands.waitSeconds(0.1)),
                 sourceToReefC.cmd()));
 
     // Prep elevator along the way
@@ -114,7 +114,7 @@ public class ScoreLotsOfCoral {
                     Commands.parallel(
                         SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
                         new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral())),
-                    Commands.waitSeconds(2.0)),
+                    Commands.waitSeconds(0.1)),
                 sourceToReefD.cmd()));
 
     sourceToReefD

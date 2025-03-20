@@ -28,6 +28,7 @@ public class ScoreAssistCmds {
   }
 
   public static Command exectuteCoralScore() {
+    // TODO: Use driver input as whether or not to fully automate
     return Commands.sequence(
             Commands.parallel(
                 start(), // 1) activate score assist

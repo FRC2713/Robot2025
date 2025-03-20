@@ -21,7 +21,7 @@ public class PathfindToPose extends Command {
   private LoggedTunableNumber pathConstraintVelocityMPS =
       new LoggedTunableNumber("ScoreAssist/Pathfind/maxVelocityMPS", 2.5);
   private LoggedTunableNumber pathConstraintaccel =
-      new LoggedTunableNumber("ScoreAssist/Pathfind/constraintAccel", 4.0);
+      new LoggedTunableNumber("ScoreAssist/Pathfind/constraintAccel", 3.0);
 
   /** Creates a new PathScore. */
   public PathfindToPose(Drivetrain drive, Supplier<Pose2d> node) {
@@ -48,7 +48,7 @@ public class PathfindToPose extends Command {
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
     pathfindingCommand =
         AutoBuilder.pathfindToPose(
-            targetPose, constraints, 0.2 // Goal end velocity in meters/sec
+            targetPose, constraints, 0.0 // Goal end velocity in meters/sec
             );
     pathfindingCommand.initialize();
   }
