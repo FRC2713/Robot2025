@@ -364,12 +364,6 @@ public class RobotContainer {
                 Commands.runOnce(() -> RobotContainer.disableSourceAlign = true),
                 RollerCmds.setSpeed(() -> 0)));
 
-    // Enable/disable reefalign
-    driver
-        .b()
-        .onTrue(Commands.runOnce(() -> RobotContainer.disableReefAlign = false))
-        .onFalse(Commands.runOnce(() -> RobotContainer.disableReefAlign = true));
-
     // Climber
     driver
         .leftTrigger(0.1)

@@ -36,6 +36,12 @@ public class DriveConstants {
         new ControlGains().p(0.5).createPathPlannerGains();
     public static final PIDConstants rotationPID = new ControlGains().p(1).createPathPlannerGains();
     public static final double translationTolerance = 0.01;
+    public static final LoggedTunableNumber pathConstraintVelocityMPS =
+        new LoggedTunableNumber("ScoreAssist/Pathfind/maxVelocityMPS", 2.5);
+    public static final LoggedTunableNumber pathConstraintaccel =
+        new LoggedTunableNumber("ScoreAssist/Pathfind/constraintAccel", 3.0);
+    public static final LoggedTunableNumber endVel =
+        new LoggedTunableNumber("ScoreAssist/Pathfind/endVel", 0.1);
   }
 
   public final class HeadingControllerConstants {

@@ -155,12 +155,12 @@ public class Robot extends LoggedRobot {
       RobotContainer.climber.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
-    // var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
-    // RobotContainer.disableReefAlign = disableReefAlign;
-    // if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
-    //   robotContainer.normalDrive();
-    // }
-    // hadDisabledReefAlign = disableReefAlign;
+    var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
+    RobotContainer.disableReefAlign = disableReefAlign;
+    if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
+      robotContainer.setToNormalDrive();
+    }
+    hadDisabledReefAlign = disableReefAlign;
   }
 
   /** This function is called once when the robot is disabled. */
