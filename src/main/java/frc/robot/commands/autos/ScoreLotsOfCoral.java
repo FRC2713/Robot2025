@@ -36,6 +36,7 @@ public class ScoreLotsOfCoral {
     AutoTrajectory sourceToReefC = routine.trajectory("SourceToReefC");
     AutoTrajectory reefCToSource = routine.trajectory("ReefCToSource");
     AutoTrajectory sourceToReefD = routine.trajectory("SourceToReefD");
+    AutoTrajectory reefDToSource = routine.trajectory("ReefDToSource");
 
     routine
         .active()
@@ -127,7 +128,7 @@ public class ScoreLotsOfCoral {
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(
-                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefCToSource.cmd())));
+                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefDToSource.cmd())));
     // Commands.sequence(
     //     // 1) Finish off trajectory with score assist, in parallel move SS to L4
     //     new ParallelDeadlineGroup(

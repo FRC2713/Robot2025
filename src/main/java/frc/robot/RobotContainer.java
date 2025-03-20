@@ -342,7 +342,7 @@ public class RobotContainer {
     driver
         .leftBumper()
         // .onTrue(ScoreAssistCmds.intake())
-        .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
+        .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.getCommand())
         // .onFalse(Commands.sequence(ScoreAssistCmds.stop()));
         .onFalse(RollerCmds.setSpeed(() -> 0));
 
