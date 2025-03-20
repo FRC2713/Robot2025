@@ -94,8 +94,8 @@ public class RobotContainer {
   public static Climber climber;
 
   // Xbox Controllers
-  private final CommandXboxController driver = new CommandXboxController(0);
-  private static final CommandXboxController operator = new CommandXboxController(1);
+  public static final CommandXboxController driver = new CommandXboxController(0);
+  public static final CommandXboxController operator = new CommandXboxController(1);
 
   // Dashboard inputs
   public final AutoChooser autoChooser;

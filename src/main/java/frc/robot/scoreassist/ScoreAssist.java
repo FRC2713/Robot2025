@@ -162,8 +162,15 @@ public class ScoreAssist {
         > ScoreAssistConstants.pathDistTolerance.getAsDouble();
   }
 
+  public boolean shouldManuallyOverridePath() {
+
+    return Math.abs(Math.hypot(RobotContainer.driver.getLeftX(), RobotContainer.driver.getLeftY()))
+        > 0.1;
+  }
+
   public static enum ScoreDrivingMode {
     PATH,
+    PATH_OVERRIDEN,
     ASSIST,
     INACTIVE
   }

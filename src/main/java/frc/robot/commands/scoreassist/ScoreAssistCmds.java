@@ -28,13 +28,13 @@ public class ScoreAssistCmds {
   }
 
   public static Command exectuteCoralScore() {
-    // TODO: Use driver input as whether or not to fully automate
     return Commands.sequence(
             Commands.parallel(
                 start(), // 1) activate score assist
                 Commands.either(
                     Commands.sequence(
-                        executePath(), // 2a) path-find close to target
+                        executePathWithOverride(), // 2a) path-find close to target (with manual
+                        // override)
                         exectuteDrive() // 2b) drive to target
                         ),
                     exectuteDrive(),
@@ -79,6 +79,10 @@ public class ScoreAssistCmds {
         new PathfindToPose(
             RobotContainer.driveSubsystem,
             () -> RobotContainer.scoreAssist.getCurrentNodeTarget().getPathScorePose()));
+  }
+
+  public static Command executePathWithOverride() {
+    return new PathFindToPoseWithOverride();
   }
 
   public static Command exectuteDrive() {
