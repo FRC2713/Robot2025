@@ -22,6 +22,22 @@ public enum SuperStructure {
               Commands.parallel(
                   ElevatorCmds.setHeightAndWait(() -> 0), ShoulderCmds.setAngleAndWait(() -> -90)),
               PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG))),
+  // Necessary for picking up algae off the ground- otherwise the robot tries to move itself through
+  // its bumper
+  STARTING_CONF2(
+      () ->
+          Commands.sequence(
+              RollerCmds.setEnableLimitSwitch(true),
+              RollerCmds.setSpeed(() -> 0),
+              Commands.either(
+                  PivotCmds.setAngleAndWait(() -> 35),
+                  Commands.none(),
+                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              PivotCmds.setAngleAndWait(SSConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
+              Commands.parallel(
+                  ElevatorCmds.setHeightAndWait(() -> 0),
+                  ShoulderCmds.setAngleAndWait(() -> -90)))),
+
   SOURCE_CORAL_INTAKE(
       () ->
           Commands.sequence(
@@ -115,10 +131,10 @@ public enum SuperStructure {
                   PivotCmds.setAngleAndWait(() -> 35),
                   Commands.none(),
                   () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_HEIGHT_IN),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.ALGAE_L2_IN),
               Commands.parallel(
-                  PivotCmds.setAngle(SSConstants.Pivot.L2_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L2_ANGLE_DEG)),
+                  PivotCmds.setAngle(SSConstants.Pivot.ALGAE_L2_DEG),
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.ALGAE_L2_DEG)),
               PivotCmds.waitUntilAtTarget())),
   ALGAE_GRAB_L3(
       () ->
@@ -128,10 +144,10 @@ public enum SuperStructure {
                   PivotCmds.setAngleAndWait(() -> 35),
                   Commands.none(),
                   () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L3_HEIGHT_IN),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.ALGAE_L3_IN),
               Commands.parallel(
-                  PivotCmds.setAngle(SSConstants.Pivot.L3_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L3_ANGLE_DEG)),
+                  PivotCmds.setAngle(SSConstants.Pivot.ALGAE_L3_DEG),
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.ALGAE_L3_DEG)),
               PivotCmds.waitUntilAtTarget())),
   ALGAE_GRAB_GROUND(
       () ->
@@ -141,10 +157,10 @@ public enum SuperStructure {
                   PivotCmds.setAngleAndWait(() -> 35),
                   Commands.none(),
                   () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.L2_HEIGHT_IN),
-              Commands.parallel(
-                  PivotCmds.setAngle(SSConstants.Pivot.L2_ANGLE_DEG),
-                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.L2_ANGLE_DEG)),
+              ElevatorCmds.setHeightAndWait(SSConstants.Elevator.ALGAE_GROUND_IN),
+              Commands.sequence(
+                  ShoulderCmds.setAngleAndWait(SSConstants.Shoulder.ALGAE_GROUND_DEG),
+                  PivotCmds.setAngle(SSConstants.Pivot.ALGAE_GROUND_DEG)),
               PivotCmds.waitUntilAtTarget())),
 
   ALGAE_GRAB_AND_CORAL_SCORE(
