@@ -83,7 +83,7 @@ public class SetpointConstants {
     public static final LoggedTunableNumber ALGAE_L3_DEG =
         new LoggedTunableNumber("Shoulder/SS/Algae L3 Height", -135);
     public static final LoggedTunableNumber ALGAE_L2_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Algae L2 Height", -100);
+        new LoggedTunableNumber("Shoulder/SS/Algae L2 Height", -110);
   }
 
   public class Pivot {
@@ -127,9 +127,9 @@ public class SetpointConstants {
     public static final LoggedTunableNumber ALGAE_GROUND_DEG =
         new LoggedTunableNumber("Pivot/SS/Ground Algae Angle", -45);
     public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber("Pivot/SS/Algae L3 Height", 115);
+        new LoggedTunableNumber("Pivot/SS/Algae L3 Height", 100);
     public static final LoggedTunableNumber ALGAE_L2_DEG =
-        new LoggedTunableNumber("Pivot/SS/Algae L2 Height", 150);
+        new LoggedTunableNumber("Pivot/SS/Algae L2 Height", 125);
   }
 
   public class Roller {
