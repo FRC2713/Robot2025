@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.SSConstants;
+import frc.robot.commands.EndEffector;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.ScoreAssistV2;
 import frc.robot.commands.SuperStructure;
@@ -74,7 +75,7 @@ public class ScoreLotsOfCoralV2 {
                 new InstantCommand(() -> driveSubsystem.stop()),
                 SuperStructure.L4.getCommand().withDeadline(Commands.waitSeconds(2)),
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                SuperStructure.CORAL_SCORE.getCommand(),
+                EndEffector.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(
@@ -119,7 +120,7 @@ public class ScoreLotsOfCoralV2 {
                 // 2) Score Coral
                 Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 Commands.print("2Scoring Coral"),
-                SuperStructure.CORAL_SCORE.getCommand(),
+                EndEffector.CORAL_SCORE.getCommand(),
                 Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(

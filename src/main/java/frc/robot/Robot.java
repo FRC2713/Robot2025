@@ -19,7 +19,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -44,7 +43,6 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   private Mechanism2d mech2d;
-  private boolean hadDisabledReefAlign = false;
 
   public Robot() {
     PortForwarder.add(5810, "localhost", 4173);
@@ -97,15 +95,7 @@ public class Robot extends LoggedRobot {
 
     // Instantiate the Mechanism2d structure
     mech2d = new Mechanism2d(3, 3);
-    MechanismLigament2d mech2d_pre_rollers =
-        mech2d
-            .getRoot("root", 1.5, Units.inchesToMeters(0))
-            .append(RobotContainer.elevator.mech2d)
-            .append(RobotContainer.shoulder.stage0)
-            .append(RobotContainer.shoulder.mech2d)
-            .append(RobotContainer.pivot.mech2d)
-            .append(RobotContainer.rollers.mech2d)
-            .append(RobotContainer.algaeClaw.mech2d);
+
     mech2d.getRoot("climber", 2, Units.inchesToMeters(10)).append(RobotContainer.climber.mech2d);
     SmartDashboard.putData("Mech2d", mech2d);
 
@@ -156,12 +146,6 @@ public class Robot extends LoggedRobot {
       RobotContainer.climber.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
-    // var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
-    // RobotContainer.disableReefAlign = disableReefAlign;
-    // if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
-    //   robotContainer.normalDrive();
-    // }
-    // hadDisabledReefAlign = disableReefAlign;
   }
 
   /** This function is called once when the robot is disabled. */
