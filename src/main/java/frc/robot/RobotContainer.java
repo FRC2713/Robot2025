@@ -87,9 +87,12 @@ public class RobotContainer {
   public static Rollers rollers;
   public static AlgaeClaw algaeClaw;
   public static Climber climber;
+
   // Xbox Controllers
-  public DriverControls driverControls = new DriverControls();
-  public OperatorControls operatorControls = new OperatorControls(driverControls, climber);
+  public static DriverControls driverControls = new DriverControls();
+  public static OperatorControls operatorControls = new OperatorControls(driverControls, climber);
+
+  // Other command triggers/control
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
   private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
   private static boolean hasRanAuto = false;
@@ -97,6 +100,11 @@ public class RobotContainer {
   // Dashboard inputs
   public final AutoChooser autoChooser;
 
+  // For Choreo
+  private final AutoFactory choreoAutoFactory;
+  public static Vision visionsubsystem;
+  public static boolean disableReefAlign = true;
+  public static boolean disableSourceAlign = true;
   public static final RHRHolonomicDriveController otfController =
       new RHRHolonomicDriveController(
           OTFConstants.translationPID, // Translation PID constants
@@ -104,12 +112,7 @@ public class RobotContainer {
           OTFConstants.translationTolerance // Translation Tolerenace
           );
 
-  // For Choreo
-  private final AutoFactory choreoAutoFactory;
-  public static Vision visionsubsystem;
-  public static boolean disableReefAlign = true;
-  public static boolean disableSourceAlign = true;
-
+  // class constructor
   public RobotContainer() {
     // Start subsystems
     switch (Constants.currentMode) {
@@ -255,8 +258,8 @@ public class RobotContainer {
     // autoChooser.addCmd(
     //     "Drive SysId (Dynamic Backward)",
     //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addCmd(
-        "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
+    // autoChooser.addCmd(
+    //     "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -270,8 +273,10 @@ public class RobotContainer {
     // Configure the button bindings
     driverControls.configureButtonBindings();
     operatorControls.configureButtonBindings();
-
     configureButtonBindings(driverControls);
+
+    // Default command, normal field-relative drive
+    driverControls.setToNormalDrive();
   }
 
   private void configureButtonBindings(DriverControls driver) {
@@ -313,16 +318,6 @@ public class RobotContainer {
                     () -> -driver.getLeftX(),
                     () -> -driver.getRightX()),
                 "Default Joystick Drive"));
-
-    // Default command, normal field-relative drive
-    DriveCommands.setDefaultDriveCommand(
-        driveSubsystem,
-        DriveCommands.joystickDrive(
-            driveSubsystem,
-            () -> -driver.getLeftY(),
-            () -> -driver.getLeftX(),
-            () -> -driver.getRightX()),
-        "Default Joystick Drive");
   }
 
   public void disabledPeriodic() {

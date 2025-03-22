@@ -52,7 +52,7 @@ public class SuperStructure {
 
   public static Command L4_PREP =
       new SetAllDOFS(
-          "L$_PREP",
+          "L4_PREP",
           () -> 0, // stop algae claw
           SetpointConstants.Elevator.L4_PREP_HEIGHT_IN,
           SetpointConstants.Shoulder.L4_ANGLE_DEG,

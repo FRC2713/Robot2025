@@ -23,9 +23,10 @@ public class EndEffector {
   public static Command ALGAE_GRAB_AND_CORAL_SCORE =
       Commands.sequence(
           Commands.runOnce(() -> Logger.recordOutput("Active EE", "ALGAE_GRAB_AND_CORAL_SCORE")),
-          ALGAE_GRAB, // run algae motors
+          AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED), // run algae motors
           AlgaeClawCmds.waitUntilAlgae(2), // wait for algae sensor
-          CORAL_SCORE); // score coral
+          RollerCmds.setEnableLimitSwitch(false), // score coral
+          RollerCmds.setSpeed(SetpointConstants.Roller.L2_PLUS_CORAL_SCORE_SPEED));
 
   public static Command PROCESSOR_SCORE =
       Commands.sequence(

@@ -3,8 +3,10 @@ package frc.robot.commands.superstructure;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.ClimberCmds;
+import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
 import frc.robot.commands.ShoulderCmds;
@@ -14,6 +16,14 @@ public class SetClimbingConfig extends SequentialCommandGroup {
 
   public SetClimbingConfig(String name) {
     this.addCommands(
+        DriveCommands.changeDefaultDriveCommand(
+            RobotContainer.driveSubsystem,
+            DriveCommands.joystickDriveSlow(
+                RobotContainer.driveSubsystem,
+                () -> -RobotContainer.driverControls.getLeftY(),
+                () -> -RobotContainer.driverControls.getLeftX(),
+                () -> -RobotContainer.driverControls.getRightX()),
+            "Slow Control"),
         new InstantCommand(() -> Logger.recordOutput("Active SS", name)),
         // move the arm out of the way, elevator first
         Commands.parallel(

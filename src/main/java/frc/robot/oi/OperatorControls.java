@@ -3,10 +3,8 @@ package frc.robot.oi;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.ClimberCmds;
-import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ScoreAssist;
 import frc.robot.commands.climber.MoveClimber;
 import frc.robot.commands.superstructure.SuperStructure;
@@ -30,31 +28,13 @@ public class OperatorControls {
     operator.y().onTrue(SuperStructure.L3);
     operator.rightBumper().onTrue(SuperStructure.L4);
 
-    climbPrepTrigger.onTrue(
-        Commands.parallel(
-            DriveCommands.changeDefaultDriveCommand(
-                RobotContainer.driveSubsystem,
-                DriveCommands.joystickDriveSlow(
-                    RobotContainer.driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Slow Control"),
-            SuperStructure.CLIMBING_CONF));
+    operator.leftBumper().onTrue(SuperStructure.STARTING_CONF);
 
-    operator
-        .start()
-        .onTrue(
-            Commands.parallel(
-                DriveCommands.changeDefaultDriveCommand(
-                    RobotContainer.driveSubsystem,
-                    DriveCommands.joystickDriveSlow(
-                        RobotContainer.driveSubsystem,
-                        () -> -driver.getLeftY(),
-                        () -> -driver.getLeftX(),
-                        () -> -driver.getRightX()),
-                    "Slow Control"),
-                SuperStructure.CLIMBING_CONF));
+    // super structure control for climbing
+    operator.start().onTrue(SuperStructure.CLIMBING_CONF);
+    climbPrepTrigger.onTrue(SuperStructure.CLIMBING_CONF);
+
+    // climber control for climbing
     operator
         .leftTrigger(0.1)
         .whileTrue(new MoveClimber(operator::getLeftTriggerAxis))
@@ -71,7 +51,5 @@ public class OperatorControls {
                     () -> climber.getCurrentAngle() > 100),
                 new MoveClimber(() -> -1 * operator.getRightTriggerAxis())))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
-
-    operator.leftBumper().onTrue(SuperStructure.STARTING_CONF);
   }
 }
