@@ -52,7 +52,7 @@ public class ScoreAssist {
     gotoSub = gotoTopic.subscribe("none");
     climbSub = climbTopic.subscribe(false);
 
-    // climbPrepTrigger.onTrue(SuperStructure.CLIMB_PREP.getCommand());
+    // climbPrepTrigger.onTrue(SuperStructure.CLIMB_PREP);
   }
 
   public static ScoreAssist getInstance() {
@@ -203,10 +203,10 @@ public class ScoreAssist {
                             // .andThen(
                             //     Commands.sequence(
                             //         Commands.waitSeconds(
-                            //             SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                            //             SetpointConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                             //         SuperStructure.CORAL_SCORE,
                             //         Commands.waitSeconds(
-                            //             SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+                            //             SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                             //         SuperStructure.SOURCE_CORAL_INTAKE))
                             .schedule();
                       }

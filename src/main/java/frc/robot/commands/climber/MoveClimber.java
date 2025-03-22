@@ -15,17 +15,14 @@ public class MoveClimber extends Command {
   private DoubleSupplier servoPos;
 
   /** Creates a new MoveClimber. */
-  public MoveClimber(DoubleSupplier input, DoubleSupplier servoPos) {
+  public MoveClimber(DoubleSupplier input) {
     this.input = input;
-    this.servoPos = servoPos;
     addRequirements(RobotContainer.climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    RobotContainer.climber.setServoPos(servoPos.getAsDouble());
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

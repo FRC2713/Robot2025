@@ -132,7 +132,7 @@ public class ScoreLotsOfCoral {
                 // SuperStructure.L4.withDeadline(Commands.waitSeconds(0.5)),
                 // Commands.print("2L4 Done"),
                 // 2) Score Coral
-                // Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+                // Commands.waitSeconds(SetpointConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
                 Commands.print("2Scoring Coral"),
                 EndEffector.CORAL_SCORE,
                 // TODO: Tune down
@@ -158,10 +158,10 @@ public class ScoreLotsOfCoral {
     //     SuperStructure.L4.withDeadline(Commands.waitSeconds(2)),
     //     Commands.print("2L4 Done"),
     //     // 2) Score Coral
-    //     Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
+    //     Commands.waitSeconds(SetpointConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
     //     Commands.print("2Scoring Coral"),
     //     SuperStructure.CORAL_SCORE,
-    //     Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+    //     Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
     //     // 3) Begin driving to source
     //     Commands.parallel(
     //         SuperStructure.SOURCE_CORAL_INTAKE, reefCToSource.cmd())));

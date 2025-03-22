@@ -176,7 +176,7 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    robotContainer.normalDrive();
+    robotContainer.driverControls.setToNormalDrive();
   }
 
   /** This function is called periodically during operator control. */
