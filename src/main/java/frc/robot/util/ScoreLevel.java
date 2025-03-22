@@ -7,17 +7,17 @@ import java.util.function.Supplier;
 import lombok.Getter;
 
 public enum ScoreLevel {
-  ONE(Commands::none, () -> SuperStructure.L1),
-  TWO(() -> SuperStructure.L2, () -> SuperStructure.L2),
-  THREE(() -> SuperStructure.L3, () -> SuperStructure.L3),
-  FOUR(() -> SuperStructure.L4_PREP, () -> SuperStructure.L4);
+  ONE(Commands::none, SuperStructure.L1),
+  TWO(SuperStructure.L2, SuperStructure.L2),
+  THREE(SuperStructure.L3, SuperStructure.L3),
+  FOUR(SuperStructure.L4_PREP, SuperStructure.L4);
 
   @Getter private Supplier<Command> prepCommand;
-  @Getter private Supplier<Command> scoreCommand;
+  @Getter private Supplier<Command> ssCommand;
 
-  private ScoreLevel(Supplier<Command> prepCommand, Supplier<Command> scoreCommand) {
+  private ScoreLevel(Supplier<Command> prepCommand, Supplier<Command> ssCommand) {
     this.prepCommand = prepCommand;
-    this.scoreCommand = scoreCommand;
+    this.ssCommand = ssCommand;
   }
 
   // public static Map<ScoreLevel, Command> createPrepCommandsMap() {

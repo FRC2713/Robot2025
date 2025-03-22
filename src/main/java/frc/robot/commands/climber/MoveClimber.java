@@ -12,7 +12,6 @@ import java.util.function.DoubleSupplier;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveClimber extends Command {
   private final DoubleSupplier input;
-  private DoubleSupplier servoPos;
 
   /** Creates a new MoveClimber. */
   public MoveClimber(DoubleSupplier input) {

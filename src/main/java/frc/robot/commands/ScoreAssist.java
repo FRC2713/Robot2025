@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.DriveConstants;
+import frc.robot.subsystems.constants.ScoreAssistConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreLoc;
@@ -63,9 +64,9 @@ public class ScoreAssist {
   }
 
   private ProfiledPIDController yscoreAssistController =
-      DriveConstants.scoreAssistGains.createTrapezoidalPIDController();
+      ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
   private ProfiledPIDController xscoreAssistController =
-      DriveConstants.scoreAssistGains.createTrapezoidalPIDController();
+      ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
   private ProfiledPIDController omegascoreAssistController =
       DriveConstants.HeadingControllerConstants.angleGains.createAngularTrapezoidalPIDController();
 
@@ -198,7 +199,7 @@ public class ScoreAssist {
                         reefTrackerLoc
                             .get()
                             .getLevel()
-                            .getScoreCommand()
+                            .getSsCommand()
                             .get()
                             // .andThen(
                             //     Commands.sequence(
@@ -242,9 +243,9 @@ public class ScoreAssist {
   }
 
   public void periodic() {
-    if (DriveConstants.scoreAssistGains.hasChanged(hashCode())) {
-      yscoreAssistController = DriveConstants.scoreAssistGains.createTrapezoidalPIDController();
-      xscoreAssistController = DriveConstants.scoreAssistGains.createTrapezoidalPIDController();
+    if (ScoreAssistConstants.assistGains.hasChanged(hashCode())) {
+      yscoreAssistController = ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
+      xscoreAssistController = ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
     }
     if (DriveConstants.HeadingControllerConstants.angleGains.hasChanged(hashCode())) {
       omegascoreAssistController =

@@ -24,18 +24,18 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveCommands;
-import frc.robot.commands.ReefAlign;
-import frc.robot.commands.SourceAlign;
-import frc.robot.commands.autos.CenterAutoPineTree;
+import frc.robot.commands.DriveCmds;
+import frc.robot.commands.autos.CenterAutoOnePiece;
 import frc.robot.commands.autos.CoralAndAlgaeAuto;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
 import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
-import frc.robot.commands.autos.ScoreLotsOfCoralV2;
 import frc.robot.generated.TunerConstants;
 import frc.robot.oi.DriverControls;
 import frc.robot.oi.OperatorControls;
+import frc.robot.scoreassist.ReefAlign;
+import frc.robot.scoreassist.ScoreAssist;
+import frc.robot.scoreassist.SourceAlign;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
@@ -90,7 +90,7 @@ public class RobotContainer {
 
   // Xbox Controllers
   public static DriverControls driverControls = new DriverControls();
-  public static OperatorControls operatorControls = new OperatorControls(driverControls, climber);
+  public static OperatorControls operatorControls = new OperatorControls(climber);
 
   // Other command triggers/control
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
@@ -103,6 +103,7 @@ public class RobotContainer {
   // For Choreo
   private final AutoFactory choreoAutoFactory;
   public static Vision visionsubsystem;
+  public static ScoreAssist scoreAssist;
   public static boolean disableReefAlign = true;
   public static boolean disableSourceAlign = true;
   public static final RHRHolonomicDriveController otfController =
@@ -226,7 +227,7 @@ public class RobotContainer {
     // Add options to the chooser
     // I add a * to the name when it generates its starting trajectory
     autoChooser.addRoutine(
-        "Center Pine Tree", () -> CenterAutoPineTree.getRoutine(choreoAutoFactory, driveSubsystem));
+        "Center Pine Tree", () -> CenterAutoOnePiece.getRoutine(choreoAutoFactory, driveSubsystem));
     autoChooser.addRoutine(
         "Score Lots Of Coral",
         () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));
@@ -237,15 +238,12 @@ public class RobotContainer {
         "Coral and Algae Auto",
         () -> CoralAndAlgaeAuto.getRoutine(choreoAutoFactory, driveSubsystem));
     autoChooser.addRoutine(
-        "ScoreAssist V2 Score Lots of Coral",
-        () -> ScoreLotsOfCoralV2.getRoutine(choreoAutoFactory, driveSubsystem));
-    autoChooser.addRoutine(
         "Drive Testing", () -> DriveTesting.getRoutine(choreoAutoFactory, driveSubsystem));
 
     // Uncomment for swerve drive characterization
     // autoChooser.addCmd(
     //     "Drive Simple FF Characterization",
-    //     () -> DriveCommands.feedforwardCharacterization(driveSubsystem));
+    //     () -> DriveCmds.feedforwardCharacterization(driveSubsystem));
     // autoChooser.addCmd(
     //     "Drive SysId (Quasistatic Forward)",
     //     () -> driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
@@ -259,7 +257,7 @@ public class RobotContainer {
     //     "Drive SysId (Dynamic Backward)",
     //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     // autoChooser.addCmd(
-    //     "Wheel Radius", () -> DriveCommands.wheelRadiusCharacterization(driveSubsystem));
+    //     "Wheel Radius", () -> DriveCmds.wheelRadiusCharacterization(driveSubsystem));
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -269,6 +267,8 @@ public class RobotContainer {
             Commands.sequence(
                 new InstantCommand(() -> RobotContainer.hasRanAuto = true),
                 autoChooser.selectedCommandScheduler()));
+
+    scoreAssist = new ScoreAssist();
 
     // Configure the button bindings
     driverControls.configureButtonBindings();
@@ -282,42 +282,27 @@ public class RobotContainer {
   private void configureButtonBindings(DriverControls driver) {
     reefAlignTrigger
         .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
+            DriveCmds.changeDefaultDriveCommand(
                 driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
+                DriveCmds.joystickDriveAtAngle(
                     driveSubsystem,
                     () -> -driver.getLeftY(),
                     () -> -driver.getLeftX(),
                     () -> ReefAlign.getInstance().inZone().orElse(driveSubsystem.getRotation())),
-                "Drive Align To Reef"))
-        .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Default Joystick Drive"));
+                "Align To Reef"))
+        .onFalse(driver.setToNormalDriveCmd());
+
     sourceAlignTrigger
         .onTrue(
-            DriveCommands.changeDefaultDriveCommand(
+            DriveCmds.changeDefaultDriveCommand(
                 driveSubsystem,
-                DriveCommands.joystickDriveAtAngle(
+                DriveCmds.joystickDriveAtAngle(
                     driveSubsystem,
                     () -> -driver.getLeftY(),
                     () -> -driver.getLeftX(),
                     () -> SourceAlign.getInstance().inZone().orElse(driveSubsystem.getRotation())),
                 "Align To Source"))
-        .onFalse(
-            DriveCommands.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCommands.joystickDrive(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> -driver.getRightX()),
-                "Default Joystick Drive"));
+        .onFalse(driver.setToNormalDriveCmd());
   }
 
   public void disabledPeriodic() {

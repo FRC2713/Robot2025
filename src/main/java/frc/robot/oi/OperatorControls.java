@@ -13,26 +13,24 @@ import frc.robot.subsystems.climber.Climber;
 public class OperatorControls {
   private static final CommandXboxController operator = new CommandXboxController(1);
   private Trigger climbPrepTrigger = new Trigger(ScoreAssist.getInstance()::shouldClimbPrep);
-  private final DriverControls driver;
   private final Climber climber;
 
-  public OperatorControls(DriverControls driver, Climber climber) {
-    this.driver = driver;
+  public OperatorControls(Climber climber) {
     this.climber = climber;
   }
 
   public void configureButtonBindings() {
     // Operator Controls
-    operator.a().onTrue(SuperStructure.L1);
-    operator.b().onTrue(SuperStructure.L2);
-    operator.y().onTrue(SuperStructure.L3);
-    operator.rightBumper().onTrue(SuperStructure.L4);
+    operator.a().onTrue(SuperStructure.L1.get());
+    operator.b().onTrue(SuperStructure.L2.get());
+    operator.y().onTrue(SuperStructure.L3.get());
+    operator.rightBumper().onTrue(SuperStructure.L4.get());
 
-    operator.leftBumper().onTrue(SuperStructure.STARTING_CONF);
+    operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.get());
 
     // super structure control for climbing
-    operator.start().onTrue(SuperStructure.CLIMBING_CONF);
-    climbPrepTrigger.onTrue(SuperStructure.CLIMBING_CONF);
+    operator.start().onTrue(SuperStructure.CLIMBING_CONF.get());
+    climbPrepTrigger.onTrue(SuperStructure.CLIMBING_CONF.get());
 
     // climber control for climbing
     operator

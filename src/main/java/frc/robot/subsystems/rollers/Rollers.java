@@ -5,7 +5,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.constants.RollerConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -18,8 +17,6 @@ public class Rollers extends SubsystemBase {
       new MechanismLigament2d(
           "tuberollers", Units.inchesToMeters(2), -20, 7, new Color8Bit(255, 255, 255));
 
-  private double tubeSpeedTarget;
-
   public Rollers(RollersIO IO) {
     this.IO = IO;
   }
@@ -30,13 +27,13 @@ public class Rollers extends SubsystemBase {
   }
 
   public void setRPM(double rpm) {
-    tubeSpeedTarget = rpm;
     IO.setRPM(rpm);
   }
 
   @AutoLogOutput(key = "Rollers/isAtTarget")
   public boolean isAtTarget() {
     return this.IO.isAtTarget();
+  }
 
   public void updateMech2D() {
     mech2d.setAngle(Rotation2d.fromDegrees(inputs.tubePositionDegs));

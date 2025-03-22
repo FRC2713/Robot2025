@@ -19,9 +19,8 @@ import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ReefAlign;
-import frc.robot.commands.ScoreAssist;
-import frc.robot.commands.SourceAlign;
+import frc.robot.scoreassist.ReefAlign;
+import frc.robot.scoreassist.SourceAlign;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -118,8 +117,8 @@ public class Robot extends LoggedRobot {
 
     // call non-subsystem periodics
     ReefAlign.getInstance().periodic();
-    ScoreAssist.getInstance().periodic();
     SourceAlign.getInstance().periodic();
+    RobotContainer.scoreAssist.periodic();
 
     // Record the pose of each subsystem
     // order matters here.
@@ -160,7 +159,7 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    robotContainer.driverControls.setToNormalDrive();
+    RobotContainer.driverControls.setToNormalDrive();
   }
 
   /** This function is called periodically during operator control. */

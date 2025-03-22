@@ -1,8 +1,11 @@
-package frc.robot.commands;
+package frc.robot.scoreassist;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotContainer;
+import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.TrapezoidZone;
 import frc.robot.util.TrapezoidZone.Point;
@@ -28,6 +31,13 @@ public class SourceAlign {
         Rotation2d.fromDegrees(55))
   };
 
+  public static Pose2d centeredLeft =
+      new Pose2d(
+          new Translation2d(0.4480087459087372, 1.305626749992370),
+          Rotation2d.fromRadians(0.996491486039043));
+
+  private boolean lastTriggerState = false;
+
   private SourceAlign() {}
 
   public void periodic() {
@@ -36,12 +46,19 @@ public class SourceAlign {
     for (TrapezoidZone trapezoid : trapezoids) {
       Logger.recordOutput("SourceAlign/trap" + (index++), trapezoid.toPose2dArray());
     }
+
+    boolean nextTriggerState =
+        DriverStation.isTeleopEnabled()
+            && !RobotContainer.disableSourceAlign
+            && inZone().isPresent();
+
+    // Don't update the default command during ScoreAssist
+    if (RobotContainer.scoreAssist.mode == ScoreDrivingMode.INACTIVE)
+      this.lastTriggerState = nextTriggerState;
   }
 
   public boolean shouldDoSourceAlign() {
-    return DriverStation.isTeleopEnabled()
-        && !RobotContainer.disableSourceAlign
-        && inZone().isPresent();
+    return lastTriggerState;
   }
 
   public Optional<Rotation2d> inZone() {

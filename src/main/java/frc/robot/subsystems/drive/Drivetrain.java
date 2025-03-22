@@ -414,6 +414,10 @@ public class Drivetrain extends SubsystemBase {
     return odometryPoseEstimator.getEstimatedPosition();
   }
 
+  public Translation2d getTranslation() {
+    return getPose().getTranslation();
+  }
+
   /** Returns the current odometry rotation. */
   public Rotation2d getRotation() {
     return getPose().getRotation();
@@ -434,6 +438,12 @@ public class Drivetrain extends SubsystemBase {
 
   public double getAngularVelocityRadPerSec() {
     return gyroInputs.yawVelocityRadPerSec;
+  }
+
+  @AutoLogOutput(key = "SwerveChassisSpeeds/speed")
+  public double getSpeed() {
+    var speeds = getChassisSpeeds();
+    return Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
   }
 
   /** Returns the maximum linear speed in meters per sec. */

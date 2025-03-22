@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.ClimberCmds;
-import frc.robot.commands.DriveCommands;
+import frc.robot.commands.DriveCmds;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
 import frc.robot.commands.ShoulderCmds;
@@ -16,9 +16,9 @@ public class SetClimbingConfig extends SequentialCommandGroup {
 
   public SetClimbingConfig(String name) {
     this.addCommands(
-        DriveCommands.changeDefaultDriveCommand(
+        DriveCmds.changeDefaultDriveCommand(
             RobotContainer.driveSubsystem,
-            DriveCommands.joystickDriveSlow(
+            DriveCmds.joystickDriveSlow(
                 RobotContainer.driveSubsystem,
                 () -> -RobotContainer.driverControls.getLeftY(),
                 () -> -RobotContainer.driverControls.getLeftX(),
