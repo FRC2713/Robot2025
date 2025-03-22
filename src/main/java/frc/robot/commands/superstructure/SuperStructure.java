@@ -73,9 +73,11 @@ public class SuperStructure {
               SetpointConstants.Elevator.PROCESSOR_PREP_HEIGHT_IN,
               SetpointConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG,
               SetpointConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG)
-          .andThen(ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN));
+          .andThen(
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN));
 
-  public static Command ALGAE_SAFE_RETRACT = PivotCmds.setAngle(SetpointConstants.Pivot.SAFE_ANGLE_DEGS);
+  public static Command ALGAE_SAFE_RETRACT =
+      PivotCmds.setAngle(SetpointConstants.Pivot.SAFE_ANGLE_DEGS);
 
   public static Command CLIMBING_CONF = new SetClimbingConfig("CLIMBING_CONF");
 

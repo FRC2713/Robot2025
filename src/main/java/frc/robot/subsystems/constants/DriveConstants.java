@@ -75,7 +75,6 @@ public class DriveConstants {
     try {
       pathPlannerConfig = RobotConfig.fromGUISettings();
     } catch (Exception e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

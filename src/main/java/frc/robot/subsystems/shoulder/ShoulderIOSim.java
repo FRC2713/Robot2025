@@ -63,4 +63,10 @@ public class ShoulderIOSim implements ShoulderIO {
     this.pid = pid.createPIDController();
     feedforward = pid.createArmFF();
   }
+
+  @Override
+  public boolean isAtTarget() {
+    return Math.abs(Units.radiansToDegrees(sim.getAngleRads()) - this.targetAngleDeg)
+        < ShoulderConstants.AT_TARGET_GIVE_DEGS;
+  }
 }

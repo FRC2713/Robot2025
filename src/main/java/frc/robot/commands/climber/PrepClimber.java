@@ -21,7 +21,8 @@ public class PrepClimber extends Command {
   public void initialize() {
     if (RobotContainer.climber.getCurrentAngle() > 100) {
       ClimberCmds.configureSoftLimits(
-          SetpointConstants.Climber.MIN_ANGLE_CLIMBING, SetpointConstants.Climber.MAX_ANGLE_CLIMBING);
+          SetpointConstants.Climber.MIN_ANGLE_CLIMBING,
+          SetpointConstants.Climber.MAX_ANGLE_CLIMBING);
     }
   }
 

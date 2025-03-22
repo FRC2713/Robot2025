@@ -36,4 +36,8 @@ public interface ClimberIO {
   ;
 
   public default void configureSoftLimits(double minDeg, double maxDeg) {}
+
+  public default boolean isAtTarget() {
+    return true;
+  }
 }

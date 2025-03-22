@@ -2,10 +2,8 @@ package frc.robot.oi;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.ClimberCmds;
@@ -131,7 +129,8 @@ public class DriverControls {
         .onTrue(
             DriveCommands.changeDefaultDriveCommand(
                 RobotContainer.driveSubsystem,
-                DriveCommands.inch(RobotContainer.driveSubsystem, SetpointConstants.Drive.INCH_SPEED),
+                DriveCommands.inch(
+                    RobotContainer.driveSubsystem, SetpointConstants.Drive.INCH_SPEED),
                 "Inch Left"))
         .onFalse(
             DriveCommands.changeDefaultDriveCommand(
@@ -151,7 +150,6 @@ public class DriverControls {
                     RobotContainer.driveSubsystem,
                     () -> -1 * SetpointConstants.Drive.INCH_SPEED.getAsDouble()),
                 "Inch Right"))
-
         .onFalse(
             DriveCommands.changeDefaultDriveCommand(
                 RobotContainer.driveSubsystem,

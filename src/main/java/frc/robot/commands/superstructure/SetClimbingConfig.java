@@ -8,7 +8,6 @@ import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
 import frc.robot.commands.ShoulderCmds;
-
 import org.littletonrobotics.junction.Logger;
 
 public class SetClimbingConfig extends SequentialCommandGroup {

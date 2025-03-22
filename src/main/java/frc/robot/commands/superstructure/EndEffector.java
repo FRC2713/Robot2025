@@ -5,12 +5,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.RollerCmds;
-
 import org.littletonrobotics.junction.Logger;
 
-/**
- * Collection of 
- */
+/** Collection of */
 public class EndEffector {
   public static Command CORAL_SCORE =
       Commands.sequence(
