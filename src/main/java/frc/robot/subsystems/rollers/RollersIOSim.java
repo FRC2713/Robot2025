@@ -35,4 +35,10 @@ public class RollersIOSim implements RollersIO {
   public void setRPM(double rpm) {
     this.commandedRPM = rpm;
   }
+
+  @Override
+  public boolean isAtTarget() {
+    return Math.abs(commandedRPM - sim.getAngularVelocityRPM())
+        < RollerConstants.AT_TARGET_GIVE_RPM;
+  }
 }

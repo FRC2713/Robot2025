@@ -15,11 +15,8 @@ package frc.robot;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Threads;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ReefAlign;
@@ -42,7 +39,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
-  private Mechanism2d mech2d;
 
   public Robot() {
     PortForwarder.add(5810, "localhost", 4173);
@@ -93,12 +89,6 @@ public class Robot extends LoggedRobot {
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
 
-    // Instantiate the Mechanism2d structure
-    mech2d = new Mechanism2d(3, 3);
-
-    mech2d.getRoot("climber", 2, Units.inchesToMeters(10)).append(RobotContainer.climber.mech2d);
-    SmartDashboard.putData("Mech2d", mech2d);
-
     Logger.recordOutput(
         "FieldConstants/BranchAPose",
         FieldConstants.Reef.branchPositions2d.get(1).get(FieldConstants.ReefLevel.L2));
@@ -126,13 +116,7 @@ public class Robot extends LoggedRobot {
     // Return to normal thread priority
     Threads.setCurrentThreadPriority(false, 10);
 
-    // update the Mech2d's
-    RobotContainer.elevator.updateMech2D();
-    RobotContainer.pivot.updateMech2D();
-    RobotContainer.rollers.updateMech2D();
-    RobotContainer.algaeClaw.updateMech2D();
-    RobotContainer.shoulder.updateMech2D();
-    RobotContainer.climber.updateMech2D();
+    // call non-subsystem periodics
     ReefAlign.getInstance().periodic();
     ScoreAssist.getInstance().periodic();
     SourceAlign.getInstance().periodic();
