@@ -33,7 +33,7 @@ public class ScoreAssistCmds {
                 start(), // 1) activate score assist
                 Commands.either(
                     Commands.sequence(
-                        executePathWithOverride(), // 2a) path-find close to target (with manual
+                        executePath(), // 2a) path-find close to target (with manual
                         // override)
                         exectuteDrive() // 2b) drive to target
                         ),

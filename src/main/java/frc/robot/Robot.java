@@ -117,6 +117,7 @@ public class Robot extends LoggedRobot {
   public void robotInit() {
     Pathfinding.setPathfinder(new LocalADStarAK());
     SmartDashboard.putBoolean("Disable ReefAlign", false);
+    SmartDashboard.putBoolean("Use Pathing", false);
   }
 
   /** This function is called periodically during all modes. */
@@ -161,6 +162,7 @@ public class Robot extends LoggedRobot {
       robotContainer.setToNormalDrive();
     }
     hadDisabledReefAlign = disableReefAlign;
+    RobotContainer.autoScorePathing = SmartDashboard.getBoolean("Use Pathing", false);
   }
 
   /** This function is called once when the robot is disabled. */

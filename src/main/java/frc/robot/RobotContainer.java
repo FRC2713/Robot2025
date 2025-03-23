@@ -116,6 +116,7 @@ public class RobotContainer {
   public static Vision visionsubsystem;
   public static boolean disableReefAlign = false;
   public static boolean disableSourceAlign = true;
+  public static boolean autoScorePathing = false;
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
   private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
   // private Trigger climbPrepTrigger = new

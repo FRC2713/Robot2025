@@ -152,14 +152,15 @@ public class ScoreAssist {
 
   public boolean shouldUsePath() {
     return RobotContainer.driveSubsystem
-            .getPose()
-            .getTranslation()
-            .getDistance(
-                RobotContainer.scoreAssist
-                    .getCurrentNodeTarget()
-                    .getRobotAlignmentPose()
-                    .getTranslation())
-        > ScoreAssistConstants.pathDistTolerance.getAsDouble();
+                .getPose()
+                .getTranslation()
+                .getDistance(
+                    RobotContainer.scoreAssist
+                        .getCurrentNodeTarget()
+                        .getRobotAlignmentPose()
+                        .getTranslation())
+            > ScoreAssistConstants.pathDistTolerance.getAsDouble()
+        && RobotContainer.autoScorePathing;
   }
 
   public boolean shouldManuallyOverridePath() {
