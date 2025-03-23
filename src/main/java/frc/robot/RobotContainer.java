@@ -272,6 +272,7 @@ public class RobotContainer {
                 autoChooser.selectedCommandScheduler()));
 
     scoreAssist = new ScoreAssist();
+    climbAssist = new ClimbAssist();
 
     // Configure the button bindings
     driverControls.configureButtonBindings();

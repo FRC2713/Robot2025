@@ -362,7 +362,7 @@ public class Drivetrain extends SubsystemBase {
       }
     }
 
-    return ScoreLoc.fromNodeAndLevel(closestLoc, level);
+    return new ScoreLoc(closestLoc, level);
   }
 
   /***********************

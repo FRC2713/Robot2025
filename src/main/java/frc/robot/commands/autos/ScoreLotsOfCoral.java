@@ -16,7 +16,7 @@ import frc.robot.commands.scoreassist.ScoreAssistCmds;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
-import frc.robot.util.ScoreLoc;
+import frc.robot.util.ScoreLoc.ScoreLocations;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ScoreLotsOfCoral {
@@ -68,7 +68,7 @@ public class ScoreLotsOfCoral {
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
-                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLoc.E_FOUR),
+                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.E_FOUR),
                 // TODO: Tune down
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
@@ -96,7 +96,7 @@ public class ScoreLotsOfCoral {
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS and runs the
                 // rollers
-                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLoc.C_FOUR),
+                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.C_FOUR),
                 // TODO: Tune down
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Move SS to intake configuration and begin driving to source
@@ -119,7 +119,7 @@ public class ScoreLotsOfCoral {
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS
-                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLoc.D_FOUR),
+                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.D_FOUR),
                 // TODO: Tune down
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source

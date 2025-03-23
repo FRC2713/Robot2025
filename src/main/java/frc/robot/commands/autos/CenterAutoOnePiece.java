@@ -15,7 +15,7 @@ import frc.robot.commands.scoreassist.ScoreAssistCmds;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
-import frc.robot.util.ScoreLoc;
+import frc.robot.util.ScoreLoc.ScoreLocations;
 
 public class CenterAutoOnePiece {
   /**
@@ -64,7 +64,7 @@ public class CenterAutoOnePiece {
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
-                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLoc.G_FOUR),
+                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.G_FOUR),
                 // TODO: Tune down
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source

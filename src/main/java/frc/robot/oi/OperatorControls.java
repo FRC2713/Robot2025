@@ -11,12 +11,14 @@ import frc.robot.commands.superstructure.SuperStructure;
 
 public class OperatorControls {
   private static final CommandXboxController operator = new CommandXboxController(1);
-  private Trigger climbPrepTrigger =
-      new Trigger(() -> RobotContainer.climbAssist.shouldClimbPrep());
 
   public OperatorControls() {}
 
   public void configureButtonBindings() {
+
+    // Customized triggers
+    Trigger climbPrepTrigger = new Trigger(() -> RobotContainer.climbAssist.shouldClimbPrep());
+
     // Operator Controls
     operator.a().onTrue(SuperStructure.L1.get());
     operator.b().onTrue(SuperStructure.L2.get());

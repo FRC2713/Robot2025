@@ -11,6 +11,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.ScoreAssistConstants;
 import frc.robot.util.ScoreLevel;
 import frc.robot.util.ScoreLoc;
+import frc.robot.util.ScoreLoc.ScoreLocations;
 import frc.robot.util.ScoreNode;
 import lombok.Getter;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -76,7 +77,7 @@ public class ScoreAssist {
    */
   private void updateWithNT() {
     String reefTrackerInput = reefTrackerSub.get();
-    var loc = ScoreLoc.parseFromNT(reefTrackerInput);
+    var loc = ScoreLocations.parseFromNT(reefTrackerInput);
     Logger.recordOutput("ScoreAssist/fromNT", reefTrackerInput);
     if (loc == null) {
       updateWithClosest();
@@ -148,10 +149,11 @@ public class ScoreAssist {
         "ScoreAssist/pathTargetErrorInches", Units.metersToInches(this.pathTargetError));
   }
 
-  /** 
-   * When the drivetrain is close enough to the target, score assist is done 
+  /**
+   * When the drivetrain is close enough to the target, score assist is done
+   *
    * @return if score assist is done (based on drivetrain position)
-   * */
+   */
   @AutoLogOutput(key = "ScoreAssist/isAtFinalTargetPose")
   public boolean isAtFinalTargetPose() {
     boolean slow = RobotContainer.driveSubsystem.getSpeed() < 0.08;
@@ -171,6 +173,7 @@ public class ScoreAssist {
   /**
    * The path-portion of score assist has a specific target. When the drivetrain is close enough to
    * that target, score assist is done using paths and will beign using profiled pid
+   *
    * @return if the path-portion is done (based on drivetrain position)
    */
   @AutoLogOutput(key = "ScoreAssist/isAtPathTargetPose")
@@ -186,8 +189,9 @@ public class ScoreAssist {
         > ScoreAssistConstants.pathDistTolerance.getAsDouble();
   }
 
-  /** 
-   * Under certain circumstances, do not do the path-portion of score assist 
+  /**
+   * Under certain circumstances, do not do the path-portion of score assist
+   *
    * @return if we should be using the path-portion or letting the user drive
    */
   @AutoLogOutput(key = "ScoreAssist/shouldOverridePath")
