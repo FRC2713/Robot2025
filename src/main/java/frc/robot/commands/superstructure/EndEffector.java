@@ -39,4 +39,10 @@ public class EndEffector {
           Commands.sequence(
               Commands.runOnce(() -> Logger.recordOutput("Active EE", "PROCESSOR_SCORE")),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED));
+
+  public static Supplier<Command> STOP_ROLLERS =
+      () ->
+          Commands.sequence(
+              Commands.runOnce(() -> Logger.recordOutput("Active EE", "STOP_ROLLERS")),
+              RollerCmds.setSpeed(() -> 0));
 }

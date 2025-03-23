@@ -9,7 +9,6 @@ import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCmds;
-import frc.robot.commands.RollerCmds;
 import frc.robot.commands.climber.Climb;
 import frc.robot.commands.scoreassist.ScoreAssistCmds;
 import frc.robot.commands.superstructure.EndEffector;
@@ -68,7 +67,7 @@ public class DriverControls {
     driver
         .leftBumper()
         .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.get())
-        .onFalse(RollerCmds.setSpeed(() -> 0));
+        .onFalse(EndEffector.STOP_ROLLERS.get());
 
     // Score Coral w Score Assist
     driver
@@ -86,7 +85,7 @@ public class DriverControls {
         .onFalse(
             Commands.parallel(
                 Commands.runOnce(() -> RobotContainer.disableSourceAlign = true),
-                RollerCmds.setSpeed(() -> 0)));
+                EndEffector.STOP_ROLLERS.get()));
 
     // Enable/disable reefalign
     driver

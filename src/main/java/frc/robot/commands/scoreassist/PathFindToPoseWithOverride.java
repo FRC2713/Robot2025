@@ -19,8 +19,8 @@ public class PathFindToPoseWithOverride extends SequentialCommandGroup {
                 () -> RobotContainer.scoreAssist.getCurrentNodeTarget().getPathScorePose())
             .until(
                 () ->
-                    RobotContainer.scoreAssist.shouldManuallyOverridePath()
-                        || !RobotContainer.scoreAssist.shouldUsePath());
+                    RobotContainer.scoreAssist.shouldOverridePath()
+                        || !RobotContainer.scoreAssist.isAtPathTargetPose());
 
     Command setToOverride =
         Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.PATH_OVERRIDEN);
@@ -33,7 +33,7 @@ public class PathFindToPoseWithOverride extends SequentialCommandGroup {
                     ReefAlign.getInstance()
                         .inZone()
                         .orElse(RobotContainer.driveSubsystem.getRotation()))
-            .until(() -> !RobotContainer.scoreAssist.shouldUsePath());
+            .until(() -> !RobotContainer.scoreAssist.isAtPathTargetPose());
     this.addCommands(setToPathFinding, pathFinding, setToOverride, overriding);
   }
 }

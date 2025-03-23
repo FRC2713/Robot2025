@@ -33,6 +33,7 @@ import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.generated.TunerConstants;
 import frc.robot.oi.DriverControls;
 import frc.robot.oi.OperatorControls;
+import frc.robot.scoreassist.ClimbAssist;
 import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.ScoreAssist;
 import frc.robot.scoreassist.SourceAlign;
@@ -88,9 +89,13 @@ public class RobotContainer {
   public static AlgaeClaw algaeClaw;
   public static Climber climber;
 
+  public static Vision visionsubsystem;
+  public static ScoreAssist scoreAssist;
+  public static ClimbAssist climbAssist;
+
   // Xbox Controllers
   public static DriverControls driverControls = new DriverControls();
-  public static OperatorControls operatorControls = new OperatorControls(climber);
+  public static OperatorControls operatorControls = new OperatorControls();
 
   // Other command triggers/control
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
@@ -102,8 +107,6 @@ public class RobotContainer {
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
-  public static Vision visionsubsystem;
-  public static ScoreAssist scoreAssist;
   public static boolean disableReefAlign = true;
   public static boolean disableSourceAlign = true;
   public static final RHRHolonomicDriveController otfController =

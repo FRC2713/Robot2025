@@ -119,6 +119,7 @@ public class Robot extends LoggedRobot {
     ReefAlign.getInstance().periodic();
     SourceAlign.getInstance().periodic();
     RobotContainer.scoreAssist.periodic();
+    RobotContainer.climbAssist.periodic();
 
     // Record the pose of each subsystem
     // order matters here.

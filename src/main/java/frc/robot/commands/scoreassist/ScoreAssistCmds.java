@@ -41,7 +41,7 @@ public class ScoreAssistCmds {
                         exectuteDrive() // 2b) drive to target
                         ),
                     exectuteDrive(),
-                    RobotContainer.scoreAssist::shouldUsePath),
+                    RobotContainer.scoreAssist::isAtPathTargetPose),
                 executePrep()), // 3) execute prep
             stop(),
             executeSS())

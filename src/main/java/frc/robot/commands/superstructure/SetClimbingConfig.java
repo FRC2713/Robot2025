@@ -16,6 +16,7 @@ public class SetClimbingConfig extends SequentialCommandGroup {
 
   public SetClimbingConfig(String name) {
     this.addCommands(
+        // set drive train mode to slow
         DriveCmds.changeDefaultDriveCommand(
             RobotContainer.driveSubsystem,
             DriveCmds.joystickDriveSlow(
@@ -24,7 +25,7 @@ public class SetClimbingConfig extends SequentialCommandGroup {
                 () -> -RobotContainer.driverControls.getLeftX(),
                 () -> -RobotContainer.driverControls.getRightX()),
             "Slow Control"),
-        new InstantCommand(() -> Logger.recordOutput("Active SS", name)),
+        new InstantCommand(() -> Logger.recordOutput("Active SS", name + "_STAGE_1")),
         // move the arm out of the way, elevator first
         Commands.parallel(
             ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.CLIMB_PREP_HEIGHT),
@@ -33,6 +34,7 @@ public class SetClimbingConfig extends SequentialCommandGroup {
         // deploy the climber
         ClimberCmds.deploy(),
         Commands.waitSeconds(0.5),
+        new InstantCommand(() -> Logger.recordOutput("Active SS", name + "_STAGE_2")),
         // tuck the arm back in
         Commands.sequence(
             ShoulderCmds.setAngle(SetpointConstants.Shoulder.CLIMB_ANGLE_DEGS),
