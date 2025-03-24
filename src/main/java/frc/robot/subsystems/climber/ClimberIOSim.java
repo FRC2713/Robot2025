@@ -59,7 +59,9 @@ public class ClimberIOSim implements ClimberIO {
   private void setVoltageWithPID() {
     var pos = Units.radiansToDegrees(sim.getAngleRads());
     var vel = sim.getVelocityRadPerSec();
-    this.volts = this.pid.calculate( Units.radiansToDegrees(sim.getAngleRads()), this.targetAngleDeg) +  this.feedforward.calculate(pos, vel);
+    this.volts =
+        this.pid.calculate(Units.radiansToDegrees(sim.getAngleRads()), this.targetAngleDeg)
+            + this.feedforward.calculate(pos, vel);
   }
 
   @Override

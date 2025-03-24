@@ -9,7 +9,6 @@ import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
-
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -48,12 +47,12 @@ public class SetDOFSOneAtATime extends SequentialCommandGroup {
 
   /***
    * Meant to be for moving superstructures one at a time, built with factory
-   * @param orderedCommands 
+   * @param orderedCommands
    */
   public SetDOFSOneAtATime(List<Command> orderedCommands) {
-      for (Command c : orderedCommands) {
-          this.addCommands(c);
-      }
+    for (Command c : orderedCommands) {
+      this.addCommands(c);
+    }
   }
 
   /***

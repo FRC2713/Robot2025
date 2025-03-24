@@ -9,8 +9,7 @@ import frc.robot.util.ControlGains;
 import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.RHRUtil;
 
-
-  public class ShoulderConstants {
+public class ShoulderConstants {
   public static final int kCANId = 17;
   public static final int kEncoderCANId = 18;
   public static final boolean kInverted = false;

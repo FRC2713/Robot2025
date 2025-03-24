@@ -19,7 +19,7 @@ public class OperatorControls {
     climbPrepTrigger.onTrue(SuperStructure.CLIMBING_CONF.get());
   }
 
-  public void configureButtonBindings() {    
+  public void configureButtonBindings() {
 
     // Operator Controls
     operator.a().onTrue(SuperStructure.L1.get());
