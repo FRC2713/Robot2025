@@ -43,7 +43,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
   }
 
   /***
-   * Convinence constructor for going to a coral scoring location
+   * Convinence constructor for going to a coral scoring location but not scoring yet
    * @param algaeSpeed
    * @param elevatorTarget
    * @param shoulderTarget

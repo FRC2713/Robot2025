@@ -64,21 +64,23 @@ public class SuperStructure {
               SetpointConstants.Shoulder.L3_ANGLE_DEG,
               SetpointConstants.Pivot.L3_ANGLE_DEG);
 
+  // TODO: if this intersects with the reef, might need to do pivot last
   public static Supplier<Command> L4_PREP =
       () ->
           new SetAllDOFS(
               "L4_PREP",
-              "ALGAE_GRAB",
+              "STOP_ROLLERS",
               () -> 0, // stop algae claw
               SetpointConstants.Elevator.L4_PREP_HEIGHT_IN,
               SetpointConstants.Shoulder.L4_ANGLE_DEG,
               SetpointConstants.Pivot.L4_ANGLE_DEG);
 
+  // TODO: if this intersects with the reef, might need to do pivot last
   public static Supplier<Command> L4 =
       () ->
           new SetAllDOFS(
               "L4",
-              "ALGAE_GRAB",
+              "STOP_ROLLERS",
               () -> 0, // stop algae claw
               SetpointConstants.Elevator.L4_HEIGHT_IN,
               SetpointConstants.Shoulder.L4_ANGLE_DEG,

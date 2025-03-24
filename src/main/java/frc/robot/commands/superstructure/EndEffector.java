@@ -10,7 +10,7 @@ import org.littletonrobotics.junction.Logger;
 
 /**
  * Collection of commands that ONLY have to do with the end effector. Note that the SuperStructure
- * class might also move end effector motors.
+ * class commands might also control end effector motors.
  */
 public class EndEffector {
   public static Supplier<Command> CORAL_SCORE =
