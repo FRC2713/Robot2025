@@ -1,5 +1,6 @@
 package frc.robot.commands.superstructure;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.SetpointConstants;
@@ -8,6 +9,8 @@ import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
+
+import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
@@ -41,6 +44,16 @@ public class SetDOFSOneAtATime extends SequentialCommandGroup {
         ElevatorCmds.setHeightAndWait(elevatorTarget),
         ShoulderCmds.setAngleAndWait(shoulderTarget),
         PivotCmds.setAngleAndWait(wristTarget));
+  }
+
+  /***
+   * Meant to be for moving superstructures one at a time, built with factory
+   * @param orderedCommands 
+   */
+  public SetDOFSOneAtATime(List<Command> orderedCommands) {
+      for (Command c : orderedCommands) {
+          this.addCommands(c);
+      }
   }
 
   /***
