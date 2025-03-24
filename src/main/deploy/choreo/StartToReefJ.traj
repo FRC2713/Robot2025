@@ -4,7 +4,7 @@
  "snapshot":{
   "waypoints":[
     {"x":7.773796558380127, "y":5.657740592956543, "heading":3.141592653589793, "intervals":39, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":5.0948567390441895, "y":5.333974361419678, "heading":-2.0943951023931953, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+    {"x":5.0948567390441895, "y":5.333974361419678, "heading":-2.0943951023931953, "intervals":63, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
@@ -15,8 +15,7 @@
  "params":{
   "waypoints":[
     {"x":{"exp":"7.773796558380127 m", "val":7.773796558380127}, "y":{"exp":"5.657740592956543 m", "val":5.657740592956543}, "heading":{"exp":"pi rad", "val":3.141592653589793}, "intervals":39, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"5.0948567390441895 m", "val":5.0948567390441895}, "y":{"exp":"5.333974361419678 m", "val":5.333974361419678}, "heading":{"exp":"-120 deg", "val":-2.0943951023931953}, "intervals":63, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"11.927160263061523 m", "val":11.927160263061523}, "y":{"exp":"-0.6110000610351562 m", "val":-0.6110000610351562}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+    {"x":{"exp":"5.0948567390441895 m", "val":5.0948567390441895}, "y":{"exp":"5.333974361419678 m", "val":5.333974361419678}, "heading":{"exp":"-120 deg", "val":-2.0943951023931953}, "intervals":63, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},

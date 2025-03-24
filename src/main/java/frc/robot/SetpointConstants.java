@@ -4,7 +4,7 @@ import frc.robot.subsystems.constants.ClimberConstants;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 
-public class SSConstants {
+public class SetpointConstants {
   public class Elevator {
     public static final LoggedTunableNumber STARTING_HEIGHT =
         new LoggedTunableNumber("Elevator/SS/Starting Height", 0);
@@ -24,7 +24,7 @@ public class SSConstants {
     public static final LoggedTunableNumber L4_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L4 Height", 24);
     public static final LoggedTunableNumber L4_PREP_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 0);
+        new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 7);
 
     public static final LoggedTunableNumber PROCESSOR_PREP_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/Proc Prep Height", 10);
@@ -156,6 +156,8 @@ public class SSConstants {
   }
 
   public class Auto {
+    // TODO: tune down each of these delays or remove them if unneccessary
+
     public static final LoggedTunableNumber INTAKE_DELAY =
         new LoggedTunableNumber("Auto/Intake Delay", 1);
     public static final LoggedTunableNumber L4_SCORE_DELAY =

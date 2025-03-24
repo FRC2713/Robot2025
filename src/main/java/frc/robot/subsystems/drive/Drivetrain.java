@@ -23,8 +23,6 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -78,7 +76,6 @@ public class Drivetrain extends SubsystemBase {
   private final SysIdRoutine sysId;
   private final Alert gyroDisconnectedAlert =
       new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
-  private final Debouncer debounce = new Debouncer(3, DebounceType.kBoth);
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = new Rotation2d();
@@ -365,7 +362,7 @@ public class Drivetrain extends SubsystemBase {
       }
     }
 
-    return ScoreLoc.fromNodeAndLevel(closestLoc, level);
+    return new ScoreLoc(closestLoc, level);
   }
 
   /***********************
@@ -417,6 +414,10 @@ public class Drivetrain extends SubsystemBase {
     return odometryPoseEstimator.getEstimatedPosition();
   }
 
+  public Translation2d getTranslation() {
+    return getPose().getTranslation();
+  }
+
   /** Returns the current odometry rotation. */
   public Rotation2d getRotation() {
     return getPose().getRotation();
@@ -437,6 +438,12 @@ public class Drivetrain extends SubsystemBase {
 
   public double getAngularVelocityRadPerSec() {
     return gyroInputs.yawVelocityRadPerSec;
+  }
+
+  @AutoLogOutput(key = "SwerveChassisSpeeds/speed")
+  public double getSpeed() {
+    var speeds = getChassisSpeeds();
+    return Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
   }
 
   /** Returns the maximum linear speed in meters per sec. */

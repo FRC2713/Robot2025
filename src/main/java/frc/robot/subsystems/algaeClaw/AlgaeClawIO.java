@@ -23,4 +23,8 @@ public interface AlgaeClawIO {
 
   public default void setEnableLimitSwitch(boolean enabled) {}
   ;
+
+  public default boolean isAtTarget() {
+    return true;
+  }
 }

@@ -45,8 +45,6 @@ public class PivotIOSim implements PivotIO {
     inputs.absoluteAngleDegrees = Units.radiansToDegrees(sim.getAngleRads());
     inputs.velocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
     inputs.voltage = output;
-    inputs.isAtTarget =
-        Math.abs(inputs.angleDegrees - targetAngleDeg) < PivotConstants.AT_TARGET_GIVE_DEGS;
     inputs.commandedAngleDegs = targetAngleDeg;
   }
 
@@ -64,5 +62,11 @@ public class PivotIOSim implements PivotIO {
   public void setPID(LoggedTunableGains pid) {
     this.pid = pid.createPIDController();
     feedforward = pid.createArmFF();
+  }
+
+  @Override
+  public boolean isAtTarget() {
+    return Math.abs(Units.radiansToDegrees(sim.getAngleRads()) - targetAngleDeg)
+        < PivotConstants.AT_TARGET_GIVE_DEGS;
   }
 }

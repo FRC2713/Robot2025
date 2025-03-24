@@ -1,8 +1,9 @@
-package frc.robot.commands;
+package frc.robot.scoreassist;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotContainer;
+import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ScoreNode;
 import frc.robot.util.TrapezoidZone;
@@ -57,6 +58,8 @@ public class ReefAlign {
         ScoreNode.K.getPose().getRotation().rotateBy(Rotation2d.fromDegrees(180)))
   };
 
+  private boolean lastTriggerState = false;
+
   private ReefAlign() {}
 
   public void periodic() {
@@ -65,13 +68,21 @@ public class ReefAlign {
     // for (TrapezoidZone trapezoid : trapezoids) {
     //   Logger.recordOutput("ReefAlign/trap" + (index++), trapezoid.toPose2dArray());
     // }
+
+    boolean nextTriggerState =
+        DriverStation.isTeleopEnabled()
+            && RobotContainer.rollers.hasCoral()
+            && !RobotContainer.disableReefAlign
+            && (RobotContainer.scoreAssist.mode == ScoreDrivingMode.INACTIVE)
+            && inZone().isPresent();
+
+    // Don't update the default command during ScoreAssist
+    if (RobotContainer.scoreAssist.mode == ScoreDrivingMode.INACTIVE)
+      this.lastTriggerState = nextTriggerState;
   }
 
   public boolean shouldDoReefAlign() {
-    return DriverStation.isTeleopEnabled()
-        && RobotContainer.rollers.hasCoral()
-        && !RobotContainer.disableReefAlign
-        && inZone().isPresent();
+    return this.lastTriggerState;
   }
 
   public Optional<Rotation2d> inZone() {

@@ -11,15 +11,15 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
-import frc.robot.SSConstants;
-import frc.robot.commands.EndEffector;
-import frc.robot.commands.ScoreAssist;
-import frc.robot.commands.SuperStructure;
+import frc.robot.SetpointConstants;
+import frc.robot.commands.scoreassist.ScoreAssistCmds;
+import frc.robot.commands.superstructure.EndEffector;
+import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
-import frc.robot.util.ScoreLoc;
+import frc.robot.util.ScoreLoc.ScoreLocations;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+// TODO: make sure this actually matches ScoreLotsOfCoral with all the refactoring and tuning
 public class ScoreLotsOfCoralFlipped {
   /**
    * @param factory
@@ -41,7 +41,7 @@ public class ScoreLotsOfCoralFlipped {
             Commands.sequence(
                 new InstantCommand(() -> System.out.println("Score Lots of Coral started")),
                 RHRUtil.resetRotationIfReal(startToReefJTraj.getInitialPose().get()),
-                Commands.parallel(SuperStructure.L4_PREP.getCommand(), startToReefJTraj.cmd()),
+                Commands.parallel(SuperStructure.L4_PREP.get(), startToReefJTraj.cmd()),
                 Commands.print("Shoulder in position & trajectory started")));
 
     // When at the reef, score and go to source
@@ -49,58 +49,37 @@ public class ScoreLotsOfCoralFlipped {
         .done()
         .onTrue(
             Commands.sequence(
-                // 1) Finish off trajectory with score assist, in parallel move SS to L4
-                Commands.parallel(
-                    Commands.sequence(
-                        new InstantCommand(
-                            () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.J_FOUR)),
-                        ScoreAssist.getInstance()
-                            .goReefTracker(driveSubsystem)
-                            .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
-                        new InstantCommand(() -> driveSubsystem.stop())),
-                    SuperStructure.L4.getCommand()),
-                // 2) Score Coral
-                ScoreAssist.getInstance().waitUntilFinished(1.6),
-                Commands.waitSeconds(SSConstants.Auto.L4_SCORE_DELAY.getAsDouble()),
-                EndEffector.CORAL_SCORE.getCommand(),
-                Commands.waitSeconds(SSConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
-                // 3) Begin driving to source
-                Commands.parallel(
-                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefJToSource.cmd())));
+                // 1) Finish off trajectory with score assist, in parallel move SS to L4 and when
+                // ready runs the rollers
+                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.J_FOUR),
+                Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+                // 2) Begin driving to source
+                Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE.get(), reefJToSource.cmd())));
 
     // When the trajectory is done, intake; then go to reef B
     reefJToSource
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(),
+                SuperStructure.SOURCE_CORAL_INTAKE.get(),
                 Commands.race(
                     new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral()),
                     Commands.waitSeconds(1.0)),
                 sourceToReefL.cmd()));
 
     // Prep elevator along the way
-    // sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L4_PREP.getCommand());
+    // sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L4_PREP);
     // Once at reef B, score and go to source
     sourceToReefL
         .done()
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, in parallel move SS to L4
-                Commands.parallel(
-                    Commands.sequence(
-                        new InstantCommand(
-                            () -> ScoreAssist.getInstance().setReefTrackerLoc(ScoreLoc.L_FOUR)),
-                        ScoreAssist.getInstance()
-                            .goReefTracker(driveSubsystem)
-                            .withDeadline(ScoreAssist.getInstance().waitUntilFinished(1.0)),
-                        new InstantCommand(() -> driveSubsystem.stop())),
-                    SuperStructure.L4.getCommand()),
+                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.L_FOUR),
                 // 2) Score Coral
-                EndEffector.CORAL_SCORE.getCommand(),
+                EndEffector.CORAL_SCORE.get(),
                 // 3) Begin driving to source
-                Commands.parallel(
-                    SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), reefLToSource.cmd())));
+                Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE.get(), reefLToSource.cmd())));
 
     return routine;
   }

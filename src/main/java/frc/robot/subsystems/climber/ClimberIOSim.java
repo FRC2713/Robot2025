@@ -67,11 +67,17 @@ public class ClimberIOSim implements ClimberIO {
   @Override
   public void setPID(LoggedTunableGains pid) {
     this.pid = pid.createPIDController();
-    feedforward = pid.createArmFF();
+    this.feedforward = pid.createArmFF();
   }
 
   @Override
   public void setServoPos(double pos) {
     servoPos = pos;
+  }
+
+  @Override
+  public boolean isAtTarget() {
+    return Math.abs(Units.radiansToDegrees(sim.getAngleRads()) - this.targetAngleDeg)
+        < ClimberConstants.AT_TARGET_GIVE_DEGS;
   }
 }
