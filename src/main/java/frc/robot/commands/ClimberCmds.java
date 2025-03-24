@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
-import frc.robot.SSConstants;
+import frc.robot.SetpointConstants;
 import java.util.function.DoubleSupplier;
 
 public class ClimberCmds {
@@ -56,7 +56,7 @@ public class ClimberCmds {
         Commands.waitUntil(
             () ->
                 RobotContainer.climber.getCurrentAngle()
-                    >= SSConstants.Climber.MAX_ANGLE_CLIMBING.getAsDouble()),
+                    >= SetpointConstants.Climber.MAX_ANGLE_CLIMBING.getAsDouble()),
         setVoltage(() -> 0));
   }
 
@@ -69,14 +69,15 @@ public class ClimberCmds {
     return Commands.sequence(
         Commands.either(
             ClimberCmds.configureSoftLimits(
-                SSConstants.Climber.MIN_ANGLE_CLIMBING, SSConstants.Climber.MAX_ANGLE_CLIMBING),
+                SetpointConstants.Climber.MIN_ANGLE_CLIMBING,
+                SetpointConstants.Climber.MAX_ANGLE_CLIMBING),
             Commands.none(),
             () -> (RobotContainer.climber.getCurrentAngle() > 100) && resetLimitsWhenInRange),
         new InstantCommand(() -> RobotContainer.climber.setServoPos(servoPos.getAsDouble())),
         Commands.run(
             () ->
                 RobotContainer.climber.setVoltage(
-                    input.getAsDouble() * SSConstants.Climber.INP_TO_VOLTS.getAsDouble()),
+                    input.getAsDouble() * SetpointConstants.Climber.INP_TO_VOLTS.getAsDouble()),
             RobotContainer.climber));
   }
 }

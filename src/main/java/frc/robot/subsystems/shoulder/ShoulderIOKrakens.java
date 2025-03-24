@@ -106,4 +106,11 @@ public class ShoulderIOKrakens implements ShoulderIO {
   public void setBus(double bus) {
     motor.set(bus);
   }
+
+  @Override
+  public boolean isAtTarget() {
+    return Math.abs(
+            Units.rotationsToDegrees(motor.getPosition().getValueAsDouble()) - this.targetDegrees)
+        < ShoulderConstants.AT_TARGET_GIVE_DEGS;
+  }
 }

@@ -5,7 +5,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.constants.RollerConstants;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class AlgaeClaw extends SubsystemBase {
@@ -17,8 +17,6 @@ public class AlgaeClaw extends SubsystemBase {
       new MechanismLigament2d(
           "algaeclaw", Units.inchesToMeters(2), -20, 7, new Color8Bit(100, 100, 100));
 
-  private double tubeSpeedTarget;
-
   public AlgaeClaw(AlgaeClawIO IO) {
     this.IO = IO;
   }
@@ -29,13 +27,12 @@ public class AlgaeClaw extends SubsystemBase {
   }
 
   public void setRPM(double rpm) {
-    tubeSpeedTarget = rpm;
     IO.setRPM(rpm);
   }
 
+  @AutoLogOutput(key = "AlgaeClaw/isAtTarget")
   public boolean isAtTarget() {
-    return Math.abs(tubeSpeedTarget - inputs.algaeClawVelocityRPM)
-        < RollerConstants.AT_TARGET_GIVE_RPM;
+    return this.IO.isAtTarget();
   }
 
   public void updateMech2D() {

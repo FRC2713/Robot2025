@@ -22,8 +22,6 @@ public class Climber extends SubsystemBase {
           10,
           new Color8Bit(255, 0, 0));
 
-  private double targetAngleDeg = (ClimberConstants.kInitialAngle);
-
   public Pose3d pose = ClimberConstants.kInitialPose;
   public Transform3d transform = new Transform3d();
 
@@ -49,13 +47,12 @@ public class Climber extends SubsystemBase {
   }
 
   public void setTargetAngle(double degrees) {
-    this.targetAngleDeg = degrees;
     this.IO.setTargetAngle(degrees);
   }
 
   @AutoLogOutput(key = "Climber/isAtTarget")
   public boolean isAtTarget() {
-    return Math.abs(getCurrentAngle() - this.targetAngleDeg) < ClimberConstants.AT_TARGET_GIVE_DEGS;
+    return this.IO.isAtTarget();
   }
 
   public void updateMech2D() {

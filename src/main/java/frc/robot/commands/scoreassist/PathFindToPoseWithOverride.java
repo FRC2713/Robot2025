@@ -19,21 +19,21 @@ public class PathFindToPoseWithOverride extends SequentialCommandGroup {
                 () -> RobotContainer.scoreAssist.getCurrentNodeTarget().getPathScorePose())
             .until(
                 () ->
-                    RobotContainer.scoreAssist.shouldManuallyOverridePath()
-                        || !RobotContainer.scoreAssist.shouldUsePath());
+                    RobotContainer.scoreAssist.shouldOverridePath()
+                        || !RobotContainer.scoreAssist.isAtPathTargetPose());
 
     Command setToOverride =
         Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.PATH_OVERRIDEN);
     Command overriding =
         DriveCmds.joystickDriveAtAngle(
                 RobotContainer.driveSubsystem,
-                () -> -RobotContainer.driver.getLeftY(),
-                () -> -RobotContainer.driver.getLeftX(),
+                () -> -RobotContainer.driverControls.getLeftY(),
+                () -> -RobotContainer.driverControls.getLeftX(),
                 () ->
                     ReefAlign.getInstance()
                         .inZone()
                         .orElse(RobotContainer.driveSubsystem.getRotation()))
-            .until(() -> !RobotContainer.scoreAssist.shouldUsePath());
+            .until(() -> !RobotContainer.scoreAssist.isAtPathTargetPose());
     this.addCommands(setToPathFinding, pathFinding, setToOverride, overriding);
   }
 }
