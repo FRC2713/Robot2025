@@ -75,6 +75,8 @@ public class DriveConstants {
     }
   }
 
+  // keep for inital path planner testing
+  @SuppressWarnings("unused")
   private static RobotConfig fromManualSettings() {
     return new RobotConfig(
         Constants.massKG,
