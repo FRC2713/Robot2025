@@ -107,7 +107,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Pivot/SS/L4 Angle", 55);
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/Barge Angle", -30);
+        new LoggedTunableNumber("Pivot/SS/Barge Angle", 135);
 
     public static final LoggedTunableNumber PREP_CLIMB_ANGLE_DEGS =
         new LoggedTunableNumber("Pivot/SS/Prep Climb Angle", 30);
