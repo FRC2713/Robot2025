@@ -41,7 +41,7 @@ public class SourceAlign {
   private SourceAlign() {}
 
   public void periodic() {
-    // Logger.recordOutput("ReefAlign/disabled", RobotContainer.disableReefAlign);
+    Logger.recordOutput("SourceAlign/disabled", RobotContainer.disableSourceAlign);
     int index = 0;
     for (TrapezoidZone trapezoid : trapezoids) {
       Logger.recordOutput("SourceAlign/trap" + (index++), trapezoid.toPose2dArray());

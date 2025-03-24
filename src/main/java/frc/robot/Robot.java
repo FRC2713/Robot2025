@@ -17,6 +17,7 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Threads;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.scoreassist.ReefAlign;
@@ -136,11 +137,10 @@ public class Robot extends LoggedRobot {
     var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
     RobotContainer.disableReefAlign = disableReefAlign;
     if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
-      robotContainer.setToNormalDrive();
+      RobotContainer.driverControls.setToNormalDrive();
     }
     hadDisabledReefAlign = disableReefAlign;
     RobotContainer.autoScorePathing = SmartDashboard.getBoolean("Use Pathing", false);
-
   }
 
   /** This function is called once when the robot is disabled. */
