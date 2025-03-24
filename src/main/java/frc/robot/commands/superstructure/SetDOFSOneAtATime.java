@@ -24,7 +24,8 @@ public class SetDOFSOneAtATime extends SequentialCommandGroup {
    * @param wristTarget
    */
   public SetDOFSOneAtATime(
-      String name,
+      String ssName,
+      String eeName,
       BooleanSupplier intakingCoral,
       DoubleSupplier coralSpeed,
       DoubleSupplier algaeSpeed,
@@ -32,7 +33,8 @@ public class SetDOFSOneAtATime extends SequentialCommandGroup {
       DoubleSupplier shoulderTarget,
       DoubleSupplier wristTarget) {
     this.addCommands(
-        new InstantCommand(() -> Logger.recordOutput("Active SS", this.toString())),
+        new InstantCommand(() -> Logger.recordOutput("Active SS", ssName)),
+        new InstantCommand(() -> Logger.recordOutput("Active EE", eeName)),
         RollerCmds.setEnableLimitSwitch(intakingCoral),
         RollerCmds.setSpeedAndWait(coralSpeed),
         AlgaeClawCmds.setSpeedAndWait(algaeSpeed),
@@ -48,12 +50,14 @@ public class SetDOFSOneAtATime extends SequentialCommandGroup {
    * @param wristTarget
    */
   public SetDOFSOneAtATime(
-      String name,
+      String ssName,
+      String eeName,
       DoubleSupplier elevatorTarget,
       DoubleSupplier shoulderTarget,
       DoubleSupplier wristTarget) {
     this(
-        name,
+        ssName,
+        eeName,
         () -> false,
         () -> 0,
         SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
@@ -70,11 +74,20 @@ public class SetDOFSOneAtATime extends SequentialCommandGroup {
    * @param wristTarget
    */
   public SetDOFSOneAtATime(
-      String name,
+      String ssName,
+      String eeName,
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
       DoubleSupplier shoulderTarget,
       DoubleSupplier wristTarget) {
-    this(name, () -> false, () -> 0, algaeSpeed, elevatorTarget, shoulderTarget, wristTarget);
+    this(
+        ssName,
+        eeName,
+        () -> false,
+        () -> 0,
+        algaeSpeed,
+        elevatorTarget,
+        shoulderTarget,
+        wristTarget);
   }
 }

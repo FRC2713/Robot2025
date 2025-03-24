@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveCmds;
 import frc.robot.commands.autos.CenterAutoOnePiece;
 import frc.robot.commands.autos.CoralAndAlgaeAuto;
 import frc.robot.commands.autos.DriveTesting;
@@ -89,17 +88,10 @@ public class RobotContainer {
   public static AlgaeClaw algaeClaw;
   public static Climber climber;
 
-  public static Vision visionsubsystem;
-  public static ScoreAssist scoreAssist;
-  public static ClimbAssist climbAssist;
-
   // Xbox Controllers
   public static DriverControls driverControls = new DriverControls();
   public static OperatorControls operatorControls = new OperatorControls();
 
-  // Other command triggers/control
-  private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
-  private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
   private static boolean hasRanAuto = false;
 
   // Dashboard inputs
@@ -107,8 +99,6 @@ public class RobotContainer {
 
   // For Choreo
   private final AutoFactory choreoAutoFactory;
-  public static boolean disableReefAlign = true;
-  public static boolean disableSourceAlign = true;
   public static final RHRHolonomicDriveController otfController =
       new RHRHolonomicDriveController(
           OTFConstants.translationPID, // Translation PID constants
@@ -116,7 +106,18 @@ public class RobotContainer {
           OTFConstants.translationTolerance // Translation Tolerenace
           );
 
-  // class constructor
+  // For teleop automation
+  public static ScoreAssist scoreAssist;
+  public static ClimbAssist climbAssist;
+  public static Vision visionsubsystem;
+  public static boolean disableReefAlign = false;
+  public static boolean disableSourceAlign = true;
+  public static boolean autoScorePathing = false;
+  private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
+  private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
+  // private Trigger climbPrepTrigger = new
+  // Trigger(ScoreAssistOld.getInstance()::shouldClimbPrep);
+
   public RobotContainer() {
     // Start subsystems
     switch (Constants.currentMode) {
@@ -284,29 +285,9 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings(DriverControls driver) {
-    reefAlignTrigger
-        .onTrue(
-            DriveCmds.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCmds.joystickDriveAtAngle(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> ReefAlign.getInstance().inZone().orElse(driveSubsystem.getRotation())),
-                "Align To Reef"))
-        .onFalse(driver.setToNormalDriveCmd());
+    reefAlignTrigger.onTrue(driver.setToReefAlignCmd()).onFalse(driver.setToNormalDriveCmd());
 
-    sourceAlignTrigger
-        .onTrue(
-            DriveCmds.changeDefaultDriveCommand(
-                driveSubsystem,
-                DriveCmds.joystickDriveAtAngle(
-                    driveSubsystem,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX(),
-                    () -> SourceAlign.getInstance().inZone().orElse(driveSubsystem.getRotation())),
-                "Align To Source"))
-        .onFalse(driver.setToNormalDriveCmd());
+    sourceAlignTrigger.onTrue(driver.setToSourceAlignCmd()).onFalse(driver.setToNormalDriveCmd());
   }
 
   public void disabledPeriodic() {

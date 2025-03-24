@@ -2,7 +2,6 @@ package frc.robot.commands.superstructure;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
@@ -24,7 +23,8 @@ public class SetAllDOFS extends ParallelCommandGroup {
    * @param wristTarget
    */
   public SetAllDOFS(
-      String name,
+      String ssName,
+      String eeName,
       BooleanSupplier intakingCoral,
       DoubleSupplier coralSpeed,
       DoubleSupplier algaeSpeed,
@@ -32,7 +32,8 @@ public class SetAllDOFS extends ParallelCommandGroup {
       DoubleSupplier shoulderTarget,
       DoubleSupplier wristTarget) {
     this.addCommands(
-        new InstantCommand(() -> Logger.recordOutput("Active SS", name)),
+        new InstantCommand(() -> Logger.recordOutput("Active SS", ssName)),
+        new InstantCommand(() -> Logger.recordOutput("Active EE", eeName)),
         RollerCmds.setEnableLimitSwitch(intakingCoral),
         RollerCmds.setSpeedAndWait(coralSpeed),
         AlgaeClawCmds.setSpeedAndWait(algaeSpeed),
@@ -42,39 +43,27 @@ public class SetAllDOFS extends ParallelCommandGroup {
   }
 
   /***
-   * Convinence constructor for going to a scoring location
-   * @param elevatorTarget
-   * @param shoulderTarget
-   * @param wristTarget
-   */
-  public SetAllDOFS(
-      String name,
-      DoubleSupplier elevatorTarget,
-      DoubleSupplier shoulderTarget,
-      DoubleSupplier wristTarget) {
-    this(
-        name,
-        () -> false,
-        () -> 0,
-        SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
-        elevatorTarget,
-        shoulderTarget,
-        wristTarget);
-  }
-
-  /***
-   * Convinence constructor for going to a scoring location
+   * Convinence constructor for going to a coral scoring location
    * @param algaeSpeed
    * @param elevatorTarget
    * @param shoulderTarget
    * @param wristTarget
    */
   public SetAllDOFS(
-      String name,
+      String ssName,
+      String eeName,
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
       DoubleSupplier shoulderTarget,
       DoubleSupplier wristTarget) {
-    this(name, () -> false, () -> 0, algaeSpeed, elevatorTarget, shoulderTarget, wristTarget);
+    this(
+        ssName,
+        eeName,
+        () -> false,
+        () -> 0,
+        algaeSpeed,
+        elevatorTarget,
+        shoulderTarget,
+        wristTarget);
   }
 }

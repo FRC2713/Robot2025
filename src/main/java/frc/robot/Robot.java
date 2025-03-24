@@ -17,6 +17,7 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Threads;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.scoreassist.ReefAlign;
@@ -38,6 +39,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
+  private boolean hadDisabledReefAlign = false;
 
   public Robot() {
     PortForwarder.add(5810, "localhost", 4173);
@@ -96,7 +98,8 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
     Pathfinding.setPathfinder(new LocalADStarAK());
-    // SmartDashboard.putBoolean("Disable ReefAlign", false);
+    SmartDashboard.putBoolean("Disable ReefAlign", false);
+    SmartDashboard.putBoolean("Use Pathing", false);
   }
 
   /** This function is called periodically during all modes. */
@@ -130,6 +133,14 @@ public class Robot extends LoggedRobot {
       RobotContainer.climber.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
+
+    var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
+    RobotContainer.disableReefAlign = disableReefAlign;
+    if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
+      RobotContainer.driverControls.setToNormalDrive();
+    }
+    hadDisabledReefAlign = disableReefAlign;
+    RobotContainer.autoScorePathing = SmartDashboard.getBoolean("Use Pathing", false);
   }
 
   /** This function is called once when the robot is disabled. */

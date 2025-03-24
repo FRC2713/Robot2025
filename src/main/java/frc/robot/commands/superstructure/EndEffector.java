@@ -8,7 +8,10 @@ import frc.robot.commands.RollerCmds;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-/** Collection of */
+/**
+ * Collection of commands that ONLY have to do with the end effector. Note that the SuperStructure
+ * class might also move end effector motors.
+ */
 public class EndEffector {
   public static Supplier<Command> CORAL_SCORE =
       () ->

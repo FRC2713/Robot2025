@@ -13,6 +13,7 @@ public class SuperStructure {
       () ->
           new SetAllDOFS(
               "STARTING_CONFG",
+              "STOP_ROLLERS",
               () -> true, // ready for coral-ing
               () -> 0, // not actually coral-ing
               () -> 0, // not actually algae-ing
@@ -24,6 +25,7 @@ public class SuperStructure {
       () ->
           new SetAllDOFS(
                   "SOURCE_CORAL_INTAKE",
+                  "INTAKE_CORAL",
                   () -> true, // ready for coral-ing
                   SetpointConstants.Roller.SOURCE_CORAL_INTAKE_SPEED, // start coral-ing
                   () -> 0, // not actually algae-ing
@@ -36,6 +38,8 @@ public class SuperStructure {
       () ->
           new SetAllDOFS(
               "L1",
+              "ALGAE_GRAB",
+              SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
               SetpointConstants.Elevator.L1_HEIGHT_IN,
               SetpointConstants.Shoulder.L1_ANGLE_DEG,
               SetpointConstants.Pivot.L1_ANGLE_DEG);
@@ -44,6 +48,8 @@ public class SuperStructure {
       () ->
           new SetAllDOFS(
               "L2",
+              "ALGAE_GRAB",
+              SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
               SetpointConstants.Elevator.L2_HEIGHT_IN,
               SetpointConstants.Shoulder.L2_ANGLE_DEG,
               SetpointConstants.Pivot.L2_ANGLE_DEG);
@@ -52,6 +58,8 @@ public class SuperStructure {
       () ->
           new SetAllDOFS(
               "L3",
+              "ALGAE_GRAB",
+              SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
               SetpointConstants.Elevator.L3_HEIGHT_IN,
               SetpointConstants.Shoulder.L3_ANGLE_DEG,
               SetpointConstants.Pivot.L3_ANGLE_DEG);
@@ -60,6 +68,7 @@ public class SuperStructure {
       () ->
           new SetAllDOFS(
               "L4_PREP",
+              "ALGAE_GRAB",
               () -> 0, // stop algae claw
               SetpointConstants.Elevator.L4_PREP_HEIGHT_IN,
               SetpointConstants.Shoulder.L4_ANGLE_DEG,
@@ -69,6 +78,7 @@ public class SuperStructure {
       () ->
           new SetAllDOFS(
               "L4",
+              "ALGAE_GRAB",
               () -> 0, // stop algae claw
               SetpointConstants.Elevator.L4_HEIGHT_IN,
               SetpointConstants.Shoulder.L4_ANGLE_DEG,
@@ -78,6 +88,7 @@ public class SuperStructure {
       () ->
           new SetDOFSOneAtATime(
                   "PROCESSOR",
+                  "ALGAE_HOLD",
                   SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
                   SetpointConstants.Elevator.PROCESSOR_PREP_HEIGHT_IN,
                   SetpointConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG,
@@ -95,6 +106,7 @@ public class SuperStructure {
       () ->
           new SetAllDOFS(
               "BARGE",
+              "ALGAE_HOLD",
               SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
               SetpointConstants.Elevator.BARGE_HEIGHT_IN,
               SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES,

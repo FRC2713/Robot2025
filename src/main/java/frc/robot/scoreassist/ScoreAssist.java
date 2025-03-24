@@ -179,14 +179,15 @@ public class ScoreAssist {
   @AutoLogOutput(key = "ScoreAssist/isAtPathTargetPose")
   public boolean isAtPathTargetPose() {
     return RobotContainer.driveSubsystem
-            .getPose()
-            .getTranslation()
-            .getDistance(
-                RobotContainer.scoreAssist
-                    .getCurrentNodeTarget()
-                    .getRobotAlignmentPose()
-                    .getTranslation())
-        > ScoreAssistConstants.pathDistTolerance.getAsDouble();
+                .getPose()
+                .getTranslation()
+                .getDistance(
+                    RobotContainer.scoreAssist
+                        .getCurrentNodeTarget()
+                        .getRobotAlignmentPose()
+                        .getTranslation())
+            > ScoreAssistConstants.pathDistTolerance.getAsDouble()
+        && RobotContainer.autoScorePathing;
   }
 
   /**
