@@ -12,12 +12,14 @@ import frc.robot.commands.superstructure.SuperStructure;
 public class OperatorControls {
   private static final CommandXboxController operator = new CommandXboxController(1);
 
-  public OperatorControls() {}
+  // TODO: test with reef tracker (needs uncommited code from driver station)
+  Trigger climbPrepTrigger = new Trigger(() -> RobotContainer.climbAssist.shouldClimbPrep());
 
-  public void configureButtonBindings() {
+  public void configureTriggers() {
+    climbPrepTrigger.onTrue(SuperStructure.CLIMBING_CONF.get());
+  }
 
-    // Customized triggers
-    Trigger climbPrepTrigger = new Trigger(() -> RobotContainer.climbAssist.shouldClimbPrep());
+  public void configureButtonBindings() {    
 
     // Operator Controls
     operator.a().onTrue(SuperStructure.L1.get());
@@ -29,7 +31,6 @@ public class OperatorControls {
 
     // super structure control for climbing, also sets the driving mode to slow
     operator.start().onTrue(SuperStructure.CLIMBING_CONF.get());
-    climbPrepTrigger.onTrue(SuperStructure.CLIMBING_CONF.get());
 
     // climber control for climbing
     operator

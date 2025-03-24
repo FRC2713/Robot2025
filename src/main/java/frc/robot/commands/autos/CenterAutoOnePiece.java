@@ -65,7 +65,7 @@ public class CenterAutoOnePiece {
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
                 ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.G_FOUR),
-                // TODO: Tune down
+                // 2) Wait to make sure coral is outtathere
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE.get())));

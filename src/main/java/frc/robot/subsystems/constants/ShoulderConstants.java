@@ -9,12 +9,14 @@ import frc.robot.util.ControlGains;
 import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.RHRUtil;
 
-public class ShoulderConstants {
+
+  public class ShoulderConstants {
   public static final int kCANId = 17;
   public static final int kEncoderCANId = 18;
   public static final boolean kInverted = false;
 
-  public static final double kGearing = 180;
+  // TODO: update gearing and encoder offset (needs uncommited code from driver station)
+  public static final double kGearing = 108;
   public static final double kLength = Units.inchesToMeters(18);
   public static final double kMass = 7.094328; // kg
   public static final double kHeight = Units.inchesToMeters(24);
@@ -75,6 +77,7 @@ public class ShoulderConstants {
               .expo_kV(kExponential_kV)
               .expo_kA(kExponential_kA));
 
+  // TODO: update gearing and encoder offset (needs uncommited code from driver station)
   public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(163.125);
 
   public static final int mech2dWidth = 10;

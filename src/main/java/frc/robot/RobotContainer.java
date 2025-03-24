@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.autos.CenterAutoOnePiece;
 import frc.robot.commands.autos.CoralAndAlgaeAuto;
 import frc.robot.commands.autos.DriveTesting;
@@ -33,9 +32,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.oi.DriverControls;
 import frc.robot.oi.OperatorControls;
 import frc.robot.scoreassist.ClimbAssist;
-import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.ScoreAssist;
-import frc.robot.scoreassist.SourceAlign;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
 import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
@@ -113,8 +110,7 @@ public class RobotContainer {
   public static boolean disableReefAlign = false;
   public static boolean disableSourceAlign = true;
   public static boolean autoScorePathing = false;
-  private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
-  private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
+
   // private Trigger climbPrepTrigger = new
   // Trigger(ScoreAssistOld.getInstance()::shouldClimbPrep);
 
@@ -277,17 +273,12 @@ public class RobotContainer {
 
     // Configure the button bindings
     driverControls.configureButtonBindings();
+    driverControls.configureTriggers();
     operatorControls.configureButtonBindings();
-    configureButtonBindings(driverControls);
+    operatorControls.configureTriggers();
 
     // Default command, normal field-relative drive
     driverControls.setToNormalDrive();
-  }
-
-  private void configureButtonBindings(DriverControls driver) {
-    reefAlignTrigger.onTrue(driver.setToReefAlignCmd()).onFalse(driver.setToNormalDriveCmd());
-
-    sourceAlignTrigger.onTrue(driver.setToSourceAlignCmd()).onFalse(driver.setToNormalDriveCmd());
   }
 
   public void disabledPeriodic() {

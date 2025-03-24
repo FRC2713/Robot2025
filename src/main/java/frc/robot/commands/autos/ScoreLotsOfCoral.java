@@ -69,7 +69,7 @@ public class ScoreLotsOfCoral {
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
                 ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.E_FOUR),
-                // TODO: Tune down
+                // 2) Wait to make sure coral is outtathere
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE.get(), reefEToSource.cmd())));
@@ -97,7 +97,7 @@ public class ScoreLotsOfCoral {
                 // 1) Finish off trajectory with score assist, which also moves the SS and runs the
                 // rollers
                 ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.C_FOUR),
-                // TODO: Tune down
+                // 2) Wait to make sure coral is outtathere
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Move SS to intake configuration and begin driving to source
                 Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE.get(), reefCToSource.cmd())));
@@ -120,7 +120,7 @@ public class ScoreLotsOfCoral {
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS
                 ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.D_FOUR),
-                // TODO: Tune down
+                // 2) Wait to make sure coral is outtathere
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
                 Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE.get(), reefDToSource.cmd())));

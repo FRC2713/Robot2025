@@ -156,6 +156,8 @@ public class SetpointConstants {
   }
 
   public class Auto {
+    // TODO: tune down each of these delays or remove them if unneccessary
+
     public static final LoggedTunableNumber INTAKE_DELAY =
         new LoggedTunableNumber("Auto/Intake Delay", 1);
     public static final LoggedTunableNumber L4_SCORE_DELAY =

@@ -19,7 +19,7 @@ import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
 import frc.robot.util.ScoreLoc.ScoreLocations;
 
-// TODO: make sure this matches ScoreLotsOfCoral with all the refactoring and tuning before DCMP
+// TODO: make sure this actually matches ScoreLotsOfCoral with all the refactoring and tuning
 public class ScoreLotsOfCoralFlipped {
   /**
    * @param factory
