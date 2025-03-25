@@ -41,7 +41,7 @@ public class CoralAndAlgaeAuto {
                 SuperStructure.L3.get(),
                 EndEffector.ALGAE_GRAB_AND_CORAL_SCORE.get(),
                 Commands.parallel(
-                    SuperStructure.PROCESSOR.get().beforeStarting(Commands.waitSeconds(0.5)),
+                    SuperStructure.PROCESSOR_PREP.get().beforeStarting(Commands.waitSeconds(0.5)),
                     reefEToProcTraj.cmd())));
 
     // When the trajectory is done, score in processor. Then go to source
@@ -49,7 +49,7 @@ public class CoralAndAlgaeAuto {
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.PROCESSOR.get(),
+                SuperStructure.PROCESSOR_PREP.get(),
                 EndEffector.PROCESSOR_SCORE.get(),
                 Commands.parallel(procToSourceTraj.cmd(), SuperStructure.STARTING_CONF.get())));
 
@@ -69,7 +69,7 @@ public class CoralAndAlgaeAuto {
                 SuperStructure.L3.get(),
                 EndEffector.ALGAE_GRAB_AND_CORAL_SCORE.get(),
                 Commands.parallel(
-                    SuperStructure.PROCESSOR.get().beforeStarting(Commands.waitSeconds(0.5)),
+                    SuperStructure.PROCESSOR_PREP.get().beforeStarting(Commands.waitSeconds(0.5)),
                     reefCToProcessor.cmd())));
 
     // When at the processor, score!

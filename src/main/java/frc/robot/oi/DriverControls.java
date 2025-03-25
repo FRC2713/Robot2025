@@ -99,8 +99,8 @@ public class DriverControls {
     // Grab Algae
     driver
         .rightTrigger(0.2)
-        .onTrue(Commands.sequence(EndEffector.CORAL_SCORE.get()))
-        .onFalse(SuperStructure.STARTING_CONF.get());
+        .whileTrue(Commands.sequence(EndEffector.ALGAE_GRAB.get()))
+        .onFalse(SuperStructure.STARTING_CONF_WITH_ALGAE.get());
 
     // POV Precision Driving
     driver

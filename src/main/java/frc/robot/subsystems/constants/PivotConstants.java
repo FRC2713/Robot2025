@@ -19,7 +19,10 @@ public class PivotConstants {
   public static final double kMass = 7.094328; // kg
 
   public static final double kMinAngleRad = Units.degreesToRadians(-200);
-  public static final double kMaxAngleRad = Units.degreesToRadians(100);
+  // Change may need to be reverted based on actual data. Note, however, that the pivot does need to
+  // be able to move up to SetpointConstants.Pivot.Algae_L2_DEG in order to pick up algae off the
+  // reef.
+  public static final double kMaxAngleRad = Units.degreesToRadians(200);
 
   public static final double kInitialAngleRad = Units.degreesToRadians(35);
 

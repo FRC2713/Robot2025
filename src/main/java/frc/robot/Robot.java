@@ -124,6 +124,7 @@ public class Robot extends LoggedRobot {
     RobotContainer.scoreAssist.periodic();
     RobotContainer.climbAssist.periodic();
 
+    // TODO: need to update assets with DCMP-version of end effector
     // Record the pose of each subsystem
     // order matters here.
     Pose3d[] componentPoses = {

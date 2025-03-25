@@ -28,7 +28,7 @@ public class SetDOFSOneAtATimeFactory {
     return this;
   }
 
-  public SetDOFSOneAtATimeFactory addShouldercommand(DoubleSupplier setpoint) {
+  public SetDOFSOneAtATimeFactory addShoulderCommand(DoubleSupplier setpoint) {
     this.ordered.add(ShoulderCmds.setAngleAndWait(setpoint));
     return this;
   }

@@ -20,6 +20,8 @@ public class AlgaeClawConstants {
   public static final double kMaxVelocity = 6000 / 2; // rpm
   public static final double kMaxAcceleration = 6000; // rpm / sec
 
+  public static final double hasAlgaeVoltage = 1.7;
+
   public static SparkFlexConfig createConfig(int currentLimit) {
     SparkFlexConfig config = new SparkFlexConfig();
 

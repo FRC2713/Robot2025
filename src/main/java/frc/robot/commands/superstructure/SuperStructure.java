@@ -1,10 +1,13 @@
 package frc.robot.commands.superstructure;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
+import frc.robot.commands.ShoulderCmds;
 import java.util.function.Supplier;
 
 public class SuperStructure {
@@ -86,25 +89,9 @@ public class SuperStructure {
               SetpointConstants.Shoulder.L4_ANGLE_DEG,
               SetpointConstants.Pivot.L4_ANGLE_DEG);
 
-  public static Supplier<Command> PROCESSOR =
-      () ->
-          new SetDOFSOneAtATime(
-                  "PROCESSOR",
-                  "ALGAE_HOLD",
-                  SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
-                  SetpointConstants.Elevator.PROCESSOR_PREP_HEIGHT_IN,
-                  SetpointConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG,
-                  SetpointConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG)
-              .andThen(
-                  ElevatorCmds.setHeightAndWait(
-                      SetpointConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN));
-
-  public static Supplier<Command> ALGAE_SAFE_RETRACT =
-      () -> PivotCmds.setAngle(SetpointConstants.Pivot.SAFE_ANGLE_DEGS);
-
   public static Supplier<Command> CLIMBING_CONF = () -> new SetClimbingConfig("CLIMBING_CONF");
 
-  public static Supplier<Command> BARGE =
+  public static Supplier<Command> BARGE_PREP =
       () ->
           new SetAllDOFS(
               "BARGE",
@@ -113,4 +100,77 @@ public class SuperStructure {
               SetpointConstants.Elevator.BARGE_HEIGHT_IN,
               SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES,
               SetpointConstants.Pivot.BARGE_ANGLE_DEG);
+
+  // TODO: cleanup these algae commands using SetAllDOFS or SetDOFSOneAtATime
+  // TODO: use the LoggedTunableNumbers created in SetpointConstants instead of hard-coded values
+
+  // Necessary for picking up algae off the ground- otherwise the ss hits the bumper
+  public static Supplier<Command> STARTING_CONF_WITH_ALGAE =
+      () ->
+          Commands.sequence(
+              RollerCmds.setEnableLimitSwitch(true),
+              RollerCmds.setSpeed(() -> 0),
+              Commands.either(
+                  PivotCmds.setAngleAndWait(() -> 35),
+                  Commands.none(),
+                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
+              Commands.parallel(
+                  ElevatorCmds.setHeightAndWait(() -> 0), ShoulderCmds.setAngleAndWait(() -> -90)));
+
+  public static Supplier<Command> ALGAE_GRAB_L2 =
+      () ->
+          Commands.sequence(
+              EndEffector.ALGAE_GRAB.get(),
+              Commands.either(
+                  PivotCmds.setAngleAndWait(() -> 35),
+                  Commands.none(),
+                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_L2_IN),
+              Commands.parallel(
+                  PivotCmds.setAngle(SetpointConstants.Pivot.ALGAE_L2_DEG),
+                  ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_L2_DEG)),
+              PivotCmds.waitUntilAtTarget());
+
+  public static Supplier<Command> ALGAE_GRAB_L3 =
+      () ->
+          Commands.sequence(
+              EndEffector.ALGAE_GRAB.get(),
+              Commands.either(
+                  PivotCmds.setAngleAndWait(() -> 35),
+                  Commands.none(),
+                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_L3_IN),
+              Commands.parallel(
+                  PivotCmds.setAngle(SetpointConstants.Pivot.ALGAE_L3_DEG),
+                  ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_L3_DEG)),
+              PivotCmds.waitUntilAtTarget());
+
+  public static Supplier<Command> ALGAE_GRAB_GROUND =
+      () ->
+          Commands.sequence(
+              EndEffector.ALGAE_GRAB.get(),
+              //   Commands.either(
+              //       PivotCmds.setAngleAndWait(() -> 35),
+              //       Commands.none(),
+              //       () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_GROUND_IN),
+              Commands.sequence(
+                  ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_GROUND_DEG),
+                  PivotCmds.setAngle(SetpointConstants.Pivot.ALGAE_GROUND_DEG)),
+              PivotCmds.waitUntilAtTarget());
+
+  public static Supplier<Command> ALGAE_SAFE_RETRACT =
+      () -> Commands.sequence(PivotCmds.setAngle(SetpointConstants.Pivot.SAFE_ANGLE_DEGS));
+
+  public static Supplier<Command> PROCESSOR_PREP =
+      () ->
+          Commands.sequence(
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.PROCESSOR_PREP_HEIGHT_IN),
+              ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG),
+              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN));
+
+  public static Supplier<Command> PROCESSOR_SCORE =
+      () -> Commands.sequence(PROCESSOR_PREP.get(), EndEffector.PROCESSOR_SCORE.get());
 }

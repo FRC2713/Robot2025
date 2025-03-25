@@ -10,11 +10,12 @@ import java.util.function.DoubleSupplier;
 
 public class RollerCmds {
   public static Command setSpeed(DoubleSupplier targetRPM) {
-    return new InstantCommand(() -> RobotContainer.rollers.setRPM(targetRPM.getAsDouble()));
+    return new InstantCommand(
+        () -> RobotContainer.endEffector.setCoralRPM(targetRPM.getAsDouble()));
   }
 
   public static Command waitUntilAtTarget() {
-    return new WaitUntilCommand(() -> RobotContainer.rollers.isAtTarget());
+    return new WaitUntilCommand(() -> RobotContainer.endEffector.isCoralAtTarget());
   }
 
   public static Command waitUntilCoral() {
@@ -28,22 +29,22 @@ public class RollerCmds {
   public static Command waitUntilCoral(double timeout) {
     return Commands.race(
         Commands.waitSeconds(timeout),
-        new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral()));
+        new WaitUntilCommand(() -> RobotContainer.endEffector.hasCoral()));
   }
 
   public static Command waitUntilNoCoral(double timeout) {
     return Commands.race(
         Commands.waitSeconds(timeout),
-        new WaitUntilCommand(() -> !RobotContainer.rollers.hasCoral()));
+        new WaitUntilCommand(() -> !RobotContainer.endEffector.hasCoral()));
   }
 
   public static Command setEnableLimitSwitch(boolean setEnable) {
-    return new InstantCommand(() -> RobotContainer.rollers.setEnableLimitSwitch(setEnable));
+    return new InstantCommand(() -> RobotContainer.endEffector.setEnableLimitSwitch(setEnable));
   }
 
   public static Command setEnableLimitSwitch(BooleanSupplier setEnable) {
     return new InstantCommand(
-        () -> RobotContainer.rollers.setEnableLimitSwitch(setEnable.getAsBoolean()));
+        () -> RobotContainer.endEffector.setEnableLimitSwitch(setEnable.getAsBoolean()));
   }
 
   public static Command setSpeedAndWait(DoubleSupplier targetRPM) {

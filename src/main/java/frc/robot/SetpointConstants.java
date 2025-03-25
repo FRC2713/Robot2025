@@ -27,16 +27,25 @@ public class SetpointConstants {
         new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 15);
 
     public static final LoggedTunableNumber PROCESSOR_PREP_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/Proc Prep Height", 10);
+        new LoggedTunableNumber("Elevator/SS/Proc Prep Height", 0);
 
     public static final LoggedTunableNumber PROCESSOR_SCORE_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/Proc Score Height", 10);
+        new LoggedTunableNumber("Elevator/SS/Proc Score Height", 0);
 
     public static final LoggedTunableNumber BARGE_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/Barge Height", 26);
 
     public static final LoggedTunableNumber CLIMB_PREP_HEIGHT =
         new LoggedTunableNumber("Elevator/SS/Climb Prep Height", 10);
+
+    public static final LoggedTunableNumber ALGAE_GROUND_IN =
+        new LoggedTunableNumber("Elevator/SS/Ground Algae Height", 0);
+
+    public static final LoggedTunableNumber ALGAE_L3_IN =
+        new LoggedTunableNumber("Elevator/SS/Algae L3 Height", 1);
+
+    public static final LoggedTunableNumber ALGAE_L2_IN =
+        new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 0);
   }
 
   public class Shoulder {
@@ -62,7 +71,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Shoulder/SS/L4 Prep Angle", 90);
 
     public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Proc Score Angle", -30);
+        new LoggedTunableNumber("Shoulder/SS/Proc Score Angle", -90);
 
     public static final LoggedTunableNumber PREP_CLIMB_ANGLE_DEGS =
         new LoggedTunableNumber("Shoulder/SS/Prep Climb Angle", -140);
@@ -72,6 +81,15 @@ public class SetpointConstants {
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEGREES =
         new LoggedTunableNumber("Shoulder/SS/Barge Angle", 90);
+
+    public static final LoggedTunableNumber ALGAE_GROUND_DEG =
+        new LoggedTunableNumber("Shoulder/SS/Ground Algae Angle", -45);
+
+    public static final LoggedTunableNumber ALGAE_L3_DEG =
+        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", 150);
+
+    public static final LoggedTunableNumber ALGAE_L2_DEG =
+        new LoggedTunableNumber("Shoulder/SS/Algae L2 Angle", -140);
   }
 
   public class Pivot {
@@ -95,23 +113,31 @@ public class SetpointConstants {
         new LoggedTunableNumber("Pivot/SS/L4 Angle", 55);
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/Barge Angle", -30);
+        new LoggedTunableNumber("Pivot/SS/Barge Angle", 135);
 
     public static final LoggedTunableNumber PREP_CLIMB_ANGLE_DEGS =
         new LoggedTunableNumber("Pivot/SS/Prep Climb Angle", 30);
 
     public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/Proc Score Angle", -180);
+        new LoggedTunableNumber("Pivot/SS/Proc Score Angle", 0);
 
     public static final LoggedTunableNumber CLIMB_ANGLE_DEGS =
         new LoggedTunableNumber("Pivot/SS/Climb Angle", -111);
-    ;
 
     public static final LoggedTunableNumber ALGAE_GRAB_ANGLE_DEGS =
         new LoggedTunableNumber("Pivot/SS/Algae Grab Angle", 35);
 
     public static final LoggedTunableNumber SAFE_ANGLE_DEGS =
         new LoggedTunableNumber("Pivot/SS/Safe Angle", 8);
+
+    public static final LoggedTunableNumber ALGAE_GROUND_DEG =
+        new LoggedTunableNumber("Pivot/SS/Ground Algae Angle", -45);
+
+    public static final LoggedTunableNumber ALGAE_L3_DEG =
+        new LoggedTunableNumber("Pivot/SS/Algae L3 Angle", 150);
+
+    public static final LoggedTunableNumber ALGAE_L2_DEG =
+        new LoggedTunableNumber("Pivot/SS/Algae L2 Angle", 125);
   }
 
   public class Roller {
@@ -160,8 +186,10 @@ public class SetpointConstants {
 
     public static final LoggedTunableNumber INTAKE_DELAY =
         new LoggedTunableNumber("Auto/Intake Delay", 1);
+
     public static final LoggedTunableNumber L4_SCORE_DELAY =
         new LoggedTunableNumber("Auto/L4 Score Delay", 0.05);
+
     public static final LoggedTunableNumber L4_POST_SCORE_DELAY =
         new LoggedTunableNumber("Auto/L4 Post-Score Delay", 0.4);
   }
