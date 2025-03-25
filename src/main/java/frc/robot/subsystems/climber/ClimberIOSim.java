@@ -54,6 +54,16 @@ public class ClimberIOSim implements ClimberIO {
     inputs.commandedAngleDegs = targetAngleDeg;
   }
 
+  // right now climber just uses voltage control
+  @SuppressWarnings("unused")
+  private void setVoltageWithPID() {
+    var pos = Units.radiansToDegrees(sim.getAngleRads());
+    var vel = sim.getVelocityRadPerSec();
+    this.volts =
+        this.pid.calculate(Units.radiansToDegrees(sim.getAngleRads()), this.targetAngleDeg)
+            + this.feedforward.calculate(pos, vel);
+  }
+
   @Override
   public void setVoltage(double volts) {
     this.volts = volts;
@@ -67,11 +77,17 @@ public class ClimberIOSim implements ClimberIO {
   @Override
   public void setPID(LoggedTunableGains pid) {
     this.pid = pid.createPIDController();
-    feedforward = pid.createArmFF();
+    this.feedforward = pid.createArmFF();
   }
 
   @Override
   public void setServoPos(double pos) {
     servoPos = pos;
+  }
+
+  @Override
+  public boolean isAtTarget() {
+    return Math.abs(Units.radiansToDegrees(sim.getAngleRads()) - this.targetAngleDeg)
+        < ClimberConstants.AT_TARGET_GIVE_DEGS;
   }
 }

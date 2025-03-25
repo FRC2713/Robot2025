@@ -20,7 +20,8 @@ public class PivotConstants {
 
   public static final double kMinAngleRad = Units.degreesToRadians(-200);
   // Change may need to be reverted based on actual data. Note, however, that the pivot does need to
-  // be able to move up to SSConstants.Pivot.Algae_L2_DEG in order to pick up algae off the reef.
+  // be able to move up to SetpointConstants.Pivot.Algae_L2_DEG in order to pick up algae off the
+  // reef.
   public static final double kMaxAngleRad = Units.degreesToRadians(200);
 
   public static final double kInitialAngleRad = Units.degreesToRadians(35);
@@ -76,12 +77,11 @@ public class PivotConstants {
               .expo_kV(kExponential_kV)
               .expo_kA(kExponential_kA));
 
-  //   175.166
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(290.1953125 + 2);
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(290.1953125 - 35);
   public static final double humanOffsetDegs = -55;
 
   public static final int mech2dWidth = 10;
   public static final Color8Bit mech2dColor = new Color8Bit(0, 0, 255);
 
-  public static final double AT_TARGET_GIVE_DEGS = 1;
+  public static final double AT_TARGET_GIVE_DEGS = 3;
 }

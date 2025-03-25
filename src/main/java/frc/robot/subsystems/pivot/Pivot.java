@@ -26,8 +26,6 @@ public class Pivot extends SubsystemBase {
   public Pose3d pose = PivotConstants.kInitialPose;
   public Transform3d transform = new Transform3d();
 
-  private double targetAngleDeg = Units.radiansToDegrees(PivotConstants.kInitialAngleRad);
-
   public Pivot(PivotIO IO) {
     this.inputs = new PivotInputsAutoLogged();
     IO.updateInputs(inputs);
@@ -55,13 +53,12 @@ public class Pivot extends SubsystemBase {
   }
 
   public void setTargetAngle(double degrees) {
-    this.targetAngleDeg = degrees;
     this.IO.setTargetAngle(degrees);
   }
 
   @AutoLogOutput(key = "Pivot/isAtTarget")
   public boolean isAtTarget() {
-    return inputs.isAtTarget;
+    return this.IO.isAtTarget();
   }
 
   public void updateMech2D() {

@@ -29,8 +29,6 @@ public class Shoulder extends SubsystemBase {
   public Pose3d pose = ShoulderConstants.kInitialPose;
   public Transform3d transform = new Transform3d();
 
-  private double targetAngleDeg = Units.radiansToDegrees(ShoulderConstants.kInitialAngleRad);
-
   public Shoulder(ShoulderIO IO) {
     this.inputs = new ShoulderInputsAutoLogged();
     IO.updateInputs(inputs);
@@ -48,14 +46,12 @@ public class Shoulder extends SubsystemBase {
   }
 
   public void setTargetAngle(double degrees) {
-    this.targetAngleDeg = degrees;
     this.IO.setTargetAngle(degrees);
   }
 
   @AutoLogOutput(key = "Shoulder/isAtTarget")
   public boolean isAtTarget() {
-    return Math.abs(this.inputs.angleDegrees - this.targetAngleDeg)
-        < ShoulderConstants.AT_TARGET_GIVE_DEGS;
+    return this.IO.isAtTarget();
   }
 
   public void updateMech2D() {

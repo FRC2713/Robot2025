@@ -31,4 +31,8 @@ public interface ShoulderIO {
 
   public default void setBus(double bus) {}
   ;
+
+  public default boolean isAtTarget() {
+    return true;
+  }
 }

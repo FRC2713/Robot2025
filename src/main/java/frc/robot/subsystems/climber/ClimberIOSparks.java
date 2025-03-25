@@ -16,7 +16,7 @@ public class ClimberIOSparks implements ClimberIO {
   public SparkFlex leftMotor = new SparkFlex(ClimberConstants.kLeftCANId, MotorType.kBrushless);
   public SparkFlex rightMotor = new SparkFlex(ClimberConstants.kRightCANId, MotorType.kBrushless);
   public Servo servo = new Servo(0);
-  private double target;
+  private double targetAngleDegrees;
 
   public ClimberIOSparks() {
     leftMotor.configure(
@@ -45,7 +45,7 @@ public class ClimberIOSparks implements ClimberIO {
 
     inputs.servoCommandedPos = servo.getPosition();
 
-    inputs.commandedAngleDegs = this.target;
+    inputs.commandedAngleDegs = this.targetAngleDegrees;
   }
 
   @Override
@@ -67,7 +67,7 @@ public class ClimberIOSparks implements ClimberIO {
 
   @Override
   public void setTargetAngle(double angle) {
-    this.target = angle;
+    this.targetAngleDegrees = angle;
     leftMotor
         .getClosedLoopController()
         .setReference(
@@ -100,5 +100,13 @@ public class ClimberIOSparks implements ClimberIO {
         ClimberConstants.createRightSparkConfig(limits),
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
+  }
+
+  @Override
+  public boolean isAtTarget() {
+    return Math.abs(
+            Units.rotationsToDegrees(leftMotor.getEncoder().getPosition())
+                - this.targetAngleDegrees)
+        < ClimberConstants.AT_TARGET_GIVE_DEGS;
   }
 }
