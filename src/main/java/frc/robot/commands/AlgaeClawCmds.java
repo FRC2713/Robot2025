@@ -9,16 +9,17 @@ import java.util.function.DoubleSupplier;
 
 public class AlgaeClawCmds {
   public static Command setSpeed(DoubleSupplier targetRPM) {
-    return new InstantCommand(() -> RobotContainer.algaeClaw.setRPM(targetRPM.getAsDouble()));
+    return new InstantCommand(
+        () -> RobotContainer.endEffector.setAlgaeRPM(targetRPM.getAsDouble()));
   }
 
   public static Command setSpeedIfNoAlgae(DoubleSupplier targetRPM) {
     return Commands.either(
-        Commands.none(), setSpeed(targetRPM), RobotContainer.algaeClaw::hasAlgae);
+        Commands.none(), setSpeed(targetRPM), RobotContainer.endEffector::hasAlgae);
   }
 
   public static Command waitUntilAtTarget() {
-    return new WaitUntilCommand(() -> RobotContainer.algaeClaw.isAtTarget());
+    return new WaitUntilCommand(() -> RobotContainer.endEffector.isAlgaeAtTarget());
   }
 
   public static Command waitUntilAlgae() {
@@ -32,17 +33,17 @@ public class AlgaeClawCmds {
   public static Command waitUntilAlgae(double timeout) {
     return Commands.race(
         Commands.waitSeconds(timeout),
-        new WaitUntilCommand(() -> RobotContainer.algaeClaw.hasAlgae()));
+        new WaitUntilCommand(() -> RobotContainer.endEffector.hasAlgae()));
   }
 
   public static Command waitUntilNoAlgae(double timeout) {
     return Commands.race(
         Commands.waitSeconds(timeout),
-        new WaitUntilCommand(() -> !RobotContainer.algaeClaw.hasAlgae()));
+        new WaitUntilCommand(() -> !RobotContainer.endEffector.hasAlgae()));
   }
 
   // public static Command setEnableLimitSwitch(boolean setEnable) {
-  //   return new InstantCommand(() -> RobotContainer.algaeClaw.setEnableLimitSwitch(setEnable));
+  //   return new InstantCommand(() -> RobotContainer.endEffector.setEnableLimitSwitch(setEnable));
   // }
 
   public static Command setSpeedAndWait(DoubleSupplier targetRPM) {

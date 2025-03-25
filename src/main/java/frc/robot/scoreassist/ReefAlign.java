@@ -71,7 +71,7 @@ public class ReefAlign {
 
     boolean nextTriggerState =
         DriverStation.isTeleopEnabled()
-            && RobotContainer.rollers.hasCoral()
+            && RobotContainer.endEffector.hasCoral()
             && !RobotContainer.disableReefAlign
             && (RobotContainer.scoreAssist.mode == ScoreDrivingMode.INACTIVE)
             && inZone().isPresent();

@@ -11,7 +11,6 @@ public interface AlgaeClawIO {
     public double algaeClawVelocityRPM = 0.0;
     public double commandedAlgaeClawRPM = 0.0;
     public double algaeClawPositionDegs = 0.0;
-
     public boolean hasAlgae = false;
   }
 

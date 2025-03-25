@@ -33,10 +33,6 @@ import frc.robot.oi.DriverControls;
 import frc.robot.oi.OperatorControls;
 import frc.robot.scoreassist.ClimbAssist;
 import frc.robot.scoreassist.ScoreAssist;
-import frc.robot.subsystems.algaeClaw.AlgaeClaw;
-import frc.robot.subsystems.algaeClaw.AlgaeClawIO;
-import frc.robot.subsystems.algaeClaw.AlgaeClawIOSim;
-import frc.robot.subsystems.algaeClaw.AlgaeClawIOSparks;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSparks;
@@ -54,14 +50,14 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.endEffector.EndEffectorIO;
+import frc.robot.subsystems.endEffector.EndEffectorIOSim;
+import frc.robot.subsystems.endEffector.EndEffectorIOSparks;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOKrakens;
 import frc.robot.subsystems.pivot.PivotIOSim;
-import frc.robot.subsystems.rollers.Rollers;
-import frc.robot.subsystems.rollers.RollersIO;
-import frc.robot.subsystems.rollers.RollersIOSim;
-import frc.robot.subsystems.rollers.RollersIOSparks;
 import frc.robot.subsystems.shoulder.Shoulder;
 import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
@@ -81,9 +77,8 @@ public class RobotContainer {
   public static Elevator elevator;
   public static Shoulder shoulder;
   public static Pivot pivot;
-  public static Rollers rollers;
-  public static AlgaeClaw algaeClaw;
   public static Climber climber;
+  public static EndEffector endEffector;
 
   // Xbox Controllers
   public static DriverControls driverControls = new DriverControls();
@@ -128,8 +123,7 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIOKrakens());
         pivot = new Pivot(new PivotIOKrakens());
-        rollers = new Rollers(new RollersIOSparks());
-        algaeClaw = new AlgaeClaw(new AlgaeClawIOSparks());
+        endEffector = new EndEffector(new EndEffectorIOSparks());
         shoulder = new Shoulder(new ShoulderIOKrakens());
         climber = new Climber(new ClimberIOSparks());
         break;
@@ -144,8 +138,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         pivot = new Pivot(new PivotIOSim());
         elevator = new Elevator(new ElevatorIOSim());
-        rollers = new Rollers(new RollersIOSim());
-        algaeClaw = new AlgaeClaw(new AlgaeClawIOSim());
+        endEffector = new EndEffector(new EndEffectorIOSim());
         shoulder = new Shoulder(new ShoulderIOSim());
         climber = new Climber(new ClimberIO() {});
         break;
@@ -161,8 +154,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         elevator = new Elevator(new ElevatorIO() {});
         pivot = new Pivot(new PivotIO() {});
-        rollers = new Rollers(new RollersIO() {});
-        algaeClaw = new AlgaeClaw(new AlgaeClawIO() {});
+        endEffector = new EndEffector(new EndEffectorIO() {});
         shoulder = new Shoulder(new ShoulderIO() {});
         climber = new Climber(new ClimberIO() {});
         break;
@@ -285,7 +277,8 @@ public class RobotContainer {
     // Safety
     elevator.setTargetHeight(elevator.getCurrentHeight());
     pivot.setTargetAngle(pivot.getCurrentAngle());
-    rollers.setRPM(0);
+    endEffector.setCoralRPM(0);
+    endEffector.setAlgaeRPM(0);
     shoulder.setTargetAngle(shoulder.getCurrentAngle());
     if (visionsubsystem.getPose() != null) {
       if (!hasRanAuto && visionsubsystem.getPose().getTranslation().getX() != 0) {
