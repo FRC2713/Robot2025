@@ -210,7 +210,8 @@ public enum SuperStructure {
               PivotCmds.setAngle(SSConstants.Pivot.BARGE_ANGLE_DEG),
               ElevatorCmds.setHeightAndWait(SSConstants.Elevator.BARGE_HEIGHT_IN),
               ShoulderCmds.waitUntilAtTarget(),
-              PivotCmds.waitUntilAtTarget()));
+              PivotCmds.waitUntilAtTarget(),
+              AlgaeClawCmds.setSpeed(SSConstants.AlgaeClaw.BARGE_SCORE_SPEED)));
 
   private Supplier<Command> cmd;
 
