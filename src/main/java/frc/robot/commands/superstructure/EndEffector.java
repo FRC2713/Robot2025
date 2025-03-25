@@ -2,7 +2,6 @@ package frc.robot.commands.superstructure;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.RollerCmds;
@@ -26,8 +25,10 @@ public class EndEffector {
           Commands.sequence(
               Commands.runOnce(() -> Logger.recordOutput("Active EE", "ALGAE_GRAB")),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED))
-              .until(() -> RobotContainer.algaeClaw.hasAlgae());
-
+              ;
+  public static Supplier<Command> ALGAE_HOLD =
+      () -> 
+      AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED);
   public static Supplier<Command> ALGAE_GRAB_AND_CORAL_SCORE =
       () ->
           Commands.sequence(

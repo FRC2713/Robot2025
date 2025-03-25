@@ -107,25 +107,17 @@ public class SuperStructure {
   // Necessary for picking up algae off the ground- otherwise the ss hits the bumper
   public static Supplier<Command> STARTING_CONF_WITH_ALGAE =
       () ->
-          Commands.sequence(
-              RollerCmds.setEnableLimitSwitch(true),
-              RollerCmds.setSpeed(() -> 0),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
-              Commands.parallel(
-                  ElevatorCmds.setHeightAndWait(() -> 0), ShoulderCmds.setAngleAndWait(() -> -90)));
+      new SetDOFSOneAtATimeFactory("STARTING_CONF_WITH_ALGAE", "STOP_ROLLERS")
+      .addElevatorCommand(SetpointConstants.Elevator.STARTING_HEIGHT)
+      .addPivotCommand(SetpointConstants.Pivot.STARTING_ANGLE)
+      .addAlgaeSpeedCommand(() -> 0)
+      .addCoralSpeedCommand(() -> 0)
+      .addShoulderCommand(SetpointConstants.Shoulder.STARTING_ANGLE).create();
 
   public static Supplier<Command> ALGAE_GRAB_L2 =
       () ->
           Commands.sequence(
               EndEffector.ALGAE_GRAB.get(),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
               ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_L2_IN),
               Commands.parallel(
                   PivotCmds.setAngle(SetpointConstants.Pivot.ALGAE_L2_DEG),

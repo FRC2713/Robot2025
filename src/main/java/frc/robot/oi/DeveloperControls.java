@@ -5,6 +5,9 @@
 package frc.robot.oi;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotContainer;
+import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 
 /* Please use this class when testing out new commands and triggers
@@ -14,8 +17,9 @@ import frc.robot.commands.superstructure.SuperStructure;
 public class DeveloperControls {
       private final CommandXboxController devCommandXboxController = new CommandXboxController(3);
 
+      private Trigger hasAlgaeTrigger = new Trigger(() -> RobotContainer.endEffector.hasAlgae());
       public void configureTriggers() {
-
+            hasAlgaeTrigger.onTrue(EndEffector.ALGAE_HOLD.get());
       }
 
       public void configureButtonBindings() {
