@@ -91,7 +91,7 @@ public class SuperStructure {
 
   public static Supplier<Command> CLIMBING_CONF = () -> new SetClimbingConfig("CLIMBING_CONF");
 
-  public static Supplier<Command> BARGE =
+  public static Supplier<Command> BARGE_PREP =
       () ->
           new SetAllDOFS(
               "BARGE",
@@ -170,4 +170,7 @@ public class SuperStructure {
               ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG),
               PivotCmds.setAngleAndWait(SetpointConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
               ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN));
+
+  public static Supplier<Command> PROCESSOR_SCORE =
+      () -> Commands.sequence(PROCESSOR_PREP.get(), EndEffector.PROCESSOR_SCORE.get());
 }

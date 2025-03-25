@@ -24,9 +24,9 @@ public class EndEffector {
   public static Supplier<Command> ALGAE_GRAB =
       () ->
           Commands.sequence(
-              Commands.runOnce(() -> Logger.recordOutput("Active EE", "ALGAE_GRAB")),
-              AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED))
-              .until(() -> RobotContainer.algaeClaw.hasAlgae());
+                  Commands.runOnce(() -> Logger.recordOutput("Active EE", "ALGAE_GRAB")),
+                  AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED))
+              .until(() -> RobotContainer.endEffector.hasAlgae());
 
   public static Supplier<Command> ALGAE_GRAB_AND_CORAL_SCORE =
       () ->

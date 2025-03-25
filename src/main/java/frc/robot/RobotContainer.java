@@ -29,9 +29,9 @@ import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
 import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.generated.TunerConstants;
+import frc.robot.oi.DeveloperControls; // Added import for DeveloperControls
 import frc.robot.oi.DriverControls;
 import frc.robot.oi.OperatorControls;
-import frc.robot.oi.DeveloperControls; // Added import for DeveloperControls
 import frc.robot.scoreassist.ClimbAssist;
 import frc.robot.scoreassist.ScoreAssist;
 import frc.robot.subsystems.climber.Climber;
