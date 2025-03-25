@@ -12,7 +12,7 @@ public class RollerConstants {
   public static final double kMOI = 0.001;
   public static final double kGearing = 17.0 / 35.0;
 
-  public static final boolean kMotorInverted = true;
+  public static final boolean kMotorInverted = false;
 
   // values from Rev velocity control examples
   public static final ControlGains PID = new ControlGains().p(1).d(0.1);

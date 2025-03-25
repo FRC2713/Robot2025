@@ -4,7 +4,8 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.SuperStructure;
+import frc.robot.commands.superstructure.EndEffector;
+import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 
 public class CoralAndAlgaeAuto {
@@ -30,49 +31,49 @@ public class CoralAndAlgaeAuto {
                 startToReefETraj.cmd()));
 
     // Go from start to reef D, preping the elevator along the way
-    startToReefETraj.atTime("PrepElevator").onTrue(SuperStructure.L3.getCommand());
+    startToReefETraj.atTime("PrepElevator").onTrue(SuperStructure.L3.get());
 
     // When at the reef, score and pick up algae; then go to the processor
     startToReefETraj
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L3.getCommand(),
-                SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand(),
+                SuperStructure.L3.get(),
+                EndEffector.ALGAE_GRAB_AND_CORAL_SCORE.get(),
                 Commands.parallel(
-                    SuperStructure.PROCESSOR_PREP.delayCommand(0.5), reefEToProcTraj.cmd())));
+                    SuperStructure.PROCESSOR_PREP.get().beforeStarting(Commands.waitSeconds(0.5)),
+                    reefEToProcTraj.cmd())));
 
     // When the trajectory is done, score in processor. Then go to source
     reefEToProcTraj
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.PROCESSOR_SCORE.getCommand(),
-                Commands.parallel(
-                    procToSourceTraj.cmd(), SuperStructure.STARTING_CONF.getCommand())));
+                SuperStructure.PROCESSOR_PREP.get(),
+                EndEffector.PROCESSOR_SCORE.get(),
+                Commands.parallel(procToSourceTraj.cmd(), SuperStructure.STARTING_CONF.get())));
 
     // When at the source, pick up coral and go to reef B
     procToSourceTraj
         .done()
-        .onTrue(
-            Commands.sequence(
-                SuperStructure.SOURCE_CORAL_INTAKE.getCommand(), sourceToReefC.cmd()));
+        .onTrue(Commands.sequence(SuperStructure.SOURCE_CORAL_INTAKE.get(), sourceToReefC.cmd()));
 
     // Prep elevator along the way
-    sourceToReefC.atTime("PrepElevator").onTrue(SuperStructure.L3.getCommand());
+    sourceToReefC.atTime("PrepElevator").onTrue(SuperStructure.L3.get());
 
     // Once at reef B, score and pick up algae; then go to processor
     sourceToReefC
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.L3.getCommand(),
-                SuperStructure.ALGAE_GRAB_AND_CORAL_SCORE.getCommand(),
+                SuperStructure.L3.get(),
+                EndEffector.ALGAE_GRAB_AND_CORAL_SCORE.get(),
                 Commands.parallel(
-                    SuperStructure.PROCESSOR_PREP.delayCommand(0.5), reefCToProcessor.cmd())));
+                    SuperStructure.PROCESSOR_PREP.get().beforeStarting(Commands.waitSeconds(0.5)),
+                    reefCToProcessor.cmd())));
 
     // When at the processor, score!
-    reefCToProcessor.done().onTrue(SuperStructure.PROCESSOR_SCORE.getCommand());
+    reefCToProcessor.done().onTrue(EndEffector.PROCESSOR_SCORE.get());
 
     return routine;
   }

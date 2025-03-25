@@ -15,17 +15,13 @@ package frc.robot;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Threads;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ReefAlign;
-import frc.robot.commands.ScoreAssist;
-import frc.robot.commands.SourceAlign;
+import frc.robot.scoreassist.ReefAlign;
+import frc.robot.scoreassist.SourceAlign;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -43,7 +39,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
-  private Mechanism2d mech2d;
   private boolean hadDisabledReefAlign = false;
 
   public Robot() {
@@ -95,20 +90,6 @@ public class Robot extends LoggedRobot {
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
 
-    // Instantiate the Mechanism2d structure
-    mech2d = new Mechanism2d(3, 3);
-    MechanismLigament2d mech2d_pre_rollers =
-        mech2d
-            .getRoot("root", 1.5, Units.inchesToMeters(0))
-            .append(RobotContainer.elevator.mech2d)
-            .append(RobotContainer.shoulder.stage0)
-            .append(RobotContainer.shoulder.mech2d)
-            .append(RobotContainer.pivot.mech2d)
-            .append(RobotContainer.rollers.mech2d)
-            .append(RobotContainer.algaeClaw.mech2d);
-    mech2d.getRoot("climber", 2, Units.inchesToMeters(10)).append(RobotContainer.climber.mech2d);
-    SmartDashboard.putData("Mech2d", mech2d);
-
     Logger.recordOutput(
         "FieldConstants/BranchAPose",
         FieldConstants.Reef.branchPositions2d.get(1).get(FieldConstants.ReefLevel.L2));
@@ -117,7 +98,8 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
     Pathfinding.setPathfinder(new LocalADStarAK());
-    // SmartDashboard.putBoolean("Disable ReefAlign", false);
+    SmartDashboard.putBoolean("Disable ReefAlign", false);
+    SmartDashboard.putBoolean("Use Pathing", false);
   }
 
   /** This function is called periodically during all modes. */
@@ -136,17 +118,13 @@ public class Robot extends LoggedRobot {
     // Return to normal thread priority
     Threads.setCurrentThreadPriority(false, 10);
 
-    // update the Mech2d's
-    RobotContainer.elevator.updateMech2D();
-    RobotContainer.pivot.updateMech2D();
-    RobotContainer.rollers.updateMech2D();
-    RobotContainer.algaeClaw.updateMech2D();
-    RobotContainer.shoulder.updateMech2D();
-    RobotContainer.climber.updateMech2D();
+    // call non-subsystem periodics
     ReefAlign.getInstance().periodic();
-    ScoreAssist.getInstance().periodic();
     SourceAlign.getInstance().periodic();
+    RobotContainer.scoreAssist.periodic();
+    RobotContainer.climbAssist.periodic();
 
+    // TODO: need to update assets with DCMP-version of end effector
     // Record the pose of each subsystem
     // order matters here.
     Pose3d[] componentPoses = {
@@ -156,12 +134,14 @@ public class Robot extends LoggedRobot {
       RobotContainer.climber.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
-    // var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
-    // RobotContainer.disableReefAlign = disableReefAlign;
-    // if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
-    //   robotContainer.normalDrive();
-    // }
-    // hadDisabledReefAlign = disableReefAlign;
+
+    var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
+    RobotContainer.disableReefAlign = disableReefAlign;
+    if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
+      RobotContainer.driverControls.setToNormalDrive();
+    }
+    hadDisabledReefAlign = disableReefAlign;
+    RobotContainer.autoScorePathing = SmartDashboard.getBoolean("Use Pathing", false);
   }
 
   /** This function is called once when the robot is disabled. */
@@ -192,7 +172,7 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    robotContainer.normalDrive();
+    RobotContainer.driverControls.setToNormalDrive();
   }
 
   /** This function is called periodically during operator control. */

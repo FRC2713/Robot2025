@@ -52,19 +52,19 @@ public class ElevatorConstants {
           "Elevator",
           new ControlGains()
               // PID
-              .p(RHRUtil.modeDependentDouble(100., 0.1))
-              .i(0.0)
+              .p(RHRUtil.modeDependentDouble(60., 0.1))
+              .i(RHRUtil.modeDependentDouble(2.0, 0.0))
               .d(RHRUtil.modeDependentDouble(10, 0.01))
               // FF
-              .g(RHRUtil.modeDependentDouble(14, 0.0785))
+              .g(RHRUtil.modeDependentDouble(18, 0.0785))
               .v(RHRUtil.modeDependentDouble(100.0 / 9, 0))
-              .s(RHRUtil.modeDependentDouble(1, 0))
+              .s(RHRUtil.modeDependentDouble(0, 0))
               .v(RHRUtil.modeDependentDouble(0.6328, 0))
               .a(0.0)
               // Motion Magic
               .trapezoidal(
                   // Theoretical Max: ...
-                  RHRUtil.modeDependentDouble(5, 0.1),
+                  RHRUtil.modeDependentDouble(20, 0.1),
                   RHRUtil.modeDependentDouble(0.5, 0.1),
                   RHRUtil.modeDependentDouble(0.5, 0.1))
               .exponential(0.6328, 0.1));

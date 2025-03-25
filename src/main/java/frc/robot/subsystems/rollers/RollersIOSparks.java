@@ -52,4 +52,10 @@ public class RollersIOSparks implements RollersIO {
   private boolean hasCoral() {
     return limitSwitch.isPressed();
   }
+
+  @Override
+  public boolean isAtTarget() {
+    return Math.abs(targetRPM - motor.getEncoder().getVelocity())
+        < RollerConstants.AT_TARGET_GIVE_RPM;
+  }
 }

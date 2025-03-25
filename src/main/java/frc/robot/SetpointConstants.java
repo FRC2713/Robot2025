@@ -4,8 +4,11 @@ import frc.robot.subsystems.constants.ClimberConstants;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 
-public class SSConstants {
+public class SetpointConstants {
   public class Elevator {
+    public static final LoggedTunableNumber STARTING_HEIGHT =
+        new LoggedTunableNumber("Elevator/SS/Starting Height", 0);
+
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/Source Coral Intake Height", 6 + 2 + 0.5);
 
@@ -21,7 +24,7 @@ public class SSConstants {
     public static final LoggedTunableNumber L4_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L4 Height", 24);
     public static final LoggedTunableNumber L4_PREP_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 0);
+        new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 15);
 
     public static final LoggedTunableNumber PROCESSOR_PREP_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/Proc Prep Height", 0);
@@ -34,15 +37,22 @@ public class SSConstants {
 
     public static final LoggedTunableNumber CLIMB_PREP_HEIGHT =
         new LoggedTunableNumber("Elevator/SS/Climb Prep Height", 10);
+
     public static final LoggedTunableNumber ALGAE_GROUND_IN =
         new LoggedTunableNumber("Elevator/SS/Ground Algae Height", 0);
+
     public static final LoggedTunableNumber ALGAE_L3_IN =
         new LoggedTunableNumber("Elevator/SS/Algae L3 Height", 8);
+
     public static final LoggedTunableNumber ALGAE_L2_IN =
         new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 0);
   }
 
   public class Shoulder {
+
+    public static final LoggedTunableNumber STARTING_ANGLE =
+        new LoggedTunableNumber("Shoulder/SS/Starting Angle", -90);
+
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/Source Intake Angle", -80);
 
@@ -71,15 +81,22 @@ public class SSConstants {
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEGREES =
         new LoggedTunableNumber("Shoulder/SS/Barge Angle", 90);
+
     public static final LoggedTunableNumber ALGAE_GROUND_DEG =
         new LoggedTunableNumber("Shoulder/SS/Ground Algae Angle", -45);
+
     public static final LoggedTunableNumber ALGAE_L3_DEG =
         new LoggedTunableNumber("Shoulder/SS/Algae L3 Height", -135);
+
     public static final LoggedTunableNumber ALGAE_L2_DEG =
         new LoggedTunableNumber("Shoulder/SS/Algae L2 Height", -110);
   }
 
   public class Pivot {
+
+    public static final LoggedTunableNumber STARTING_ANGLE =
+        new LoggedTunableNumber("Pivot/SS/Starting Angle", 35);
+
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Source Intake Angle", 35);
 
@@ -115,8 +132,10 @@ public class SSConstants {
 
     public static final LoggedTunableNumber ALGAE_GROUND_DEG =
         new LoggedTunableNumber("Pivot/SS/Ground Algae Angle", -45);
+
     public static final LoggedTunableNumber ALGAE_L3_DEG =
         new LoggedTunableNumber("Pivot/SS/Algae L3 Height", 100);
+
     public static final LoggedTunableNumber ALGAE_L2_DEG =
         new LoggedTunableNumber("Pivot/SS/Algae L2 Height", 125);
   }
@@ -153,11 +172,6 @@ public class SSConstants {
     public static final LoggedTunableNumber INP_TO_VOLTS =
         new LoggedTunableNumber("Climber/SS/Inputs to Volts", 10);
 
-    public static final LoggedTunableNumber SERVO_POS_ON =
-        new LoggedTunableNumber("Climber/SS/Servo Pos On", 0.5);
-    public static final LoggedTunableNumber SERVO_POS_OFF =
-        new LoggedTunableNumber("Climber/SS/Servo Pos Off", 0.0);
-
     public static final LoggedTunableNumber MIN_ANGLE_CLIMBING =
         new LoggedTunableNumber("Climber/SS/Min Angle Climbing", 35);
     public static final LoggedTunableNumber MAX_ANGLE_CLIMBING =
@@ -168,10 +182,14 @@ public class SSConstants {
   }
 
   public class Auto {
+    // TODO: tune down each of these delays or remove them if unneccessary
+
     public static final LoggedTunableNumber INTAKE_DELAY =
         new LoggedTunableNumber("Auto/Intake Delay", 1);
+
     public static final LoggedTunableNumber L4_SCORE_DELAY =
         new LoggedTunableNumber("Auto/L4 Score Delay", 0.05);
+
     public static final LoggedTunableNumber L4_POST_SCORE_DELAY =
         new LoggedTunableNumber("Auto/L4 Post-Score Delay", 0.4);
   }

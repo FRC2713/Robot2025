@@ -7,8 +7,9 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.util.Units;
-import frc.robot.SSConstants;
+import frc.robot.SetpointConstants;
 import frc.robot.subsystems.constants.AlgaeClawConstants;
+import frc.robot.subsystems.constants.RollerConstants;
 
 /** For the first implementation, the robot controls AlgaeClaw and Algae with a single NEO */
 public class AlgaeClawIOSparks implements AlgaeClawIO {
@@ -16,6 +17,7 @@ public class AlgaeClawIOSparks implements AlgaeClawIO {
   private final SparkFlex motor;
   private double targetRPM;
   private Debouncer debouncer;
+  private boolean enableLS = true;
 
   public AlgaeClawIOSparks() {
     this.motor = new SparkFlex(AlgaeClawConstants.kCANId, MotorType.kBrushless);
@@ -28,6 +30,9 @@ public class AlgaeClawIOSparks implements AlgaeClawIO {
 
   @Override
   public void updateInputs(AlgaeClawInputs inputs) {
+    if (enableLS && hasAlgae()) {
+      setRPM(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED.getAsDouble());
+    }
     inputs.algaeClawVelocityRPM = motor.getEncoder().getVelocity();
     inputs.algaeClawOutputVoltage = motor.getAppliedOutput() * motor.getBusVoltage();
     inputs.algaeClawCurrentAmps = motor.getOutputCurrent();
@@ -44,11 +49,19 @@ public class AlgaeClawIOSparks implements AlgaeClawIO {
   }
 
   @Override
-  public void setEnableLimitSwitch(boolean setEnable) {}
+  public void setEnableLimitSwitch(boolean setEnable) {
+    enableLS = setEnable;
+  }
 
   private boolean hasAlgae() {
     return debouncer.calculate(
         motor.getOutputCurrent()
-            > SSConstants.AlgaeClaw.ALGAE_DETECTED_CURRENT_LIMIT.getAsDouble());
+            > SetpointConstants.AlgaeClaw.ALGAE_DETECTED_CURRENT_LIMIT.getAsDouble());
+  }
+
+  @Override
+  public boolean isAtTarget() {
+    return Math.abs(targetRPM - motor.getEncoder().getVelocity())
+        < RollerConstants.AT_TARGET_GIVE_RPM;
   }
 }
