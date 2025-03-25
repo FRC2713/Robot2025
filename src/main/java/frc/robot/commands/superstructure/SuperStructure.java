@@ -150,10 +150,10 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               EndEffector.ALGAE_GRAB.get(),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              //   Commands.either(
+              //       PivotCmds.setAngleAndWait(() -> 35),
+              //       Commands.none(),
+              //       () -> RobotContainer.pivot.getCurrentAngle() < -120),
               ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_GROUND_IN),
               Commands.sequence(
                   ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_GROUND_DEG),
