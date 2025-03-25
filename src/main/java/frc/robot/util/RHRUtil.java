@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.RobotContainer;
+import org.littletonrobotics.junction.Logger;
 
 public class RHRUtil {
   public static double speed(Twist2d twist) {
@@ -30,5 +31,9 @@ public class RHRUtil {
                     new Pose2d(
                         RobotContainer.driveSubsystem.getPose().getTranslation(),
                         initialPose.getRotation())));
+  }
+
+  public static Command logString(String key, String value) {
+    return new InstantCommand(() -> Logger.recordOutput(key, value));
   }
 }

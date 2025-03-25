@@ -79,23 +79,24 @@ public class DriveToPose extends Command {
             speeds,
             isFlipped ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation()));
 
-    // Logger.recordOutput("ScoreAssist/Driving/TargetPose", targetPose.get());
-    // Logger.recordOutput("ScoreAssist/Driving/CommandedSpeeds", speeds);
+    // helpful for tuning controllers
+    // Logger.recordOutput("ScoreAssist/PIDDriving/TargetPose", targetPose.get());
+    // Logger.recordOutput("ScoreAssist/PIDDriving/CommandedSpeeds", speeds);
     // Logger.recordOutput(
-    //     "ScoreAssist/Driving/X Current Setpoint",
+    //     "ScoreAssist/PIDDriving/X Current Setpoint",
     //     this.xscoreAssistController.getSetpoint().position);
     // Logger.recordOutput(
-    //     "ScoreAssist/Driving/X Current Goal", this.xscoreAssistController.getGoal().position);
+    //     "ScoreAssist/PIDDriving/X Current Goal", this.xscoreAssistController.getGoal().position);
     // Logger.recordOutput(
-    //     "ScoreAssist/Driving/Y Current Setpoint",
+    //     "ScoreAssist/PIDDriving/Y Current Setpoint",
     //     this.xscoreAssistController.getSetpoint().position);
     // Logger.recordOutput(
-    //     "ScoreAssist/Driving/Y Current Goal", this.xscoreAssistController.getGoal().position);
+    //     "ScoreAssist/PIDDriving/Y Current Goal", this.xscoreAssistController.getGoal().position);
     // Logger.recordOutput(
-    //     "ScoreAssist/Driving/Theta Current Setpoint",
+    //     "ScoreAssist/PIDDriving/Theta Current Setpoint",
     //     this.omegascoreAssistController.getSetpoint().position);
     // Logger.recordOutput(
-    //     "ScoreAssist/Driving/Theta Current Goal",
+    //     "ScoreAssist/PIDDriving/Theta Current Goal",
     //     this.omegascoreAssistController.getGoal().position);
   }
 

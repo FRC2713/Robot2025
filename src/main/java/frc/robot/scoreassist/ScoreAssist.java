@@ -106,6 +106,7 @@ public class ScoreAssist {
     this.currentNodeTarget = closestNode;
 
     Logger.recordOutput("ScoreAssist/updatedNodeTarget", updatedNodeTarget);
+    Logger.recordOutput("ScoreAssist/updatedLevelTarget", false);
   }
 
   /** Helper function to determine what the closest scoring node is */
@@ -152,7 +153,7 @@ public class ScoreAssist {
   /**
    * When the drivetrain is close enough to the target, score assist is done
    *
-   * @return if score assist is done (based on drivetrain position)
+   * @return if score assist is done (based on drivetrain position and speed)
    */
   @AutoLogOutput(key = "ScoreAssist/isAtFinalTargetPose")
   public boolean isAtFinalTargetPose() {
@@ -162,7 +163,7 @@ public class ScoreAssist {
     boolean withinTheta =
         Math.abs(this.thetaError) < ScoreAssistConstants.assistThetaTolerance.getAsDouble();
 
-    return this.mode == ScoreDrivingMode.ASSIST
+    return (this.mode == ScoreDrivingMode.ASSIST || this.mode == ScoreDrivingMode.SCORING)
         && currentNodeTarget != null
         && withinX
         && withinY
@@ -178,7 +179,8 @@ public class ScoreAssist {
    */
   @AutoLogOutput(key = "ScoreAssist/isAtPathTargetPose")
   public boolean isAtPathTargetPose() {
-    return RobotContainer.driveSubsystem
+    return RobotContainer.autoScorePathing
+        && RobotContainer.driveSubsystem
                 .getPose()
                 .getTranslation()
                 .getDistance(
@@ -186,8 +188,7 @@ public class ScoreAssist {
                         .getCurrentNodeTarget()
                         .getRobotAlignmentPose()
                         .getTranslation())
-            > ScoreAssistConstants.pathDistTolerance.getAsDouble()
-        && RobotContainer.autoScorePathing;
+            > ScoreAssistConstants.pathDistTolerance.getAsDouble();
   }
 
   /**
@@ -197,13 +198,12 @@ public class ScoreAssist {
    */
   @AutoLogOutput(key = "ScoreAssist/shouldOverridePath")
   public boolean shouldOverridePath() {
-    double translationStickMag =
-        Math.abs(
-            Math.hypot(
-                RobotContainer.driverControls.getLeftX(),
-                RobotContainer.driverControls.getLeftY()));
-
-    return translationStickMag > 0.15;
+    return !RobotContainer.autoScorePathing
+        || Math.abs(
+                Math.hypot(
+                    RobotContainer.driverControls.getLeftX(),
+                    RobotContainer.driverControls.getLeftY()))
+            > 0.15;
   }
 
   public static enum ScoreDrivingMode {

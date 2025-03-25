@@ -16,12 +16,15 @@ import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.SourceAlign;
+import frc.robot.util.RHRUtil;
 
 public class DriverControls {
   private final CommandXboxController driver = new CommandXboxController(0);
 
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
   private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
+
+  public String currentDriveCommandName = "Default Joystick Drive";
 
   public void configureTriggers() {
     reefAlignTrigger.onTrue(this.setToReefAlignCmd()).onFalse(this.setToNormalDriveCmd());
@@ -69,8 +72,14 @@ public class DriverControls {
     // Score Coral w Score Assist
     driver
         .rightBumper()
-        .onTrue(ScoreAssistCmds.exectuteCoralScore())
-        .onFalse(ScoreAssistCmds.stop());
+        .onTrue(
+            Commands.sequence(
+                RHRUtil.logString("CurrentDriveCommand", "Score Assist"),
+                ScoreAssistCmds.exectuteCoralScore()))
+        .onFalse(
+            Commands.sequence(
+                RHRUtil.logString("CurrentDriveCommand", this.currentDriveCommandName),
+                ScoreAssistCmds.stop()));
 
     // Enable/disable sourcealign
     driver

@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.DriveConstants.HeadingControllerConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import java.text.DecimalFormat;
@@ -46,6 +47,7 @@ public class DriveCmds {
   private DriveCmds() {}
 
   public static void setDefaultDriveCommand(Drivetrain drive, Command cmd, String name) {
+    RobotContainer.driverControls.currentDriveCommandName = name;
     Logger.recordOutput("CurrentDriveCommand", name);
     var currentCmd = drive.getCurrentCommand();
     if (currentCmd != null) {
