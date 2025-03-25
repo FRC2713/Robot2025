@@ -31,6 +31,7 @@ import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.generated.TunerConstants;
 import frc.robot.oi.DriverControls;
 import frc.robot.oi.OperatorControls;
+import frc.robot.oi.DeveloperControls; // Added import for DeveloperControls
 import frc.robot.scoreassist.ClimbAssist;
 import frc.robot.scoreassist.ScoreAssist;
 import frc.robot.subsystems.algaeClaw.AlgaeClaw;
@@ -88,6 +89,7 @@ public class RobotContainer {
   // Xbox Controllers
   public static DriverControls driverControls = new DriverControls();
   public static OperatorControls operatorControls = new OperatorControls();
+  public static DeveloperControls devControls = new DeveloperControls();
 
   private static boolean hasRanAuto = false;
 
@@ -276,6 +278,8 @@ public class RobotContainer {
     driverControls.configureTriggers();
     operatorControls.configureButtonBindings();
     operatorControls.configureTriggers();
+    devControls.configureButtonBindings();
+    devControls.configureTriggers();
 
     // Default command, normal field-relative drive
     driverControls.setToNormalDrive();
