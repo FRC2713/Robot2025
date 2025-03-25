@@ -17,6 +17,7 @@ public class AlgaeClawIOSparks implements AlgaeClawIO {
   private final SparkFlex motor;
   private double targetRPM;
   private Debouncer debouncer;
+  private boolean enableLS = true;
 
   public AlgaeClawIOSparks() {
     this.motor = new SparkFlex(AlgaeClawConstants.kCANId, MotorType.kBrushless);
@@ -29,6 +30,9 @@ public class AlgaeClawIOSparks implements AlgaeClawIO {
 
   @Override
   public void updateInputs(AlgaeClawInputs inputs) {
+    if (enableLS && hasAlgae()) {
+      setRPM(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED.getAsDouble());
+    }
     inputs.algaeClawVelocityRPM = motor.getEncoder().getVelocity();
     inputs.algaeClawOutputVoltage = motor.getAppliedOutput() * motor.getBusVoltage();
     inputs.algaeClawCurrentAmps = motor.getOutputCurrent();
@@ -45,7 +49,9 @@ public class AlgaeClawIOSparks implements AlgaeClawIO {
   }
 
   @Override
-  public void setEnableLimitSwitch(boolean setEnable) {}
+  public void setEnableLimitSwitch(boolean setEnable) {
+    enableLS = setEnable;
+  }
 
   private boolean hasAlgae() {
     return debouncer.calculate(

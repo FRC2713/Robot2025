@@ -107,6 +107,7 @@ public class ScoreAssistCmds {
   /** This moves the SS when ready, and runs the rollers when ready */
   public static Command executeSS() {
     return new MoveSSToTarget(
-        RobotContainer.scoreAssist::getCurrentLevelTarget, EndEffector.CORAL_SCORE.get());
+        RobotContainer.scoreAssist::getCurrentLevelTarget,
+        Commands.sequence(Commands.waitSeconds(0.1), EndEffector.CORAL_SCORE.get()));
   }
 }

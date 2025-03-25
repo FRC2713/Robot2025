@@ -72,7 +72,7 @@ public class SuperStructure {
               "STOP_ROLLERS",
               () -> 0, // stop algae claw
               SetpointConstants.Elevator.L4_PREP_HEIGHT_IN,
-              SetpointConstants.Shoulder.L4_ANGLE_DEG,
+              SetpointConstants.Shoulder.L4_PREP_ANGLE_DEG,
               SetpointConstants.Pivot.L4_ANGLE_DEG);
 
   // TODO: if this intersects with the reef, might need to do pivot last

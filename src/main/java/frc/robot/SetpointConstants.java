@@ -24,7 +24,7 @@ public class SetpointConstants {
     public static final LoggedTunableNumber L4_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L4 Height", 24);
     public static final LoggedTunableNumber L4_PREP_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 7);
+        new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 15);
 
     public static final LoggedTunableNumber PROCESSOR_PREP_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/Proc Prep Height", 10);
@@ -77,7 +77,7 @@ public class SetpointConstants {
   public class Pivot {
 
     public static final LoggedTunableNumber STARTING_ANGLE =
-        new LoggedTunableNumber("Pivot/SS/Starting Angle", 0);
+        new LoggedTunableNumber("Pivot/SS/Starting Angle", 35);
 
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Source Intake Angle", 35);

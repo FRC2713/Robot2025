@@ -63,7 +63,7 @@ public class DriverControls {
     // Intake Coral
     driver
         .leftBumper()
-        .onTrue(SuperStructure.SOURCE_CORAL_INTAKE.get())
+        .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.get())
         .onFalse(EndEffector.STOP_ROLLERS.get());
 
     // Score Coral w Score Assist
