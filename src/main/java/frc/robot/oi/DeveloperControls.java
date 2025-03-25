@@ -5,6 +5,7 @@
 package frc.robot.oi;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.superstructure.SuperStructure;
 
 /* Please use this class when testing out new commands and triggers
  * This will help keep the existing commands clean and we only move 
@@ -18,6 +19,7 @@ public class DeveloperControls {
       }
 
       public void configureButtonBindings() {
-
+            devCommandXboxController.b().onTrue(SuperStructure.ALGAE_GRAB_GROUND.get());
+            devCommandXboxController.x().onTrue(SuperStructure.STARTING_CONF_WITH_ALGAE.get());
       }
 }
