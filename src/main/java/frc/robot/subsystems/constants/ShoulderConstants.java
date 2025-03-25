@@ -50,7 +50,7 @@ public class ShoulderConstants {
   public static final double kS = RHRUtil.modeDependentDouble(1., 0.); // Volts
 
   // Theorectical Max: ...
-  public static final double kTrapezoidalMaxVelocity = 2;
+  public static final double kTrapezoidalMaxVelocity = 1.;
   public static final double kTrapezoidalMaxAcceleration = 4;
   public static final double kTrapezoidalMaxJerk = 10;
   public static final double kExponential_kV = 13;

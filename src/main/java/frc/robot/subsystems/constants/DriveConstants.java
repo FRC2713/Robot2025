@@ -18,7 +18,7 @@ public class DriveConstants {
 
   // positive values adjust the robots scoring pose to the right.
   public static final LoggedTunableNumber coralOffsetFromCenter =
-      new LoggedTunableNumber("Drive/coralOffsetFromCenter", 0.05);
+      new LoggedTunableNumber("Drive/coralOffsetFromCenter", -0.05);
   public static final double driveBaseWidthWithBumpersMeters =
       edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 9.0 + 4.75);
 

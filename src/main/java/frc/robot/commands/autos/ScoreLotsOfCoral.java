@@ -83,7 +83,7 @@ public class ScoreLotsOfCoral {
                 Commands.race(
                     Commands.parallel(
                         SuperStructure.SOURCE_CORAL_INTAKE.get(),
-                        new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral())),
+                        new WaitUntilCommand(() -> RobotContainer.endEffector.hasCoral())),
                     Commands.waitSeconds(0.1)),
                 sourceToReefC.cmd()));
 
@@ -110,7 +110,7 @@ public class ScoreLotsOfCoral {
                 Commands.race(
                     Commands.parallel(
                         SuperStructure.SOURCE_CORAL_INTAKE.get(),
-                        new WaitUntilCommand(() -> RobotContainer.rollers.hasCoral())),
+                        new WaitUntilCommand(() -> RobotContainer.endEffector.hasCoral())),
                     Commands.waitSeconds(0.1)),
                 sourceToReefD.cmd()));
 
