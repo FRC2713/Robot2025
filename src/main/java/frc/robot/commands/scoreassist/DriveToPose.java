@@ -13,7 +13,6 @@ import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ScoreAssistConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class DriveToPose extends Command {
 
@@ -27,9 +26,16 @@ public class DriveToPose extends Command {
       DriveConstants.HeadingControllerConstants.angleGains.createAngularTrapezoidalPIDController();
   private Drivetrain drive;
 
+  private final boolean runInBackground;
+
   public DriveToPose(Supplier<Pose2d> pose, Drivetrain drive) {
+    this(pose, drive, false);
+  }
+
+  public DriveToPose(Supplier<Pose2d> pose, Drivetrain drive, boolean runInBackground) {
     this.targetPose = pose;
     this.drive = drive;
+    this.runInBackground = runInBackground;
     addRequirements(drive);
   }
 
@@ -73,24 +79,24 @@ public class DriveToPose extends Command {
             speeds,
             isFlipped ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation()));
 
-    Logger.recordOutput("ScoreAssist/Driving/TargetPose", targetPose.get());
-    Logger.recordOutput("ScoreAssist/Driving/CommandedSpeeds", speeds);
-    Logger.recordOutput(
-        "ScoreAssist/Driving/X Current Setpoint",
-        this.xscoreAssistController.getSetpoint().position);
-    Logger.recordOutput(
-        "ScoreAssist/Driving/X Current Goal", this.xscoreAssistController.getGoal().position);
-    Logger.recordOutput(
-        "ScoreAssist/Driving/Y Current Setpoint",
-        this.xscoreAssistController.getSetpoint().position);
-    Logger.recordOutput(
-        "ScoreAssist/Driving/Y Current Goal", this.xscoreAssistController.getGoal().position);
-    Logger.recordOutput(
-        "ScoreAssist/Driving/Theta Current Setpoint",
-        this.omegascoreAssistController.getSetpoint().position);
-    Logger.recordOutput(
-        "ScoreAssist/Driving/Theta Current Goal",
-        this.omegascoreAssistController.getGoal().position);
+    // Logger.recordOutput("ScoreAssist/Driving/TargetPose", targetPose.get());
+    // Logger.recordOutput("ScoreAssist/Driving/CommandedSpeeds", speeds);
+    // Logger.recordOutput(
+    //     "ScoreAssist/Driving/X Current Setpoint",
+    //     this.xscoreAssistController.getSetpoint().position);
+    // Logger.recordOutput(
+    //     "ScoreAssist/Driving/X Current Goal", this.xscoreAssistController.getGoal().position);
+    // Logger.recordOutput(
+    //     "ScoreAssist/Driving/Y Current Setpoint",
+    //     this.xscoreAssistController.getSetpoint().position);
+    // Logger.recordOutput(
+    //     "ScoreAssist/Driving/Y Current Goal", this.xscoreAssistController.getGoal().position);
+    // Logger.recordOutput(
+    //     "ScoreAssist/Driving/Theta Current Setpoint",
+    //     this.omegascoreAssistController.getSetpoint().position);
+    // Logger.recordOutput(
+    //     "ScoreAssist/Driving/Theta Current Goal",
+    //     this.omegascoreAssistController.getGoal().position);
   }
 
   // Called once the command ends or is interrupted.
@@ -100,6 +106,10 @@ public class DriveToPose extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (this.runInBackground) {
+      return false;
+    }
+
     return RobotContainer.scoreAssist.isAtFinalTargetPose();
   }
 }

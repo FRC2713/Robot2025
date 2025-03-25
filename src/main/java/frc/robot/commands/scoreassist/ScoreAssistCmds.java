@@ -32,19 +32,20 @@ public class ScoreAssistCmds {
   /** This drives to target, moves the SS when ready, and runs the rollers when ready */
   public static Command exectuteCoralScore() {
     return Commands.sequence(
-            Commands.parallel(
-                start(), // 1) activate score assist
+            start(), // 1) activate score assist
+            Commands.race(
                 Commands.either(
                     Commands.sequence(
                         executePath(), // 2a) path-find close to target (with manual
                         // override)
-                        exectuteDrive() // 2b) drive to target
+                        exectuteDrive(true) // 2b) drive to target
                         ),
-                    exectuteDrive(),
+                    exectuteDrive(true),
                     RobotContainer.scoreAssist::isAtPathTargetPose),
                 executePrep()), // 3) execute prep
-            stop(),
-            executeSS())
+            pause(ScoreDrivingMode.SCORING),
+            executeSS(),
+            stop())
         .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
@@ -53,17 +54,25 @@ public class ScoreAssistCmds {
     // Note that during autonomous, ScoreAssist does not update via NT
     return Commands.sequence(
             Commands.runOnce(() -> RobotContainer.scoreAssist.updateManually(scoreLoc)),
+            start(), // 1) activate score assist
             Commands.parallel(
-                start(), // 1) activate score assist
-                exectuteDrive(), // 2) drive to target
+                exectuteDrive(false), // 2) drive to target
                 executePrep()), // 3) execute prep
-            stop(),
-            executeSS())
+            pause(ScoreDrivingMode.SCORING),
+            executeSS(),
+            stop())
         .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
-  public static Command start() {
+  private static Command start() {
     return new InstantCommand(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.PATH);
+  }
+
+  private static Command pause(ScoreDrivingMode pausedMode) {
+    return Commands.sequence(
+        new InstantCommand(() -> RobotContainer.scoreAssist.mode = pausedMode),
+        Commands.runOnce(
+            () -> RobotContainer.driveSubsystem.stop(), RobotContainer.driveSubsystem));
   }
 
   public static Command stop() {
@@ -78,7 +87,7 @@ public class ScoreAssistCmds {
   }
 
   /** This drives to target */
-  public static Command executePath() {
+  private static Command executePath() {
     return Commands.sequence(
         Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.PATH),
         new PathfindToPose(
@@ -87,27 +96,29 @@ public class ScoreAssistCmds {
   }
 
   /** This drives */
-  public static Command executePathWithOverride() {
-    return new PathFindToPoseWithOverride();
-  }
-  /** This drives */
-  public static Command exectuteDrive() {
+  private static Command exectuteDrive(boolean driveInBackground) {
     return Commands.sequence(
         Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.ASSIST),
         new DriveToPose(
             () -> RobotContainer.scoreAssist.getCurrentNodeTarget().getRobotAlignmentPose(),
-            RobotContainer.driveSubsystem));
+            RobotContainer.driveSubsystem,
+            driveInBackground));
   }
 
   /** This moves the SS when ready */
-  public static Command executePrep() {
+  private static Command executePrep() {
     return new MoveSSToTarget(RobotContainer.scoreAssist::getCurrentLevelTarget);
   }
 
   /** This moves the SS when ready, and runs the rollers when ready */
-  public static Command executeSS() {
-    return new MoveSSToTarget(
-        RobotContainer.scoreAssist::getCurrentLevelTarget,
-        Commands.sequence(Commands.waitSeconds(0.1), EndEffector.CORAL_SCORE.get()));
+  private static Command executeSS() {
+    // return new MoveSSToTarget(
+    //     RobotContainer.scoreAssist::getCurrentLevelTarget,
+    //     Commands.sequence(Commands.waitSeconds(0.1), EndEffector.CORAL_SCORE.get()));
+    return Commands.race(
+        new MoveSSToTarget(
+            RobotContainer.scoreAssist::getCurrentLevelTarget,
+            Commands.sequence(Commands.waitSeconds(0.1), EndEffector.CORAL_SCORE.get())),
+        exectuteDrive(true));
   }
 }

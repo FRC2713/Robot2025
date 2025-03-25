@@ -210,6 +210,7 @@ public class ScoreAssist {
     PATH,
     PATH_OVERRIDEN,
     ASSIST,
+    SCORING,
     INACTIVE
   }
 }
