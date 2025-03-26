@@ -12,6 +12,9 @@ public class ScoreAssistMessage {
       throw new IllegalArgumentException("Invalid format: " + ntString);
     }
     var parts = ntString.split(",");
+    if (parts.length != 3) {
+      throw new IllegalArgumentException("Invalid format: " + ntString);
+    }
     var goalVal = Integer.parseInt(parts[0]);
     this.level = Integer.parseInt(parts[1]);
     this.index = Integer.parseInt(parts[2]);
