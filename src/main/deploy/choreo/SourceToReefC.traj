@@ -73,6 +73,5 @@
     {"t":1.46167, "x":3.49207, "y":2.77963, "heading":1.02593, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
   "splits":[0]
  },
- "events":[
-   {"name":"PrepElevator", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+ "events":[]
 }

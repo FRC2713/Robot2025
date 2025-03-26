@@ -53,5 +53,6 @@ public class EndEffector {
       () ->
           Commands.sequence(
               Commands.runOnce(() -> Logger.recordOutput("Active EE", "STOP_ROLLERS")),
-              RollerCmds.setSpeed(() -> 0));
+              RollerCmds.setSpeed(() -> 0),
+              AlgaeClawCmds.setSpeed(() -> 0));
 }

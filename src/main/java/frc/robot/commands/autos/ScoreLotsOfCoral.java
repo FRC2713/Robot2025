@@ -85,7 +85,7 @@ public class ScoreLotsOfCoral {
                         SuperStructure.SOURCE_CORAL_INTAKE.get(),
                         new WaitUntilCommand(() -> RobotContainer.endEffector.hasCoral())),
                     Commands.waitSeconds(0.1)),
-                sourceToReefC.cmd()));
+                Commands.parallel(sourceToReefC.cmd(), SuperStructure.L4_PREP.get())));
 
     // Prep elevator along the way
     // sourceToReefB.atTime("PrepElevator").onTrue(SuperStructure.L4_PREP);
@@ -94,6 +94,7 @@ public class ScoreLotsOfCoral {
         .done()
         .onTrue(
             Commands.sequence(
+                new InstantCommand(() -> driveSubsystem.stop()),
                 // 1) Finish off trajectory with score assist, which also moves the SS and runs the
                 // rollers
                 ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.C_FOUR),
@@ -112,12 +113,13 @@ public class ScoreLotsOfCoral {
                         SuperStructure.SOURCE_CORAL_INTAKE.get(),
                         new WaitUntilCommand(() -> RobotContainer.endEffector.hasCoral())),
                     Commands.waitSeconds(0.1)),
-                sourceToReefD.cmd()));
+                    Commands.parallel(SuperStructure.L4_PREP.get(),sourceToReefD.cmd())));
 
     sourceToReefD
         .done()
         .onTrue(
             Commands.sequence(
+                new InstantCommand(() -> driveSubsystem.stop()),
                 // 1) Finish off trajectory with score assist, which also moves the SS
                 ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.D_FOUR),
                 // 2) Wait to make sure coral is outtathere
