@@ -9,7 +9,9 @@ import lombok.Getter;
 public enum ScoreLevel {
   ONE(Commands::none, SuperStructure.L1),
   TWO(SuperStructure.L2, SuperStructure.L2),
+  ALGAE_TWO(SuperStructure.ALGAE_GRAB_L2, SuperStructure.ALGAE_GRAB_L2),
   THREE(SuperStructure.L3, SuperStructure.L3),
+  ALGAE_THREE(SuperStructure.ALGAE_GRAB_L3, SuperStructure.ALGAE_GRAB_L3),
   FOUR(SuperStructure.L4_PREP, SuperStructure.L4);
 
   @Getter private Supplier<Command> prepCommand;

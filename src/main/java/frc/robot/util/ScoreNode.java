@@ -14,21 +14,27 @@ public enum ScoreNode {
   // indexes start at right branch facing driver station and move clockwise, which means that
   // B is zero
   A(FieldConstants.Reef.branchPositions2d.get(1).get(ReefLevel.L2)),
+  AB_ALGAE(FieldConstants.Reef.centerFaces[0]),
   B(FieldConstants.Reef.branchPositions2d.get(0).get(ReefLevel.L2)),
 
   C(FieldConstants.Reef.branchPositions2d.get(11).get(ReefLevel.L2)),
+  CD_ALGAE(FieldConstants.Reef.centerFaces[5]),
   D(FieldConstants.Reef.branchPositions2d.get(10).get(ReefLevel.L2)),
 
   E(FieldConstants.Reef.branchPositions2d.get(9).get(ReefLevel.L2)),
+  EF_ALGAE(FieldConstants.Reef.centerFaces[4]),
   F(FieldConstants.Reef.branchPositions2d.get(8).get(ReefLevel.L2)),
 
   G(FieldConstants.Reef.branchPositions2d.get(7).get(ReefLevel.L2)),
+  GH_ALGAE(FieldConstants.Reef.centerFaces[3]),
   H(FieldConstants.Reef.branchPositions2d.get(6).get(ReefLevel.L2)),
 
   I(FieldConstants.Reef.branchPositions2d.get(5).get(ReefLevel.L2)),
+  IJ_ALGAE(FieldConstants.Reef.centerFaces[2]),
   J(FieldConstants.Reef.branchPositions2d.get(4).get(ReefLevel.L2)),
 
   K(FieldConstants.Reef.branchPositions2d.get(3).get(ReefLevel.L2)),
+  KL_ALGAE(FieldConstants.Reef.centerFaces[1]),
   L(FieldConstants.Reef.branchPositions2d.get(2).get(ReefLevel.L2));
 
   private Pose2d pose;
