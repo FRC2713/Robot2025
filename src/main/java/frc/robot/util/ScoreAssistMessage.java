@@ -1,23 +1,24 @@
 package frc.robot.util;
 
 public class ScoreAssistMessage {
-    public GoalType goal;
-    public int level;
-    public int index;
+  public GoalType goal;
+  public int level;
+  public int index;
 
-    public ScoreAssistMessage(String ntString) {
-        if (!ntString.matches("^\\d+,\\d+,\\d+$")) {
-            throw new IllegalArgumentException("Invalid format: " + ntString);
-        }
-        // example string format: "1,4,11"
-        var split = ntString.indexOf(',');
-        var goal = Integer.parseInt(ntString.substring(0, split));
-        this.level = Integer.parseInt(ntString.substring(split + 1));
-        this.index = Integer.parseInt(ntString.substring(split + 1));
-        this.goal = GoalType.values()[goal];
+  public ScoreAssistMessage(String ntString) {
+    // check if string is in the correct format
+    // example string format: "1,4,11"
+    if (!ntString.matches("^\\d+,\\d+,\\d+$")) {
+      throw new IllegalArgumentException("Invalid format: " + ntString);
     }
+    var parts = ntString.split(",");
+    var goalVal = Integer.parseInt(parts[0]);
+    this.level = Integer.parseInt(parts[1]);
+    this.index = Integer.parseInt(parts[2]);
+    this.goal = GoalType.values()[goalVal];
+  }
 
-    public static enum GoalType {
+  public static enum GoalType {
     CORAL(1),
     ALGAE(2),
     CAGE(3),
@@ -27,13 +28,11 @@ public class ScoreAssistMessage {
     private final int value;
 
     GoalType(int value) {
-        this.value = value;
+      this.value = value;
     }
 
     public int getValue() {
-        return value;
+      return value;
     }
-}
-
-
+  }
 }

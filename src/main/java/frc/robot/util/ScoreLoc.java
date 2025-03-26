@@ -180,7 +180,6 @@ public class ScoreLoc {
         default:
           return null;
       }
-      
     }
 
     private static ScoreLoc parseCoral(ScoreAssistMessage saMessage) {
