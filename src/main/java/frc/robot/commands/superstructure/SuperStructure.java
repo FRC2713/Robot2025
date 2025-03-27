@@ -110,11 +110,11 @@ public class SuperStructure {
           Commands.sequence(
               RollerCmds.setEnableLimitSwitch(true),
               RollerCmds.setSpeed(() -> 0),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG),
+              //   Commands.either(
+              //       PivotCmds.setAngleAndWait(() -> 35),
+              //       Commands.none(),
+              //       () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              PivotCmds.setAngleAndWait(() -> 90),
               Commands.parallel(
                   ElevatorCmds.setHeightAndWait(() -> 0), ShoulderCmds.setAngleAndWait(() -> -90)));
 
@@ -136,10 +136,10 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               EndEffector.ALGAE_GRAB.get(),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
+              //   Commands.either(
+              //       PivotCmds.setAngleAndWait(() -> 35),
+              //       Commands.none(),
+              //       () -> RobotContainer.pivot.getCurrentAngle() < -120),
               ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_L3_IN),
               Commands.parallel(
                   PivotCmds.setAngle(SetpointConstants.Pivot.ALGAE_L3_DEG),

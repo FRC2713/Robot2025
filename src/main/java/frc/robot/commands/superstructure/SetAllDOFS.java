@@ -35,8 +35,8 @@ public class SetAllDOFS extends ParallelCommandGroup {
         new InstantCommand(() -> Logger.recordOutput("Active SS", ssName)),
         new InstantCommand(() -> Logger.recordOutput("Active EE", eeName)),
         RollerCmds.setEnableLimitSwitch(intakingCoral),
-        RollerCmds.setSpeedAndWait(coralSpeed),
-        AlgaeClawCmds.setSpeedAndWait(algaeSpeed),
+        RollerCmds.setSpeed(coralSpeed),
+        AlgaeClawCmds.setSpeed(algaeSpeed),
         ElevatorCmds.setHeightAndWait(elevatorTarget),
         PivotCmds.setAngleAndWait(wristTarget),
         ShoulderCmds.setAngleAndWait(shoulderTarget));
