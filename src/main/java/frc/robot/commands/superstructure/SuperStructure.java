@@ -166,10 +166,9 @@ public class SuperStructure {
   public static Supplier<Command> PROCESSOR_PREP =
       () ->
           Commands.sequence(
-              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.PROCESSOR_PREP_HEIGHT_IN),
               ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG),
               PivotCmds.setAngleAndWait(SetpointConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
-              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.PROCESSOR_SCORE_HEIGHT_IN));
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.PROCESSOR_HEIGHT_IN));
 
   public static Supplier<Command> PROCESSOR_SCORE =
       () -> Commands.sequence(PROCESSOR_PREP.get(), EndEffector.PROCESSOR_SCORE.get());

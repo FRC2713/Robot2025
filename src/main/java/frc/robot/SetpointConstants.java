@@ -23,29 +23,27 @@ public class SetpointConstants {
 
     public static final LoggedTunableNumber L4_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L4 Height", 24);
+
     public static final LoggedTunableNumber L4_PREP_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L4 Prep Height", 15);
 
-    public static final LoggedTunableNumber PROCESSOR_PREP_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/Proc Prep Height", 0);
+    public static final LoggedTunableNumber CLIMB_PREP_HEIGHT =
+        new LoggedTunableNumber("Elevator/SS/Climb Prep Height", 10);
 
-    public static final LoggedTunableNumber PROCESSOR_SCORE_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/Proc Score Height", 0);
+    public static final LoggedTunableNumber PROCESSOR_HEIGHT_IN =
+        new LoggedTunableNumber("Elevator/SS/Proc Height", 0);
 
     public static final LoggedTunableNumber BARGE_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/Barge Height", 26);
-
-    public static final LoggedTunableNumber CLIMB_PREP_HEIGHT =
-        new LoggedTunableNumber("Elevator/SS/Climb Prep Height", 10);
 
     public static final LoggedTunableNumber ALGAE_GROUND_IN =
         new LoggedTunableNumber("Elevator/SS/Ground Algae Height", 0);
 
     public static final LoggedTunableNumber ALGAE_L3_IN =
-        new LoggedTunableNumber("Elevator/SS/Algae L3 Height", 1);
+        new LoggedTunableNumber("Elevator/SS/Algae L3 Height", 16);
 
     public static final LoggedTunableNumber ALGAE_L2_IN =
-        new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 0);
+        new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 12);
   }
 
   public class Shoulder {
@@ -70,14 +68,14 @@ public class SetpointConstants {
     public static final LoggedTunableNumber L4_PREP_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/L4 Prep Angle", 90);
 
-    public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Proc Score Angle", -90);
-
     public static final LoggedTunableNumber PREP_CLIMB_ANGLE_DEGS =
         new LoggedTunableNumber("Shoulder/SS/Prep Climb Angle", -140);
 
     public static final LoggedTunableNumber CLIMB_ANGLE_DEGS =
         new LoggedTunableNumber("Shoulder/SS/Climb Angle", -147);
+
+    public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/Proc Score Angle", -90);
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEGREES =
         new LoggedTunableNumber("Shoulder/SS/Barge Angle", 90);
@@ -86,10 +84,10 @@ public class SetpointConstants {
         new LoggedTunableNumber("Shoulder/SS/Ground Algae Angle", -45);
 
     public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", 150);
+        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", -120);
 
     public static final LoggedTunableNumber ALGAE_L2_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Algae L2 Angle", -140);
+        new LoggedTunableNumber("Shoulder/SS/Algae L2 Angle", -100);
   }
 
   public class Pivot {
@@ -134,10 +132,10 @@ public class SetpointConstants {
         new LoggedTunableNumber("Pivot/SS/Ground Algae Angle", -45);
 
     public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber("Pivot/SS/Algae L3 Angle", 150);
+        new LoggedTunableNumber("Pivot/SS/Algae L3 Angle", 135);
 
     public static final LoggedTunableNumber ALGAE_L2_DEG =
-        new LoggedTunableNumber("Pivot/SS/Algae L2 Angle", 125);
+        new LoggedTunableNumber("Pivot/SS/Algae L2 Angle", 170);
   }
 
   public class Roller {

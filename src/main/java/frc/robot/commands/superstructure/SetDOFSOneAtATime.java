@@ -38,8 +38,8 @@ public class SetDOFSOneAtATime extends SequentialCommandGroup {
         new InstantCommand(() -> Logger.recordOutput("Active SS", ssName)),
         new InstantCommand(() -> Logger.recordOutput("Active EE", eeName)),
         RollerCmds.setEnableLimitSwitch(intakingCoral),
-        RollerCmds.setSpeedAndWait(coralSpeed),
-        AlgaeClawCmds.setSpeedAndWait(algaeSpeed),
+        RollerCmds.setSpeed(coralSpeed),
+        AlgaeClawCmds.setSpeed(algaeSpeed),
         ElevatorCmds.setHeightAndWait(elevatorTarget),
         ShoulderCmds.setAngleAndWait(shoulderTarget),
         PivotCmds.setAngleAndWait(wristTarget));
