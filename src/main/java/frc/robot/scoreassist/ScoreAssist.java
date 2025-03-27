@@ -2,13 +2,12 @@ package frc.robot.scoreassist;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.ScoreAssistConstants;
+import frc.robot.util.ReefTracker;
 import frc.robot.util.ScoreLevel;
 import frc.robot.util.ScoreLoc;
 import frc.robot.util.ScoreLoc.ScoreLocations;
@@ -22,10 +21,6 @@ import org.littletonrobotics.junction.Logger;
  * superstructure target
  */
 public class ScoreAssist {
-
-  private final StringSubscriber reefTrackerSub =
-      NetworkTableInstance.getDefault().getStringTopic("/scoreassist/goto").subscribe("none");
-
   @Getter private ScoreNode currentNodeTarget = ScoreNode.A;
   @Getter private ScoreLevel currentLevelTarget = ScoreLevel.FOUR;
   private boolean updatedNodeTarget = false;
@@ -76,9 +71,7 @@ public class ScoreAssist {
    * choosen
    */
   private void updateWithNT() {
-    String reefTrackerInput = reefTrackerSub.get();
-    var loc = ScoreLocations.parseFromNT(reefTrackerInput);
-    Logger.recordOutput("ScoreAssist/fromNT", reefTrackerInput);
+    var loc = ScoreLocations.fromMsg(ReefTracker.getInstance().getGotoLoc());
     if (loc == null) {
       updateWithClosest();
       usingClosest.set(true);
@@ -210,6 +203,7 @@ public class ScoreAssist {
     PATH,
     PATH_OVERRIDEN,
     ASSIST,
+    BARGE,
     INACTIVE
   }
 }

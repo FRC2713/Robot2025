@@ -69,7 +69,7 @@ public class DriverControls {
     // Score Coral w Score Assist
     driver
         .rightBumper()
-        .onTrue(ScoreAssistCmds.exectuteCoralScore())
+        .onTrue(ScoreAssistCmds.executeReefTrackerScore())
         .onFalse(ScoreAssistCmds.stop());
 
     // Enable/disable sourcealign
@@ -96,11 +96,11 @@ public class DriverControls {
         .whileTrue(new Climb(() -> -1 * driver.getLeftTriggerAxis()))
         .onFalse(ClimberCmds.setVoltage(() -> 0));
 
-    // Grab Algae
+    // Manual Score
     driver
         .rightTrigger(0.2)
-        .whileTrue(Commands.sequence(EndEffector.ALGAE_GRAB.get()))
-        .onFalse(SuperStructure.STARTING_CONF_WITH_ALGAE.get());
+        .whileTrue(ScoreAssistCmds.contextualManualScore())
+        .onFalse(SuperStructure.SOURCE_CORAL_INTAKE.get());
 
     // POV Precision Driving
     driver

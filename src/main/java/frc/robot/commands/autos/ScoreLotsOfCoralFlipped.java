@@ -51,7 +51,7 @@ public class ScoreLotsOfCoralFlipped {
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, in parallel move SS to L4 and when
                 // ready runs the rollers
-                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.J_FOUR),
+                ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.J_FOUR),
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 2) Begin driving to source
                 Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE.get(), reefJToSource.cmd())));
@@ -75,7 +75,7 @@ public class ScoreLotsOfCoralFlipped {
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, in parallel move SS to L4
-                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.L_FOUR),
+                ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.L_FOUR),
                 // 2) Score Coral
                 EndEffector.CORAL_SCORE.get(),
                 // 3) Begin driving to source
