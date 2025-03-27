@@ -16,9 +16,9 @@ public class ScoreAssistMessage {
       throw new IllegalArgumentException("Invalid format: " + ntString);
     }
     var goalVal = Integer.parseInt(parts[0]);
-    this.level = Integer.parseInt(parts[1]);
-    this.index = Integer.parseInt(parts[2]);
-    this.goal = GoalType.values()[goalVal];
+    this.level = Integer.parseInt(parts[2]);
+    this.index = Integer.parseInt(parts[1]);
+    this.goal = GoalType.values()[goalVal - 1];
   }
 
   public static enum GoalType {
@@ -37,5 +37,19 @@ public class ScoreAssistMessage {
     public int getValue() {
       return value;
     }
+
+    public static GoalType fromValue(int value) {
+      for (GoalType type : GoalType.values()) {
+        if (type.getValue() == value) {
+          return type;
+        }
+      }
+      return null;
+    }
+  }
+
+  @Override
+  public String toString() {
+    return goal + " Level: " + level + " Index: " + index;
   }
 }
