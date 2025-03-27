@@ -24,9 +24,9 @@ public class DriveConstants {
 
   public final class AutoConstants {
     public static final LoggedTunableGains xTrajectoryController =
-        new LoggedTunableGains("xTraj", new ControlGains().p(1.0));
+        new LoggedTunableGains("xTraj", new ControlGains().p(0.1));
     public static final LoggedTunableGains yTrajectoryController =
-        new LoggedTunableGains("yTraj", new ControlGains().p(1.0));
+        new LoggedTunableGains("yTraj", new ControlGains().p(0.1));
     public static final LoggedTunableGains headingTrajectoryController =
         new LoggedTunableGains("headingTraj", new ControlGains().p(1.5).d(0.0));
   }

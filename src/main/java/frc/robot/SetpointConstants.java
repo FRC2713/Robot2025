@@ -40,10 +40,10 @@ public class SetpointConstants {
         new LoggedTunableNumber("Elevator/SS/Ground Algae Height", 0);
 
     public static final LoggedTunableNumber ALGAE_L3_IN =
-        new LoggedTunableNumber("Elevator/SS/Algae L3 Height", 16);
+        new LoggedTunableNumber("Elevator/SS/Algae L3 Height", 25);
 
     public static final LoggedTunableNumber ALGAE_L2_IN =
-        new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 12);
+        new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 25);
   }
 
   public class Shoulder {
@@ -87,7 +87,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Shoulder/SS/Ground Algae Angle", -45);
 
     public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", -120);
+        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", -180);
 
     public static final LoggedTunableNumber ALGAE_L2_DEG =
         new LoggedTunableNumber("Shoulder/SS/Algae L2 Angle", -100);
@@ -135,10 +135,10 @@ public class SetpointConstants {
         new LoggedTunableNumber("Pivot/SS/Ground Algae Angle", -45);
 
     public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber("Pivot/SS/Algae L3 Angle", 135);
+        new LoggedTunableNumber("Pivot/SS/Algae L3 Angle", 190);
 
     public static final LoggedTunableNumber ALGAE_L2_DEG =
-        new LoggedTunableNumber("Pivot/SS/Algae L2 Angle", 170);
+        new LoggedTunableNumber("Pivot/SS/Algae L2 Angle", 190);
   }
 
   public class Roller {
@@ -166,7 +166,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("AlgaeClaw/SS/Barge Score Speed", -4000);
 
     public static final DoubleSupplier ALGAE_HOLD_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/Algae Hold Speed", 2000);
+        new LoggedTunableNumber("AlgaeClaw/SS/Algae Hold Speed", 6000);
 
     public static final DoubleSupplier ALGAE_DETECTED_CURRENT_LIMIT =
         new LoggedTunableNumber("AlgaeClaw/SS/Algae Detected Current Limit", 30);
