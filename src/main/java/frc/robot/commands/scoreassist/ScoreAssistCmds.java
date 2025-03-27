@@ -6,14 +6,30 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.DriveAtLongitude;
 import frc.robot.commands.MoveSSToTarget;
+import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.ReefTracker;
+import frc.robot.util.ScoreAssistMessage;
 import frc.robot.util.ScoreLoc;
+import java.util.HashMap;
 
 public class ScoreAssistCmds {
+  public static ScoreAssistMessage.GoalType contextualScore = ScoreAssistMessage.GoalType.CORAL;
+
+  /** Execute desired score command from ReefTracker */
+  public static Command executeReefTrackerScore() {
+    var commands = new HashMap<ScoreAssistMessage.GoalType, Command>();
+    commands.put(ScoreAssistMessage.GoalType.CORAL, exectuteCoralScore());
+    commands.put(ScoreAssistMessage.GoalType.ALGAE, exectuteCoralScore());
+    commands.put(ScoreAssistMessage.GoalType.BARGE, executeBargeScore());
+    return Commands.select(commands, ReefTracker.getInstance()::getGoalTypeOrCoral);
+  }
 
   /** This moves the Superstructure and drives */
   public static Command intake() {
@@ -28,9 +44,33 @@ public class ScoreAssistCmds {
                         Rotation2d.fromRadians(0.996491486039043)))));
   }
 
+  // Gets the desired manual score type
+  public static Command contextualManualScore() {
+    return Commands.select(
+        new HashMap<ScoreAssistMessage.GoalType, Command>() {
+          {
+            put(ScoreAssistMessage.GoalType.CORAL, EndEffector.CORAL_SCORE.get());
+            put(ScoreAssistMessage.GoalType.BARGE, EndEffector.BARGE_SCORE.get());
+          }
+        },
+        () -> contextualScore);
+  }
+
+  /** This is assist for barge scoring */
+  public static Command executeBargeScore() {
+    return Commands.parallel(
+        Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.BARGE),
+        Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.BARGE),
+        SuperStructure.BARGE_PREP.get(),
+        new DriveAtLongitude(
+            () -> AllianceFlipUtil.apply(FieldConstants.Barge.alignmentX),
+            RobotContainer.driveSubsystem));
+  }
+
   /** This drives to target, moves the SS when ready, and runs the rollers when ready */
   public static Command exectuteCoralScore() {
     return Commands.sequence(
+            Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.CORAL),
             Commands.parallel(
                 start(), // 1) activate score assist
                 Commands.either(
@@ -77,7 +117,7 @@ public class ScoreAssistCmds {
   }
 
   /** This drives to target */
-  public static Command executePath() {
+  private static Command executePath() {
     return Commands.sequence(
         Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.PATH),
         new PathfindToPose(
@@ -86,11 +126,11 @@ public class ScoreAssistCmds {
   }
 
   /** This drives */
-  public static Command executePathWithOverride() {
+  private static Command executePathWithOverride() {
     return new PathFindToPoseWithOverride();
   }
   /** This drives */
-  public static Command exectuteDrive() {
+  private static Command exectuteDrive() {
     return Commands.sequence(
         Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.ASSIST),
         new DriveToPose(
@@ -99,12 +139,12 @@ public class ScoreAssistCmds {
   }
 
   /** This moves the SS when ready */
-  public static Command executePrep() {
+  private static Command executePrep() {
     return new MoveSSToTarget(RobotContainer.scoreAssist::getCurrentLevelTarget, true);
   }
 
   /** This moves the SS when ready, and runs the rollers when ready */
-  public static Command executeSS() {
+  private static Command executeSS() {
     return new MoveSSToTarget(RobotContainer.scoreAssist::getCurrentLevelTarget, false, true);
   }
 }

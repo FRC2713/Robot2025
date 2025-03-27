@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.SourceAlign;
 import frc.robot.util.LocalADStarAK;
+import frc.robot.util.ReefTracker;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -119,6 +120,7 @@ public class Robot extends LoggedRobot {
     Threads.setCurrentThreadPriority(false, 10);
 
     // call non-subsystem periodics
+    ReefTracker.getInstance().periodic();
     ReefAlign.getInstance().periodic();
     SourceAlign.getInstance().periodic();
     RobotContainer.scoreAssist.periodic();
