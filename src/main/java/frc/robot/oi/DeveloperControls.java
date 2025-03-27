@@ -6,6 +6,8 @@ package frc.robot.oi;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotContainer;
 import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 
@@ -16,14 +18,21 @@ import frc.robot.commands.superstructure.SuperStructure;
 public class DeveloperControls {
   private final CommandXboxController devCommandXboxController = new CommandXboxController(2);
 
-  public void configureTriggers() {}
+  private Trigger hasAlgaeTrigger = new Trigger(() -> RobotContainer.endEffector.hasAlgae());
+
+  public void configureTriggers() {
+    hasAlgaeTrigger.onTrue(EndEffector.ALGAE_HOLD.get());
+  }
 
   public void configureButtonBindings() {
-
     devCommandXboxController.a().onTrue(SuperStructure.ALGAE_GRAB_GROUND.get());
     devCommandXboxController.b().onTrue(SuperStructure.ALGAE_GRAB_L2.get());
     devCommandXboxController.y().onTrue(SuperStructure.ALGAE_GRAB_L3.get());
-    devCommandXboxController.rightBumper().onTrue(SuperStructure.PROCESSOR_SCORE.get());
+    devCommandXboxController
+        .rightBumper()
+        .onTrue(
+            Commands.sequence(
+                SuperStructure.PROCESSOR_PREP.get(), EndEffector.PROCESSOR_SCORE.get()));
     devCommandXboxController
         .x()
         .onTrue(Commands.sequence(SuperStructure.BARGE_PREP.get(), EndEffector.BARGE_SCORE.get()));

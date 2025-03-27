@@ -51,6 +51,9 @@ public class SetpointConstants {
     public static final LoggedTunableNumber STARTING_ANGLE =
         new LoggedTunableNumber("Shoulder/SS/Starting Angle", -90);
 
+    public static final LoggedTunableNumber ALGAE_STARTING_ANGLE =
+        new LoggedTunableNumber("Shoulder/SS/Starting Angle With Algae", -90);
+
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/Source Intake Angle", -80);
 
@@ -95,6 +98,9 @@ public class SetpointConstants {
     public static final LoggedTunableNumber STARTING_ANGLE =
         new LoggedTunableNumber("Pivot/SS/Starting Angle", 35);
 
+    public static final LoggedTunableNumber ALGAE_STARTING_ANGLE =
+        new LoggedTunableNumber("Pivot/SS/Starting Angle With Algae", 90);
+
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Source Intake Angle", 35);
 
@@ -121,9 +127,6 @@ public class SetpointConstants {
 
     public static final LoggedTunableNumber CLIMB_ANGLE_DEGS =
         new LoggedTunableNumber("Pivot/SS/Climb Angle", -111);
-
-    public static final LoggedTunableNumber ALGAE_GRAB_ANGLE_DEGS =
-        new LoggedTunableNumber("Pivot/SS/Algae Grab Angle", 35);
 
     public static final LoggedTunableNumber SAFE_ANGLE_DEGS =
         new LoggedTunableNumber("Pivot/SS/Safe Angle", 8);

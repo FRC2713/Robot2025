@@ -2,13 +2,13 @@ package frc.robot.commands.superstructure;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
-import frc.robot.commands.ShoulderCmds;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class SuperStructure {
 
@@ -108,68 +108,73 @@ public class SuperStructure {
   public static Supplier<Command> STARTING_CONF_WITH_ALGAE =
       () ->
           Commands.sequence(
-              RollerCmds.setEnableLimitSwitch(true),
-              RollerCmds.setSpeed(() -> 0),
-              //   Commands.either(
-              //       PivotCmds.setAngleAndWait(() -> 35),
-              //       Commands.none(),
-              //       () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              PivotCmds.setAngleAndWait(() -> 90),
-              Commands.parallel(
-                  ElevatorCmds.setHeightAndWait(() -> 0), ShoulderCmds.setAngleAndWait(() -> -90)));
+              new InstantCommand(
+                  () -> Logger.recordOutput("Active SS", "STARTING_CONF_WITH_ALGAE")),
+              PivotCmds.setAngleAndWait(
+                  SetpointConstants.Pivot.ALGAE_STARTING_ANGLE), // runs the pivot first
+              new SetAllDOFS(
+                  "STARTING_CONF_WITH_ALGAE",
+                  "ALGAE_HOLD",
+                  SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
+                  SetpointConstants.Elevator.STARTING_HEIGHT,
+                  SetpointConstants.Shoulder.ALGAE_STARTING_ANGLE,
+                  SetpointConstants.Pivot.ALGAE_STARTING_ANGLE));
 
   public static Supplier<Command> ALGAE_GRAB_L2 =
       () ->
           Commands.sequence(
-              EndEffector.ALGAE_GRAB.get(),
-              Commands.either(
-                  PivotCmds.setAngleAndWait(() -> 35),
-                  Commands.none(),
-                  () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_L2_IN),
-              Commands.parallel(
-                  PivotCmds.setAngle(SetpointConstants.Pivot.ALGAE_L2_DEG),
-                  ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_L2_DEG)),
-              PivotCmds.waitUntilAtTarget());
+              new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_GRAB_L2")),
+              ElevatorCmds.setHeightAndWait(
+                  SetpointConstants.Elevator.ALGAE_L2_IN), // runs the elevator first
+              new SetAllDOFS(
+                  "ALGAE_GRAB_L2",
+                  "ALGAE_GRAB",
+                  SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
+                  SetpointConstants.Elevator.ALGAE_L2_IN,
+                  SetpointConstants.Shoulder.ALGAE_L2_DEG,
+                  SetpointConstants.Pivot.ALGAE_L2_DEG));
 
   public static Supplier<Command> ALGAE_GRAB_L3 =
       () ->
           Commands.sequence(
-              EndEffector.ALGAE_GRAB.get(),
-              //   Commands.either(
-              //       PivotCmds.setAngleAndWait(() -> 35),
-              //       Commands.none(),
-              //       () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_L3_IN),
-              Commands.parallel(
-                  PivotCmds.setAngle(SetpointConstants.Pivot.ALGAE_L3_DEG),
-                  ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_L3_DEG)),
-              PivotCmds.waitUntilAtTarget());
+              new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_GRAB_L3")),
+              ElevatorCmds.setHeightAndWait(
+                  SetpointConstants.Elevator.ALGAE_L3_IN), // runs the elevator first
+              new SetAllDOFS(
+                  "ALGAE_GRAB_L3",
+                  "ALGAE_GRAB",
+                  SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
+                  SetpointConstants.Elevator.ALGAE_L3_IN,
+                  SetpointConstants.Shoulder.ALGAE_L3_DEG,
+                  SetpointConstants.Pivot.ALGAE_L3_DEG));
 
   public static Supplier<Command> ALGAE_GRAB_GROUND =
       () ->
           Commands.sequence(
-              EndEffector.ALGAE_GRAB.get(),
-              //   Commands.either(
-              //       PivotCmds.setAngleAndWait(() -> 35),
-              //       Commands.none(),
-              //       () -> RobotContainer.pivot.getCurrentAngle() < -120),
-              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_GROUND_IN),
-              Commands.sequence(
-                  ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_GROUND_DEG),
-                  PivotCmds.setAngle(SetpointConstants.Pivot.ALGAE_GROUND_DEG)),
-              PivotCmds.waitUntilAtTarget());
+              new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_GRAB_GROUND")),
+              ElevatorCmds.setHeightAndWait(
+                  SetpointConstants.Elevator.ALGAE_GROUND_IN), // runs the elevator first
+              new SetAllDOFS(
+                  "ALGAE_GRAB_GROUND",
+                  "ALGAE_GRAB",
+                  SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
+                  SetpointConstants.Elevator.ALGAE_GROUND_IN,
+                  SetpointConstants.Shoulder.ALGAE_GROUND_DEG,
+                  SetpointConstants.Pivot.ALGAE_GROUND_DEG));
 
   public static Supplier<Command> ALGAE_SAFE_RETRACT =
-      () -> Commands.sequence(PivotCmds.setAngle(SetpointConstants.Pivot.SAFE_ANGLE_DEGS));
+      () ->
+          new SetDOFSOneAtATimeFactory("ALGAE_SAFE_RETRACT", "ALGAE_HOLD")
+              .addAlgaeSpeedCommand(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED)
+              .addPivotCommand(SetpointConstants.Pivot.SAFE_ANGLE_DEGS)
+              .create();
 
   public static Supplier<Command> PROCESSOR_PREP =
       () ->
-          Commands.sequence(
-              ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG),
-              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG),
-              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.PROCESSOR_HEIGHT_IN));
-
-  public static Supplier<Command> PROCESSOR_SCORE =
-      () -> Commands.sequence(PROCESSOR_PREP.get(), EndEffector.PROCESSOR_SCORE.get());
+          new SetDOFSOneAtATimeFactory("PROCESSOR_PREP", "ALGAE_HOLD")
+              .addAlgaeSpeedCommand(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED)
+              .addShoulderCommand(SetpointConstants.Shoulder.ALGAE_L2_DEG)
+              .addPivotCommand(SetpointConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG)
+              .addElevatorCommand(SetpointConstants.Elevator.ALGAE_L2_IN)
+              .create();
 }

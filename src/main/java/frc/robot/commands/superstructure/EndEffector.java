@@ -2,7 +2,6 @@ package frc.robot.commands.superstructure;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.RollerCmds;
@@ -24,9 +23,14 @@ public class EndEffector {
   public static Supplier<Command> ALGAE_GRAB =
       () ->
           Commands.sequence(
-                  Commands.runOnce(() -> Logger.recordOutput("Active EE", "ALGAE_GRAB")),
-                  AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED))
-              .until(() -> RobotContainer.endEffector.hasAlgae());
+              Commands.runOnce(() -> Logger.recordOutput("Active EE", "ALGAE_GRAB")),
+              AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED));
+
+  public static Supplier<Command> ALGAE_HOLD =
+      () ->
+          Commands.sequence(
+              Commands.runOnce(() -> Logger.recordOutput("Active EE", "ALGAE_HOLD")),
+              AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED));
 
   public static Supplier<Command> ALGAE_GRAB_AND_CORAL_SCORE =
       () ->
@@ -44,11 +48,13 @@ public class EndEffector {
           Commands.sequence(
               Commands.runOnce(() -> Logger.recordOutput("Active EE", "PROCESSOR_SCORE")),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.PROCESSOR_SCORE_SPEED));
+
   public static Supplier<Command> BARGE_SCORE =
       () ->
           Commands.sequence(
               Commands.runOnce(() -> Logger.recordOutput("Active EE", "BARGE_SCORE")),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.BARGE_SCORE_SPEED));
+
   public static Supplier<Command> STOP_ROLLERS =
       () ->
           Commands.sequence(
