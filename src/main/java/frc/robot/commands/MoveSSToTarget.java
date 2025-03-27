@@ -13,9 +13,10 @@ public class MoveSSToTarget extends Command {
 
   private Supplier<ScoreLevel> moveTarget;
   private boolean moveIsAPrep;
+  private boolean scoreAfter;
 
   private Command movingCmd;
-  private Command postMoveCmd;
+  private Command scoreCmd;
 
   private State state = State.INIT;
 
@@ -26,31 +27,29 @@ public class MoveSSToTarget extends Command {
     FINISHED
   }
 
-  private MoveSSToTarget(Supplier<ScoreLevel> level, Command scoreCommand, boolean moveIsAPrep) {
+  /**
+   * Move to this level
+   *
+   * @param level what level to go to
+   * @param prep prep or full SS move?
+   * @param score score after moving?
+   */
+  public MoveSSToTarget(Supplier<ScoreLevel> level, boolean prep, boolean score) {
 
     this.moveTarget = level;
-    this.postMoveCmd = scoreCommand;
-    this.moveIsAPrep = moveIsAPrep;
+    this.moveIsAPrep = prep;
+    this.scoreAfter = score;
     this.state = State.INIT;
   }
 
   /**
-   * Move to this level with the intention of scoring after
+   * Move to this level (without scoring)
    *
    * @param level what level to go to
-   * @param scoreCommand what to do after level is reached
+   * @param prep prep or full SS move?
    */
-  public MoveSSToTarget(Supplier<ScoreLevel> level, Command scoreCommand) {
-    this(level, scoreCommand, false);
-  }
-
-  /**
-   * Move to this level, nothing else will happen
-   *
-   * @param level what level to go to
-   */
-  public MoveSSToTarget(Supplier<ScoreLevel> level) {
-    this(level, Commands.none(), true);
+  public MoveSSToTarget(Supplier<ScoreLevel> level, boolean prep) {
+    this(level, prep, false);
   }
 
   @Override
@@ -63,6 +62,7 @@ public class MoveSSToTarget extends Command {
 
     this.movingCmd.initialize();
     this.state = State.MOVING;
+    this.scoreCmd = moveTarget.get().getScoreCommand().get();
   }
 
   public void execute() {
@@ -70,13 +70,13 @@ public class MoveSSToTarget extends Command {
       movingCmd.execute();
       if (movingCmd.isFinished()) {
         movingCmd.end(false);
-        postMoveCmd.initialize();
         this.state = State.POST_MOVE;
+        if (scoreAfter) scoreCmd.initialize(); else this.state = State.FINISHED;
       }
-    } else if (this.state == State.POST_MOVE) {
-      postMoveCmd.execute();
-      if (postMoveCmd.isFinished()) {
-        postMoveCmd.end(false);
+    } else if (this.state == State.POST_MOVE && scoreAfter) {
+      scoreCmd.execute();
+      if (scoreCmd.isFinished()) {
+        scoreCmd.end(false);
         this.state = State.FINISHED;
       }
     }

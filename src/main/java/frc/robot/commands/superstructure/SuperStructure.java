@@ -47,6 +47,7 @@ public class SuperStructure {
               SetpointConstants.Shoulder.L1_ANGLE_DEG,
               SetpointConstants.Pivot.L1_ANGLE_DEG);
 
+  // TODO: We don't necessarily need to start the algae claw here
   public static Supplier<Command> L2 =
       () ->
           new SetAllDOFS(

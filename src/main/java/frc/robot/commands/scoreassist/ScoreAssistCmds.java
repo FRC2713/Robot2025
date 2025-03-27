@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.MoveSSToTarget;
-import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.util.AllianceFlipUtil;
@@ -101,13 +100,11 @@ public class ScoreAssistCmds {
 
   /** This moves the SS when ready */
   public static Command executePrep() {
-    return new MoveSSToTarget(RobotContainer.scoreAssist::getCurrentLevelTarget);
+    return new MoveSSToTarget(RobotContainer.scoreAssist::getCurrentLevelTarget, true);
   }
 
   /** This moves the SS when ready, and runs the rollers when ready */
   public static Command executeSS() {
-    return new MoveSSToTarget(
-        RobotContainer.scoreAssist::getCurrentLevelTarget,
-        Commands.sequence(Commands.waitSeconds(0.1), EndEffector.CORAL_SCORE.get()));
+    return new MoveSSToTarget(RobotContainer.scoreAssist::getCurrentLevelTarget, false, true);
   }
 }
