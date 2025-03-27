@@ -25,8 +25,8 @@ public class ScoreAssistCmds {
   /** Execute desired score command from ReefTracker */
   public static Command executeReefTrackerScore() {
     var commands = new HashMap<ScoreAssistMessage.GoalType, Command>();
-    commands.put(ScoreAssistMessage.GoalType.CORAL, exectuteCoralScore());
-    commands.put(ScoreAssistMessage.GoalType.ALGAE, exectuteCoralScore());
+    commands.put(ScoreAssistMessage.GoalType.CORAL, executeCoralScore());
+    commands.put(ScoreAssistMessage.GoalType.ALGAE, executeCoralScore());
     commands.put(ScoreAssistMessage.GoalType.BARGE, executeBargeScore());
     return Commands.select(commands, ReefTracker.getInstance()::getGoalTypeOrCoral);
   }
@@ -68,7 +68,7 @@ public class ScoreAssistCmds {
   }
 
   /** This drives to target, moves the SS when ready, and runs the rollers when ready */
-  public static Command exectuteCoralScore() {
+  public static Command executeCoralScore() {
     return Commands.sequence(
             Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.CORAL),
             Commands.parallel(
@@ -77,9 +77,9 @@ public class ScoreAssistCmds {
                     Commands.sequence(
                         executePath(), // 2a) path-find close to target (with manual
                         // override)
-                        exectuteDrive() // 2b) drive to target
+                        executeDrive() // 2b) drive to target
                         ),
-                    exectuteDrive(),
+                    executeDrive(),
                     RobotContainer.scoreAssist::isAtPathTargetPose),
                 executePrep()), // 3) execute prep
             stop(),
@@ -88,13 +88,13 @@ public class ScoreAssistCmds {
   }
 
   /** This drives to target, moves the SS when ready, and runs the rollers when ready */
-  public static Command exectuteCoralScoreInAuto(ScoreLoc scoreLoc) {
+  public static Command executeCoralScoreInAuto(ScoreLoc scoreLoc) {
     // Note that during autonomous, ScoreAssist does not update via NT
     return Commands.sequence(
             Commands.runOnce(() -> RobotContainer.scoreAssist.updateManually(scoreLoc)),
             Commands.parallel(
                 start(), // 1) activate score assist
-                exectuteDrive(), // 2) drive to target
+                executeDrive(), // 2) drive to target
                 executePrep()), // 3) execute prep
             stop(),
             executeSS())
@@ -130,7 +130,7 @@ public class ScoreAssistCmds {
     return new PathFindToPoseWithOverride();
   }
   /** This drives */
-  private static Command exectuteDrive() {
+  private static Command executeDrive() {
     return Commands.sequence(
         Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.ASSIST),
         new DriveToPose(
