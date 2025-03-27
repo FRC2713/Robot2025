@@ -91,7 +91,7 @@ public class ReefAlign {
         RHRUtil.integrate(
             RobotContainer.driveSubsystem.getChassisSpeeds(),
             RobotContainer.driveSubsystem.getPose(),
-            0.2);
+            0.3);
     Logger.recordOutput("ReefAlign/mindReading", projection);
     for (TrapezoidZone trapezoid : trapezoids) {
       if (trapezoid.isPointInside(projection)) {
