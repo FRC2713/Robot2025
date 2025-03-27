@@ -65,10 +65,10 @@ public class ReefAlign {
 
   public void periodic() {
     Logger.recordOutput("ReefAlign/disabled", RobotContainer.disableReefAlign);
-    int index = 0;
-    for (TrapezoidZone trapezoid : trapezoids) {
-      Logger.recordOutput("ReefAlign/trap" + (index++), trapezoid.toPose2dArray());
-    }
+    // int index = 0;
+    // for (TrapezoidZone trapezoid : trapezoids) {
+    //   Logger.recordOutput("ReefAlign/trap" + (index++), trapezoid.toPose2dArray());
+    // }
 
     boolean nextTriggerState =
         DriverStation.isTeleopEnabled()
@@ -87,7 +87,11 @@ public class ReefAlign {
   }
 
   public Optional<Rotation2d> inZone() {
-    var projection = RHRUtil.integrate(RobotContainer.driveSubsystem.getChassisSpeeds(), RobotContainer.driveSubsystem.getPose(), 0.2);
+    var projection =
+        RHRUtil.integrate(
+            RobotContainer.driveSubsystem.getChassisSpeeds(),
+            RobotContainer.driveSubsystem.getPose(),
+            0.2);
     Logger.recordOutput("ReefAlign/mindReading", projection);
     for (TrapezoidZone trapezoid : trapezoids) {
       if (trapezoid.isPointInside(projection)) {

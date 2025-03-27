@@ -42,10 +42,10 @@ public class SourceAlign {
 
   public void periodic() {
     Logger.recordOutput("SourceAlign/disabled", RobotContainer.disableSourceAlign);
-    int index = 0;
-    for (TrapezoidZone trapezoid : trapezoids) {
-      Logger.recordOutput("SourceAlign/trap" + (index++), trapezoid.toPose2dArray());
-    }
+    // int index = 0;
+    // for (TrapezoidZone trapezoid : trapezoids) {
+    //   Logger.recordOutput("SourceAlign/trap" + (index++), trapezoid.toPose2dArray());
+    // }
 
     boolean nextTriggerState =
         DriverStation.isTeleopEnabled()
