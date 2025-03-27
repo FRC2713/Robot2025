@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotContainer;
 import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.RHRUtil;
 import frc.robot.util.ScoreNode;
 import frc.robot.util.TrapezoidZone;
 import frc.robot.util.TrapezoidZone.Point;
@@ -31,21 +32,21 @@ public class ReefAlign {
     new TrapezoidZone(
         new Point(4.498320579528809, 3.0688583850860596),
         new Point(5.305319309234619, 3.494252920150757),
-        1.5,
+        1.75,
         Rotation2d.fromDegrees(30),
         true,
         ScoreNode.E.getPose().getRotation().rotateBy(Rotation2d.fromDegrees(180))),
     new TrapezoidZone(
         new Point(5.305319309234619, 3.494252920150757),
         new Point(5.305319309234619, 4.495181083679199),
-        1,
+        1.75,
         Rotation2d.fromDegrees(30),
         true,
         ScoreNode.G.getPose().getRotation().rotateBy(Rotation2d.fromDegrees(180))),
     new TrapezoidZone(
         new Point(5.305319309234619, 4.495181083679199),
         new Point(4.498320579528809, 4.9768781661987305),
-        1.5,
+        1.75,
         Rotation2d.fromDegrees(30),
         true,
         ScoreNode.I.getPose().getRotation().rotateBy(Rotation2d.fromDegrees(180))),
@@ -64,10 +65,10 @@ public class ReefAlign {
 
   public void periodic() {
     Logger.recordOutput("ReefAlign/disabled", RobotContainer.disableReefAlign);
-    // int index = 0;
-    // for (TrapezoidZone trapezoid : trapezoids) {
-    //   Logger.recordOutput("ReefAlign/trap" + (index++), trapezoid.toPose2dArray());
-    // }
+    int index = 0;
+    for (TrapezoidZone trapezoid : trapezoids) {
+      Logger.recordOutput("ReefAlign/trap" + (index++), trapezoid.toPose2dArray());
+    }
 
     boolean nextTriggerState =
         DriverStation.isTeleopEnabled()
@@ -86,9 +87,10 @@ public class ReefAlign {
   }
 
   public Optional<Rotation2d> inZone() {
-    var pose = RobotContainer.driveSubsystem.getPose();
+    var projection = RHRUtil.integrate(RobotContainer.driveSubsystem.getChassisSpeeds(), RobotContainer.driveSubsystem.getPose(), 0.2);
+    Logger.recordOutput("ReefAlign/mindReading", projection);
     for (TrapezoidZone trapezoid : trapezoids) {
-      if (trapezoid.isPointInside(pose)) {
+      if (trapezoid.isPointInside(projection)) {
         var commandedAngle = AllianceFlipUtil.apply(trapezoid.getOmega());
         Logger.recordOutput("ReefAlign/commandedAngle", commandedAngle);
         return Optional.of(commandedAngle);

@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
@@ -30,5 +31,9 @@ public class RHRUtil {
                     new Pose2d(
                         RobotContainer.driveSubsystem.getPose().getTranslation(),
                         initialPose.getRotation())));
+  }
+
+  public static Pose2d integrate(ChassisSpeeds speeds, Pose2d initialPose, double delta_t) {
+    return initialPose.exp(speeds.toTwist2d(delta_t));
   }
 }
