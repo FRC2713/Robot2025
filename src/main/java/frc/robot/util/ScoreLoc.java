@@ -96,8 +96,15 @@ public class ScoreLoc {
     public static ScoreLoc L_THREE = new ScoreLoc(ScoreNode.L, ScoreLevel.THREE);
     public static ScoreLoc L_FOUR = new ScoreLoc(ScoreNode.L, ScoreLevel.FOUR);
 
+    public static ScoreLoc ALGAE_AB = new ScoreLoc(ScoreNode.AB_ALGAE, ScoreLevel.ALGAE_THREE);
+    public static ScoreLoc ALGAE_CD = new ScoreLoc(ScoreNode.CD_ALGAE, ScoreLevel.ALGAE_TWO);
+    public static ScoreLoc ALGAE_EF = new ScoreLoc(ScoreNode.EF_ALGAE, ScoreLevel.ALGAE_THREE);
+    public static ScoreLoc ALGAE_GH = new ScoreLoc(ScoreNode.GH_ALGAE, ScoreLevel.ALGAE_TWO);
+    public static ScoreLoc ALGAE_IJ = new ScoreLoc(ScoreNode.IJ_ALGAE, ScoreLevel.ALGAE_THREE);
+    public static ScoreLoc ALGAE_KL = new ScoreLoc(ScoreNode.KL_ALGAE, ScoreLevel.ALGAE_TWO);
+
     // maps the ReefTracker app's node indexes to what the robot defines them as
-    private static Map<Integer, ScoreNode> ntNodeMappings =
+    private static Map<Integer, ScoreNode> ntCoralNodes =
         Map.ofEntries(
             Map.entry(Integer.valueOf(0), ScoreNode.B),
             Map.entry(Integer.valueOf(1), ScoreNode.A),
@@ -113,12 +120,22 @@ public class ScoreLoc {
             Map.entry(Integer.valueOf(11), ScoreNode.C));
 
     // maps the ReefTracker app's level numbers to what the robot defines them as
-    private static Map<Integer, ScoreLevel> ntLevelMappings =
+    private static Map<Integer, ScoreLevel> ntCoralLevels =
         Map.ofEntries(
             Map.entry(Integer.valueOf(1), ScoreLevel.ONE),
             Map.entry(Integer.valueOf(2), ScoreLevel.TWO),
             Map.entry(Integer.valueOf(3), ScoreLevel.THREE),
             Map.entry(Integer.valueOf(4), ScoreLevel.FOUR));
+
+    // maps the ReefTracker app's algae data to what the robot defines them as
+    private static Map<Integer, ScoreLoc> ntAlgaeMap =
+        Map.ofEntries(
+            Map.entry(Integer.valueOf(0), ALGAE_AB),
+            Map.entry(Integer.valueOf(5), ALGAE_CD),
+            Map.entry(Integer.valueOf(4), ALGAE_EF),
+            Map.entry(Integer.valueOf(3), ALGAE_GH),
+            Map.entry(Integer.valueOf(2), ALGAE_IJ),
+            Map.entry(Integer.valueOf(1), ALGAE_KL));
 
     /**
      * Validates a string from the reef tracker app as parsable to a ScoreLoc
@@ -130,10 +147,8 @@ public class ScoreLoc {
       if (ntloc == "none") {
         return false;
       }
-      var split = ntloc.indexOf(',');
       try {
-        Integer.parseInt(ntloc.substring(0, split));
-        Integer.parseInt(ntloc.substring(split + 1));
+        new ScoreAssistMessage(ntloc);
       } catch (Exception e) {
         return false;
       }
@@ -150,23 +165,35 @@ public class ScoreLoc {
       if (ntloc == "none") {
         return null;
       }
-      var split = ntloc.indexOf(',');
-      var index = -1;
-      var level = -1;
+      ScoreAssistMessage saMessage;
       try {
-        index = Integer.parseInt(ntloc.substring(0, split));
-        level = Integer.parseInt(ntloc.substring(split + 1));
+        saMessage = new ScoreAssistMessage(ntloc);
       } catch (Exception e) {
         return null;
       }
 
-      ScoreNode parsedNode = ntNodeMappings.getOrDefault(index, null);
-      ScoreLevel parsedLevel = ntLevelMappings.getOrDefault(level, null);
+      switch (saMessage.goal) {
+        case CORAL:
+          return parseCoral(saMessage);
+        case ALGAE:
+          return parseAlgae(saMessage);
+        default:
+          return null;
+      }
+    }
+
+    private static ScoreLoc parseCoral(ScoreAssistMessage saMessage) {
+      ScoreNode parsedNode = ntCoralNodes.getOrDefault(saMessage.index, null);
+      ScoreLevel parsedLevel = ntCoralLevels.getOrDefault(saMessage.level, null);
       if (parsedNode == null || parsedLevel == null) {
         return null;
       }
 
       return new ScoreLoc(parsedNode, parsedLevel);
+    }
+
+    private static ScoreLoc parseAlgae(ScoreAssistMessage saMessage) {
+      return ntAlgaeMap.getOrDefault(saMessage.index, null);
     }
   }
 }

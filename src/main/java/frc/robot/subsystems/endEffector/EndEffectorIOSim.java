@@ -10,7 +10,7 @@ import frc.robot.subsystems.constants.RollerConstants;
 public class EndEffectorIOSim implements EndEffectorIO {
 
   private final DCMotor coralMotor = DCMotor.getNEO(1);
-  private final DCMotorSim sim =
+  private final DCMotorSim coralSim =
       new DCMotorSim(
           LinearSystemId.createDCMotorSystem(
               coralMotor, RollerConstants.kMOI, RollerConstants.kGearing),
@@ -27,13 +27,20 @@ public class EndEffectorIOSim implements EndEffectorIO {
   private boolean hasCoral = true;
 
   public void updateInputs(EndEffectorInputs inputs) {
-    sim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(commandedCoralRPM));
-    sim.update(0.020);
+    coralSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(commandedCoralRPM));
+    coralSim.update(0.020);
+    algaeSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(commandedAlgaeRPM));
+    algaeSim.update(0.020);
 
-    inputs.tubeCurrentAmps = sim.getCurrentDrawAmps();
-    inputs.tubeOutputVoltage = sim.getInputVoltage();
-    inputs.tubeVelocityRPM = sim.getAngularVelocityRPM();
-    inputs.tubePositionDegs = Units.radiansToDegrees(sim.getAngularPositionRad());
+    inputs.tubeCurrentAmps = coralSim.getCurrentDrawAmps();
+    inputs.tubeOutputVoltage = coralSim.getInputVoltage();
+    inputs.tubeVelocityRPM = coralSim.getAngularVelocityRPM();
+    inputs.tubePositionDegs = Units.radiansToDegrees(coralSim.getAngularPositionRad());
+
+    inputs.algaeRollersCurrentAmps = algaeSim.getCurrentDrawAmps();
+    inputs.algaeRollersOutputVoltage = algaeSim.getInputVoltage();
+    inputs.algaeRollersVelocityRPM = algaeSim.getAngularVelocityRPM();
+    inputs.algaeRollersPositionDegs = Units.radiansToDegrees(algaeSim.getAngularPositionRad());
 
     inputs.commandedTubeRPM = commandedCoralRPM;
     inputs.commandedAlgaeRollersRPM = commandedAlgaeRPM;
@@ -46,8 +53,13 @@ public class EndEffectorIOSim implements EndEffectorIO {
   }
 
   @Override
+  public void setAlgaeRPM(double rpm) {
+    this.commandedAlgaeRPM = rpm;
+  }
+
+  @Override
   public boolean isCoralAtTarget() {
-    return Math.abs(commandedCoralRPM - sim.getAngularVelocityRPM())
+    return Math.abs(commandedCoralRPM - coralSim.getAngularVelocityRPM())
         < RollerConstants.AT_TARGET_GIVE_RPM;
   }
 
