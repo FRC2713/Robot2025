@@ -138,11 +138,11 @@ public class ScoreLoc {
             Map.entry(Integer.valueOf(1), ALGAE_KL));
 
     /**
-     * Validates a string from the reef tracker app as parsable to a ScoreLoc
-     *
+     * @deprecated Validates a string from the reef tracker app as parsable to a ScoreLoc
      * @param ntloc a string representation of a scoring location given from the reef tracker app
      * @return
      */
+    @Deprecated
     public static boolean checkNTValid(String ntloc) {
       if (ntloc == "none") {
         return false;
@@ -156,11 +156,11 @@ public class ScoreLoc {
     }
 
     /**
-     * Parses a string from the reef tracker app to a ScoreLoc
-     *
+     * @deprecated Parses a string from the reef tracker app to a ScoreLoc
      * @param ntloc a string representation of a scoring location given from the reef tracker app
      * @return the ScoreLoc that is parsed from the string, or null if its not parsable
      */
+    @Deprecated
     public static ScoreLoc parseFromNT(String ntloc) {
       if (ntloc == "none") {
         return null;
@@ -172,6 +172,20 @@ public class ScoreLoc {
         return null;
       }
 
+      switch (saMessage.goal) {
+        case CORAL:
+          return parseCoral(saMessage);
+        case ALGAE:
+          return parseAlgae(saMessage);
+        default:
+          return null;
+      }
+    }
+
+    public static ScoreLoc fromMsg(ScoreAssistMessage saMessage) {
+      if (saMessage == null) {
+        return null;
+      }
       switch (saMessage.goal) {
         case CORAL:
           return parseCoral(saMessage);

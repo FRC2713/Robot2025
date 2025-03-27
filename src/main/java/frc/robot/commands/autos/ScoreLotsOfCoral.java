@@ -68,7 +68,7 @@ public class ScoreLotsOfCoral {
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
-                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.E_FOUR),
+                ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.E_FOUR),
                 // 2) Wait to make sure coral is outtathere
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
@@ -97,7 +97,7 @@ public class ScoreLotsOfCoral {
                 new InstantCommand(() -> driveSubsystem.stop()),
                 // 1) Finish off trajectory with score assist, which also moves the SS and runs the
                 // rollers
-                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.C_FOUR),
+                ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.C_FOUR),
                 // 2) Wait to make sure coral is outtathere
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Move SS to intake configuration and begin driving to source
@@ -121,7 +121,7 @@ public class ScoreLotsOfCoral {
             Commands.sequence(
                 new InstantCommand(() -> driveSubsystem.stop()),
                 // 1) Finish off trajectory with score assist, which also moves the SS
-                ScoreAssistCmds.exectuteCoralScoreInAuto(ScoreLocations.D_FOUR),
+                ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.D_FOUR),
                 // 2) Wait to make sure coral is outtathere
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source

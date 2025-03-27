@@ -51,6 +51,9 @@ public class FieldConstants {
     // Measured from floor to bottom of cage
     public static final double deepHeight = Units.inchesToMeters(3.125);
     public static final double shallowHeight = Units.inchesToMeters(30.125);
+
+    public static final Pose2d alignmentX =
+        new Pose2d(new Translation2d(7.743555545806885, -1), new Rotation2d());
   }
 
   public static class CoralStation {

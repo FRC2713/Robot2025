@@ -1,4 +1,4 @@
-package frc.robot.commands.scoreassist;
+package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,19 +15,16 @@ import frc.robot.subsystems.drive.Drivetrain;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-public class DriveToPose extends Command {
-
+public class DriveAtLongitude extends Command {
   private Supplier<Pose2d> targetPose;
 
-  private ProfiledPIDController yscoreAssistController =
-      ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
   private ProfiledPIDController xscoreAssistController =
       ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
   private ProfiledPIDController omegascoreAssistController =
       DriveConstants.HeadingControllerConstants.angleGains.createAngularTrapezoidalPIDController();
   private Drivetrain drive;
 
-  public DriveToPose(Supplier<Pose2d> pose, Drivetrain drive) {
+  public DriveAtLongitude(Supplier<Pose2d> pose, Drivetrain drive) {
     this.targetPose = pose;
     this.drive = drive;
     addRequirements(drive);
@@ -37,7 +34,6 @@ public class DriveToPose extends Command {
   @Override
   public void initialize() {
     xscoreAssistController.reset(drive.getPose().getX());
-    yscoreAssistController.reset(drive.getPose().getY());
     omegascoreAssistController.reset(drive.getRotation().getRadians());
   }
 
@@ -48,6 +44,10 @@ public class DriveToPose extends Command {
     boolean isFlipped =
         DriverStation.getAlliance().isPresent()
             && DriverStation.getAlliance().get() == Alliance.Red;
+
+    var driverControls =
+        DriveCmds.getLinearVelocityFromJoysticks(
+            -RobotContainer.driverControls.getLeftY(), -RobotContainer.driverControls.getLeftX());
     // Get linear velocity
     Translation2d linearVelocity =
         new Translation2d(
@@ -55,10 +55,7 @@ public class DriveToPose extends Command {
                 * xscoreAssistController.calculate(
                     drive.getPose().getTranslation().getX(),
                     targetPose.get().getTranslation().getX()),
-            (isFlipped ? -1 : 1)
-                * yscoreAssistController.calculate(
-                    drive.getPose().getTranslation().getY(),
-                    targetPose.get().getTranslation().getY()));
+            driverControls.getY() * (drive.getMaxLinearSpeedMetersPerSec() * 0.8));
 
     // Calculate angular speed
     double omega =
@@ -81,11 +78,6 @@ public class DriveToPose extends Command {
     Logger.recordOutput(
         "ScoreAssist/Driving/X Current Goal", this.xscoreAssistController.getGoal().position);
     Logger.recordOutput(
-        "ScoreAssist/Driving/Y Current Setpoint",
-        this.yscoreAssistController.getSetpoint().position);
-    Logger.recordOutput(
-        "ScoreAssist/Driving/Y Current Goal", this.yscoreAssistController.getGoal().position);
-    Logger.recordOutput(
         "ScoreAssist/Driving/Theta Current Setpoint",
         this.omegascoreAssistController.getSetpoint().position);
     Logger.recordOutput(
@@ -97,9 +89,8 @@ public class DriveToPose extends Command {
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.scoreAssist.isAtFinalTargetPose();
+    return false;
   }
 }
