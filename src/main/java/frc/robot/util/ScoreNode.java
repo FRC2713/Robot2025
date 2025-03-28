@@ -54,9 +54,11 @@ public enum ScoreNode {
     if (type == LocType.CORAL) {
       return (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0);
     } else if (type == LocType.ALGAE_L2) {
-      return  (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0) + SetpointConstants.Drive.OFFSET_ALGAE_L2.getAsDouble();
+      return (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0)
+          + SetpointConstants.Drive.OFFSET_ALGAE_L2.getAsDouble();
     } else {
-      return  (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0) + SetpointConstants.Drive.OFFSET_ALGAE_L3.getAsDouble();
+      return (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0)
+          + SetpointConstants.Drive.OFFSET_ALGAE_L3.getAsDouble();
     }
   }
 

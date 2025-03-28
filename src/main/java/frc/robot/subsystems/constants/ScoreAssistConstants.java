@@ -19,7 +19,7 @@ public class ScoreAssistConstants {
 
   // For ProfiledPID assistance
   public static final LoggedTunableGains assistGains =
-      new LoggedTunableGains("ScoreAssist", new ControlGains().p(10).d(0).trapezoidal(2.5, 5, 0));
+      new LoggedTunableGains("ScoreAssist", new ControlGains().p(10).d(0).trapezoidal(2., 2, 0));
 
   public static final LoggedTunableNumber assistXTolerance =
       new LoggedTunableNumber("ScoreAssist/X Tolerance", Units.inchesToMeters(0.75));
