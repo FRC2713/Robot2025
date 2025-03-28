@@ -201,9 +201,5 @@ public class SetpointConstants {
   public class Drive {
     public static final LoggedTunableNumber INCH_SPEED =
         new LoggedTunableNumber("Drive/Inch Speed", 0.1);
-    public static final LoggedTunableNumber OFFSET_ALGAE_L2 =
-        new LoggedTunableNumber("Drive/Algae Offset L2", 0.03);
-    public static final LoggedTunableNumber OFFSET_ALGAE_L3 =
-        new LoggedTunableNumber("Drive/Algae Offset L3", 0.39);
   }
 }

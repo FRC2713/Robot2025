@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
 import frc.robot.FieldConstants.ReefLevel;
-import frc.robot.SetpointConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import java.util.Optional;
 import lombok.Getter;
@@ -56,10 +55,10 @@ public enum ScoreNode {
       return (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0);
     } else if (type == ScoreLocType.ALGAE_L2) {
       return (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0)
-          + SetpointConstants.Drive.OFFSET_ALGAE_L2.getAsDouble();
+          + DriveConstants.OFFSET_ALGAE_L2.getAsDouble();
     } else {
       return (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0)
-          + SetpointConstants.Drive.OFFSET_ALGAE_L3.getAsDouble();
+          + DriveConstants.OFFSET_ALGAE_L3.getAsDouble();
     }
   }
 
@@ -86,7 +85,7 @@ public enum ScoreNode {
 
     Transform2d robotOffset =
         new Transform2d(
-            (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0) + AUTO_SCORE_OFFSET,
+            yOffset() + AUTO_SCORE_OFFSET,
             DriveConstants.coralOffsetFromCenter
                 .getAsDouble(), // offset of scoring mechanism from center of robot
             new Rotation2d(Math.PI));
