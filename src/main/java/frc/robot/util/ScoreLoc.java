@@ -45,12 +45,6 @@ public class ScoreLoc {
     return this.name;
   }
 
-  public enum ScoreLocType {
-    CORAL,
-    ALGAE_L2,
-    ALGAE_L3
-  }
-
   /** Predefined scoring locations */
   public class ScoreLocations {
     public static ScoreLoc A_ONE = new ScoreLoc(ScoreNode.A, ScoreLevel.ONE);

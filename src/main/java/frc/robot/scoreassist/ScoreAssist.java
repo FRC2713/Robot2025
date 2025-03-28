@@ -11,6 +11,7 @@ import frc.robot.util.ReefTracker;
 import frc.robot.util.ScoreLevel;
 import frc.robot.util.ScoreLoc;
 import frc.robot.util.ScoreLoc.ScoreLocations;
+import frc.robot.util.ScoreLocType;
 import frc.robot.util.ScoreNode;
 import lombok.Getter;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -110,7 +111,7 @@ public class ScoreAssist {
     for (ScoreNode node : ScoreNode.values()) {
       double distance =
           pose.getTranslation().getDistance(node.getRobotAlignmentPose().getTranslation());
-      if (distance < closestDistance) {
+      if (distance < closestDistance && node.getType() == ScoreLocType.CORAL) {
         closestDistance = distance;
         closestNode = node;
       }

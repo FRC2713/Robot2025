@@ -1,6 +1,6 @@
 package frc.robot.util;
 
-public enum LocType {
+public enum ScoreLocType {
   CORAL,
   ALGAE_L2,
   ALGAE_L3,

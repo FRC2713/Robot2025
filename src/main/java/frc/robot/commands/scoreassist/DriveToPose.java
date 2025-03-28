@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ScoreAssistConstants;
@@ -36,6 +37,13 @@ public class DriveToPose extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (Constants.tuningMode) {
+      yscoreAssistController = ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
+      xscoreAssistController = ScoreAssistConstants.assistGains.createTrapezoidalPIDController();
+      omegascoreAssistController =
+          DriveConstants.HeadingControllerConstants.angleGains
+              .createAngularTrapezoidalPIDController();
+    }
     xscoreAssistController.reset(drive.getPose().getX());
     yscoreAssistController.reset(drive.getPose().getY());
     omegascoreAssistController.reset(drive.getRotation().getRadians());

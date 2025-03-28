@@ -10,38 +10,39 @@ import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.SetpointConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import java.util.Optional;
+import lombok.Getter;
 
 public enum ScoreNode {
   // indexes start at right branch facing driver station and move clockwise, which means that
   // B is zero
-  A(FieldConstants.Reef.branchPositions2d.get(1).get(ReefLevel.L2), LocType.CORAL),
-  AB_ALGAE(FieldConstants.Reef.centerFaces[0], LocType.ALGAE_L3),
-  B(FieldConstants.Reef.branchPositions2d.get(0).get(ReefLevel.L2), LocType.CORAL),
+  A(FieldConstants.Reef.branchPositions2d.get(1).get(ReefLevel.L2), ScoreLocType.CORAL),
+  AB_ALGAE(FieldConstants.Reef.centerFaces[0], ScoreLocType.ALGAE_L3),
+  B(FieldConstants.Reef.branchPositions2d.get(0).get(ReefLevel.L2), ScoreLocType.CORAL),
 
-  C(FieldConstants.Reef.branchPositions2d.get(11).get(ReefLevel.L2), LocType.CORAL),
-  CD_ALGAE(FieldConstants.Reef.centerFaces[5], LocType.ALGAE_L2),
-  D(FieldConstants.Reef.branchPositions2d.get(10).get(ReefLevel.L2), LocType.CORAL),
+  C(FieldConstants.Reef.branchPositions2d.get(11).get(ReefLevel.L2), ScoreLocType.CORAL),
+  CD_ALGAE(FieldConstants.Reef.centerFaces[5], ScoreLocType.ALGAE_L2),
+  D(FieldConstants.Reef.branchPositions2d.get(10).get(ReefLevel.L2), ScoreLocType.CORAL),
 
-  E(FieldConstants.Reef.branchPositions2d.get(9).get(ReefLevel.L2), LocType.CORAL),
-  EF_ALGAE(FieldConstants.Reef.centerFaces[4], LocType.ALGAE_L3),
-  F(FieldConstants.Reef.branchPositions2d.get(8).get(ReefLevel.L2), LocType.CORAL),
+  E(FieldConstants.Reef.branchPositions2d.get(9).get(ReefLevel.L2), ScoreLocType.CORAL),
+  EF_ALGAE(FieldConstants.Reef.centerFaces[4], ScoreLocType.ALGAE_L3),
+  F(FieldConstants.Reef.branchPositions2d.get(8).get(ReefLevel.L2), ScoreLocType.CORAL),
 
-  G(FieldConstants.Reef.branchPositions2d.get(7).get(ReefLevel.L2), LocType.CORAL),
-  GH_ALGAE(FieldConstants.Reef.centerFaces[3], LocType.ALGAE_L2),
-  H(FieldConstants.Reef.branchPositions2d.get(6).get(ReefLevel.L2), LocType.CORAL),
+  G(FieldConstants.Reef.branchPositions2d.get(7).get(ReefLevel.L2), ScoreLocType.CORAL),
+  GH_ALGAE(FieldConstants.Reef.centerFaces[3], ScoreLocType.ALGAE_L2),
+  H(FieldConstants.Reef.branchPositions2d.get(6).get(ReefLevel.L2), ScoreLocType.CORAL),
 
-  I(FieldConstants.Reef.branchPositions2d.get(5).get(ReefLevel.L2), LocType.CORAL),
-  IJ_ALGAE(FieldConstants.Reef.centerFaces[2], LocType.ALGAE_L3),
-  J(FieldConstants.Reef.branchPositions2d.get(4).get(ReefLevel.L2), LocType.CORAL),
+  I(FieldConstants.Reef.branchPositions2d.get(5).get(ReefLevel.L2), ScoreLocType.CORAL),
+  IJ_ALGAE(FieldConstants.Reef.centerFaces[2], ScoreLocType.ALGAE_L3),
+  J(FieldConstants.Reef.branchPositions2d.get(4).get(ReefLevel.L2), ScoreLocType.CORAL),
 
-  K(FieldConstants.Reef.branchPositions2d.get(3).get(ReefLevel.L2), LocType.CORAL),
-  KL_ALGAE(FieldConstants.Reef.centerFaces[1], LocType.ALGAE_L2),
-  L(FieldConstants.Reef.branchPositions2d.get(2).get(ReefLevel.L2), LocType.CORAL);
+  K(FieldConstants.Reef.branchPositions2d.get(3).get(ReefLevel.L2), ScoreLocType.CORAL),
+  KL_ALGAE(FieldConstants.Reef.centerFaces[1], ScoreLocType.ALGAE_L2),
+  L(FieldConstants.Reef.branchPositions2d.get(2).get(ReefLevel.L2), ScoreLocType.CORAL);
 
   private Pose2d pose;
-  private LocType type;
+  @Getter private ScoreLocType type;
 
-  ScoreNode(Pose2d pose, LocType type) {
+  ScoreNode(Pose2d pose, ScoreLocType type) {
     this.pose = pose;
     this.type = type;
   }
@@ -51,9 +52,9 @@ public enum ScoreNode {
   }
 
   public double yOffset() {
-    if (type == LocType.CORAL) {
+    if (type == ScoreLocType.CORAL) {
       return (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0);
-    } else if (type == LocType.ALGAE_L2) {
+    } else if (type == ScoreLocType.ALGAE_L2) {
       return (DriveConstants.driveBaseWidthWithBumpersMeters / 2.0)
           + SetpointConstants.Drive.OFFSET_ALGAE_L2.getAsDouble();
     } else {
