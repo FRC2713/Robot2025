@@ -10,9 +10,9 @@ import lombok.Getter;
 public enum ScoreLevel {
   ONE(Commands::none, SuperStructure.L1, EndEffector.CORAL_SCORE),
   TWO(SuperStructure.L2, SuperStructure.L2, EndEffector.CORAL_SCORE),
-  ALGAE_TWO(SuperStructure.ALGAE_GRAB_L2, SuperStructure.ALGAE_GRAB_L2, EndEffector.ALGAE_GRAB),
+  ALGAE_TWO(SuperStructure.ALGAE_GRAB_L2, SuperStructure.ALGAE_GRAB_L2, SuperStructure.ALGAE_COLLECT_L2),
   THREE(SuperStructure.L3, SuperStructure.L3, EndEffector.CORAL_SCORE),
-  ALGAE_THREE(SuperStructure.ALGAE_GRAB_L3, SuperStructure.ALGAE_GRAB_L3, EndEffector.ALGAE_GRAB),
+  ALGAE_THREE(SuperStructure.ALGAE_GRAB_L3, SuperStructure.ALGAE_GRAB_L3, SuperStructure.ALGAE_COLLECT_L3),
   FOUR(
       SuperStructure.L4_PREP,
       SuperStructure.L4,
