@@ -53,7 +53,7 @@ public class FieldConstants {
     public static final double shallowHeight = Units.inchesToMeters(30.125);
 
     public static final Pose2d alignmentX =
-        new Pose2d(new Translation2d(7.743555545806885, -1), new Rotation2d());
+        new Pose2d(new Translation2d(7.743555545806885, -1), new Rotation2d(Math.PI));
   }
 
   public static class CoralStation {

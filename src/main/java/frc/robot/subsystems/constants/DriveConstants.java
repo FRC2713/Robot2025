@@ -25,7 +25,7 @@ public class DriveConstants {
       new LoggedTunableNumber("Drive/Algae Offset L3", 0.39);
 
   public static final double driveBaseWidthWithBumpersMeters =
-      edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 9.0 + 4.75);
+      edu.wpi.first.math.util.Units.inchesToMeters(28.25 + 9.0 + 4.75 + 0.15);
 
   public final class AutoConstants {
     public static final LoggedTunableGains xTrajectoryController =
@@ -33,7 +33,7 @@ public class DriveConstants {
     public static final LoggedTunableGains yTrajectoryController =
         new LoggedTunableGains("yTraj", new ControlGains().p(2));
     public static final LoggedTunableGains headingTrajectoryController =
-        new LoggedTunableGains("headingTraj", new ControlGains().p(1.5).d(0.0));
+        new LoggedTunableGains("headingTraj", new ControlGains().p(3).d(0.0));
   }
 
   public final class OTFConstants {

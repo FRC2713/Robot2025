@@ -36,7 +36,7 @@ public class VisionConstants {
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_DISABLED =
       new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(999999));
 
-  public static final double MAX_TIME_DIFFERENCE = 0.5;
+  public static final double MAX_TIME_DIFFERENCE = 1.0;
 
   // its probably bad OOD to have this but ¯\_(ツ)_/¯
   public static final VisionOptions ACTIVE_VISION_OPTION = VisionOptions.MEGATAG2;
