@@ -1,6 +1,11 @@
 package frc.robot.subsystems.constants;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.FieldConstants;
 import frc.robot.util.ControlGains;
 import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.LoggedTunableNumber;
@@ -29,4 +34,10 @@ public class ScoreAssistConstants {
 
   public static final LoggedTunableNumber assistThetaTolerance =
       new LoggedTunableNumber("ScoreAssist/Theta Tolerance", 3); // degrees
+
+  public static final Pose2d processorPose =
+      FieldConstants.Processor.centerFace.transformBy(new Transform2d(1, 0, new Rotation2d()));
+
+  public static final Pose2d bargeAlignmentX =
+      new Pose2d(new Translation2d(7.743555545806885, -1), new Rotation2d(Math.PI));
 }

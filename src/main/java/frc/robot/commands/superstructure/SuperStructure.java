@@ -142,8 +142,7 @@ public class SuperStructure {
               EndEffector.ALGAE_GRAB.get(),
               EndEffector.WAIT_UNTIL_ALGAE.get(),
               EndEffector.ALGAE_HOLD.get(),
-              SuperStructure.STARTING_CONF.get()
-          );
+              SuperStructure.STARTING_CONF.get());
 
   public static Supplier<Command> ALGAE_GRAB_L3 =
       () ->
@@ -159,15 +158,14 @@ public class SuperStructure {
                   SetpointConstants.Shoulder.ALGAE_L3_DEG,
                   SetpointConstants.Pivot.ALGAE_L3_DEG));
 
-                  public static Supplier<Command> ALGAE_COLLECT_L3 =
-                  () ->
-                      Commands.sequence(
-                          new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_COLLECT_L2")),
-                          EndEffector.ALGAE_GRAB.get(),
-                          EndEffector.WAIT_UNTIL_ALGAE.get(),
-                          EndEffector.ALGAE_HOLD.get(),
-                          SuperStructure.STARTING_CONF.get()
-                      );
+  public static Supplier<Command> ALGAE_COLLECT_L3 =
+      () ->
+          Commands.sequence(
+              new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_COLLECT_L2")),
+              EndEffector.ALGAE_GRAB.get(),
+              EndEffector.WAIT_UNTIL_ALGAE.get(),
+              EndEffector.ALGAE_HOLD.get(),
+              SuperStructure.STARTING_CONF.get());
 
   public static Supplier<Command> ALGAE_GRAB_GROUND =
       () ->
@@ -194,8 +192,8 @@ public class SuperStructure {
       () ->
           new SetDOFSOneAtATimeFactory("PROCESSOR_PREP", "ALGAE_HOLD")
               .addAlgaeSpeedCommand(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED)
-              .addShoulderCommand(SetpointConstants.Shoulder.ALGAE_L2_DEG)
+              .addShoulderCommand(SetpointConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG)
               .addPivotCommand(SetpointConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG)
-              .addElevatorCommand(SetpointConstants.Elevator.ALGAE_L2_IN)
+              .addElevatorCommand(SetpointConstants.Elevator.PROCESSOR_HEIGHT_IN)
               .create();
 }

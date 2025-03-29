@@ -41,7 +41,7 @@ public class ScoreAssist {
       this.updateWithNT();
     }
 
-    this.recalculateErrors();
+    // this.recalculateErrors();
 
     // Logging
     Logger.recordOutput("ScoreAssist/mode", this.mode);

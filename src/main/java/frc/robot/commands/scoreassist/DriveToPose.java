@@ -5,11 +5,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ScoreAssistConstants;
 import frc.robot.subsystems.drive.Drivetrain;
@@ -27,6 +29,23 @@ public class DriveToPose extends Command {
   private ProfiledPIDController omegascoreAssistController =
       DriveConstants.HeadingControllerConstants.angleGains.createAngularTrapezoidalPIDController();
   private Drivetrain drive;
+
+  private double xError = Double.MAX_VALUE;
+  private double yError = Double.MAX_VALUE;
+  private double thetaError = Double.MAX_VALUE;
+
+  /** Helper function to calculate the drivetrain's errors to certain targets */
+  private void recalculateErrors() {
+    Pose2d targetToRobotError =
+        targetPose.get().relativeTo(RobotContainer.driveSubsystem.getPose());
+    this.xError = targetToRobotError.getX();
+    this.yError = targetToRobotError.getY();
+    this.thetaError = targetToRobotError.getRotation().getDegrees();
+
+    Logger.recordOutput("ScoreAssist/xErrorInches", Units.metersToInches(this.xError));
+    Logger.recordOutput("ScoreAssist/yErrorInches", Units.metersToInches(this.yError));
+    Logger.recordOutput("ScoreAssist/thetaError", this.thetaError);
+  }
 
   public DriveToPose(Supplier<Pose2d> pose, Drivetrain drive) {
     this.targetPose = pose;
@@ -52,6 +71,7 @@ public class DriveToPose extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    recalculateErrors();
 
     boolean isFlipped =
         DriverStation.getAlliance().isPresent()
@@ -108,6 +128,20 @@ public class DriveToPose extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.scoreAssist.isAtFinalTargetPose();
+    boolean slow = RobotContainer.driveSubsystem.getSpeed() < 0.08;
+    boolean withinX = Math.abs(this.xError) < ScoreAssistConstants.assistXTolerance.getAsDouble();
+    boolean withinY = Math.abs(this.yError) < ScoreAssistConstants.assistYTolerance.getAsDouble();
+    boolean withinTheta =
+        Math.abs(this.thetaError) < ScoreAssistConstants.assistThetaTolerance.getAsDouble();
+
+    boolean isAtTargetPose =
+        RobotContainer.scoreAssist.mode == ScoreDrivingMode.ASSIST
+            && withinX
+            && withinY
+            && withinTheta
+            && slow;
+    Logger.recordOutput("ScoreAssist/isAtFinalTargetPose", isAtTargetPose);
+
+    return isAtTargetPose;
   }
 }

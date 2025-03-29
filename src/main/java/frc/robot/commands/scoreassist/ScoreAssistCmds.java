@@ -6,13 +6,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveAtLongitude;
 import frc.robot.commands.MoveSSToTarget;
 import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
+import frc.robot.subsystems.constants.ScoreAssistConstants;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ReefTracker;
 import frc.robot.util.ScoreAssistMessage;
@@ -26,8 +26,9 @@ public class ScoreAssistCmds {
   public static Command executeReefTrackerScore() {
     var commands = new HashMap<ScoreAssistMessage.GoalType, Command>();
     commands.put(ScoreAssistMessage.GoalType.CORAL, executeCoralScore());
-    commands.put(ScoreAssistMessage.GoalType.ALGAE, executeCoralScore());
+    commands.put(ScoreAssistMessage.GoalType.ALGAE, executeAlgaeGrabOnlyAssist());
     commands.put(ScoreAssistMessage.GoalType.BARGE, executeBargeScore());
+    commands.put(ScoreAssistMessage.GoalType.PROCESSOR, executeProcessorScore());
     return Commands.select(commands, ReefTracker.getInstance()::getGoalTypeOrCoral);
   }
 
@@ -51,6 +52,7 @@ public class ScoreAssistCmds {
           {
             put(ScoreAssistMessage.GoalType.CORAL, EndEffector.CORAL_SCORE.get());
             put(ScoreAssistMessage.GoalType.BARGE, EndEffector.BARGE_SCORE.get());
+            put(ScoreAssistMessage.GoalType.PROCESSOR, EndEffector.PROCESSOR_SCORE.get());
           }
         },
         () -> contextualScore);
@@ -59,12 +61,13 @@ public class ScoreAssistCmds {
   /** This is assist for barge scoring */
   public static Command executeBargeScore() {
     return Commands.parallel(
-        Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.BARGE),
-        Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.BARGE),
-        SuperStructure.BARGE_PREP.get(),
-        new DriveAtLongitude(
-            () -> AllianceFlipUtil.apply(FieldConstants.Barge.alignmentX),
-            RobotContainer.driveSubsystem));
+            Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.BARGE),
+            Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.BARGE),
+            SuperStructure.BARGE_PREP.get(),
+            new DriveAtLongitude(
+                () -> AllianceFlipUtil.apply(ScoreAssistConstants.bargeAlignmentX),
+                RobotContainer.driveSubsystem))
+        .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
   /** This drives to target, moves the SS when ready, and runs the rollers when ready */
@@ -87,6 +90,49 @@ public class ScoreAssistCmds {
         .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
+  /** This drives to target, moves the SS when ready, and grabs algae when ready */
+  // private static Command executeAlgaeGrab() {
+  //   return Commands.sequence(
+  //           Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.CORAL),
+  //           start(), // 1) activate score assist
+  //           Commands.parallel(
+  //               executePrep(), executePath()), // 2a) path-find close to target (with manual
+  //           // override)
+  //           executeDrive(), // 2b) drive to target
+  //           stop(),
+  //           executeSS())
+  //       .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
+  // }
+
+  /** This drives to target, moves the SS when ready, and grabs algae when ready */
+  private static Command executeAlgaeGrabOnlyAssist() {
+    return Commands.sequence(
+            Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.CORAL),
+            start(), // 1) activate score assist
+            Commands.parallel(
+                executePrep(),
+                executeDriveToPathPose()), // 2a) path-find close to target (with manual
+            // override)
+            executeDrive(), // 2b) drive to target
+            stop(),
+            executeSS())
+        .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
+  }
+
+  /** This drives to target, moves the SS when ready, and scores in the processor when ready */
+  private static Command executeProcessorScore() {
+    return Commands.parallel(
+            Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.PROCESSOR),
+            start(),
+            SuperStructure.PROCESSOR_PREP.get(),
+            Commands.sequence(
+                new DriveToPose(
+                    () -> AllianceFlipUtil.apply(ScoreAssistConstants.processorPose),
+                    RobotContainer.driveSubsystem),
+                EndEffector.PROCESSOR_SCORE.get()))
+        .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
+  }
+
   /** This drives to target, moves the SS when ready, and runs the rollers when ready */
   public static Command executeCoralScoreInAuto(ScoreLoc scoreLoc) {
     // Note that during autonomous, ScoreAssist does not update via NT
@@ -101,7 +147,7 @@ public class ScoreAssistCmds {
         .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
-  public static Command start() {
+  private static Command start() {
     return new InstantCommand(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.PATH);
   }
 
@@ -135,6 +181,15 @@ public class ScoreAssistCmds {
         Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.ASSIST),
         new DriveToPose(
             () -> RobotContainer.scoreAssist.getCurrentNodeTarget().getRobotAlignmentPose(),
+            RobotContainer.driveSubsystem));
+  }
+
+  /** This drives to the path pose */
+  private static Command executeDriveToPathPose() {
+    return Commands.sequence(
+        Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.ASSIST),
+        new DriveToPose(
+            () -> RobotContainer.scoreAssist.getCurrentNodeTarget().getPathScorePose(),
             RobotContainer.driveSubsystem));
   }
 
