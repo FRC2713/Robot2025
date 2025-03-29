@@ -125,7 +125,11 @@ public class DriveToPose extends Command {
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
+  /**
+   * When the drivetrain is close enough to the target, drive to pose is done
+   *
+   * @return if drive to pose is done (based on drivetrain position)
+   */
   @Override
   public boolean isFinished() {
     boolean slow = RobotContainer.driveSubsystem.getSpeed() < 0.08;
