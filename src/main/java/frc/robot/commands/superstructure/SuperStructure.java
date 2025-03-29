@@ -135,6 +135,16 @@ public class SuperStructure {
                   SetpointConstants.Shoulder.ALGAE_L2_DEG,
                   SetpointConstants.Pivot.ALGAE_L2_DEG));
 
+  public static Supplier<Command> ALGAE_COLLECT_L2 =
+      () ->
+          Commands.sequence(
+              new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_COLLECT_L2")),
+              EndEffector.ALGAE_GRAB.get(),
+              EndEffector.WAIT_UNTIL_ALGAE.get(),
+              EndEffector.ALGAE_HOLD.get(),
+              SuperStructure.STARTING_CONF.get()
+          );
+
   public static Supplier<Command> ALGAE_GRAB_L3 =
       () ->
           Commands.sequence(
@@ -148,6 +158,16 @@ public class SuperStructure {
                   SetpointConstants.Elevator.ALGAE_L3_IN,
                   SetpointConstants.Shoulder.ALGAE_L3_DEG,
                   SetpointConstants.Pivot.ALGAE_L3_DEG));
+
+                  public static Supplier<Command> ALGAE_COLLECT_L3 =
+                  () ->
+                      Commands.sequence(
+                          new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_COLLECT_L2")),
+                          EndEffector.ALGAE_GRAB.get(),
+                          EndEffector.WAIT_UNTIL_ALGAE.get(),
+                          EndEffector.ALGAE_HOLD.get(),
+                          SuperStructure.STARTING_CONF.get()
+                      );
 
   public static Supplier<Command> ALGAE_GRAB_GROUND =
       () ->

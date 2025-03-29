@@ -25,6 +25,10 @@ public class EndEffector {
           Commands.sequence(
               Commands.runOnce(() -> Logger.recordOutput("Active EE", "ALGAE_GRAB")),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED));
+  
+
+  public static Supplier<Command> WAIT_UNTIL_ALGAE =
+     () -> AlgaeClawCmds.waitUntilAlgae();
 
   public static Supplier<Command> ALGAE_HOLD =
       () ->
