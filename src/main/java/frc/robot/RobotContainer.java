@@ -23,12 +23,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import frc.robot.commands.DriveCmds;
+import frc.robot.commands.autos.CenterAutoBarge;
 import frc.robot.commands.autos.CenterAutoOnePiece;
-import frc.robot.commands.autos.CoralAndAlgaeAuto;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
-import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.generated.TunerConstants;
 import frc.robot.oi.DeveloperControls; // Added import for DeveloperControls
 import frc.robot.oi.DriverControls;
@@ -222,16 +220,16 @@ public class RobotContainer {
     // Add options to the chooser
     // I add a * to the name when it generates its starting trajectory
     autoChooser.addRoutine(
-        "Center Pine Tree", () -> CenterAutoOnePiece.getRoutine(choreoAutoFactory, driveSubsystem));
+        "Centre - One Piece",
+        () -> CenterAutoOnePiece.getRoutine(choreoAutoFactory, driveSubsystem));
     autoChooser.addRoutine(
-        "Score Lots Of Coral",
+        "Centre - Barge", () -> CenterAutoBarge.getRoutine(choreoAutoFactory, driveSubsystem));
+    autoChooser.addRoutine(
+        "Proc - Score Lots Of Coral",
         () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));
-    autoChooser.addRoutine(
-        "Score Lots Of Coral Flipped",
-        () -> ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem));
-    autoChooser.addRoutine(
-        "Coral and Algae Auto",
-        () -> CoralAndAlgaeAuto.getRoutine(choreoAutoFactory, driveSubsystem));
+    // autoChooser.addRoutine(
+    //     "Right - Score Lots Of Coral",
+    //     () -> ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem));
     autoChooser.addRoutine(
         "Drive Testing", () -> DriveTesting.getRoutine(choreoAutoFactory, driveSubsystem));
 
@@ -251,7 +249,8 @@ public class RobotContainer {
     // autoChooser.addCmd(
     //     "Drive SysId (Dynamic Backward)",
     //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addCmd("Wheel Radius", () -> DriveCmds.wheelRadiusCharacterization(driveSubsystem));
+    // autoChooser.addCmd("Wheel Radius", () ->
+    // DriveCmds.wheelRadiusCharacterization(driveSubsystem));
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
 

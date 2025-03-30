@@ -26,7 +26,7 @@ public class ScoreAssistCmds {
   public static Command executeReefTrackerScore() {
     var commands = new HashMap<ScoreAssistMessage.GoalType, Command>();
     commands.put(ScoreAssistMessage.GoalType.CORAL, executeCoralScore());
-    commands.put(ScoreAssistMessage.GoalType.ALGAE, executeAlgaeGrabOnlyAssist());
+    commands.put(ScoreAssistMessage.GoalType.ALGAE, executeAlgaeGrab());
     commands.put(ScoreAssistMessage.GoalType.BARGE, executeBargeScore());
     commands.put(ScoreAssistMessage.GoalType.PROCESSOR, executeProcessorScore());
     return Commands.select(commands, ReefTracker.getInstance()::getGoalTypeOrCoral);
@@ -91,7 +91,7 @@ public class ScoreAssistCmds {
   }
 
   /** This drives to target, moves the SS when ready, and grabs algae when ready */
-  // private static Command executeAlgaeGrab() {
+  // private static Command executeAlgaeGrabPathing() {
   //   return Commands.sequence(
   //           Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.CORAL),
   //           start(), // 1) activate score assist
@@ -105,7 +105,7 @@ public class ScoreAssistCmds {
   // }
 
   /** This drives to target, moves the SS when ready, and grabs algae when ready */
-  private static Command executeAlgaeGrabOnlyAssist() {
+  private static Command executeAlgaeGrab() {
     return Commands.sequence(
             Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.CORAL),
             start(), // 1) activate score assist
@@ -142,6 +142,22 @@ public class ScoreAssistCmds {
                 start(), // 1) activate score assist
                 executeDrive(), // 2) drive to target
                 executePrep()), // 3) execute prep
+            stop(),
+            executeSS())
+        .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
+  }
+
+  /** This drives to target, moves the SS when ready, and grabs algae when ready */
+  public static Command executeAlgaeGrabInAuto(ScoreLoc scoreLoc) {
+    return Commands.sequence(
+            Commands.runOnce(() -> RobotContainer.scoreAssist.updateManually(scoreLoc)),
+            Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.CORAL),
+            start(), // 1) activate score assist
+            Commands.parallel(
+                executePrep(),
+                executeDriveToPathPose()), // 2a) path-find close to target (with manual
+            // override)
+            executeDrive(), // 2b) drive to target
             stop(),
             executeSS())
         .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
