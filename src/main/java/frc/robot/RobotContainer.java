@@ -27,6 +27,7 @@ import frc.robot.commands.autos.CenterAutoBarge;
 import frc.robot.commands.autos.CenterAutoOnePiece;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
+import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.generated.TunerConstants;
 import frc.robot.oi.DeveloperControls; // Added import for DeveloperControls
 import frc.robot.oi.DriverControls;
@@ -227,9 +228,9 @@ public class RobotContainer {
     autoChooser.addRoutine(
         "Proc - Score Lots Of Coral",
         () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));
-    // autoChooser.addRoutine(
-    //     "Right - Score Lots Of Coral",
-    //     () -> ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem));
+    autoChooser.addRoutine(
+        "Right - Score Lots Of Coral",
+        () -> ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem));
     autoChooser.addRoutine(
         "Drive Testing", () -> DriveTesting.getRoutine(choreoAutoFactory, driveSubsystem));
 
