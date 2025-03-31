@@ -83,6 +83,10 @@ public class SetpointConstants {
     public static final LoggedTunableNumber BARGE_ANGLE_DEGREES =
         new LoggedTunableNumber("Shoulder/SS/Barge Angle", -270);
 
+    public static final LoggedTunableNumber BARGE_ANGLE_DEGREES_BACKWARDS =
+        new LoggedTunableNumber(
+            "Shoulder/SS/Barge Backwards Angle", BARGE_ANGLE_DEGREES.get() + 360);
+
     public static final LoggedTunableNumber ALGAE_GROUND_DEG =
         new LoggedTunableNumber("Shoulder/SS/Ground Algae Angle", -45);
 
@@ -118,6 +122,9 @@ public class SetpointConstants {
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Barge Angle", 35);
+
+    public static final LoggedTunableNumber BARGE_ANGLE_DEG_BACKWARDS =
+        new LoggedTunableNumber("Pivot/SS/Barge Angle Backwards", 35 + 90);
 
     public static final LoggedTunableNumber PREP_CLIMB_ANGLE_DEGS =
         new LoggedTunableNumber("Pivot/SS/Prep Climb Angle", 30);

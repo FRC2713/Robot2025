@@ -40,6 +40,6 @@ public class SetClimbingConfig extends SequentialCommandGroup {
             ShoulderCmds.setAngle(SetpointConstants.Shoulder.CLIMB_ANGLE_DEGS),
             // ElevatorCmds.waitUntilAtTarget(),
             PivotCmds.setAngleAndWait(SetpointConstants.Pivot.CLIMB_ANGLE_DEGS),
-            ElevatorCmds.setHeight(2)));
+            ElevatorCmds.setHeight(3)));
   }
 }

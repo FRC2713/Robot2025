@@ -92,15 +92,25 @@ public class SuperStructure {
 
   public static Supplier<Command> CLIMBING_CONF = () -> new SetClimbingConfig("CLIMBING_CONF");
 
-  public static Supplier<Command> BARGE_PREP =
+  public static Supplier<Command> BARGE_PREP_FORWARDS =
       () ->
           new SetAllDOFS(
-              "BARGE",
+              "BARGE FORWARDS",
               "ALGAE_HOLD",
               SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
               SetpointConstants.Elevator.BARGE_HEIGHT_IN,
               SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES,
               SetpointConstants.Pivot.BARGE_ANGLE_DEG);
+
+  public static Supplier<Command> BARGE_PREP_BACKWARDS =
+      () ->
+          new SetAllDOFS(
+              "BARGE BACKWARDS",
+              "ALGAE_HOLD",
+              SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
+              SetpointConstants.Elevator.BARGE_HEIGHT_IN,
+              SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES_BACKWARDS,
+              SetpointConstants.Pivot.BARGE_ANGLE_DEG_BACKWARDS);
 
   // TODO: cleanup these algae commands using SetAllDOFS or SetDOFSOneAtATime
   // TODO: use the LoggedTunableNumbers created in SetpointConstants instead of hard-coded values

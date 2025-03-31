@@ -35,7 +35,9 @@ public class DeveloperControls {
                 SuperStructure.PROCESSOR_PREP.get(), EndEffector.PROCESSOR_SCORE.get()));
     devCommandXboxController
         .x()
-        .onTrue(Commands.sequence(SuperStructure.BARGE_PREP.get(), EndEffector.BARGE_SCORE.get()));
+        .onTrue(
+            Commands.sequence(
+                SuperStructure.BARGE_PREP_FORWARDS.get(), EndEffector.BARGE_SCORE.get()));
     devCommandXboxController.leftBumper().onTrue(SuperStructure.STARTING_CONF_WITH_ALGAE.get());
   }
 }

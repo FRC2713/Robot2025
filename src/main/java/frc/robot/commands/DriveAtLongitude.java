@@ -24,8 +24,37 @@ public class DriveAtLongitude extends Command {
       DriveConstants.HeadingControllerConstants.angleGains.createAngularTrapezoidalPIDController();
   private Drivetrain drive;
 
+  // TODO: Use library
+  public static double normalizeAngle(double angle) {
+    angle %= 360;
+    if (angle < 0) {
+      angle += 360;
+    }
+    return angle;
+  }
+
+  public static boolean doBackwards(Pose2d pose) {
+    var currentRot = normalizeAngle(pose.getRotation().getDegrees());
+    var robotRot = normalizeAngle(RobotContainer.driveSubsystem.getRotation().getDegrees());
+
+    return getAngularDistance(normalizeAngle(currentRot + 180), robotRot)
+        < getAngularDistance(currentRot, robotRot);
+  }
+
+  public static double getAngularDistance(double a, double b) {
+    double diff = Math.abs(a - b) % 360;
+    return Math.min(diff, 360 - diff);
+  }
+
   public DriveAtLongitude(Supplier<Pose2d> pose, Drivetrain drive) {
-    this.targetPose = pose;
+    this.targetPose =
+        () -> {
+          if (doBackwards(pose.get())) {
+            return new Pose2d(
+                pose.get().getTranslation(),
+                pose.get().getRotation().plus(Rotation2d.fromDegrees(180)));
+          } else return pose.get();
+        };
     this.drive = drive;
     addRequirements(drive);
   }

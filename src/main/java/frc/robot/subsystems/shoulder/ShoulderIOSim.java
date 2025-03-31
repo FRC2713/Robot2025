@@ -25,7 +25,7 @@ public class ShoulderIOSim implements ShoulderIO {
   private PIDController pid = ShoulderConstants.Gains.createPIDController();
 
   public ShoulderIOSim() {
-    pid.enableContinuousInput(0, 2 * Math.PI);
+    // pid.enableContinuousInput(0, 2 * Math.PI);
   }
 
   private ArmFeedforward feedforward = ShoulderConstants.Gains.createArmFF();
