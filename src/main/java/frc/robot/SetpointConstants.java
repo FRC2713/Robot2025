@@ -72,7 +72,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Shoulder/SS/L4 Prep Angle", 90);
 
     public static final LoggedTunableNumber PREP_CLIMB_ANGLE_DEGS =
-        new LoggedTunableNumber("Shoulder/SS/Prep Climb Angle", -140);
+        new LoggedTunableNumber("Shoulder/SS/Prep Climb Angle", -170);
 
     public static final LoggedTunableNumber CLIMB_ANGLE_DEGS =
         new LoggedTunableNumber("Shoulder/SS/Climb Angle", -147);

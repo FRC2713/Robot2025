@@ -38,7 +38,8 @@ public class SetClimbingConfig extends SequentialCommandGroup {
         // tuck the arm back in
         Commands.sequence(
             ShoulderCmds.setAngle(SetpointConstants.Shoulder.CLIMB_ANGLE_DEGS),
-            PivotCmds.setAngle(SetpointConstants.Pivot.CLIMB_ANGLE_DEGS),
-            ElevatorCmds.setHeight(0)));
+            // ElevatorCmds.waitUntilAtTarget(),
+            PivotCmds.setAngleAndWait(SetpointConstants.Pivot.CLIMB_ANGLE_DEGS),
+            ElevatorCmds.setHeight(2)));
   }
 }
