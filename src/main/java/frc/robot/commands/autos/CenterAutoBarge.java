@@ -78,7 +78,9 @@ public class CenterAutoBarge {
 
     centreBarge
         .done()
-        .onTrue(Commands.sequence(SuperStructure.BARGE_PREP.get(), EndEffector.BARGE_SCORE.get()));
+        .onTrue(
+            Commands.sequence(
+                SuperStructure.BARGE_PREP_FORWARDS.get(), EndEffector.BARGE_SCORE.get()));
 
     return routine;
   }
