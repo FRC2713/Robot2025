@@ -1,7 +1,5 @@
 package frc.robot.scoreassist;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -26,11 +24,6 @@ public class ScoreAssist {
   @Getter private ScoreLevel currentLevelTarget = ScoreLevel.FOUR;
   private boolean updatedNodeTarget = false;
   private boolean updatedLevelTarget = false;
-
-  private double xError = Double.MAX_VALUE;
-  private double yError = Double.MAX_VALUE;
-  private double thetaError = Double.MAX_VALUE;
-  private double pathTargetError = Double.MAX_VALUE;
 
   private Alert usingClosest = new Alert("Using Closest Node", AlertType.kWarning);
 
@@ -118,50 +111,6 @@ public class ScoreAssist {
     }
 
     return closestNode;
-  }
-
-  /** Helper function to calculate the drivetrain's errors to certain targets */
-  private void recalculateErrors() {
-    Pose2d targetToRobotError =
-        this.currentNodeTarget
-            .getRobotAlignmentPose()
-            .relativeTo(RobotContainer.driveSubsystem.getPose());
-    this.xError = targetToRobotError.getX();
-    this.yError = targetToRobotError.getY();
-    this.thetaError = targetToRobotError.getRotation().getDegrees();
-
-    this.pathTargetError =
-        this.currentNodeTarget
-            .getPathScorePose()
-            .getTranslation()
-            .getDistance(RobotContainer.driveSubsystem.getTranslation());
-
-    Logger.recordOutput("ScoreAssist/xErrorInches", Units.metersToInches(this.xError));
-    Logger.recordOutput("ScoreAssist/yErrorInches", Units.metersToInches(this.yError));
-    Logger.recordOutput("ScoreAssist/thetaError", this.thetaError);
-    Logger.recordOutput(
-        "ScoreAssist/pathTargetErrorInches", Units.metersToInches(this.pathTargetError));
-  }
-
-  /**
-   * When the drivetrain is close enough to the target, score assist is done
-   *
-   * @return if score assist is done (based on drivetrain position)
-   */
-  @AutoLogOutput(key = "ScoreAssist/isAtFinalTargetPose")
-  public boolean isAtFinalTargetPose() {
-    boolean slow = RobotContainer.driveSubsystem.getSpeed() < 0.08;
-    boolean withinX = Math.abs(this.xError) < ScoreAssistConstants.assistXTolerance.getAsDouble();
-    boolean withinY = Math.abs(this.yError) < ScoreAssistConstants.assistYTolerance.getAsDouble();
-    boolean withinTheta =
-        Math.abs(this.thetaError) < ScoreAssistConstants.assistThetaTolerance.getAsDouble();
-
-    return this.mode == ScoreDrivingMode.ASSIST
-        && currentNodeTarget != null
-        && withinX
-        && withinY
-        && withinTheta
-        && slow;
   }
 
   /**
