@@ -167,7 +167,9 @@ public class RobotContainer {
             // new VisionIO() {}
             VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK_WHEEL_ODOMETRY
                 ? new VisionIOOdometry()
-                : (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
+                : ((VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
+                        || VisionConstants.ACTIVE_VISION_OPTION
+                            == VisionOptions.SLAMDUNK_MEGATAG2_MERGED)
                     ? new VisionIOPoseEstimator()
                     : new VisionIOLimelights(
                         VisionConstants.FRONT_LIMELIGHT_INFO,
