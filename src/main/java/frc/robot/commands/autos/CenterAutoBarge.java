@@ -10,14 +10,15 @@ import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
-import frc.robot.SetpointConstants;
+import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.scoreassist.ScoreAssistCmds;
+import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
 import frc.robot.util.ScoreLoc.ScoreLocations;
 
-public class CenterAutoOnePiece {
+public class CenterAutoBarge {
   /**
    * @param factory
    * @param driveSubsystem
@@ -29,8 +30,8 @@ public class CenterAutoOnePiece {
     // Load the routine's trajectories
     // StartRoReefE starts square to the starting line, Start2RoReefE starts pre-aligned to the EF
     // reef face
-    AutoTrajectory startToReefGTraj = routine.trajectory("CenterPineTree");
-    // AutoTrajectory reefGToSource = routine.trajectory("PineTreePrepSource");
+    AutoTrajectory centreAlgae = routine.trajectory("CentreAlgae");
+    AutoTrajectory centreBarge = routine.trajectory("CentreBarge");
     // AutoTrajectory sourceToReefC = routine.trajectory("SourceToReefC");
     // AutoTrajectory reefCToSource = routine.trajectory("ReefCToSource");
 
@@ -38,8 +39,8 @@ public class CenterAutoOnePiece {
         .active()
         .onTrue(
             Commands.sequence(
-                new InstantCommand(() -> System.out.println("CenterPineTree started")),
-                RHRUtil.resetRotationIfReal(startToReefGTraj.getInitialPose().get()),
+                new InstantCommand(() -> System.out.println("CenterAutoBarge started")),
+                RHRUtil.resetRotationIfReal(centreAlgae.getInitialPose().get()),
                 // If pose estimation is really off, reset based on the trajectory
                 new InstantCommand(
                     () -> {
@@ -47,28 +48,37 @@ public class CenterAutoOnePiece {
                           || RobotContainer.driveSubsystem
                                   .getPose()
                                   .getTranslation()
-                                  .getDistance(
-                                      startToReefGTraj.getInitialPose().get().getTranslation())
+                                  .getDistance(centreAlgae.getInitialPose().get().getTranslation())
                               > 1) {
                         System.out.println("Hard reset odom");
                         RobotContainer.driveSubsystem.resetOdometry(
-                            startToReefGTraj.getInitialPose().get());
+                            centreAlgae.getInitialPose().get());
                       }
                     }),
-                Commands.parallel(SuperStructure.L4_PREP.get(), startToReefGTraj.cmd()),
+                Commands.parallel(SuperStructure.L4_PREP.get(), centreAlgae.cmd()),
                 Commands.print("Shoulder in position & trajectory started")));
 
     // When at the reef, score
-    startToReefGTraj
+    centreAlgae
         .done()
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
                 ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.G_FOUR),
-                // 2) Wait to make sure coral is outtathere
-                Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
-                // 3) Begin driving to source
-                Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE.get())));
+
+                // 3) Score coral
+                ScoreAssistCmds.executeAlgaeGrabInAuto(ScoreLocations.ALGAE_GH)
+                    .withDeadline(Commands.waitSeconds(3)),
+                // 2) Wait to make sure we got algae
+                AlgaeClawCmds.waitUntilAlgae(1),
+
+                // 3) Begin driving to barge
+                Commands.parallel(
+                    centreBarge.cmd(), SuperStructure.STARTING_CONF_WITH_ALGAE.get())));
+
+    centreBarge
+        .done()
+        .onTrue(Commands.sequence(SuperStructure.BARGE_PREP.get(), EndEffector.BARGE_SCORE.get()));
 
     return routine;
   }
