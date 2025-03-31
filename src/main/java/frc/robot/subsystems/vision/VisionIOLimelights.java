@@ -2,8 +2,10 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -149,14 +151,20 @@ public class VisionIOLimelights implements VisionIO {
     }
   }
 
+  @Override
   public void updatePoseEstimate(SwerveDrivePoseEstimator poseEstimator) {
+    updatePoseEstimate(
+        poseEstimator,
+        VecBuilder.fill(
+            this.inputs.translationStddev,
+            this.inputs.translationStddev,
+            this.inputs.rotationStddev));
+  }
+
+  public void updatePoseEstimate(SwerveDrivePoseEstimator poseEstimator, Vector<N3> stdDevs) {
     this.updateStddevs();
     if (this.stddevCalcState.applyToPoseEstimate()) {
-      poseEstimator.setVisionMeasurementStdDevs(
-          VecBuilder.fill(
-              this.inputs.translationStddev,
-              this.inputs.translationStddev,
-              this.inputs.rotationStddev));
+      poseEstimator.setVisionMeasurementStdDevs(stdDevs);
       poseEstimator.addVisionMeasurement(this.inputs.pose, this.inputs.timestamp);
     }
   }
