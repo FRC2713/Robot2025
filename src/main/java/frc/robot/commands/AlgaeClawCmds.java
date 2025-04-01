@@ -10,8 +10,7 @@ import java.util.function.DoubleSupplier;
 public class AlgaeClawCmds {
   public static Command setSpeed(DoubleSupplier targetRPM) {
     return new InstantCommand(
-        () -> RobotContainer.endEffector.setAlgaeRPM(targetRPM.getAsDouble()),
-        RobotContainer.endEffector);
+        () -> RobotContainer.endEffector.setAlgaeRPM(targetRPM.getAsDouble()));
   }
 
   public static Command setSpeedIfNoAlgae(DoubleSupplier targetRPM) {
