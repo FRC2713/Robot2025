@@ -25,18 +25,19 @@ public class EndEffector extends SubsystemBase {
     IO.updateInputs(this.inputs);
     Logger.processInputs("EndEffector", inputs);
 
-    if (hasAlgae() && !hadAlgae) {
+    var hasAlgae = hasAlgae();
+    if (hasAlgae && !hadAlgae) {
       System.out.println("Algae detected; slowing down SS");
       RobotContainer.shoulder.setPID(ShoulderConstants.SlowGains);
       RobotContainer.pivot.setPID(PivotConstants.SlowGains);
       RobotContainer.elevator.setPID(ElevatorConstants.SlowGains);
-    } else if (!hasAlgae() && hadAlgae) {
+    } else if (!hasAlgae && hadAlgae) {
       System.out.println("No algae detected; Speeding up SS");
       RobotContainer.shoulder.setPID(ShoulderConstants.Gains);
       RobotContainer.pivot.setPID(PivotConstants.Gains);
       RobotContainer.elevator.setPID(ElevatorConstants.Gains);
     }
-    hadAlgae = hasAlgae();
+    hadAlgae = hasAlgae;
   }
 
   public void setCoralRPM(double rpm) {
