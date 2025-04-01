@@ -56,10 +56,10 @@
             },
             {
               "axis": "y",
-              "degrees": -90
+              "degrees": -180
             }
           ],
-          "zeroedPosition": [0,0,0]
+          "zeroedPosition": [0,-0.1,0]
         },{
           "zeroedRotations": [
             {
