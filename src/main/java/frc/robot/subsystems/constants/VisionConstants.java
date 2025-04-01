@@ -13,7 +13,7 @@ import frc.robot.util.LimelightInfo;
 
 public class VisionConstants {
   // public static double CAMERA_TO_TAG_MAX_DIST_INCHES = 120;
-  public static double MAX_POSE_JUMP_METERS = 0.5; // Units.feetToMeters(5);
+  public static double MAX_POSE_JUMP_METERS = 3; // Units.feetToMeters(5);
   public static double MAX_SPEED = 0.02;
 
   public record PoseEstimatorErrorStDevs(double translationalStDev, double rotationalStDev) {
@@ -28,18 +28,18 @@ public class VisionConstants {
   }
 
   // its probably bad OOD to have this but ¯\_(ツ)_/¯
-  public static final VisionOptions ACTIVE_VISION_OPTION = VisionOptions.MEGATAG2;
+  public static final VisionOptions ACTIVE_VISION_OPTION = VisionOptions.SLAMDUNK_MEGATAG2_MERGED;
 
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_STATE_STDEVS =
       new PoseEstimatorErrorStDevs(1.0, Units.degreesToRadians(1));
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_MAX_SPEED_STDEVS =
       ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
-          ? new PoseEstimatorErrorStDevs(2.0, Units.degreesToRadians(999999))
+          ? new PoseEstimatorErrorStDevs(1.0, Units.degreesToRadians(999999))
           : new PoseEstimatorErrorStDevs(4.0, Units.degreesToRadians(999999));
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS =
       ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
-          ? new PoseEstimatorErrorStDevs(0.1, Units.degreesToRadians(100))
-          : new PoseEstimatorErrorStDevs(0.2, Units.degreesToRadians(100));
+          ? new PoseEstimatorErrorStDevs(0.01, Units.degreesToRadians(100))
+          : new PoseEstimatorErrorStDevs(0.1, Units.degreesToRadians(100));
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_DISABLED =
       new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(999999));
 

@@ -65,7 +65,9 @@ public class VisionIOLimelights implements VisionIO {
     LimelightHelpers.PoseEstimate secondaryMT = null;
 
     // 1) Choose between MegaTag1 and MegaTag2
-    if (VisionConstants.ACTIVE_VISION_OPTION == VisionConstants.VisionOptions.MEGATAG2) {
+    if (VisionConstants.ACTIVE_VISION_OPTION == VisionConstants.VisionOptions.MEGATAG2
+        || VisionConstants.ACTIVE_VISION_OPTION
+            == VisionConstants.VisionOptions.SLAMDUNK_MEGATAG2_MERGED) {
 
       // https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-robot-localization-megatag2
       // docs say this needs to be called every frame
@@ -187,7 +189,8 @@ public class VisionIOLimelights implements VisionIO {
 
     if (this.state == CombinedMegaTagState.UPDATED_WITH_PRIMARY
         || this.state == CombinedMegaTagState.UPDATED_WITH_SECONDARY) {
-      if (VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.MEGATAG2
+      if ((VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.MEGATAG2
+              || VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK_MEGATAG2_MERGED)
           && this.inputs.tagCount > 0) {
         this.inputs.translationStddev =
             MathUtil.interpolate(

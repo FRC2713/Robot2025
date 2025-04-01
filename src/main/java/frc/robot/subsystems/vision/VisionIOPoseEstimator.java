@@ -125,18 +125,18 @@ public class VisionIOPoseEstimator implements VisionIO {
       if (speed > VisionConstants.MAX_SPEED) {
         Logger.recordOutput("Vision/Reasoning", "Moving more than max speed");
         // TODO: All add vision measurements should occur in updatePoseEstimate
-        RobotContainer.driveSubsystem.addVisionMeasurement(
-            pose2d, time, VisionConstants.POSE_ESTIMATOR_MAX_SPEED_STDEVS.toMatrix());
+        // RobotContainer.driveSubsystem.addVisionMeasurement(
+        //     pose2d, time, VisionConstants.POSE_ESTIMATOR_MAX_SPEED_STDEVS.toMatrix());
         return;
       }
       if (DriverStation.isDisabled()) {
         Logger.recordOutput("Vision/Reasoning", "Disabled!");
-        RobotContainer.driveSubsystem.addVisionMeasurement(
-            pose2d, time, VisionConstants.POSE_ESTIMATOR_VISION_DISABLED.toMatrix());
+        // RobotContainer.driveSubsystem.addVisionMeasurement(
+        //     pose2d, time, VisionConstants.POSE_ESTIMATOR_VISION_DISABLED.toMatrix());
       }
       Logger.recordOutput("Vision/Reasoning", "All good!");
-      RobotContainer.driveSubsystem.addVisionMeasurement(
-          pose2d, time, VisionConstants.POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS.toMatrix());
+      // RobotContainer.driveSubsystem.addVisionMeasurement(
+      //     pose2d, time, VisionConstants.POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS.toMatrix());
       return;
     }
 
@@ -153,14 +153,20 @@ public class VisionIOPoseEstimator implements VisionIO {
   public void updatePoseEstimate(SwerveDrivePoseEstimator poseEstimator) {
     if (VisionConstants.ACTIVE_VISION_OPTION != VisionOptions.SLAMDUNK_MEGATAG2_MERGED) return;
     // Trust limelights less if SLAMDunk! is working
-    if (addingMeasurement)
+    if (addingMeasurement) {
+      Logger.recordOutput("Vision/full Limelights", false);
+      RobotContainer.driveSubsystem.addVisionMeasurement(
+          pose2d, lastTimestamp, VisionConstants.POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS.toMatrix());
       limelights.updatePoseEstimate(
           poseEstimator,
           VecBuilder.fill(
               limelights.inputs.translationStddev * 1.5,
               limelights.inputs.translationStddev * 1.5,
               limelights.inputs.rotationStddev * 1.5));
-    else limelights.updatePoseEstimate(poseEstimator);
+    } else {
+      Logger.recordOutput("Vision/full Limelights", true);
+      limelights.updatePoseEstimate(poseEstimator);
+    }
   }
 
   @Override
