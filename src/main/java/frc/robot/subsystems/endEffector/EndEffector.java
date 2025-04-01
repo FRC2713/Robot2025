@@ -1,6 +1,11 @@
 package frc.robot.subsystems.endEffector;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.SetpointConstants;
+import frc.robot.subsystems.constants.ElevatorConstants;
+import frc.robot.subsystems.constants.PivotConstants;
+import frc.robot.subsystems.constants.ShoulderConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -9,6 +14,9 @@ public class EndEffector extends SubsystemBase {
   private final EndEffectorInputsAutoLogged inputs = new EndEffectorInputsAutoLogged();
   private final EndEffectorIO IO;
 
+  @AutoLogOutput(key = "EndEffector/hadAlgae")
+  private boolean hadAlgae = false;
+
   public EndEffector(EndEffectorIO IO) {
     this.IO = IO;
   }
@@ -16,6 +24,20 @@ public class EndEffector extends SubsystemBase {
   public void periodic() {
     IO.updateInputs(this.inputs);
     Logger.processInputs("EndEffector", inputs);
+
+    var hasAlgae = hasAlgae();
+    if (hasAlgae && !hadAlgae) {
+      System.out.println("Algae detected; slowing down SS");
+      RobotContainer.shoulder.setPID(ShoulderConstants.SlowGains);
+      RobotContainer.pivot.setPID(PivotConstants.SlowGains);
+      RobotContainer.elevator.setPID(ElevatorConstants.SlowGains);
+    } else if (!hasAlgae && hadAlgae) {
+      System.out.println("No algae detected; Speeding up SS");
+      RobotContainer.shoulder.setPID(ShoulderConstants.Gains);
+      RobotContainer.pivot.setPID(PivotConstants.Gains);
+      RobotContainer.elevator.setPID(ElevatorConstants.Gains);
+    }
+    hadAlgae = hasAlgae;
   }
 
   public void setCoralRPM(double rpm) {
@@ -23,7 +45,13 @@ public class EndEffector extends SubsystemBase {
   }
 
   public void setAlgaeRPM(double rpm) {
-    IO.setAlgaeRPM(rpm);
+    if (rpm < 0) {
+      IO.setAlgaeRPM(rpm);
+    } else if (hasAlgae()) {
+      IO.setAlgaeRPM(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED.getAsDouble());
+    } else {
+      IO.setAlgaeRPM(rpm);
+    }
   }
 
   @AutoLogOutput(key = "EndEffector/isCoralAtTarget")

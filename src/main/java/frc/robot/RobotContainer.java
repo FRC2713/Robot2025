@@ -125,9 +125,9 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIOKrakens());
         pivot = new Pivot(new PivotIOKrakens());
-        endEffector = new EndEffector(new EndEffectorIOSparks());
         shoulder = new Shoulder(new ShoulderIOKrakens());
         climber = new Climber(new ClimberIOSparks());
+        endEffector = new EndEffector(new EndEffectorIOSparks());
         break;
 
       case SIM:
@@ -140,9 +140,9 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         pivot = new Pivot(new PivotIOSim());
         elevator = new Elevator(new ElevatorIOSim());
-        endEffector = new EndEffector(new EndEffectorIOSim());
         shoulder = new Shoulder(new ShoulderIOSim());
         climber = new Climber(new ClimberIO() {});
+        endEffector = new EndEffector(new EndEffectorIOSim());
         break;
 
       default:
@@ -156,9 +156,9 @@ public class RobotContainer {
                 new ModuleIO() {});
         elevator = new Elevator(new ElevatorIO() {});
         pivot = new Pivot(new PivotIO() {});
-        endEffector = new EndEffector(new EndEffectorIO() {});
         shoulder = new Shoulder(new ShoulderIO() {});
         climber = new Climber(new ClimberIO() {});
+        endEffector = new EndEffector(new EndEffectorIO() {});
         break;
     }
     visionsubsystem =

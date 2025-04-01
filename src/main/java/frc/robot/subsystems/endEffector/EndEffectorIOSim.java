@@ -4,10 +4,16 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.constants.RollerConstants;
 
 /** For the first implementation, the robot controls Tube and Algae with a single NEO */
 public class EndEffectorIOSim implements EndEffectorIO {
+
+  public EndEffectorIOSim() {
+    SmartDashboard.putBoolean("Has Coral", false);
+    SmartDashboard.putBoolean("Has Algae", false);
+  }
 
   private final DCMotor coralMotor = DCMotor.getNEO(1);
   private final DCMotorSim coralSim =
@@ -23,8 +29,6 @@ public class EndEffectorIOSim implements EndEffectorIO {
           algaeMotor);
   private double commandedCoralRPM;
   private double commandedAlgaeRPM;
-
-  private boolean hasCoral = true;
 
   public void updateInputs(EndEffectorInputs inputs) {
     coralSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(commandedCoralRPM));
@@ -44,7 +48,8 @@ public class EndEffectorIOSim implements EndEffectorIO {
 
     inputs.commandedTubeRPM = commandedCoralRPM;
     inputs.commandedAlgaeRollersRPM = commandedAlgaeRPM;
-    inputs.hasCoral = hasCoral;
+    inputs.hasCoral = SmartDashboard.getBoolean("Has Coral", false);
+    inputs.hasAlgae = SmartDashboard.getBoolean("Has Algae", false);
   }
 
   @Override

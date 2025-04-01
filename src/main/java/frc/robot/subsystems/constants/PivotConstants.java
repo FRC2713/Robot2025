@@ -76,6 +76,7 @@ public class PivotConstants {
               .maxTrapezoidalJerk(kTrapezoidalMaxJerk)
               .expo_kV(kExponential_kV)
               .expo_kA(kExponential_kA));
+  public static final LoggedTunableGains SlowGains = Gains.slowDown();
 
   public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(4.395);
   public static final double humanOffsetDegs = -55;

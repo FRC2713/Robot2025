@@ -7,6 +7,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.constants.ElevatorConstants;
+import frc.robot.util.LoggedTunableGains;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -64,5 +65,9 @@ public class Elevator extends SubsystemBase {
 
   public void updateMech2D() {
     this.mech2d.setLength(Units.inchesToMeters(this.inputs.heightInchesLeft));
+  }
+
+  public void setPID(LoggedTunableGains pid) {
+    this.IO.setPID(pid);
   }
 }

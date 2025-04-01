@@ -74,6 +74,7 @@ public class ShoulderConstants {
                   kTrapezoidalMaxVelocity, kTrapezoidalMaxAcceleration, kTrapezoidalMaxJerk)
               .expo_kV(kExponential_kV)
               .expo_kA(kExponential_kA));
+  public static final LoggedTunableGains SlowGains = Gains.slowDown();
 
   public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(233.125);
 
