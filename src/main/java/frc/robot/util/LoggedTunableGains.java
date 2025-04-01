@@ -26,8 +26,10 @@ public class LoggedTunableGains {
   public final LoggedTunableNumber MotionMagicJerk;
   public final LoggedTunableNumber MotionMagicExpo_kV;
   public final LoggedTunableNumber MotionMagicExpo_kA;
+  private String name;
 
   public LoggedTunableGains(String subsystem, ControlGains PID) {
+    this.name = subsystem;
     kP = new LoggedTunableNumber(subsystem + "/PID/P", PID.getKP());
     kI = new LoggedTunableNumber(subsystem + "/PID/I", PID.getKI());
     kD = new LoggedTunableNumber(subsystem + "/PID/D", PID.getKD());
@@ -200,5 +202,20 @@ public class LoggedTunableGains {
         .g(this.getKG())
         .a(this.getKG())
         .v(this.getKV());
+  }
+
+  public LoggedTunableGains slowDown() {
+    return new LoggedTunableGains(
+        "Slow_" + name,
+        new ControlGains()
+            .p(this.getKP())
+            .i(this.getKI())
+            .d(this.getKD())
+            .s(this.getKS())
+            .g(this.getKG())
+            .a(this.getKG())
+            .v(this.getKV())
+            .maxTrapezoidalVelocity(MotionMagicCruiseVelocity.getAsDouble() / 5)
+            .maxTrapezoidalAcceleration(MotionMagicAcceleration.getAsDouble() / 5));
   }
 }

@@ -68,6 +68,7 @@ public class ElevatorConstants {
                   RHRUtil.modeDependentDouble(0.5, 0.1),
                   RHRUtil.modeDependentDouble(0.5, 0.1))
               .exponential(0.6328, 0.1));
+  public static final LoggedTunableGains SlowGains = Gains.slowDown();
 
   public static final double mech2dWidth = Units.inchesToMeters(1);
   public static final Color8Bit mech2dColor = new Color8Bit(255, 0, 0);

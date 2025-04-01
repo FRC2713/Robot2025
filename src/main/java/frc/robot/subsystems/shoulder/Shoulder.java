@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.ShoulderConstants;
+import frc.robot.util.LoggedTunableGains;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -33,6 +34,10 @@ public class Shoulder extends SubsystemBase {
     this.inputs = new ShoulderInputsAutoLogged();
     IO.updateInputs(inputs);
     this.IO = IO;
+  }
+
+  public void setPID(LoggedTunableGains gains) {
+    this.IO.setPID(gains);
   }
 
   public void periodic() {

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.PivotConstants;
+import frc.robot.util.LoggedTunableGains;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -73,5 +74,9 @@ public class Pivot extends SubsystemBase {
   public void setBus(double bus) {
     Logger.recordOutput("bus", bus);
     IO.setBus(bus);
+  }
+
+  public void setPID(LoggedTunableGains pid) {
+    this.IO.setPID(pid);
   }
 }
