@@ -1,6 +1,7 @@
 package frc.robot.subsystems.endEffector;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.SetpointConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -23,7 +24,13 @@ public class EndEffector extends SubsystemBase {
   }
 
   public void setAlgaeRPM(double rpm) {
-    IO.setAlgaeRPM(rpm);
+    if (rpm < 0) {
+      IO.setAlgaeRPM(rpm);
+    } else if (hasAlgae()) {
+      IO.setAlgaeRPM(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED.getAsDouble());
+    } else {
+      IO.setAlgaeRPM(rpm);
+    }
   }
 
   @AutoLogOutput(key = "EndEffector/isCoralAtTarget")
