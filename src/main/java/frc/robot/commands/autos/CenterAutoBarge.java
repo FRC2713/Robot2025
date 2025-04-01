@@ -63,9 +63,10 @@ public class CenterAutoBarge {
         .done()
         .onTrue(
             Commands.sequence(
+                new InstantCommand(() -> driveSubsystem.stop()),
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
                 ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.G_FOUR),
-
+                new InstantCommand(() -> driveSubsystem.stop()),
                 // 3) Score coral
                 ScoreAssistCmds.executeAlgaeGrabInAuto(ScoreLocations.ALGAE_GH)
                     .withDeadline(Commands.waitSeconds(3)),
@@ -80,7 +81,9 @@ public class CenterAutoBarge {
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.BARGE_PREP_FORWARDS.get(), EndEffector.BARGE_SCORE.get()));
+                new InstantCommand(() -> driveSubsystem.stop()),
+                SuperStructure.BARGE_PREP_FORWARDS.get(),
+                EndEffector.BARGE_SCORE.get()));
 
     return routine;
   }

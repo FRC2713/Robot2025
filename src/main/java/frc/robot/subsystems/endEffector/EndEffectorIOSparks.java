@@ -31,7 +31,7 @@ public class EndEffectorIOSparks implements EndEffectorIO {
         PersistMode.kNoPersistParameters);
 
     algaeMotor.configure(
-        AlgaeClawConstants.createConfig(40),
+        AlgaeClawConstants.createConfig(50),
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
   }

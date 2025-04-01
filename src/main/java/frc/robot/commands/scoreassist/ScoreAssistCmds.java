@@ -66,7 +66,10 @@ public class ScoreAssistCmds {
             Commands.either(
                 SuperStructure.BARGE_PREP_BACKWARDS.get(),
                 SuperStructure.BARGE_PREP_FORWARDS.get(),
-                () -> !DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX)),
+                () ->
+                    AllianceFlipUtil.shouldFlip()
+                        ? !DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX)
+                        : DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX)),
             new DriveAtLongitude(
                 () -> AllianceFlipUtil.apply(ScoreAssistConstants.bargeAlignmentX),
                 RobotContainer.driveSubsystem))

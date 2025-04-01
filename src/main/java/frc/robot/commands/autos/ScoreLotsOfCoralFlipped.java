@@ -73,6 +73,7 @@ public class ScoreLotsOfCoralFlipped {
         .done()
         .onTrue(
             Commands.sequence(
+                new InstantCommand(() -> driveSubsystem.stop()),
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
                 ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.J_FOUR),
                 // 2) Wait to make sure coral is outtathere

@@ -4,9 +4,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.SetpointConstants;
+import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
+import frc.robot.commands.ShoulderCmds;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -104,13 +106,15 @@ public class SuperStructure {
 
   public static Supplier<Command> BARGE_PREP_BACKWARDS =
       () ->
-          new SetAllDOFS(
-              "BARGE BACKWARDS",
-              "ALGAE_HOLD",
-              SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
-              SetpointConstants.Elevator.BARGE_HEIGHT_IN,
-              SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES_BACKWARDS,
-              SetpointConstants.Pivot.BARGE_ANGLE_DEG_BACKWARDS);
+          Commands.sequence(
+              new InstantCommand(() -> Logger.recordOutput("Active SS", "BARGE_BACKWARDS")),
+              // RollerCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED),
+              AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED),
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.BARGE_HEIGHT_IN),
+              PivotCmds.setAngle(90),
+              ShoulderCmds.setAngleAndWait(
+                  SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES_BACKWARDS),
+              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.BARGE_ANGLE_DEG_BACKWARDS));
 
   // TODO: cleanup these algae commands using SetAllDOFS or SetDOFSOneAtATime
   // TODO: use the LoggedTunableNumbers created in SetpointConstants instead of hard-coded values
