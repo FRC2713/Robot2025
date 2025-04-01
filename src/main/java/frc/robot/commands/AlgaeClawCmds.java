@@ -66,4 +66,13 @@ public class AlgaeClawCmds {
   public static Command intake(DoubleSupplier targetRpm) {
     return Commands.sequence(setSpeed(targetRpm));
   }
+
+  public static Command stop() {
+    return new InstantCommand(() -> RobotContainer.endEffector.setAlgaeRPM(0.0));
+  }
+
+  public static Command setAlgaeCurrentLimit(int algaeCurrentLimit) {
+    return new InstantCommand(
+        () -> RobotContainer.endEffector.setAlgaeCurrentLimit(algaeCurrentLimit));
+  }
 }

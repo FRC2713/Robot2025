@@ -24,6 +24,7 @@ public class EndEffector {
       () ->
           Commands.sequence(
               Commands.runOnce(() -> Logger.recordOutput("Active EE", "ALGAE_GRAB")),
+              AlgaeClawCmds.setAlgaeCurrentLimit(80),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED));
 
   public static Supplier<Command> WAIT_UNTIL_ALGAE = () -> AlgaeClawCmds.waitUntilAlgae();
@@ -32,6 +33,7 @@ public class EndEffector {
       () ->
           Commands.sequence(
               Commands.runOnce(() -> Logger.recordOutput("Active EE", "ALGAE_HOLD")),
+              AlgaeClawCmds.setAlgaeCurrentLimit(40),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED));
 
   public static Supplier<Command> ALGAE_GRAB_AND_CORAL_SCORE =

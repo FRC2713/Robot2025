@@ -192,7 +192,11 @@ public class SuperStructure {
                   SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
                   SetpointConstants.Elevator.ALGAE_GROUND_IN,
                   SetpointConstants.Shoulder.ALGAE_GROUND_DEG,
-                  SetpointConstants.Pivot.ALGAE_GROUND_DEG));
+                  SetpointConstants.Pivot.ALGAE_GROUND_DEG),
+              EndEffector.ALGAE_GRAB.get(),
+              AlgaeClawCmds.waitUntilAlgae(),
+              SuperStructure.STARTING_CONF_WITH_ALGAE.get(),
+              EndEffector.ALGAE_HOLD.get());
 
   public static Supplier<Command> ALGAE_SAFE_RETRACT =
       () ->

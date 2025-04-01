@@ -93,4 +93,20 @@ public class EndEffectorIOSparks implements EndEffectorIO {
     return Math.abs(targetAlgaeRPM - algaeMotor.getEncoder().getVelocity())
         < AlgaeClawConstants.AT_TARGET_GIVE_RPM;
   }
+
+  @Override
+  public void setCoralCurrentLimit(int currentLimit) {
+    coralMotor.configureAsync(
+        RollerConstants.createConfig(currentLimit, true),
+        ResetMode.kResetSafeParameters,
+        PersistMode.kNoPersistParameters);
+  }
+
+  @Override
+  public void setAlgaeCurrentLimit(int algaeCurrentLimit) {
+    algaeMotor.configureAsync(
+        AlgaeClawConstants.createConfig(algaeCurrentLimit),
+        ResetMode.kResetSafeParameters,
+        PersistMode.kNoPersistParameters);
+  }
 }
