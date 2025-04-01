@@ -96,19 +96,18 @@ public class SuperStructure {
 
   public static Supplier<Command> BARGE_PREP_FORWARDS =
       () ->
-          new SetAllDOFS(
-              "BARGE FORWARDS",
-              "ALGAE_HOLD",
-              SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
-              SetpointConstants.Elevator.BARGE_HEIGHT_IN,
-              SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES,
-              SetpointConstants.Pivot.BARGE_ANGLE_DEG);
+          Commands.sequence(
+              new InstantCommand(() -> Logger.recordOutput("Active SS", "BARGE_BACKWARDS")),
+              AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED),
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.BARGE_HEIGHT_IN),
+              PivotCmds.setAngle(90),
+              ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES),
+              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.BARGE_ANGLE_DEG));
 
   public static Supplier<Command> BARGE_PREP_BACKWARDS =
       () ->
           Commands.sequence(
               new InstantCommand(() -> Logger.recordOutput("Active SS", "BARGE_BACKWARDS")),
-              // RollerCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED),
               ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.BARGE_HEIGHT_IN),
               PivotCmds.setAngle(90),
