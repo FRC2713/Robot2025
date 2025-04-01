@@ -19,6 +19,8 @@ public interface EndEffectorIO {
     public boolean hasAlgae = false;
     public boolean hasCoral = false;
     public double algaeSensorDistance = 0.0;
+    public int currentLimit = 0;
+    public int algaeCurrentLimit = 0;
   }
 
   public default void updateInputs(EndEffectorInputs inputs) {}
@@ -40,4 +42,8 @@ public interface EndEffectorIO {
   public default boolean isAlgaeAtTarget() {
     return true;
   }
+
+  public default void setCoralCurrentLimit(int currentLimit) {}
+
+  public default void setAlgaeCurrentLimit(int algaeCurrentLimit) {}
 }

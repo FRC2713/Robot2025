@@ -68,4 +68,19 @@ public class EndEffectorIOSim implements EndEffectorIO {
     return Math.abs(commandedAlgaeRPM - algaeSim.getAngularVelocityRPM())
         < RollerConstants.AT_TARGET_GIVE_RPM;
   }
+
+  @Override
+  public void setEnableLimitSwitch(boolean setEnable) {
+    // No-op in simulation
+  }
+
+  @Override
+  public void setCoralCurrentLimit(int currentLimit) {
+    // No-op in simulation
+  }
+
+  @Override
+  public void setAlgaeCurrentLimit(int algaeCurrentLimit) {
+    // No-op in simulation
+  }
 }

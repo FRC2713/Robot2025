@@ -47,4 +47,12 @@ public class EndEffector extends SubsystemBase {
   public void setEnableLimitSwitch(boolean setEnable) {
     IO.setEnableLimitSwitch(setEnable);
   }
+
+  public void setCoralCurrentLimit(int currentLimit) {
+    IO.setCoralCurrentLimit(currentLimit);
+  }
+
+  public void setAlgaeCurrentLimit(int algaeCurrentLimit) {
+    IO.setAlgaeCurrentLimit(algaeCurrentLimit);
+  }
 }
