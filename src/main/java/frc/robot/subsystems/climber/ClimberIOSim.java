@@ -52,6 +52,8 @@ public class ClimberIOSim implements ClimberIO {
     inputs.servoCommandedPos = servoPos;
 
     inputs.commandedAngleDegs = targetAngleDeg;
+
+    inputs.detectedCage = false;
   }
 
   // right now climber just uses voltage control

@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SoftLimitConfig;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.subsystems.constants.ClimberConstants;
 import frc.robot.util.LoggedTunableGains;
@@ -16,6 +17,7 @@ public class ClimberIOSparks implements ClimberIO {
   public SparkFlex leftMotor = new SparkFlex(ClimberConstants.kLeftCANId, MotorType.kBrushless);
   public SparkFlex rightMotor = new SparkFlex(ClimberConstants.kRightCANId, MotorType.kBrushless);
   public Servo servo = new Servo(0);
+  public DigitalInput sensor = new DigitalInput(0);
   private double targetAngleDegrees;
 
   public ClimberIOSparks() {
@@ -46,6 +48,8 @@ public class ClimberIOSparks implements ClimberIO {
     inputs.servoCommandedPos = servo.getPosition();
 
     inputs.commandedAngleDegs = this.targetAngleDegrees;
+
+    inputs.detectedCage = this.sensor.get();
   }
 
   @Override

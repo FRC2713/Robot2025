@@ -18,6 +18,8 @@ public interface ClimberIO {
 
     public double commandedAngleDegs = 0.0;
     public double servoCommandedPos = 0.0;
+
+    public boolean detectedCage = false;
   }
 
   public default void updateInputs(ClimberInputs inputs) {}
