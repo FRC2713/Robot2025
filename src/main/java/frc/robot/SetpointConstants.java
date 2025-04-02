@@ -40,7 +40,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Elevator/SS/Ground Algae Height", 0);
 
     public static final LoggedTunableNumber ALGAE_L3_IN =
-        new LoggedTunableNumber("Elevator/SS/Algae L3 Height", 25);
+        new LoggedTunableNumber("Elevator/SS/Algae L3 Height", 10.6);
 
     public static final LoggedTunableNumber ALGAE_L2_IN =
         new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 0);
@@ -67,7 +67,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Shoulder/SS/L3 Angle", -150);
 
     public static final LoggedTunableNumber L4_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L4 Angle", 130);
+        new LoggedTunableNumber("Shoulder/SS/L4 Angle", 132);
     public static final LoggedTunableNumber L4_PREP_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/L4 Prep Angle", 90);
 
@@ -88,10 +88,10 @@ public class SetpointConstants {
             "Shoulder/SS/Barge Backwards Angle", BARGE_ANGLE_DEGREES.get() + 360);
 
     public static final LoggedTunableNumber ALGAE_GROUND_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Ground Algae Angle", -45);
+        new LoggedTunableNumber("Shoulder/SS/Ground Algae Angle", -76.2890625);
 
     public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", -180);
+        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", -131);
 
     public static final LoggedTunableNumber ALGAE_L2_DEG =
         new LoggedTunableNumber("Shoulder/SS/Algae L2 Angle", -250);
@@ -103,7 +103,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Pivot/SS/Starting Angle", 35);
 
     public static final LoggedTunableNumber ALGAE_STARTING_ANGLE =
-        new LoggedTunableNumber("Pivot/SS/Starting Angle With Algae", 90);
+        new LoggedTunableNumber("Pivot/SS/Starting Angle With Algae", 35);
 
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Source Intake Angle", 35);
@@ -139,10 +139,10 @@ public class SetpointConstants {
         new LoggedTunableNumber("Pivot/SS/Safe Angle", 8);
 
     public static final LoggedTunableNumber ALGAE_GROUND_DEG =
-        new LoggedTunableNumber("Pivot/SS/Ground Algae Angle", -45);
+        new LoggedTunableNumber("Pivot/SS/Ground Algae Angle", -38.4765625);
 
     public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber("Pivot/SS/Algae L3 Angle", 190);
+        new LoggedTunableNumber("Pivot/SS/Algae L3 Angle", 117);
 
     public static final LoggedTunableNumber ALGAE_L2_DEG =
         new LoggedTunableNumber("Pivot/SS/Algae L2 Angle", 190);

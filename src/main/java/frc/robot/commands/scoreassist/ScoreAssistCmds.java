@@ -84,13 +84,17 @@ public class ScoreAssistCmds {
                 start(), // 1) activate score assist
                 Commands.either(
                     Commands.sequence(
-                        executePath(), // 2a) path-find close to target (with manual
+                        // Commands.deadline(
+                        executePath(),
+                        // executePrep()
+                        //     .beforeStarting(
+                        //         Commands.waitSeconds(
+                        //             1))), // 2a) path-find close to target (with manual
                         // override)
                         executeDrive() // 2b) drive to target
                         ),
-                    executeDrive(),
-                    RobotContainer.scoreAssist::isAtPathTargetPose),
-                executePrep()), // 3) execute prep
+                    Commands.parallel(executeDrive(), executePrep()),
+                    RobotContainer.scoreAssist::isAtPathTargetPose)), // 3) execute prep
             stop(),
             executeSS())
         .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
@@ -128,15 +132,16 @@ public class ScoreAssistCmds {
   /** This drives to target, moves the SS when ready, and scores in the processor when ready */
   private static Command executeProcessorScore() {
     return Commands.parallel(
-            Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.PROCESSOR),
-            start(),
-            SuperStructure.PROCESSOR_PREP.get(),
-            Commands.sequence(
-                new DriveToPose(
-                    () -> AllianceFlipUtil.apply(ScoreAssistConstants.processorPose),
-                    RobotContainer.driveSubsystem),
-                EndEffector.PROCESSOR_SCORE.get()))
-        .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
+        Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.PROCESSOR),
+        start(),
+        SuperStructure.PROCESSOR_PREP.get()
+        // Commands.sequence(
+        //     new DriveToPose(
+        //         () -> AllianceFlipUtil.apply(ScoreAssistConstants.processorPose),
+        //         RobotContainer.driveSubsystem),
+        //     EndEffector.PROCESSOR_SCORE.get()
+        )
+    .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
   /** This drives to target, moves the SS when ready, and runs the rollers when ready */

@@ -54,7 +54,7 @@ public class ShoulderConstants {
   public static final double kTrapezoidalMaxAcceleration = 4;
   public static final double kTrapezoidalMaxJerk = 10;
   public static final double kExponential_kV = 13;
-  public static final double kExponential_kA = 0.11;
+  public static final double kExponential_kA = 0.8;
 
   public static final LoggedTunableGains Gains =
       new LoggedTunableGains(

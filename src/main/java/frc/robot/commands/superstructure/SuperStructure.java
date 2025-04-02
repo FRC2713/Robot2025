@@ -186,13 +186,11 @@ public class SuperStructure {
               new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_GRAB_GROUND")),
               ElevatorCmds.setHeightAndWait(
                   SetpointConstants.Elevator.ALGAE_GROUND_IN), // runs the elevator first
-              new SetAllDOFS(
-                  "ALGAE_GRAB_GROUND",
-                  "ALGAE_GRAB",
-                  SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
-                  SetpointConstants.Elevator.ALGAE_GROUND_IN,
-                  SetpointConstants.Shoulder.ALGAE_GROUND_DEG,
-                  SetpointConstants.Pivot.ALGAE_GROUND_DEG),
+              new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_GRAB_GROUND")),
+              new InstantCommand(() -> Logger.recordOutput("Active EE", "ALGAE_GRAB_SPEED")),
+              AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
+              ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_GROUND_DEG),
+              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.ALGAE_GROUND_DEG),
               EndEffector.ALGAE_GRAB.get(),
               AlgaeClawCmds.waitUntilAlgae(),
               SuperStructure.STARTING_CONF_WITH_ALGAE.get(),

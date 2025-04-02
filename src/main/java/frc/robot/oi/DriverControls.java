@@ -84,12 +84,7 @@ public class DriverControls {
                 Commands.runOnce(() -> RobotContainer.disableSourceAlign = true),
                 EndEffector.STOP_ROLLERS.get()));
 
-    // Enable/disable reefalign
-    // driver
-    //     .b()
-    //     .onTrue(Commands.runOnce(() -> RobotContainer.disableReefAlign = false))
-    //     .onFalse(Commands.runOnce(() -> RobotContainer.disableReefAlign = true));
-
+    driver.b().onTrue(SuperStructure.ALGAE_GRAB_GROUND.get());
     // Climber
     driver
         .leftTrigger(0.1)

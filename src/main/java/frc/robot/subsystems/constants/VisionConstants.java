@@ -28,7 +28,7 @@ public class VisionConstants {
   }
 
   // its probably bad OOD to have this but ¯\_(ツ)_/¯
-  public static final VisionOptions ACTIVE_VISION_OPTION = VisionOptions.SLAMDUNK_MEGATAG2_MERGED;
+  public static final VisionOptions ACTIVE_VISION_OPTION = VisionOptions.MEGATAG2;
 
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_STATE_STDEVS =
       new PoseEstimatorErrorStDevs(1.0, Units.degreesToRadians(1));
