@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.ClimberCmds;
+import frc.robot.commands.DriveAtLongitude;
 import frc.robot.commands.DriveCmds;
 import frc.robot.commands.climber.Climb;
 import frc.robot.commands.scoreassist.ScoreAssistCmds;
@@ -16,6 +17,10 @@ import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.SourceAlign;
+import frc.robot.subsystems.constants.ScoreAssistConstants;
+import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.ReefTracker;
+import frc.robot.util.ScoreAssistMessage.GoalType;
 
 public class DriverControls {
   private final CommandXboxController driver = new CommandXboxController(0);
@@ -23,9 +28,26 @@ public class DriverControls {
   private Trigger reefAlignTrigger = new Trigger(ReefAlign.getInstance()::shouldDoReefAlign);
   private Trigger sourceAlignTrigger = new Trigger(SourceAlign.getInstance()::shouldDoSourceAlign);
 
+  private Trigger prepProcessorTrigger =
+      new Trigger(() -> ReefTracker.getInstance().getGoalTypeOrCoral() == GoalType.PROCESSOR);
+  private Trigger prepBargeTrigger =
+      new Trigger(() -> ReefTracker.getInstance().getGoalTypeOrCoral() == GoalType.BARGE);
+
   public void configureTriggers() {
     reefAlignTrigger.onTrue(this.setToReefAlignCmd()).onFalse(this.setToNormalDriveCmd());
     sourceAlignTrigger.onTrue(this.setToSourceAlignCmd()).onFalse(this.setToNormalDriveCmd());
+
+    prepBargeTrigger.onTrue(
+        Commands.parallel(
+            EndEffector.ALGAE_HOLD.get(),
+            Commands.either(
+                SuperStructure.BARGE_PREP_BACKWARDS.get(),
+                SuperStructure.BARGE_PREP_FORWARDS.get(),
+                () ->
+                    AllianceFlipUtil.shouldFlip()
+                        ? !DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX)
+                        : DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX))));
+    prepProcessorTrigger.onTrue(SuperStructure.PROCESSOR_PREP.get());
   }
 
   public void configureButtonBindings() {
@@ -66,7 +88,7 @@ public class DriverControls {
         .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.get())
         .onFalse(EndEffector.STOP_ROLLERS.get());
 
-    // Score Coral w Score Assist
+    // Score Contextually w Score Assist
     driver
         .rightBumper()
         .onTrue(ScoreAssistCmds.executeReefTrackerScore())

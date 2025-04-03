@@ -1,6 +1,5 @@
 package frc.robot;
 
-import frc.robot.subsystems.constants.ClimberConstants;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 
@@ -78,7 +77,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Shoulder/SS/Climb Angle", -147);
 
     public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Proc Score Angle", -90);
+        new LoggedTunableNumber("Shoulder/SS/Proc Score Angle", -76.2890625);
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEGREES =
         new LoggedTunableNumber("Shoulder/SS/Barge Angle", -270);
@@ -184,9 +183,9 @@ public class SetpointConstants {
         new LoggedTunableNumber("Climber/SS/Inputs to Volts", 10);
 
     public static final LoggedTunableNumber MIN_ANGLE_CLIMBING =
-        new LoggedTunableNumber("Climber/SS/Min Angle Climbing", 35);
+        new LoggedTunableNumber("Climber/SS/Min Angle Climbing", 0);
     public static final LoggedTunableNumber MAX_ANGLE_CLIMBING =
-        new LoggedTunableNumber("Climber/SS/Max Angle Climbing", ClimberConstants.kMaxAngle);
+        new LoggedTunableNumber("Climber/SS/Max Angle Climbing", 180);
 
     public static final LoggedTunableNumber CLEARANCE_ANGLE =
         new LoggedTunableNumber("Climber/SS/Clearance Angle", 180.0);
