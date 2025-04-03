@@ -10,7 +10,6 @@ import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.subsystems.constants.DriveConstants;
 import java.util.Optional;
 import java.util.function.Supplier;
-
 import lombok.Getter;
 
 public enum ScoreNode {

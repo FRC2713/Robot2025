@@ -137,8 +137,8 @@ public class Robot extends LoggedRobot {
     };
 
     Logger.recordOutput(
-      "FieldConstants/BranchAPose",
-      FieldConstants.Reef.branchPositions2d.get(1).get(FieldConstants.ReefLevel.L2));
+        "FieldConstants/BranchAPose",
+        FieldConstants.Reef.branchPositions2d.get(1).get(FieldConstants.ReefLevel.L2));
     Logger.recordOutput("FieldConstants/centerFaces", FieldConstants.Reef.centerFaces);
     Logger.recordOutput("FieldConstants/processorFace", FieldConstants.Processor.centerFace.get());
 
