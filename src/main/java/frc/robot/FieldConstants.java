@@ -13,9 +13,11 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.util.LoggedTunableNumber;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Supplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -24,20 +26,26 @@ import lombok.RequiredArgsConstructor;
  * have a blue alliance origin.
  */
 public class FieldConstants {
-  public static final FieldType fieldType = FieldType.WELDED;
 
-  public static final double fieldLength = AprilTagLayoutType.OFFICIAL.getLayout().getFieldLength();
-  public static final double fieldWidth = AprilTagLayoutType.OFFICIAL.getLayout().getFieldWidth();
+  private static LoggedTunableNumber activeFieldTypeIdx = new LoggedTunableNumber("Field Type Idx");
+
+  public static FieldType fieldType = FieldType.WELDED;
+
+  public static final Supplier<Double> fieldLength =
+      () -> Double.valueOf(AprilTagLayoutType.OFFICIAL.getLayout().getFieldLength());
+  public static final Supplier<Double> fieldWidth =
+      () -> Double.valueOf(AprilTagLayoutType.OFFICIAL.getLayout().getFieldWidth());
   public static final double startingLineX =
       Units.inchesToMeters(299.438); // Measured from the inside of starting line
   public static final double algaeDiameter = Units.inchesToMeters(16);
 
   public static class Processor {
-    public static final Pose2d centerFace =
-        new Pose2d(
-            AprilTagLayoutType.OFFICIAL.getLayout().getTagPose(16).get().getX(),
-            0,
-            Rotation2d.fromDegrees(90));
+    public static final Supplier<Pose2d> centerFace =
+        () ->
+            new Pose2d(
+                AprilTagLayoutType.OFFICIAL.getLayout().getTagPose(16).get().getX(),
+                0,
+                Rotation2d.fromDegrees(90));
   }
 
   public static class Barge {
@@ -60,17 +68,18 @@ public class FieldConstants {
             Units.inchesToMeters(33.526),
             Units.inchesToMeters(25.824),
             Rotation2d.fromDegrees(144.011 - 90));
-    public static final Pose2d leftCenterFace =
-        new Pose2d(
-            rightCenterFace.getX(),
-            fieldWidth - rightCenterFace.getY(),
-            Rotation2d.fromRadians(-rightCenterFace.getRotation().getRadians()));
+    public static final Supplier<Pose2d> leftCenterFace =
+        () ->
+            new Pose2d(
+                rightCenterFace.getX(),
+                fieldWidth.get() - rightCenterFace.getY(),
+                Rotation2d.fromRadians(-rightCenterFace.getRotation().getRadians()));
   }
 
   public static class Reef {
     public static final double faceLength = Units.inchesToMeters(36.792600);
-    public static final Translation2d center =
-        new Translation2d(Units.inchesToMeters(176.746), fieldWidth / 2.0);
+    public static final Supplier<Translation2d> center =
+        () -> new Translation2d(Units.inchesToMeters(176.746), fieldWidth.get() / 2.0);
     public static final double faceToZoneLine =
         Units.inchesToMeters(12); // Side of the reef to the inside of the reef zone line
 
@@ -82,7 +91,12 @@ public class FieldConstants {
     public static final List<Map<ReefLevel, Pose2d>> branchPositions2d = new ArrayList<>();
 
     static {
+      Reef.init();
+    }
+
+    public static void init() {
       // Initialize faces
+      AprilTagLayoutType.OFFICIAL.init("2025-official");
       var aprilTagLayout = AprilTagLayoutType.OFFICIAL.getLayout();
       centerFaces[0] = aprilTagLayout.getTagPose(18).get().toPose2d(); // blue AB
       centerFaces[1] = aprilTagLayout.getTagPose(19).get().toPose2d(); // blue KL
@@ -98,7 +112,8 @@ public class FieldConstants {
         Map<ReefLevel, Pose2d> fillRight2d = new HashMap<>();
         Map<ReefLevel, Pose2d> fillLeft2d = new HashMap<>();
         for (var level : ReefLevel.values()) {
-          Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
+          Pose2d poseDirection =
+              new Pose2d(center.get(), Rotation2d.fromDegrees(180 - (60 * face)));
           double adjustX = Units.inchesToMeters(30.738);
           double adjustY = Units.inchesToMeters(6.469);
 
@@ -147,12 +162,20 @@ public class FieldConstants {
   public static class StagingPositions {
     // Measured from the center of the ice cream
     public static final double separation = Units.inchesToMeters(72.0);
-    public static final Pose2d middleIceCream =
-        new Pose2d(Units.inchesToMeters(48), fieldWidth / 2.0, new Rotation2d());
-    public static final Pose2d leftIceCream =
-        new Pose2d(Units.inchesToMeters(48), middleIceCream.getY() + separation, new Rotation2d());
-    public static final Pose2d rightIceCream =
-        new Pose2d(Units.inchesToMeters(48), middleIceCream.getY() - separation, new Rotation2d());
+    public static final Supplier<Pose2d> middleIceCream =
+        () -> new Pose2d(Units.inchesToMeters(48), fieldWidth.get() / 2.0, new Rotation2d());
+    public static final Supplier<Pose2d> leftIceCream =
+        () ->
+            new Pose2d(
+                Units.inchesToMeters(48),
+                middleIceCream.get().getY() + separation,
+                new Rotation2d());
+    public static final Supplier<Pose2d> rightIceCream =
+        () ->
+            new Pose2d(
+                Units.inchesToMeters(48),
+                middleIceCream.get().getY() - separation,
+                new Rotation2d());
   }
 
   public enum ReefLevel {
@@ -190,11 +213,15 @@ public class FieldConstants {
     FIELD_BORDER("2025-field-border");
 
     AprilTagLayoutType(String name) {
+      this.init(name);
+    }
+
+    public void init(String name) {
       if (Constants.disableHAL) {
-        layout = null;
+        this.layout = null;
       } else {
         try {
-          layout =
+          this.layout =
               new AprilTagFieldLayout(
                   Path.of(
                       Filesystem.getDeployDirectory().getPath(),
@@ -205,11 +232,11 @@ public class FieldConstants {
           throw new RuntimeException(e);
         }
       }
-      if (layout == null) {
-        layoutString = "";
+      if (this.layout == null) {
+        this.layoutString = "";
       } else {
         try {
-          layoutString = new ObjectMapper().writeValueAsString(layout);
+          this.layoutString = new ObjectMapper().writeValueAsString(this.layout);
         } catch (JsonProcessingException e) {
           throw new RuntimeException(
               "Failed to serialize AprilTag layout JSON " + toString() + "for Northstar");
@@ -217,8 +244,8 @@ public class FieldConstants {
       }
     }
 
-    private final AprilTagFieldLayout layout;
-    private final String layoutString;
+    private AprilTagFieldLayout layout;
+    private String layoutString;
   }
 
   public record CoralObjective(int branchId, ReefLevel reefLevel) {}
@@ -231,5 +258,18 @@ public class FieldConstants {
     WELDED("welded");
 
     @Getter private final String jsonFolder;
+  }
+
+  static {
+    LoggedTunableNumber.ifChanged(
+        activeFieldTypeIdx.hashCode(),
+        () -> {
+          if ((int) activeFieldTypeIdx.get() == 0) FieldConstants.fieldType = FieldType.WELDED;
+          else FieldConstants.fieldType = FieldType.ANDYMARK;
+
+          AprilTagLayoutType.OFFICIAL.init("2025-official");
+          Reef.init();
+        },
+        activeFieldTypeIdx);
   }
 }
