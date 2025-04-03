@@ -82,7 +82,6 @@ public class VisionIOLimelights implements VisionIO {
     var timeDiff = (Logger.getTimestamp() / 1e6) - slamdunktime;
     Logger.recordOutput("Vision/timeDiffSec", timeDiff);
 
-
     if (RobotContainer.driveSubsystem.getAngularVelocityRadPerSec() > Units.degreesToRadians(720)) {
       this.state = CombinedMegaTagState.REJECTED_DUE_TO_SPIN_BLUR;
     }

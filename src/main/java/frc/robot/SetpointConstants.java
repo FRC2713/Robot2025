@@ -172,7 +172,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("AlgaeClaw/SS/Barge Score Speed", -4000);
 
     public static final DoubleSupplier ALGAE_HOLD_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/Algae Hold Speed", 6000);
+        new LoggedTunableNumber("AlgaeClaw/SS/Algae Hold Speed", 750);
 
     public static final DoubleSupplier ALGAE_DETECTED_CURRENT_LIMIT =
         new LoggedTunableNumber("AlgaeClaw/SS/Algae Detected Current Limit", 30);
