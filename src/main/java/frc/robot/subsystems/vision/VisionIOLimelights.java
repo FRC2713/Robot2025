@@ -5,8 +5,14 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Quaternion;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -27,6 +33,8 @@ public class VisionIOLimelights implements VisionIO {
   private CombinedMegaTagState state;
   private StddevCalculationState stddevCalcState;
   private Alert alert = new Alert("Null Limelight pose", AlertType.kWarning);
+    private NetworkTable table = NetworkTableInstance.getDefault().getTable("slamdunk");
+    private final double[] defaultPose = {0, 0, 0, 0, 0, 0, 0, -1};
 
   public VisionIOLimelights(LimelightInfo primary, LimelightInfo secondary, Drivetrain drivetrain) {
     primary.setCameraPose_RobotSpace();
@@ -57,6 +65,14 @@ public class VisionIOLimelights implements VisionIO {
 
   @Override
   public void update() {
+
+        var slamdunkposeArray = table.getEntry("pose").getDoubleArray(defaultPose);
+    var slamdunkpose =
+        new Pose3d(
+            new Translation3d(slamdunkposeArray[0], slamdunkposeArray[1], slamdunkposeArray[2]),
+            new Rotation3d(new Quaternion(slamdunkposeArray[6], slamdunkposeArray[3], slamdunkposeArray[4], slamdunkposeArray[5])));
+    Logger.recordOutput("Odometry/Vision3d", slamdunkpose);
+
     if (RobotContainer.driveSubsystem.getAngularVelocityRadPerSec() > Units.degreesToRadians(720)) {
       this.state = CombinedMegaTagState.REJECTED_DUE_TO_SPIN_BLUR;
     }
