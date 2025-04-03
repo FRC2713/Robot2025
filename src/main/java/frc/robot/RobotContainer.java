@@ -277,9 +277,6 @@ public class RobotContainer {
 
     // Default command, normal field-relative drive
     driverControls.setToNormalDrive();
-
-    Logger.recordOutput("FieldConstants/centerFaces", FieldConstants.Reef.centerFaces);
-    Logger.recordOutput("FieldConstants/processorFace", FieldConstants.Processor.centerFace);
   }
 
   public void disabledPeriodic() {

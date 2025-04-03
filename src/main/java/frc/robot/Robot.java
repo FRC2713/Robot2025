@@ -135,6 +135,13 @@ public class Robot extends LoggedRobot {
       RobotContainer.pivot.pose,
       RobotContainer.climber.pose
     };
+
+    Logger.recordOutput(
+      "FieldConstants/BranchAPose",
+      FieldConstants.Reef.branchPositions2d.get(1).get(FieldConstants.ReefLevel.L2));
+    Logger.recordOutput("FieldConstants/centerFaces", FieldConstants.Reef.centerFaces);
+    Logger.recordOutput("FieldConstants/processorFace", FieldConstants.Processor.centerFace.get());
+
     Logger.recordOutput("componentPoses", componentPoses);
 
     var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);

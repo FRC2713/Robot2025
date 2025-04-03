@@ -9,6 +9,7 @@ import frc.robot.FieldConstants;
 import frc.robot.util.ControlGains;
 import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.LoggedTunableNumber;
+import java.util.function.Supplier;
 
 public class ScoreAssistConstants {
 
@@ -35,8 +36,11 @@ public class ScoreAssistConstants {
   public static final LoggedTunableNumber assistThetaTolerance =
       new LoggedTunableNumber("ScoreAssist/Theta Tolerance", 3); // degrees
 
-  public static final Pose2d processorPose =
-      FieldConstants.Processor.centerFace.transformBy(new Transform2d(1, 0, new Rotation2d()));
+  public static final Supplier<Pose2d> processorPose =
+      () ->
+          FieldConstants.Processor.centerFace
+              .get()
+              .transformBy(new Transform2d(1, 0, new Rotation2d()));
 
   public static final Pose2d bargeAlignmentX =
       new Pose2d(new Translation2d(7.743555545806885, -1), new Rotation2d(Math.PI));

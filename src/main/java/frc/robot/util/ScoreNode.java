@@ -9,45 +9,47 @@ import frc.robot.FieldConstants;
 import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.subsystems.constants.DriveConstants;
 import java.util.Optional;
+import java.util.function.Supplier;
+
 import lombok.Getter;
 
 public enum ScoreNode {
   // indexes start at right branch facing driver station and move clockwise, which means that
   // B is zero
-  A(FieldConstants.Reef.branchPositions2d.get(1).get(ReefLevel.L2), ScoreLocType.CORAL),
-  AB_ALGAE(FieldConstants.Reef.centerFaces[0], ScoreLocType.ALGAE_L3),
-  B(FieldConstants.Reef.branchPositions2d.get(0).get(ReefLevel.L2), ScoreLocType.CORAL),
+  A(() -> FieldConstants.Reef.branchPositions2d.get(1).get(ReefLevel.L2), ScoreLocType.CORAL),
+  AB_ALGAE(() -> FieldConstants.Reef.centerFaces[0], ScoreLocType.ALGAE_L3),
+  B(() -> FieldConstants.Reef.branchPositions2d.get(0).get(ReefLevel.L2), ScoreLocType.CORAL),
 
-  C(FieldConstants.Reef.branchPositions2d.get(11).get(ReefLevel.L2), ScoreLocType.CORAL),
-  CD_ALGAE(FieldConstants.Reef.centerFaces[5], ScoreLocType.ALGAE_L2),
-  D(FieldConstants.Reef.branchPositions2d.get(10).get(ReefLevel.L2), ScoreLocType.CORAL),
+  C(() -> FieldConstants.Reef.branchPositions2d.get(11).get(ReefLevel.L2), ScoreLocType.CORAL),
+  CD_ALGAE(() -> FieldConstants.Reef.centerFaces[5], ScoreLocType.ALGAE_L2),
+  D(() -> FieldConstants.Reef.branchPositions2d.get(10).get(ReefLevel.L2), ScoreLocType.CORAL),
 
-  E(FieldConstants.Reef.branchPositions2d.get(9).get(ReefLevel.L2), ScoreLocType.CORAL),
-  EF_ALGAE(FieldConstants.Reef.centerFaces[4], ScoreLocType.ALGAE_L3),
-  F(FieldConstants.Reef.branchPositions2d.get(8).get(ReefLevel.L2), ScoreLocType.CORAL),
+  E(() -> FieldConstants.Reef.branchPositions2d.get(9).get(ReefLevel.L2), ScoreLocType.CORAL),
+  EF_ALGAE(() -> FieldConstants.Reef.centerFaces[4], ScoreLocType.ALGAE_L3),
+  F(() -> FieldConstants.Reef.branchPositions2d.get(8).get(ReefLevel.L2), ScoreLocType.CORAL),
 
-  G(FieldConstants.Reef.branchPositions2d.get(7).get(ReefLevel.L2), ScoreLocType.CORAL),
-  GH_ALGAE(FieldConstants.Reef.centerFaces[3], ScoreLocType.ALGAE_L2),
-  H(FieldConstants.Reef.branchPositions2d.get(6).get(ReefLevel.L2), ScoreLocType.CORAL),
+  G(() -> FieldConstants.Reef.branchPositions2d.get(7).get(ReefLevel.L2), ScoreLocType.CORAL),
+  GH_ALGAE(() -> FieldConstants.Reef.centerFaces[3], ScoreLocType.ALGAE_L2),
+  H(() -> FieldConstants.Reef.branchPositions2d.get(6).get(ReefLevel.L2), ScoreLocType.CORAL),
 
-  I(FieldConstants.Reef.branchPositions2d.get(5).get(ReefLevel.L2), ScoreLocType.CORAL),
-  IJ_ALGAE(FieldConstants.Reef.centerFaces[2], ScoreLocType.ALGAE_L3),
-  J(FieldConstants.Reef.branchPositions2d.get(4).get(ReefLevel.L2), ScoreLocType.CORAL),
+  I(() -> FieldConstants.Reef.branchPositions2d.get(5).get(ReefLevel.L2), ScoreLocType.CORAL),
+  IJ_ALGAE(() -> FieldConstants.Reef.centerFaces[2], ScoreLocType.ALGAE_L3),
+  J(() -> FieldConstants.Reef.branchPositions2d.get(4).get(ReefLevel.L2), ScoreLocType.CORAL),
 
-  K(FieldConstants.Reef.branchPositions2d.get(3).get(ReefLevel.L2), ScoreLocType.CORAL),
-  KL_ALGAE(FieldConstants.Reef.centerFaces[1], ScoreLocType.ALGAE_L2),
-  L(FieldConstants.Reef.branchPositions2d.get(2).get(ReefLevel.L2), ScoreLocType.CORAL);
+  K(() -> FieldConstants.Reef.branchPositions2d.get(3).get(ReefLevel.L2), ScoreLocType.CORAL),
+  KL_ALGAE(() -> FieldConstants.Reef.centerFaces[1], ScoreLocType.ALGAE_L2),
+  L(() -> FieldConstants.Reef.branchPositions2d.get(2).get(ReefLevel.L2), ScoreLocType.CORAL);
 
-  private Pose2d pose;
+  private Supplier<Pose2d> pose;
   @Getter private ScoreLocType type;
 
-  ScoreNode(Pose2d pose, ScoreLocType type) {
+  ScoreNode(Supplier<Pose2d> pose, ScoreLocType type) {
     this.pose = pose;
     this.type = type;
   }
 
   public Pose2d getPose() {
-    return pose;
+    return pose.get();
   }
 
   public double yOffset() {
@@ -71,7 +73,7 @@ public enum ScoreNode {
             DriveConstants.coralOffsetFromCenter
                 .getAsDouble(), // offset of scoring mechanism from center of robot
             new Rotation2d(Math.PI));
-    Pose2d alignmentPose = pose.transformBy(robotOffset);
+    Pose2d alignmentPose = getPose().transformBy(robotOffset);
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
       return AllianceFlipUtil.flip(alignmentPose);
     }
@@ -89,7 +91,7 @@ public enum ScoreNode {
             DriveConstants.coralOffsetFromCenter
                 .getAsDouble(), // offset of scoring mechanism from center of robot
             new Rotation2d(Math.PI));
-    Pose2d autoScorePose = pose.transformBy(robotOffset);
+    Pose2d autoScorePose = getPose().transformBy(robotOffset);
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
       return AllianceFlipUtil.flip(autoScorePose);
     }

@@ -57,7 +57,9 @@ public class RHRUtil {
           new SwerveSample(
               state.t,
               state.x,
-              FieldConstants.fieldWidth - (state.y),
+              // TODO: if field constant changes, does de-selecting and re-selecting autos do the
+              // enough?
+              FieldConstants.fieldWidth.get() - (state.y),
               -state.heading,
               state.vx,
               -state.vy,

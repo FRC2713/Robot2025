@@ -11,7 +11,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.Constants.FieldConstants;
+import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.constants.VisionConstants.VisionOptions;
@@ -111,8 +111,8 @@ public class VisionIOPoseEstimator implements VisionIO {
     }
 
     // If out of field
-    if (pose2d.getTranslation().getX() > FieldConstants.fieldLength
-        || pose2d.getTranslation().getY() > FieldConstants.fieldWidth) {
+    if (pose2d.getTranslation().getX() > FieldConstants.fieldLength.get()
+        || pose2d.getTranslation().getY() > FieldConstants.fieldWidth.get()) {
       addingMeasurement = false;
       Logger.recordOutput("Vision/Adding Measurement", false);
       Logger.recordOutput("Vision/Reasoning", "Out of field");

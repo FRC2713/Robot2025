@@ -474,8 +474,8 @@ public class Drivetrain extends SubsystemBase {
   public double getAngleToReef() {
     double RobotX = this.getPose().getX();
     double RobotY = this.getPose().getY();
-    double ReefX = FieldConstants.Reef.center.getX();
-    double ReefY = FieldConstants.Reef.center.getY();
+    double ReefX = FieldConstants.Reef.center.get().getX();
+    double ReefY = FieldConstants.Reef.center.get().getY();
 
     // double output = (((1 / 2) * Math.PI) - Math.atan2(RobotX - ReefX, RobotY - ReefY));
     double output =
@@ -483,7 +483,9 @@ public class Drivetrain extends SubsystemBase {
             (90 - Units.radiansToDegrees(Math.atan2(RobotX - ReefX, RobotY - ReefY) + Math.PI)),
             360);
 
-    Pose2d[] toLog = {new Pose2d(FieldConstants.Reef.center, new Rotation2d()), this.getPose()};
+    Pose2d[] toLog = {
+      new Pose2d(FieldConstants.Reef.center.get(), new Rotation2d()), this.getPose()
+    };
     Logger.recordOutput("ReefRotation/poses", toLog);
 
     Logger.recordOutput("ReefRotation/Angle", output);
