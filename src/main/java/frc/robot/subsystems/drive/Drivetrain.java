@@ -394,6 +394,11 @@ public class Drivetrain extends SubsystemBase {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 
+  @AutoLogOutput(key = "SwerveChassisSpeeds/FieldRelative")
+  public ChassisSpeeds getChassisSpeedsFieldRelative() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(), getRotation());
+  }
+
   /** Returns the current estimated pose. */
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
