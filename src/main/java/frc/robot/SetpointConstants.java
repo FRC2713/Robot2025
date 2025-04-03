@@ -33,7 +33,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Elevator/SS/Proc Height", 0);
 
     public static final LoggedTunableNumber BARGE_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/Barge Height", 26);
+        new LoggedTunableNumber("Elevator/SS/Barge Height", 25.5);
 
     public static final LoggedTunableNumber ALGAE_GROUND_IN =
         new LoggedTunableNumber("Elevator/SS/Ground Algae Height", 0);

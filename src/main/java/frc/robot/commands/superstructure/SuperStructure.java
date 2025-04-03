@@ -97,7 +97,7 @@ public class SuperStructure {
   public static Supplier<Command> BARGE_PREP_FORWARDS =
       () ->
           Commands.sequence(
-              new InstantCommand(() -> Logger.recordOutput("Active SS", "BARGE_BACKWARDS")),
+              new InstantCommand(() -> Logger.recordOutput("Active SS", "BARGE_FORWARDS")),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED),
               ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.BARGE_HEIGHT_IN),
               PivotCmds.setAngle(90),
