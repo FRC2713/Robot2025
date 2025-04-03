@@ -85,7 +85,7 @@ public class ScoreLotsOfCoral {
                     Commands.parallel(
                         SuperStructure.SOURCE_CORAL_INTAKE.get(),
                         new WaitUntilCommand(() -> RobotContainer.endEffector.hasCoral())),
-                    Commands.waitSeconds(1)),
+                    Commands.waitSeconds(3)),
                 Commands.parallel(
                     sourceToReefC.cmd(),
                     SuperStructure.L4_PREP.get().beforeStarting(Commands.waitSeconds(0.4)))));
