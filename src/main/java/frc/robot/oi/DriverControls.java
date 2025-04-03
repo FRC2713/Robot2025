@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
+import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveAtLongitude;
 import frc.robot.commands.DriveCmds;
@@ -138,6 +139,10 @@ public class DriverControls {
                     () -> -1 * SetpointConstants.Drive.INCH_SPEED.getAsDouble()),
                 "Inch Right"))
         .onFalse(this.setToNormalDriveCmd());
+
+    driver.y()
+    .whileTrue(AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.BARGE_SCORE_SPEED))
+    .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
     // POV/x heading controller
     // driver

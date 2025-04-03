@@ -91,7 +91,7 @@ public class ScoreLotsOfCoralFlipped {
                     Commands.parallel(
                         SuperStructure.SOURCE_CORAL_INTAKE.get(),
                         new WaitUntilCommand(() -> RobotContainer.endEffector.hasCoral())),
-                    Commands.waitSeconds(0.2 + 0.5)),
+                    Commands.waitSeconds(0.5)),
                 Commands.parallel(
                     sourceToReefC.cmd(),
                     SuperStructure.L4_PREP.get().beforeStarting(Commands.waitSeconds(0.4)))));
