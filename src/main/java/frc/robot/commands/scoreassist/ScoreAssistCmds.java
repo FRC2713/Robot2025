@@ -132,16 +132,16 @@ public class ScoreAssistCmds {
   /** This drives to target, moves the SS when ready, and scores in the processor when ready */
   private static Command executeProcessorScore() {
     return Commands.parallel(
-        Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.PROCESSOR),
-        start(),
-        SuperStructure.PROCESSOR_PREP.get()
-        // Commands.sequence(
-        //     new DriveToPose(
-        //         () -> AllianceFlipUtil.apply(ScoreAssistConstants.processorPose),
-        //         RobotContainer.driveSubsystem),
-        //     EndEffector.PROCESSOR_SCORE.get()
-        )
-    .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
+            Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.PROCESSOR),
+            start(),
+            SuperStructure.PROCESSOR_PREP.get()
+            // Commands.sequence(
+            //     new DriveToPose(
+            //         () -> AllianceFlipUtil.apply(ScoreAssistConstants.processorPose),
+            //         RobotContainer.driveSubsystem),
+            //     EndEffector.PROCESSOR_SCORE.get()
+            )
+        .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
   /** This drives to target, moves the SS when ready, and runs the rollers when ready */

@@ -63,9 +63,11 @@ public class DriveToPose extends Command {
           DriveConstants.HeadingControllerConstants.angleGains
               .createAngularTrapezoidalPIDController();
     }
-    xscoreAssistController.reset(drive.getPose().getX());
-    yscoreAssistController.reset(drive.getPose().getY());
-    omegascoreAssistController.reset(drive.getRotation().getRadians());
+    var speeds = drive.getChassisSpeedsFieldRelative();
+    xscoreAssistController.reset(drive.getPose().getX(), speeds.vxMetersPerSecond);
+    yscoreAssistController.reset(drive.getPose().getY(), speeds.vyMetersPerSecond);
+    omegascoreAssistController.reset(
+        drive.getRotation().getRadians(), speeds.omegaRadiansPerSecond);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -107,17 +109,27 @@ public class DriveToPose extends Command {
         "ScoreAssist/Driving/X Current Setpoint",
         this.xscoreAssistController.getSetpoint().position);
     Logger.recordOutput(
+        "ScoreAssist/Driving/X Current Setpoint Velocity",
+        this.xscoreAssistController.getSetpoint().velocity);
+    Logger.recordOutput(
         "ScoreAssist/Driving/X Current Goal", this.xscoreAssistController.getGoal().position);
     Logger.recordOutput(
         "ScoreAssist/Driving/Y Current Setpoint",
         this.yscoreAssistController.getSetpoint().position);
     Logger.recordOutput(
+        "ScoreAssist/Driving/Y Current Setpoint Velocity",
+        this.yscoreAssistController.getSetpoint().velocity);
+    Logger.recordOutput(
         "ScoreAssist/Driving/Y Current Goal", this.yscoreAssistController.getGoal().position);
     Logger.recordOutput(
-        "ScoreAssist/Driving/Theta Current Setpoint",
+        "ScoreAssist/Driving/Angle Current Setpoint",
         this.omegascoreAssistController.getSetpoint().position);
+
     Logger.recordOutput(
-        "ScoreAssist/Driving/Theta Current Goal",
+        "ScoreAssist/Driving/Angle Current Setpoint Velocity",
+        this.omegascoreAssistController.getSetpoint().velocity);
+    Logger.recordOutput(
+        "ScoreAssist/Driving/Angle Current Goal",
         this.omegascoreAssistController.getGoal().position);
   }
 
