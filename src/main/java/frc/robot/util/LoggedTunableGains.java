@@ -215,7 +215,7 @@ public class LoggedTunableGains {
             .g(this.getKG())
             .a(this.getKG())
             .v(this.getKV())
-            .maxTrapezoidalVelocity(MotionMagicCruiseVelocity.getAsDouble() / 3)
-            .maxTrapezoidalAcceleration(MotionMagicAcceleration.getAsDouble() / 3));
+            .maxTrapezoidalVelocity(MotionMagicCruiseVelocity.getAsDouble() / 2)
+            .maxTrapezoidalAcceleration(MotionMagicAcceleration.getAsDouble() / 2));
   }
 }

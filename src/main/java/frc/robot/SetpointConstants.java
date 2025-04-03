@@ -152,7 +152,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Roller/SS/L1 Score Speed", 3000);
 
     public static final LoggedTunableNumber L2_PLUS_CORAL_SCORE_SPEED =
-        new LoggedTunableNumber("Roller/SS/L 2+ Score Speed", 4000);
+        new LoggedTunableNumber("Roller/SS/L 2+ Score Speed", 6000);
 
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_SPEED =
         new LoggedTunableNumber("Roller/SS/Source Intake Speed", 4000);

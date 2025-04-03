@@ -140,9 +140,10 @@ public class DriverControls {
                 "Inch Right"))
         .onFalse(this.setToNormalDriveCmd());
 
-    driver.y()
-    .whileTrue(AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.BARGE_SCORE_SPEED))
-    .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
+    driver
+        .y()
+        .whileTrue(AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.BARGE_SCORE_SPEED))
+        .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
 
     // POV/x heading controller
     // driver
