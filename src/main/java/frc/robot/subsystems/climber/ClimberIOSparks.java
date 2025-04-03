@@ -49,7 +49,7 @@ public class ClimberIOSparks implements ClimberIO {
 
     inputs.commandedAngleDegs = this.targetAngleDegrees;
 
-    inputs.detectedCage = this.sensor.get();
+    inputs.detectedCage = !this.sensor.get();
   }
 
   @Override
