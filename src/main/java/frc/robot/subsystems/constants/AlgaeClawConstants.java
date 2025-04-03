@@ -15,7 +15,7 @@ public class AlgaeClawConstants {
   public static final boolean kMotorInverted = true;
 
   // values from Rev velocity control examples
-  public static final ControlGains PID = new ControlGains().p(0.0003);
+  public static final ControlGains PID = new ControlGains().p(1);
 
   public static final double kMaxVelocity = 6000 / 2; // rpm
   public static final double kMaxAcceleration = 6000; // rpm / sec

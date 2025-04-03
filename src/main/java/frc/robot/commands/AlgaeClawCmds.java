@@ -8,6 +8,11 @@ import frc.robot.RobotContainer;
 import java.util.function.DoubleSupplier;
 
 public class AlgaeClawCmds {
+
+  public static Command setVoltage(DoubleSupplier targetVolts) {
+    return new InstantCommand();
+  }
+
   public static Command setSpeed(DoubleSupplier targetRPM) {
     return new InstantCommand(
         () -> RobotContainer.endEffector.setAlgaeRPM(targetRPM.getAsDouble()));

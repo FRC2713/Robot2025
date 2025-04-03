@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.superstructure.EndEffector;
@@ -18,7 +19,11 @@ public enum ScoreLevel {
   FOUR(
       SuperStructure.L4_PREP,
       SuperStructure.L4,
-      () -> EndEffector.CORAL_SCORE.get().beforeStarting(Commands.waitSeconds(0.1)));
+      () ->
+          Commands.either(
+              EndEffector.CORAL_SCORE.get().beforeStarting(Commands.waitSeconds(0.3)),
+              EndEffector.CORAL_SCORE.get().beforeStarting(Commands.waitSeconds(0.1)),
+              DriverStation::isAutonomous));
 
   @Getter private Supplier<Command> prepCommand;
   @Getter private Supplier<Command> ssCommand;

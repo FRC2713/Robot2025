@@ -1,6 +1,7 @@
 package frc.robot.subsystems.endEffector;
 
 import com.revrobotics.spark.SparkAnalogSensor;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
@@ -67,6 +68,11 @@ public class EndEffectorIOSparks implements EndEffectorIO {
   public void setAlgaeRPM(double rpm) {
     this.targetAlgaeRPM = rpm;
     algaeMotor.set(rpm / AlgaeClawConstants.kMaxVelocity);
+  }
+
+  @Override
+  public void setAlgaeVoltage(double volts) {
+    algaeMotor.getClosedLoopController().setReference(volts, ControlType.kVoltage);
   }
 
   @Override
