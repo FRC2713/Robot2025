@@ -137,7 +137,7 @@ public class ScoreAssistCmds {
             SuperStructure.PROCESSOR_PREP.get()
             // Commands.sequence(
             //     new DriveToPose(
-            //         () -> AllianceFlipUtil.apply(ScoreAssistConstants.processorPose),
+            //         () -> AllianceFlipUtil.apply(ScoreAssistConstants.processorPose.get()),
             //         RobotContainer.driveSubsystem),
             //     EndEffector.PROCESSOR_SCORE.get()
             )
