@@ -33,8 +33,8 @@ public class VisionIOLimelights implements VisionIO {
   private CombinedMegaTagState state;
   private StddevCalculationState stddevCalcState;
   private Alert alert = new Alert("Null Limelight pose", AlertType.kWarning);
-    private NetworkTable table = NetworkTableInstance.getDefault().getTable("slamdunk");
-    private final double[] defaultPose = {0, 0, 0, 0, 0, 0, 0, -1};
+  private NetworkTable table = NetworkTableInstance.getDefault().getTable("slamdunk");
+  private final double[] defaultPose = {0, 0, 0, 0, 0, 0, 0, -1};
 
   public VisionIOLimelights(LimelightInfo primary, LimelightInfo secondary, Drivetrain drivetrain) {
     primary.setCameraPose_RobotSpace();
@@ -66,12 +66,22 @@ public class VisionIOLimelights implements VisionIO {
   @Override
   public void update() {
 
-        var slamdunkposeArray = table.getEntry("pose").getDoubleArray(defaultPose);
+    var slamdunkposeArray = table.getEntry("pose").getDoubleArray(defaultPose);
     var slamdunkpose =
         new Pose3d(
             new Translation3d(slamdunkposeArray[0], slamdunkposeArray[1], slamdunkposeArray[2]),
-            new Rotation3d(new Quaternion(slamdunkposeArray[6], slamdunkposeArray[3], slamdunkposeArray[4], slamdunkposeArray[5])));
+            new Rotation3d(
+                new Quaternion(
+                    slamdunkposeArray[6],
+                    slamdunkposeArray[3],
+                    slamdunkposeArray[4],
+                    slamdunkposeArray[5])));
     Logger.recordOutput("Odometry/Vision3d", slamdunkpose);
+
+    var slamdunktime = slamdunkposeArray[7] / 1e6;
+    var timeDiff = (Logger.getTimestamp() / 1e6) - slamdunktime;
+    Logger.recordOutput("Vision/timeDiffSec", timeDiff);
+
 
     if (RobotContainer.driveSubsystem.getAngularVelocityRadPerSec() > Units.degreesToRadians(720)) {
       this.state = CombinedMegaTagState.REJECTED_DUE_TO_SPIN_BLUR;
