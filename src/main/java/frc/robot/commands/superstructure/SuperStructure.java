@@ -229,4 +229,14 @@ public class SuperStructure {
               .addPivotCommand(SetpointConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG)
               .addElevatorCommand(SetpointConstants.Elevator.PROCESSOR_HEIGHT_IN)
               .create();
+
+  public static Supplier<Command> PROCESSOR_PREP_BACKWARDS =
+      () ->
+          new SetDOFSOneAtATimeFactory("PROCESSOR_PREP_BACKWARDS", "ALGAE_HOLD")
+              .addAlgaeSpeedCommand(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED)
+              .addShoulderCommand(
+                  () -> -104)
+              .addPivotCommand(() -> 180)
+              .addElevatorCommand(SetpointConstants.Elevator.PROCESSOR_HEIGHT_IN)
+              .create();
 }
