@@ -43,7 +43,7 @@ public class SetpointConstants {
             "Elevator/SS/Algae L3 Height", 25); // pre-125-field: 25, day-one-dcmp: 10.6
 
     public static final LoggedTunableNumber ALGAE_L2_IN =
-        new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 0);
+        new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 0.8);
   }
 
   public class Shoulder {
