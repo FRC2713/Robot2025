@@ -153,10 +153,11 @@ public class SuperStructure {
               new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_SS_L2")),
               ElevatorCmds.setHeightAndWait(
                   SetpointConstants.Elevator.ALGAE_L2_IN), // runs the elevator first
-              Commands.parallel(
+                  Commands.parallel(EndEffector.ALGAE_GRAB.get()),
+              Commands.sequence(
                   ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_L2_DEG),
-                  PivotCmds.setAngleAndWait(SetpointConstants.Pivot.ALGAE_L2_DEG),
-                  EndEffector.ALGAE_GRAB.get()));
+                  PivotCmds.setAngleAndWait(SetpointConstants.Pivot.ALGAE_L2_DEG)
+                  ));
 
   public static Supplier<Command> ALGAE_COLLECT_L2 =
       () ->
