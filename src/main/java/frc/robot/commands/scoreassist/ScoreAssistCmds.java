@@ -121,13 +121,13 @@ public class ScoreAssistCmds {
   private static Command executeAlgaeGrab() {
     return Commands.sequence(
             Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.CORAL),
-            start(), // 1) activate score assist
-            Commands.parallel(
-                executePrep(),
-                executeDriveToPathPose()), // 2a) path-find close to target (with manual
-            // override)
-            executeDrive(), // 2b) drive to target
-            stop(),
+            // start(), // 1) activate score assist
+            // Commands.parallel(
+            //     executePrep(),
+            //     executeDriveToPathPose()), // 2a) path-find close to target (with manual
+            // // override)
+            // executeDrive(), // 2b) drive to target
+            // stop(),
             executeSS())
         .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }

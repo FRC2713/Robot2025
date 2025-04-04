@@ -39,7 +39,8 @@ public class SetpointConstants {
         new LoggedTunableNumber("Elevator/SS/Ground Algae Height", 0);
 
     public static final LoggedTunableNumber ALGAE_L3_IN =
-        new LoggedTunableNumber("Elevator/SS/Algae L3 Height", 10.6);
+        new LoggedTunableNumber(
+            "Elevator/SS/Algae L3 Height", 25); // pre-125-field: 25, day-one-dcmp: 10.6
 
     public static final LoggedTunableNumber ALGAE_L2_IN =
         new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 0);
@@ -90,7 +91,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Shoulder/SS/Ground Algae Angle", -76.2890625);
 
     public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", -131);
+        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", -131); // didnt change
 
     public static final LoggedTunableNumber ALGAE_L2_DEG =
         new LoggedTunableNumber("Shoulder/SS/Algae L2 Angle", -250);
@@ -141,7 +142,8 @@ public class SetpointConstants {
         new LoggedTunableNumber("Pivot/SS/Ground Algae Angle", -38.4765625);
 
     public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber("Pivot/SS/Algae L3 Angle", 117);
+        new LoggedTunableNumber(
+            "Pivot/SS/Algae L3 Angle", 190); // pre-125-field: 190, day-one-dcmp: 117
 
     public static final LoggedTunableNumber ALGAE_L2_DEG =
         new LoggedTunableNumber("Pivot/SS/Algae L2 Angle", 190);
@@ -183,7 +185,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Climber/SS/Inputs to Volts", 10);
 
     public static final LoggedTunableNumber MIN_ANGLE_CLIMBING =
-        new LoggedTunableNumber("Climber/SS/Min Angle Climbing", 0);
+        new LoggedTunableNumber("Climber/SS/Min Angle Climbing", -15);
     public static final LoggedTunableNumber MAX_ANGLE_CLIMBING =
         new LoggedTunableNumber("Climber/SS/Max Angle Climbing", 180);
 
