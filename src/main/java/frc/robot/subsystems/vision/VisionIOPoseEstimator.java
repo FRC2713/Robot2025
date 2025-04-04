@@ -1,6 +1,5 @@
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -157,12 +156,11 @@ public class VisionIOPoseEstimator implements VisionIO {
       Logger.recordOutput("Vision/full Limelights", false);
       RobotContainer.driveSubsystem.addVisionMeasurement(
           pose2d, lastTimestamp, VisionConstants.POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS.toMatrix());
-      limelights.updatePoseEstimate(
-          poseEstimator);
-          // VecBuilder.fill(
-          //     limelights.inputs.translationStddev * 1.5,
-          //     limelights.inputs.translationStddev * 1.5,
-          //     limelights.inputs.rotationStddev * 1.5));
+      limelights.updatePoseEstimate(poseEstimator);
+      // VecBuilder.fill(
+      //     limelights.inputs.translationStddev * 1.5,
+      //     limelights.inputs.translationStddev * 1.5,
+      //     limelights.inputs.rotationStddev * 1.5));
     } else {
       Logger.recordOutput("Vision/full Limelights", true);
       limelights.updatePoseEstimate(poseEstimator);
