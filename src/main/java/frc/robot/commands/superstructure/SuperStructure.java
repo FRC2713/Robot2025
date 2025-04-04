@@ -234,8 +234,7 @@ public class SuperStructure {
       () ->
           new SetDOFSOneAtATimeFactory("PROCESSOR_PREP_BACKWARDS", "ALGAE_HOLD")
               .addAlgaeSpeedCommand(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED)
-              .addShoulderCommand(
-                  () -> -104)
+              .addShoulderCommand(() -> -104)
               .addPivotCommand(() -> 180)
               .addElevatorCommand(SetpointConstants.Elevator.PROCESSOR_HEIGHT_IN)
               .create();
