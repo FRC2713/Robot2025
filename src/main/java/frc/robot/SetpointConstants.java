@@ -91,7 +91,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Shoulder/SS/Ground Algae Angle", -76.2890625);
 
     public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", -131); // didnt change
+        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", -180); // didnt change
 
     public static final LoggedTunableNumber ALGAE_L2_DEG =
         new LoggedTunableNumber("Shoulder/SS/Algae L2 Angle", -250);
