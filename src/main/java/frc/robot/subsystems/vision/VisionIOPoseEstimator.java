@@ -158,11 +158,11 @@ public class VisionIOPoseEstimator implements VisionIO {
       RobotContainer.driveSubsystem.addVisionMeasurement(
           pose2d, lastTimestamp, VisionConstants.POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS.toMatrix());
       limelights.updatePoseEstimate(
-          poseEstimator,
-          VecBuilder.fill(
-              limelights.inputs.translationStddev * 1.5,
-              limelights.inputs.translationStddev * 1.5,
-              limelights.inputs.rotationStddev * 1.5));
+          poseEstimator);
+          // VecBuilder.fill(
+          //     limelights.inputs.translationStddev * 1.5,
+          //     limelights.inputs.translationStddev * 1.5,
+          //     limelights.inputs.rotationStddev * 1.5));
     } else {
       Logger.recordOutput("Vision/full Limelights", true);
       limelights.updatePoseEstimate(poseEstimator);
