@@ -39,7 +39,7 @@ public class VisionConstants {
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS =
       ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
           ? new PoseEstimatorErrorStDevs(1, Units.degreesToRadians(999999))
-          : new PoseEstimatorErrorStDevs(2, Units.degreesToRadians(99));
+          : new PoseEstimatorErrorStDevs(2, Units.degreesToRadians(999999));
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_VISION_DISABLED =
       new PoseEstimatorErrorStDevs(0.001, Units.degreesToRadians(999999));
 
