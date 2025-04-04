@@ -15,7 +15,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Elevator/SS/L1 Height", 0);
 
     public static final LoggedTunableNumber L2_HEIGHT_IN =
-        new LoggedTunableNumber("Elevator/SS/L2 Height", 2.5);
+        new LoggedTunableNumber("Elevator/SS/L2 Height", 2.9);
 
     public static final LoggedTunableNumber L3_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L3 Height", 18);
@@ -64,7 +64,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Shoulder/SS/L2 Angle", -150);
 
     public static final LoggedTunableNumber L3_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L3 Angle", -150);
+        new LoggedTunableNumber("Shoulder/SS/L3 Angle", -155);
 
     public static final LoggedTunableNumber L4_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/L4 Angle", 132);
