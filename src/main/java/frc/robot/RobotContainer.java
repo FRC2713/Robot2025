@@ -68,6 +68,7 @@ import frc.robot.subsystems.vision.VisionIOLimelights;
 import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.subsystems.vision.VisionIOPoseEstimator;
 import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.RHRHolonomicDriveController;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
@@ -107,6 +108,8 @@ public class RobotContainer {
   public static boolean disableReefAlign = false;
   public static boolean disableSourceAlign = true;
   public static boolean autoScorePathing = false;
+
+  public static LoggedTunableNumber autoWait = new LoggedTunableNumber("auto wait", 0);
 
   // private Trigger climbPrepTrigger = new
   // Trigger(ScoreAssistOld.getInstance()::shouldClimbPrep);

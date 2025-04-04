@@ -33,6 +33,7 @@ public class CenterAutoBarge {
     AutoTrajectory centreBargeOne = routine.trajectory("CentreBarge1");
     AutoTrajectory centreBargeTwo = routine.trajectory("CentreBarge2");
     AutoTrajectory centreBargeThree = routine.trajectory("CentreBarge3");
+    AutoTrajectory centreBargeFour = routine.trajectory("CentreBarge4");
 
     // AutoTrajectory sourceToReefC = routine.trajectory("SourceToReefC");
     // AutoTrajectory reefCToSource = routine.trajectory("ReefCToSource");
@@ -41,6 +42,7 @@ public class CenterAutoBarge {
         .active()
         .onTrue(
             Commands.sequence(
+                Commands.waitSeconds(RobotContainer.autoWait.get()),
                 new InstantCommand(() -> System.out.println("CenterAutoBarge started")),
                 RHRUtil.resetRotationIfReal(centreAlgae.getInitialPose().get()),
                 // If pose estimation is really off, reset based on the trajectory
@@ -93,11 +95,13 @@ public class CenterAutoBarge {
         .done()
         .onTrue(
             Commands.sequence(
-                SuperStructure.BARGE_PREP_FORWARDS.get(),
+                SuperStructure.BARGE_PREP_FORWARDS_AUTO.get(),
                 Commands.waitSeconds(0.5),
                 EndEffector.BARGE_SCORE.get(),
                 Commands.waitSeconds(0.5),
-                SuperStructure.STARTING_CONF.get()));
+                centreBargeFour.cmd()));
+
+    centreBargeFour.atTime("GoHome").onTrue(SuperStructure.SOURCE_CORAL_INTAKE.get());
 
     return routine;
   }

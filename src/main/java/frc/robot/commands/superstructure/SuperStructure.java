@@ -104,6 +104,16 @@ public class SuperStructure {
               ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES),
               PivotCmds.setAngleAndWait(SetpointConstants.Pivot.BARGE_ANGLE_DEG));
 
+  public static Supplier<Command> BARGE_PREP_FORWARDS_AUTO =
+      () ->
+          Commands.sequence(
+              new InstantCommand(() -> Logger.recordOutput("Active SS", "BARGE_FORWARDS_AUTO")),
+              AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED),
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.BARGE_HEIGHT_IN),
+              PivotCmds.setAngle(90),
+              ShoulderCmds.setAngleAndWait(90),
+              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.BARGE_ANGLE_DEG));
+
   public static Supplier<Command> BARGE_PREP_BACKWARDS =
       () ->
           Commands.sequence(
@@ -153,10 +163,11 @@ public class SuperStructure {
               new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_SS_L2")),
               ElevatorCmds.setHeightAndWait(
                   SetpointConstants.Elevator.ALGAE_L2_IN), // runs the elevator first
-              Commands.parallel(EndEffector.ALGAE_GRAB.get(),
-              Commands.sequence(
-                  ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_L2_DEG),
-                  PivotCmds.setAngleAndWait(SetpointConstants.Pivot.ALGAE_L2_DEG))));
+              Commands.parallel(
+                  EndEffector.ALGAE_GRAB.get(),
+                  Commands.sequence(
+                      ShoulderCmds.setAngleAndWait(110),
+                      PivotCmds.setAngleAndWait(SetpointConstants.Pivot.ALGAE_L2_DEG))));
 
   public static Supplier<Command> ALGAE_COLLECT_L2 =
       () ->
