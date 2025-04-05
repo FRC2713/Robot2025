@@ -19,7 +19,6 @@ import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.SourceAlign;
 import frc.robot.subsystems.constants.ScoreAssistConstants;
-import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ReefTracker;
 import frc.robot.util.ScoreAssistMessage.GoalType;
 
@@ -44,10 +43,7 @@ public class DriverControls {
             Commands.either(
                 SuperStructure.BARGE_PREP_BACKWARDS.get(),
                 SuperStructure.BARGE_PREP_FORWARDS.get(),
-                () ->
-                    AllianceFlipUtil.shouldFlip()
-                        ? !DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX)
-                        : DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX))));
+                () -> DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX))));
     prepProcessorTrigger.onTrue(SuperStructure.PROCESSOR_PREP.get());
   }
 
