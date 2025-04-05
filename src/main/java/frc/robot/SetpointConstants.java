@@ -185,7 +185,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Climber/SS/Inputs to Volts", 10);
 
     public static final LoggedTunableNumber MIN_ANGLE_CLIMBING =
-        new LoggedTunableNumber("Climber/SS/Min Angle Climbing", -15);
+        new LoggedTunableNumber("Climber/SS/Min Angle Climbing", -7);
     public static final LoggedTunableNumber MAX_ANGLE_CLIMBING =
         new LoggedTunableNumber("Climber/SS/Max Angle Climbing", 180);
 
