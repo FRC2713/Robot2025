@@ -71,6 +71,7 @@ public class CenterAutoBarge {
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
                 ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.G_FOUR),
                 new InstantCommand(() -> driveSubsystem.stop()),
+                Commands.waitSeconds(0.3),
 
                 // 3) Begin driving to Algae Setpoint
                 centreBargeOne.cmd()));
