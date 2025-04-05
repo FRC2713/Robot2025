@@ -13,7 +13,6 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ScoreAssistConstants;
 import frc.robot.subsystems.drive.Drivetrain;
-import frc.robot.util.AllianceFlipUtil;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -37,9 +36,7 @@ public class DriveAtLongitude extends Command {
 
   public static boolean doBackwards(Pose2d pose) {
     var targetRot = normalizeAngle(pose.getRotation().getDegrees());
-    var robotRot =
-        normalizeAngle(
-            RobotContainer.driveSubsystem.getRotation().getDegrees());
+    var robotRot = normalizeAngle(RobotContainer.driveSubsystem.getRotation().getDegrees());
 
     var less =
         (getAngularDistance(normalizeAngle(targetRot + 180), robotRot)
