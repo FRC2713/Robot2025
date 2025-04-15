@@ -6,6 +6,8 @@ import frc.robot.RobotContainer;
 import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.RHRUtil;
+import frc.robot.util.ReefTracker;
+import frc.robot.util.ScoreAssistMessage.GoalType;
 import frc.robot.util.ScoreNode;
 import frc.robot.util.TrapezoidZone;
 import frc.robot.util.TrapezoidZone.Point;
@@ -72,9 +74,12 @@ public class ReefAlign {
 
     boolean nextTriggerState =
         DriverStation.isTeleopEnabled()
-            && RobotContainer.endEffector.hasCoral()
+            && (RobotContainer.endEffector.hasCoral()
+                || (ReefTracker.getInstance().getGoalTypeOrCoral() == GoalType.ALGAE
+                    && !RobotContainer.endEffector.hasAlgae()))
             && !RobotContainer.disableReefAlign
             && (RobotContainer.scoreAssist.mode == ScoreDrivingMode.INACTIVE)
+            && !RobotContainer.climbAssist.shouldClimbPrep()
             && inZone().isPresent();
 
     // Don't update the default command during ScoreAssist

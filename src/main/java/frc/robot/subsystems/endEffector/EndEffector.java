@@ -3,8 +3,6 @@ package frc.robot.subsystems.endEffector;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
-import frc.robot.subsystems.constants.ElevatorConstants;
-import frc.robot.subsystems.constants.PivotConstants;
 import frc.robot.subsystems.constants.ShoulderConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -29,13 +27,13 @@ public class EndEffector extends SubsystemBase {
     if (hasAlgae && !hadAlgae) {
       System.out.println("Algae detected; slowing down SS");
       RobotContainer.shoulder.setPID(ShoulderConstants.SlowGains);
-      RobotContainer.pivot.setPID(PivotConstants.SlowGains);
-      RobotContainer.elevator.setPID(ElevatorConstants.SlowGains);
+      // RobotContainer.pivot.setPID(PivotConstants.SlowGains);
+      // RobotContainer.elevator.setPID(ElevatorConstants.SlowGains);
     } else if (!hasAlgae && hadAlgae) {
       System.out.println("No algae detected; Speeding up SS");
       RobotContainer.shoulder.setPID(ShoulderConstants.Gains);
-      RobotContainer.pivot.setPID(PivotConstants.Gains);
-      RobotContainer.elevator.setPID(ElevatorConstants.Gains);
+      // RobotContainer.pivot.setPID(PivotConstants.Gains);
+      // RobotContainer.elevator.setPID(ElevatorConstants.Gains);
     }
     hadAlgae = hasAlgae;
   }

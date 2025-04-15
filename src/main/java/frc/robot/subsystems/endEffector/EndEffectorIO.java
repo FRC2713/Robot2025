@@ -29,6 +29,9 @@ public interface EndEffectorIO {
   public default void setAlgaeRPM(double rpm) {}
   ;
 
+  public default void setAlgaeVoltage(double volts) {}
+  ;
+
   public default void setCoralRPM(double rpm) {}
   ;
 

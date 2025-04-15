@@ -7,12 +7,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
-import frc.robot.commands.DriveAtLongitude;
 import frc.robot.commands.MoveSSToTarget;
 import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
-import frc.robot.subsystems.constants.ScoreAssistConstants;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ReefTracker;
 import frc.robot.util.ScoreAssistMessage;
@@ -60,20 +58,25 @@ public class ScoreAssistCmds {
 
   /** This is assist for barge scoring */
   public static Command executeBargeScore() {
-    return Commands.parallel(
-            Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.BARGE),
-            Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.BARGE),
-            Commands.either(
-                SuperStructure.BARGE_PREP_BACKWARDS.get(),
-                SuperStructure.BARGE_PREP_FORWARDS.get(),
-                () ->
-                    AllianceFlipUtil.shouldFlip()
-                        ? !DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX)
-                        : DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX)),
-            new DriveAtLongitude(
-                () -> AllianceFlipUtil.apply(ScoreAssistConstants.bargeAlignmentX),
-                RobotContainer.driveSubsystem))
-        .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
+    // dcmp change, removed barge driving
+    return Commands.sequence(
+        Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.BARGE),
+        EndEffector.BARGE_SCORE.get());
+
+    // return Commands.parallel(
+    //         Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.BARGE),
+    //         Commands.runOnce(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.BARGE),
+    //         Commands.either(
+    //             SuperStructure.BARGE_PREP_BACKWARDS.get(),
+    //             SuperStructure.BARGE_PREP_FORWARDS.get(),
+    //             () ->
+    //                 AllianceFlipUtil.shouldFlip()
+    //                     ? !DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX)
+    //                     : DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX)),
+    //         new DriveAtLongitude(
+    //             () -> AllianceFlipUtil.apply(ScoreAssistConstants.bargeAlignmentX),
+    //             RobotContainer.driveSubsystem))
+    //     .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
   /** This drives to target, moves the SS when ready, and runs the rollers when ready */
@@ -118,30 +121,35 @@ public class ScoreAssistCmds {
   private static Command executeAlgaeGrab() {
     return Commands.sequence(
             Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.CORAL),
-            start(), // 1) activate score assist
-            Commands.parallel(
-                executePrep(),
-                executeDriveToPathPose()), // 2a) path-find close to target (with manual
-            // override)
-            executeDrive(), // 2b) drive to target
-            stop(),
+            // start(), // 1) activate score assist
+            // Commands.parallel(
+            //     executePrep(),
+            //     executeDriveToPathPose()), // 2a) path-find close to target (with manual
+            // // override)
+            // executeDrive(), // 2b) drive to target
+            // stop(),
             executeSS())
         .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
   /** This drives to target, moves the SS when ready, and scores in the processor when ready */
-  private static Command executeProcessorScore() {
-    return Commands.parallel(
-            Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.PROCESSOR),
-            start(),
-            SuperStructure.PROCESSOR_PREP.get()
-            // Commands.sequence(
-            //     new DriveToPose(
-            //         () -> AllianceFlipUtil.apply(ScoreAssistConstants.processorPose),
-            //         RobotContainer.driveSubsystem),
-            //     EndEffector.PROCESSOR_SCORE.get()
-            )
-        .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
+  public static Command executeProcessorScore() {
+    // dcmp change, removed driving
+    return Commands.sequence(
+        Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.PROCESSOR),
+        EndEffector.PROCESSOR_SCORE.get());
+
+    // return Commands.parallel(
+    //         Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.PROCESSOR),
+    //         // start(),
+    //         SuperStructure.PROCESSOR_PREP.get()P
+    //         // Commands.sequence(
+    //         //     new DriveToPose(
+    //         //         () -> AllianceFlipUtil.apply(ScoreAssistConstants.processorPose),
+    //         //         RobotContainer.driveSubsystem),
+    //         //     EndEffector.PROCESSOR_SCORE.get()
+    //         )
+    //     .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
   }
 
   /** This drives to target, moves the SS when ready, and runs the rollers when ready */

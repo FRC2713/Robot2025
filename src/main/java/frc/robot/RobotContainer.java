@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.commands.DriveCmds;
 import frc.robot.commands.autos.CenterAutoBarge;
 import frc.robot.commands.autos.CenterAutoOnePiece;
 import frc.robot.commands.autos.DriveTesting;
@@ -68,6 +69,7 @@ import frc.robot.subsystems.vision.VisionIOLimelights;
 import frc.robot.subsystems.vision.VisionIOOdometry;
 import frc.robot.subsystems.vision.VisionIOPoseEstimator;
 import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.RHRHolonomicDriveController;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
@@ -107,6 +109,8 @@ public class RobotContainer {
   public static boolean disableReefAlign = false;
   public static boolean disableSourceAlign = true;
   public static boolean autoScorePathing = false;
+
+  public static LoggedTunableNumber autoWait = new LoggedTunableNumber("auto wait", 0);
 
   // private Trigger climbPrepTrigger = new
   // Trigger(ScoreAssistOld.getInstance()::shouldClimbPrep);
@@ -252,8 +256,7 @@ public class RobotContainer {
     // autoChooser.addCmd(
     //     "Drive SysId (Dynamic Backward)",
     //     () -> driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    // autoChooser.addCmd("Wheel Radius", () ->
-    // DriveCmds.wheelRadiusCharacterization(driveSubsystem));
+    autoChooser.addCmd("Wheel Radius", () -> DriveCmds.wheelRadiusCharacterization(driveSubsystem));
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
 

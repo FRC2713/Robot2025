@@ -30,7 +30,7 @@ public class ScoreAssistConstants {
       new LoggedTunableNumber("ScoreAssist/X Tolerance", Units.inchesToMeters(0.75));
 
   public static final LoggedTunableNumber assistYTolerance =
-      new LoggedTunableNumber("ScoreAssist/Y Tolerance", Units.inchesToMeters(2.5));
+      new LoggedTunableNumber("ScoreAssist/Y Tolerance", Units.inchesToMeters(2.));
 
   public static final LoggedTunableNumber assistThetaTolerance =
       new LoggedTunableNumber("ScoreAssist/Theta Tolerance", 3); // degrees

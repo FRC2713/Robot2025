@@ -10,7 +10,6 @@ import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
-import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.scoreassist.ScoreAssistCmds;
 import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
@@ -31,7 +30,11 @@ public class CenterAutoBarge {
     // StartRoReefE starts square to the starting line, Start2RoReefE starts pre-aligned to the EF
     // reef face
     AutoTrajectory centreAlgae = routine.trajectory("CentreAlgae");
-    AutoTrajectory centreBarge = routine.trajectory("CentreBarge");
+    AutoTrajectory centreBargeOne = routine.trajectory("CentreBarge1");
+    AutoTrajectory centreBargeTwo = routine.trajectory("CentreBarge2");
+    AutoTrajectory centreBargeThree = routine.trajectory("CentreBarge3");
+    AutoTrajectory centreBargeFour = routine.trajectory("CentreBarge4");
+
     // AutoTrajectory sourceToReefC = routine.trajectory("SourceToReefC");
     // AutoTrajectory reefCToSource = routine.trajectory("ReefCToSource");
 
@@ -39,6 +42,7 @@ public class CenterAutoBarge {
         .active()
         .onTrue(
             Commands.sequence(
+                Commands.waitSeconds(RobotContainer.autoWait.get()),
                 new InstantCommand(() -> System.out.println("CenterAutoBarge started")),
                 RHRUtil.resetRotationIfReal(centreAlgae.getInitialPose().get()),
                 // If pose estimation is really off, reset based on the trajectory
@@ -67,23 +71,38 @@ public class CenterAutoBarge {
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
                 ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.G_FOUR),
                 new InstantCommand(() -> driveSubsystem.stop()),
-                // 3) Score coral
-                ScoreAssistCmds.executeAlgaeGrabInAuto(ScoreLocations.ALGAE_GH)
-                    .withDeadline(Commands.waitSeconds(3)),
-                // 2) Wait to make sure we got algae
-                AlgaeClawCmds.waitUntilAlgae(1),
+                Commands.waitSeconds(0.3),
 
-                // 3) Begin driving to barge
-                Commands.parallel(
-                    centreBarge.cmd(), SuperStructure.STARTING_CONF_WITH_ALGAE.get())));
+                // 3) Begin driving to Algae Setpoint
+                centreBargeOne.cmd()));
 
-    centreBarge
+    centreBargeOne
         .done()
         .onTrue(
             Commands.sequence(
                 new InstantCommand(() -> driveSubsystem.stop()),
-                SuperStructure.BARGE_PREP_FORWARDS.get(),
-                EndEffector.BARGE_SCORE.get()));
+                SuperStructure.ALGAE_SS_L2.get(),
+                centreBargeTwo.cmd()));
+
+    centreBargeTwo
+        .done()
+        .onTrue(
+            Commands.sequence(
+                EndEffector.ALGAE_GRAB.get(),
+                EndEffector.WAIT_UNTIL_ALGAE.get(),
+                EndEffector.ALGAE_HOLD.get(),
+                centreBargeThree.cmd()));
+    centreBargeThree
+        .done()
+        .onTrue(
+            Commands.sequence(
+                SuperStructure.BARGE_PREP_FORWARDS_AUTO.get(),
+                Commands.waitSeconds(0.5),
+                EndEffector.BARGE_SCORE.get(),
+                Commands.waitSeconds(0.5),
+                centreBargeFour.cmd()));
+
+    centreBargeFour.atTime("GoHome").onTrue(SuperStructure.SOURCE_CORAL_INTAKE.get());
 
     return routine;
   }

@@ -67,6 +67,7 @@ public class ScoreLotsOfCoral {
         .done()
         .onTrue(
             Commands.sequence(
+                new InstantCommand(() -> driveSubsystem.stop()),
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
                 ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.E_FOUR),
                 // 2) Wait to make sure coral is outtathere
@@ -84,7 +85,7 @@ public class ScoreLotsOfCoral {
                     Commands.parallel(
                         SuperStructure.SOURCE_CORAL_INTAKE.get(),
                         new WaitUntilCommand(() -> RobotContainer.endEffector.hasCoral())),
-                    Commands.waitSeconds(0.2)),
+                    Commands.waitSeconds(3)),
                 Commands.parallel(
                     sourceToReefC.cmd(),
                     SuperStructure.L4_PREP.get().beforeStarting(Commands.waitSeconds(0.4)))));
@@ -114,7 +115,7 @@ public class ScoreLotsOfCoral {
                     Commands.parallel(
                         SuperStructure.SOURCE_CORAL_INTAKE.get(),
                         new WaitUntilCommand(() -> RobotContainer.endEffector.hasCoral())),
-                    Commands.waitSeconds(0.2)),
+                    Commands.waitSeconds(0.5)),
                 Commands.parallel(
                     SuperStructure.L4_PREP.get().beforeStarting(Commands.waitSeconds(0.4)),
                     sourceToReefD.cmd())));

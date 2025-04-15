@@ -5,6 +5,8 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.SetpointConstants;
+import frc.robot.commands.ClimberCmds;
 import java.util.function.DoubleSupplier;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -15,6 +17,10 @@ public class Climb extends SequentialCommandGroup {
   public Climb(DoubleSupplier input) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new PrepClimber(), new MoveClimber(input));
+    addCommands(
+        ClimberCmds.configureSoftLimits(
+            SetpointConstants.Climber.MIN_ANGLE_CLIMBING,
+            SetpointConstants.Climber.MAX_ANGLE_CLIMBING),
+        new MoveClimber(input));
   }
 }

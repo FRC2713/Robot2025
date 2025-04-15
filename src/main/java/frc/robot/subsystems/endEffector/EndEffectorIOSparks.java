@@ -1,11 +1,14 @@
 package frc.robot.subsystems.endEffector;
 
 import com.revrobotics.spark.SparkAnalogSensor;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.AlgaeClawConstants;
 import frc.robot.subsystems.constants.RollerConstants;
@@ -17,6 +20,7 @@ public class EndEffectorIOSparks implements EndEffectorIO {
   private final SparkFlex algaeMotor;
   private final SparkLimitSwitch limitSwitch;
   private final SparkAnalogSensor algaeSensor;
+  private final Debouncer hasAlgaeDebounce = new Debouncer(0.5, DebounceType.kBoth);
   private double targetCoralRPM;
   private double targetAlgaeRPM;
 
@@ -67,6 +71,11 @@ public class EndEffectorIOSparks implements EndEffectorIO {
   }
 
   @Override
+  public void setAlgaeVoltage(double volts) {
+    algaeMotor.getClosedLoopController().setReference(volts, ControlType.kVoltage);
+  }
+
+  @Override
   public void setEnableLimitSwitch(boolean setEnable) {
     coralMotor.configureAsync(
         RollerConstants.createConfig(60, setEnable),
@@ -79,7 +88,8 @@ public class EndEffectorIOSparks implements EndEffectorIO {
   }
 
   private boolean hasAlgae() {
-    return algaeSensor.getVoltage() > AlgaeClawConstants.hasAlgaeVoltage;
+    return hasAlgaeDebounce.calculate(
+        algaeSensor.getVoltage() > AlgaeClawConstants.hasAlgaeVoltage);
   }
 
   @Override

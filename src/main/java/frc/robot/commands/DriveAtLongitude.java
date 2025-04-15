@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ScoreAssistConstants;
@@ -34,11 +35,21 @@ public class DriveAtLongitude extends Command {
   }
 
   public static boolean doBackwards(Pose2d pose) {
-    var currentRot = normalizeAngle(pose.getRotation().getDegrees());
+    var targetRot = normalizeAngle(pose.getRotation().getDegrees());
     var robotRot = normalizeAngle(RobotContainer.driveSubsystem.getRotation().getDegrees());
 
-    return getAngularDistance(normalizeAngle(currentRot + 180), robotRot)
-        < getAngularDistance(currentRot, robotRot);
+    var less =
+        (getAngularDistance(normalizeAngle(targetRot + 180), robotRot)
+            < getAngularDistance(targetRot, robotRot));
+    var targetX = pose.getTranslation().getX();
+    var currentX = RobotContainer.driveSubsystem.getTranslation().getX();
+
+    var invert =
+        Math.abs(currentX - targetX) > Math.abs(currentX - (FieldConstants.fieldLength - targetX));
+    Logger.recordOutput("DriveAtLongitude/invert", invert);
+    Logger.recordOutput("DriveAtLongitude/less", less);
+
+    return invert ? !less : less;
   }
 
   public static double getAngularDistance(double a, double b) {
