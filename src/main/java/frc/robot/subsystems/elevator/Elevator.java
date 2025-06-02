@@ -33,8 +33,8 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (ElevatorConstants.Gains.hasChanged(hashCode())) {
-      this.IO.setPID(ElevatorConstants.Gains);
+    if (ElevatorConstants.SlowGains.hasChanged(hashCode())) {
+      this.IO.setPID(ElevatorConstants.SlowGains);
     }
 
     this.IO.updateInputs(this.inputs);
