@@ -137,7 +137,7 @@ public class Robot extends LoggedRobot {
       RobotContainer.climber.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
-    
+
     var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
     RobotContainer.disableReefAlign = disableReefAlign;
     if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {

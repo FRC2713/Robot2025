@@ -132,7 +132,8 @@ public class Drivetrain extends SubsystemBase {
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
   }
 
-  private boolean demoMode = SmartDashboard.getBoolean("demo mode", true);
+  private boolean demoMode = SmartDashboard.getBoolean("demo mode", false);
+
   @Override
   public void periodic() {
     if (TunerConstants.driveGainsPID.hasChanged(hashCode())) {
@@ -218,7 +219,9 @@ public class Drivetrain extends SubsystemBase {
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, (demoMode)? TunerConstants.kSpeedAt12VoltsDemoMode : TunerConstants.kSpeedAt12Volts);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        setpointStates,
+        (demoMode) ? TunerConstants.kSpeedAt12VoltsDemoMode : TunerConstants.kSpeedAt12Volts);
 
     // Log unoptimized setpoints and setpoint speeds
     Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
@@ -455,7 +458,9 @@ public class Drivetrain extends SubsystemBase {
 
   /** Returns the maximum linear speed in meters per sec. */
   public double getMaxLinearSpeedMetersPerSec() {
-    return (demoMode)? TunerConstants.kSpeedAt12VoltsDemoMode.in(MetersPerSecond) : TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    return (demoMode)
+        ? TunerConstants.kSpeedAt12VoltsDemoMode.in(MetersPerSecond)
+        : TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
   }
 
   /** Returns the maximum angular speed in radians per sec. */

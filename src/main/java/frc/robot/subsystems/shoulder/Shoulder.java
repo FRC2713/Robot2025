@@ -42,11 +42,12 @@ public class Shoulder extends SubsystemBase {
   }
 
   private boolean hadDemoMode = false;
+
   public void periodic() {
-    var demoMode = SmartDashboard.getBoolean("demo mode", true);
+    var demoMode = SmartDashboard.getBoolean("demo mode", false);
     if (hadDemoMode == false && demoMode != hadDemoMode) {
       this.IO.setPID(ShoulderConstants.SlowGains);
-    } else if(hadDemoMode == true && demoMode == false) {
+    } else if (hadDemoMode == true && demoMode == false) {
       this.IO.setPID(ShoulderConstants.Gains);
     }
     hadDemoMode = demoMode;

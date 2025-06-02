@@ -1,8 +1,5 @@
 package frc.robot.subsystems.elevator;
 
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -13,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.constants.ShoulderConstants;
 import frc.robot.util.LoggedTunableGains;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
   private ElevatorInputsAutoLogged inputs;
@@ -35,12 +34,13 @@ public class Elevator extends SubsystemBase {
   }
 
   private boolean hadDemoMode = false;
+
   @Override
   public void periodic() {
-    var demoMode = SmartDashboard.getBoolean("demo mode", true);
+    var demoMode = SmartDashboard.getBoolean("demo mode", false);
     if (hadDemoMode == false && demoMode != hadDemoMode) {
       this.IO.setPID(ShoulderConstants.SlowGains);
-    } else if(hadDemoMode == true && demoMode == false) {
+    } else if (hadDemoMode == true && demoMode == false) {
       this.IO.setPID(ShoulderConstants.Gains);
     }
 

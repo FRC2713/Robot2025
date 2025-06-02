@@ -24,7 +24,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.DriveCmds;
-import frc.robot.commands.autos.CenterAutoBarge;
+// See line 232 for why this is commented out -Owen
+// import frc.robot.commands.autos.CenterAutoBarge;
 import frc.robot.commands.autos.CenterAutoOnePiece;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
@@ -229,8 +230,9 @@ public class RobotContainer {
     autoChooser.addRoutine(
         "Centre - One Piece",
         () -> CenterAutoOnePiece.getRoutine(choreoAutoFactory, driveSubsystem));
-    autoChooser.addRoutine(
-        "Centre - Barge", () -> CenterAutoBarge.getRoutine(choreoAutoFactory, driveSubsystem));
+    // Note: commented out since it was causing errors that I didn't have time to look into -Owen
+    /*autoChooser.addRoutine(
+    "Centre - Barge", () -> CenterAutoBarge.getRoutine(choreoAutoFactory, driveSubsystem));*/
     autoChooser.addRoutine(
         "Proc - Score Lots Of Coral",
         () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));
