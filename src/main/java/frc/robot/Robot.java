@@ -101,6 +101,7 @@ public class Robot extends LoggedRobot {
     Pathfinding.setPathfinder(new LocalADStarAK());
     SmartDashboard.putBoolean("Disable ReefAlign", false);
     SmartDashboard.putBoolean("Use Pathing", false);
+    SmartDashboard.putBoolean("Demo mode", false);
   }
 
   /** This function is called periodically during all modes. */
@@ -136,7 +137,7 @@ public class Robot extends LoggedRobot {
       RobotContainer.climber.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
-
+    
     var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
     RobotContainer.disableReefAlign = disableReefAlign;
     if (hadDisabledReefAlign == false && disableReefAlign != hadDisabledReefAlign) {
