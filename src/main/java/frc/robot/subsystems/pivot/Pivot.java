@@ -39,9 +39,10 @@ public class Pivot extends SubsystemBase {
 
   public void periodic() {
     var demoMode = SmartDashboard.getBoolean("demo mode", false);
+    Logger.recordOutput("not demo test", (demoMode == false));
     if (hadDemoMode == false && demoMode != hadDemoMode) {
       this.IO.setPID(ShoulderConstants.SlowGains);
-    } else if (hadDemoMode == true && demoMode == false) {
+    } else if (demoMode == false) {
       this.IO.setPID(ShoulderConstants.Gains);
     }
 

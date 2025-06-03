@@ -38,9 +38,10 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     var demoMode = SmartDashboard.getBoolean("demo mode", false);
+    Logger.recordOutput("not demo mode 2", demoMode == false);
     if (hadDemoMode == false && demoMode != hadDemoMode) {
       this.IO.setPID(ShoulderConstants.SlowGains);
-    } else if (hadDemoMode == true && demoMode == false) {
+    } else if (hadDemoMode == false) {
       this.IO.setPID(ShoulderConstants.Gains);
     }
 
