@@ -6,11 +6,9 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.PivotConstants;
-import frc.robot.subsystems.constants.ShoulderConstants;
 import frc.robot.util.LoggedTunableGains;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -35,15 +33,7 @@ public class Pivot extends SubsystemBase {
     this.IO = IO;
   }
 
-  private boolean hadDemoMode = false;
-
   public void periodic() {
-    var demoMode = SmartDashboard.getBoolean("demo mode", false);
-    if (hadDemoMode == false && demoMode != hadDemoMode) {
-      this.IO.setPID(ShoulderConstants.SlowGains);
-    } else if (hadDemoMode == true && demoMode == false) {
-      this.IO.setPID(ShoulderConstants.Gains);
-    }
 
     if (PivotConstants.Gains.hasChanged(hashCode())) {
       this.IO.setPID(PivotConstants.Gains);

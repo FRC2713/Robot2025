@@ -101,7 +101,6 @@ public class Robot extends LoggedRobot {
     Pathfinding.setPathfinder(new LocalADStarAK());
     SmartDashboard.putBoolean("Disable ReefAlign", false);
     SmartDashboard.putBoolean("Use Pathing", false);
-    SmartDashboard.putBoolean("Demo mode", false);
   }
 
   /** This function is called periodically during all modes. */

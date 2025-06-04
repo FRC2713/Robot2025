@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -41,16 +40,8 @@ public class Shoulder extends SubsystemBase {
     this.IO.setPID(gains);
   }
 
-  private boolean hadDemoMode = false;
-
   public void periodic() {
-    var demoMode = SmartDashboard.getBoolean("demo mode", false);
-    if (hadDemoMode == false && demoMode != hadDemoMode) {
-      this.IO.setPID(ShoulderConstants.SlowGains);
-    } else if (hadDemoMode == true && demoMode == false) {
-      this.IO.setPID(ShoulderConstants.Gains);
-    }
-    hadDemoMode = demoMode;
+
     if (ShoulderConstants.Gains.hasChanged(hashCode())) {
       this.IO.setPID(ShoulderConstants.Gains);
     }
