@@ -34,4 +34,6 @@ public interface VisionIO {
 
   public default void updatePoseEstimate(SwerveDrivePoseEstimator poseEstimator) {}
   ;
+
+  public default void takeSnapshot() {}
 }

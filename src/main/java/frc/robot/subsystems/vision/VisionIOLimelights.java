@@ -283,6 +283,11 @@ public class VisionIOLimelights implements VisionIO {
     return this.inputs.timestamp;
   }
 
+  public void takeSnapshot() {
+    LimelightHelpers.takeSnapshot(primaryInfo.getNtTableName(), "auto_prim");
+    LimelightHelpers.takeSnapshot(secondaryInfo.getNtTableName(), "auto_sec");
+  }
+
   private enum CombinedMegaTagState {
     INIT,
     REJECTED_DUE_TO_SPIN_BLUR,

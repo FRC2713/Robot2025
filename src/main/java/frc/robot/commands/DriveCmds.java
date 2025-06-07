@@ -208,6 +208,14 @@ public class DriveCmds {
         drive);
   }
 
+  public static Command stopWithX(Drivetrain drive) {
+    return Commands.run(
+        () -> {
+          drive.stopWithX();
+        },
+        drive);
+  }
+
   /**
    * Field relative drive command using joystick for linear control and PID for angular control.
    * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
