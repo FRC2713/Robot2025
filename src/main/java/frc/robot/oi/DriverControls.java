@@ -137,6 +137,13 @@ public class DriverControls {
                 "Inch Right"))
         .onFalse(this.setToNormalDriveCmd());
 
+    // Intake coral if another coral is blocking station
+    driver
+        .povDown()
+        .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE_BLOCKED.get())
+        .onFalse(EndEffector.STOP_ROLLERS.get());
+    ;
+
     driver
         .y()
         .whileTrue(AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.BARGE_SCORE_SPEED))
