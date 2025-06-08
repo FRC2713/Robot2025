@@ -33,7 +33,8 @@ public class SuperStructure {
                   "INTAKE_CORAL",
                   () -> true, // ready for coral-ing
                   SetpointConstants.Roller.SOURCE_CORAL_INTAKE_SPEED, // start coral-ing
-                  SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED, // not actually algae-ing
+                  () ->
+                      0, // SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED, // not actually algae-ing
                   SetpointConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN,
                   SetpointConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG,
                   SetpointConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG)

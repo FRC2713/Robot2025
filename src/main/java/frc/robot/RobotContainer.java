@@ -232,11 +232,12 @@ public class RobotContainer {
     autoChooser.addRoutine(
         "Centre - Barge", () -> CenterAutoBarge.getRoutine(choreoAutoFactory, driveSubsystem));
     autoChooser.addRoutine(
-        "Proc - Score Lots Of Coral",
+        "Right - Score Lots Of Coral",
         () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));
     autoChooser.addRoutine(
-        "Right - Score Lots Of Coral",
-        () -> ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem));
+        "Left - Score Lots Of Coral",
+        () ->
+            ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem)); // tODO: rename
     autoChooser.addRoutine(
         "Drive Testing", () -> DriveTesting.getRoutine(choreoAutoFactory, driveSubsystem));
 
