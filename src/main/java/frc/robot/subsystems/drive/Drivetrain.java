@@ -236,10 +236,7 @@ public class Drivetrain extends SubsystemBase {
     runVelocity(new ChassisSpeeds());
   }
 
-  /**
-   * Stops the drive and turns the modules to an X arrangement to resist movement. The modules will
-   * return to their normal orientations the next time a nonzero velocity is requested.
-   */
+  /** Stops the drive and turns the modules to an X arrangement to resist movement. */
   public void stopWithX() {
     Rotation2d[] headings = new Rotation2d[4];
     for (int i = 0; i < 4; i++) {

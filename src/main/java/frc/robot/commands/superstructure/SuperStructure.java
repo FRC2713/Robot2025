@@ -33,11 +33,27 @@ public class SuperStructure {
                   "INTAKE_CORAL",
                   () -> true, // ready for coral-ing
                   SetpointConstants.Roller.SOURCE_CORAL_INTAKE_SPEED, // start coral-ing
-                  SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED, // not actually algae-ing
+                  () ->
+                      0, // SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED, // not actually algae-ing
                   SetpointConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN,
                   SetpointConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG,
                   SetpointConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG)
               .andThen(RollerCmds.waitUntilCoral(2.0));
+
+  public static Supplier<Command> SOURCE_CORAL_INTAKE_BLOCKED =
+      () ->
+          new SetAllDOFS(
+                  "SOURCE_CORAL_INTAKE_BLOCKED",
+                  "INTAKE_CORAL_BLOCKED",
+                  () -> true, // ready for coral-ing
+                  SetpointConstants.Roller.SOURCE_CORAL_INTAKE_SPEED, // start coral-ing
+                  () ->
+                      0, // SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED, // not actually algae-ing
+                  SetpointConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN,
+                  SetpointConstants.Shoulder.SOURCE_CORAL_INTAKE_BLOCKED_ANGLE_DEG,
+                  SetpointConstants.Pivot.SOURCE_CORAL_INTAKE_BLOCKED_ANGLE_DEG)
+              .andThen(RollerCmds.waitUntilCoral(2.0));
+  ;
 
   public static Supplier<Command> L1 =
       () ->

@@ -38,6 +38,7 @@ import frc.robot.scoreassist.ClimbAssist;
 import frc.robot.scoreassist.ScoreAssist;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
@@ -116,8 +117,7 @@ public class RobotContainer {
   // private Trigger climbPrepTrigger = new
   // Trigger(ScoreAssistOld.getInstance()::shouldClimbPrep);
 
-  public RobotContainer() {
-    // Start subsystems
+  public RobotContainer() { // Start subsystems
     switch (Constants.currentMode) {
       case REAL:
         driveSubsystem =
@@ -146,7 +146,7 @@ public class RobotContainer {
         pivot = new Pivot(new PivotIOSim());
         elevator = new Elevator(new ElevatorIOSim());
         shoulder = new Shoulder(new ShoulderIOSim());
-        climber = new Climber(new ClimberIO() {});
+        climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
         break;
 
@@ -234,11 +234,12 @@ public class RobotContainer {
     /*autoChooser.addRoutine(
     "Centre - Barge", () -> CenterAutoBarge.getRoutine(choreoAutoFactory, driveSubsystem));*/
     autoChooser.addRoutine(
-        "Proc - Score Lots Of Coral",
+        "Right - Score Lots Of Coral",
         () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));
     autoChooser.addRoutine(
-        "Right - Score Lots Of Coral",
-        () -> ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem));
+        "Left - Score Lots Of Coral",
+        () ->
+            ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem)); // tODO: rename
     autoChooser.addRoutine(
         "Drive Testing", () -> DriveTesting.getRoutine(choreoAutoFactory, driveSubsystem));
 
