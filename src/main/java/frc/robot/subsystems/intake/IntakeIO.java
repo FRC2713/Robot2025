@@ -11,6 +11,7 @@ public interface IntakeIO {
     public double intakePivotVelocityDPS = 0.0;
     public double intakePivotVoltage = 0.0;
     public double intakePivotAngleDegrees = 0.0;
+    public double intakePivotAbsoluteAngleDegrees = 0.0;
     public double intakePivotAmps = 0.0;
 
     public double commandedAngleDegs = 0.0;

@@ -1,8 +1,7 @@
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.constants.ShoulderConstants;
+import frc.robot.util.LoggedTunableGains;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -54,7 +53,7 @@ public class Intake extends SubsystemBase {
     return inputs.hasCoral;
   }
 
-  @AutoLogOutput(key = "rollerIsAtTarget")
+  @AutoLogOutput(key = "Intake/rollerIsAtTarget")
   public boolean rollerIsAtTarget() {
     return this.IO.rollerIsAtTarget();
   }
@@ -62,6 +61,18 @@ public class Intake extends SubsystemBase {
   //Pivot functions
   public void setTargetAngle(double degrees) {
     this.IO.setTargetAngle(degrees);
+  }
+
+  public void setPID(LoggedTunableGains gains) {
+    this.IO.setPID(gains);
+  }
+
+  public double getCurrentAngle() {
+    return this.inputs.intakePivotAngleDegrees;
+  }
+
+  public double getAbsoluteAngle() {
+    return this.inputs.intakePivotAbsoluteAngleDegrees;
   }
 
   @AutoLogOutput(key = "Intake/intakePivotIsAtTarget")
