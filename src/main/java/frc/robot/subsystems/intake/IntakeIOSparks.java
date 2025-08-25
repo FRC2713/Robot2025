@@ -7,10 +7,10 @@ public class IntakeIOSparks implements IntakeIO {
   public IntakeIOSparks() {
     SmartDashboard.putBoolean("Intake has coral", false);
   }
-  
+
   public void updateInputs(IntakeInputs inputs) {}
 
-  //roller functions
+  // roller functions
   public void setRollerRPM(double rpm) {}
 
   public void setRollerVoltage(double volts) {}
@@ -21,7 +21,7 @@ public class IntakeIOSparks implements IntakeIO {
     return true;
   }
 
-  //intake pivot functions
+  // intake pivot functions
   public void setVoltage(double volts) {}
 
   public void setTargetAngle(double degrees) {}

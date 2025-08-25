@@ -1,13 +1,13 @@
 package frc.robot.subsystems.intake;
 
+import frc.robot.util.LoggedTunableGains;
 import org.littletonrobotics.junction.AutoLog;
 
-import frc.robot.util.LoggedTunableGains;
-
 public interface IntakeIO {
+
   @AutoLog
   public static class IntakeInputs {
-    //intake pivot vars
+    // intake pivot vars
     public double intakePivotVelocityDPS = 0.0;
     public double intakePivotVoltage = 0.0;
     public double intakePivotAngleDegrees = 0.0;
@@ -16,7 +16,7 @@ public interface IntakeIO {
     public double commandedAngleDegs = 0.0;
     public double servoCommandedPos = 0.0;
 
-    //Roller vars
+    // Roller vars
     public double rollerOutputVoltage = 0.0;
     public double rollerCurrentAmps = 0.0;
     public double rollerVelocityRPM = 0.0;
@@ -24,14 +24,14 @@ public interface IntakeIO {
     public double rollerPositionDegs = 0.0;
     public int rollerCurrentLimit = 0;
 
-    //Coral detection
+    // Coral detection
     public boolean hasCoral = false;
     public double sensorDistance = 0.0;
   }
 
   public default void updateInputs(IntakeInputs inputs) {}
 
-  //roller functions
+  // roller functions
   public default void setRollerRPM(double rpm) {}
 
   public default void setRollerVoltage(double volts) {}
@@ -42,7 +42,7 @@ public interface IntakeIO {
     return true;
   }
 
-  //intake pivot functions
+  // intake pivot functions
   public default void setVoltage(double volts) {}
 
   public default void setTargetAngle(double degrees) {}

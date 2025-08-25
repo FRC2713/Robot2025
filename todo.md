@@ -20,6 +20,8 @@
 
 - Claw
   - Claw also needs a handoffPrep & handoff command
+  - Claw also has sensor to detect stuff
+  - Uses X60
 
 - Handoff command
   - Do first (at the same time):
