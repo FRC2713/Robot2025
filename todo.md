@@ -25,6 +25,7 @@
   - Do first (at the same time):
     - Intake needs to come up to handoff position
     - Claw needs to move to handoff position
+    - Elevator needs to go to handoff position
   - Do second (at the same time):
     - Intake needs to spit coral
     - Claw needs to intake

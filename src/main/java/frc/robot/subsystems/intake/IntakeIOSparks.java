@@ -1,7 +1,6 @@
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.intake.IntakeIO.IntakeInputs;
 import frc.robot.util.LoggedTunableGains;
 
 public class IntakeIOSparks implements IntakeIO {
