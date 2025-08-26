@@ -10,13 +10,14 @@
 - Handoff logic (intake to claw)
 - Maybe add climber (if possible, and design and manufacturing do it)
 
+- Change variables with IP (Intake Pivot) acronym to something that makes more sense
+
 - Intake
-  - Intake has X44 for running rollers and moving intake vertically
+  - Intake has X60 for running rollers and X44 moving intake vertically (?)
   - Has ranged sensor to detect when coral is present
   - Bring down to ground & turn rollers on, wait until sensor sees coral (intakeCoral)
   - Second command called handoffPrep, holds coral, brings intake up to handoff position
   - Handoff command- runs rollers in reverse to spit coral into claw
-  - Has X60 for motor
 
 - Claw
   - Claw also needs a handoffPrep & handoff command

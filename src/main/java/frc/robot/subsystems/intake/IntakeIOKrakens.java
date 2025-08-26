@@ -42,6 +42,7 @@ public class IntakeIOKrakens implements IntakeIO {
         5, () -> motor.setPosition(encoder.getAbsolutePosition().getValueAsDouble(), 0.25));
   }
 
+  @Override
   public void updateInputs(IntakeInputs inputs) {
 
     //Intake pivot updates
@@ -56,32 +57,44 @@ public class IntakeIOKrakens implements IntakeIO {
   }
 
   // roller functions
+  @Override
   public void setRollerRPM(double rpm) {}
 
+  @Override
   public void setRollerVoltage(double volts) {}
 
+  @Override
   public void setRollerCurrentLimit(int currentLimit) {}
 
+  @Override
   public boolean rollerIsAtTarget() {
     return true;
   }
 
   // intake pivot functions
+  @Override
   public void setVoltage(double volts) {
     motor.setVoltage(volts);
   }
 
+  @Override
   public void setTargetAngle(double degrees) {
     this.targetDegrees = degrees;
     motor.setControl(angleRequest.withPosition(Units.degreesToRotations(degrees)));
   }
 
-  public void setPID(LoggedTunableGains pid) {}
+  @Override
+  public void setPID(LoggedTunableGains pid) {
+    motorConfig.Slot0 = pid.toTalonFX(GravityTypeValue.Arm_Cosine);
+    motorConfig.MotionMagic = pid.getMotionMagicConfig();
 
-  public void setServoPos(double pos) {}
+    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motorConfig, 0.25));
+  }
 
+  @Override
   public void configureSoftLimits(double minDeg, double maxDeg) {}
 
+  @Override
   public boolean intakePivotIsAtTarget() {
     return true;
   }
@@ -92,25 +105,25 @@ public class IntakeIOKrakens implements IntakeIO {
     config.Feedback.FeedbackRemoteSensorID = this.encoder.getDeviceID();
     config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     config.Feedback.SensorToMechanismRatio = 1.0;
-    config.Feedback.RotorToSensorRatio = IntakeConstants.kGearing;
-    config.TorqueCurrent.PeakForwardTorqueCurrent = IntakeConstants.kStallCurrentLimit;
-    config.TorqueCurrent.PeakReverseTorqueCurrent = -IntakeConstants.kStallCurrentLimit;
-    config.CurrentLimits.StatorCurrentLimit = IntakeConstants.kStatorCurrentLimit;
+    config.Feedback.RotorToSensorRatio = IntakeConstants.kIPGearing;
+    config.TorqueCurrent.PeakForwardTorqueCurrent = IntakeConstants.kIPStallCurrentLimit;
+    config.TorqueCurrent.PeakReverseTorqueCurrent = -IntakeConstants.kIPStallCurrentLimit;
+    config.CurrentLimits.StatorCurrentLimit = IntakeConstants.kIPStatorCurrentLimit;
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.MotorOutput.Inverted =
-        (IntakeConstants.kInverted)
+        (IntakeConstants.kIPInverted)
             ? InvertedValue.CounterClockwise_Positive
             : InvertedValue.Clockwise_Positive;
 
-    config.Slot0 = IntakeConstants.Gains.toTalonFX(GravityTypeValue.Arm_Cosine);
-    config.MotionMagic = IntakeConstants.Gains.getMotionMagicConfig();
+    config.Slot0 = IntakeConstants.IPGains.toTalonFX(GravityTypeValue.Arm_Cosine);
+    config.MotionMagic = IntakeConstants.IPGains.getMotionMagicConfig();
     config.ClosedLoopGeneral.ContinuousWrap = false;
     config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     config.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
-        Units.degreesToRotations(IntakeConstants.kMaxAngle);
+        Units.degreesToRotations(IntakeConstants.kIPMaxAngle);
     config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     config.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
-        Units.degreesToRotations(IntakeConstants.kMinAngle);
+        Units.degreesToRotations(IntakeConstants.kIPMinAngle);
 
     return config;
   }
