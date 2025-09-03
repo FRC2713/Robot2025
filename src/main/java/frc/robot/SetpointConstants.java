@@ -57,6 +57,9 @@ public class SetpointConstants {
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/Source Intake Angle", -80);
 
+    public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_BLOCKED_ANGLE_DEG =
+        new LoggedTunableNumber("Shoulder/SS/Source Intake Blocked Angle", -67);
+
     public static final LoggedTunableNumber L1_ANGLE_DEG =
         new LoggedTunableNumber("Shoulder/SS/L1 Angle", -135);
 
@@ -107,6 +110,9 @@ public class SetpointConstants {
 
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/Source Intake Angle", 35);
+
+    public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_BLOCKED_ANGLE_DEG =
+        new LoggedTunableNumber("Pivot/SS/Source Intake Blocked Angle", 27.13);
 
     public static final LoggedTunableNumber L1_ANGLE_DEG =
         new LoggedTunableNumber("Pivot/SS/L1 Angle", 0);

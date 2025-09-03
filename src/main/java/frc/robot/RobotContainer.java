@@ -24,7 +24,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.DriveCmds;
-import frc.robot.commands.autos.CenterAutoBarge;
+// See line 232 for why this is commented out -Owen
+// import frc.robot.commands.autos.CenterAutoBarge;
 import frc.robot.commands.autos.CenterAutoOnePiece;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
@@ -37,6 +38,7 @@ import frc.robot.scoreassist.ClimbAssist;
 import frc.robot.scoreassist.ScoreAssist;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
@@ -115,8 +117,7 @@ public class RobotContainer {
   // private Trigger climbPrepTrigger = new
   // Trigger(ScoreAssistOld.getInstance()::shouldClimbPrep);
 
-  public RobotContainer() {
-    // Start subsystems
+  public RobotContainer() { // Start subsystems
     switch (Constants.currentMode) {
       case REAL:
         driveSubsystem =
@@ -145,7 +146,7 @@ public class RobotContainer {
         pivot = new Pivot(new PivotIOSim());
         elevator = new Elevator(new ElevatorIOSim());
         shoulder = new Shoulder(new ShoulderIOSim());
-        climber = new Climber(new ClimberIO() {});
+        climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
         break;
 
@@ -229,14 +230,16 @@ public class RobotContainer {
     autoChooser.addRoutine(
         "Centre - One Piece",
         () -> CenterAutoOnePiece.getRoutine(choreoAutoFactory, driveSubsystem));
-    autoChooser.addRoutine(
-        "Centre - Barge", () -> CenterAutoBarge.getRoutine(choreoAutoFactory, driveSubsystem));
-    autoChooser.addRoutine(
-        "Proc - Score Lots Of Coral",
-        () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));
+    // Note: commented out since it was causing errors that I didn't have time to look into -Owen
+    /*autoChooser.addRoutine(
+    "Centre - Barge", () -> CenterAutoBarge.getRoutine(choreoAutoFactory, driveSubsystem));*/
     autoChooser.addRoutine(
         "Right - Score Lots Of Coral",
-        () -> ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem));
+        () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));
+    autoChooser.addRoutine(
+        "Left - Score Lots Of Coral",
+        () ->
+            ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem)); // tODO: rename
     autoChooser.addRoutine(
         "Drive Testing", () -> DriveTesting.getRoutine(choreoAutoFactory, driveSubsystem));
 

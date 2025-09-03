@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
@@ -136,10 +137,26 @@ public class DriverControls {
                 "Inch Right"))
         .onFalse(this.setToNormalDriveCmd());
 
+    // Intake coral if another coral is blocking station
+    driver
+        .povDown()
+        .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE_BLOCKED.get())
+        .onFalse(EndEffector.STOP_ROLLERS.get());
+    ;
+
     driver
         .y()
         .whileTrue(AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.BARGE_SCORE_SPEED))
         .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
+
+    driver
+        .x()
+        .onTrue(
+            DriveCmds.changeDefaultDriveCommand(
+                RobotContainer.driveSubsystem,
+                DriveCmds.stopWithX(RobotContainer.driveSubsystem),
+                "Stop With X"))
+        .onFalse(this.setToNormalDriveCmd());
 
     // POV/x heading controller
     // driver
@@ -205,6 +222,13 @@ public class DriverControls {
   public Command setToNormalDriveCmd() {
     return DriveCmds.changeDefaultDriveCommand(
         RobotContainer.driveSubsystem, this.normalDriveCmd(), "Default Joystick Drive");
+  }
+
+  public Command stopWithX() {
+    return DriveCmds.changeDefaultDriveCommand(
+        RobotContainer.driveSubsystem,
+        new InstantCommand(() -> RobotContainer.driveSubsystem.stopWithX()),
+        "Stop With X");
   }
 
   private Command normalDriveCmd() {

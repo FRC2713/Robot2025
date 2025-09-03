@@ -32,4 +32,8 @@ public class Vision extends SubsystemBase {
   public void resetPose(Pose2d pose) {
     io.resetPose(pose);
   }
+
+  public void takeSnapshot() {
+    io.takeSnapshot();
+  }
 }
