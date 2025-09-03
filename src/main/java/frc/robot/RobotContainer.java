@@ -17,7 +17,6 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -39,11 +38,8 @@ import frc.robot.scoreassist.ScoreAssist;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
-import frc.robot.subsystems.climber.ClimberIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
-import frc.robot.subsystems.constants.VisionConstants;
-import frc.robot.subsystems.constants.VisionConstants.VisionOptions;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -52,24 +48,18 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
-import frc.robot.subsystems.endEffector.EndEffectorIOSparks;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
-import frc.robot.subsystems.pivot.PivotIOKrakens;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.shoulder.Shoulder;
 import frc.robot.subsystems.shoulder.ShoulderIO;
-import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
 import frc.robot.subsystems.shoulder.ShoulderIOSim;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionIOLimelights;
-import frc.robot.subsystems.vision.VisionIOOdometry;
-import frc.robot.subsystems.vision.VisionIOPoseEstimator;
+import frc.robot.subsystems.vision.VisionIOSLAMDunk;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.RHRHolonomicDriveController;
@@ -128,11 +118,11 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
-        elevator = new Elevator(new ElevatorIOKrakens());
-        pivot = new Pivot(new PivotIOKrakens());
-        shoulder = new Shoulder(new ShoulderIOKrakens());
-        climber = new Climber(new ClimberIOSparks());
-        endEffector = new EndEffector(new EndEffectorIOSparks());
+        elevator = new Elevator(new ElevatorIO() {});
+        pivot = new Pivot(new PivotIO() {});
+        shoulder = new Shoulder(new ShoulderIO() {});
+        climber = new Climber(new ClimberIO() {});
+        endEffector = new EndEffector(new EndEffectorIO() {});
         break;
 
       case SIM:
@@ -169,16 +159,18 @@ public class RobotContainer {
     visionsubsystem =
         new Vision(
             // new VisionIO() {}
-            VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK_WHEEL_ODOMETRY
-                ? new VisionIOOdometry()
-                : ((VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
-                        || VisionConstants.ACTIVE_VISION_OPTION
-                            == VisionOptions.SLAMDUNK_MEGATAG2_MERGED)
-                    ? new VisionIOPoseEstimator()
-                    : new VisionIOLimelights(
-                        VisionConstants.FRONT_LIMELIGHT_INFO,
-                        VisionConstants.BACK_LIMELIGHT_INFO,
-                        driveSubsystem)));
+            new VisionIOSLAMDunk()
+            // VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK_WHEEL_ODOMETRY
+            //     ? new VisionIOOdometry()
+            //     : ((VisionConstants.ACTIVE_VISION_OPTION == VisionOptions.SLAMDUNK
+            //             || VisionConstants.ACTIVE_VISION_OPTION
+            //                 == VisionOptions.SLAMDUNK_MEGATAG2_MERGED)
+            //         ? new VisionIOPoseEstimator()
+            //         : new VisionIOLimelights(
+            //             VisionConstants.FRONT_LIMELIGHT_INFO,
+            //             VisionConstants.BACK_LIMELIGHT_INFO,
+            //             driveSubsystem))
+            );
 
     // PathPlanner Config
     AutoBuilder.configure(
@@ -213,7 +205,7 @@ public class RobotContainer {
             driveSubsystem::getPose,
             driveSubsystem::resetOdometry,
             driveSubsystem::followTrajectory,
-            true,
+            false,
             driveSubsystem,
             (sample, isStart) -> {
               Logger.recordOutput(
@@ -242,6 +234,8 @@ public class RobotContainer {
             ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem)); // tODO: rename
     autoChooser.addRoutine(
         "Drive Testing", () -> DriveTesting.getRoutine(choreoAutoFactory, driveSubsystem));
+    autoChooser.addRoutine(
+        "SLAMDunk! Test", () -> DriveTesting.getSLAMDunkRoutine(choreoAutoFactory, driveSubsystem));
 
     // Uncomment for swerve drive characterization
     // autoChooser.addCmd(
@@ -296,17 +290,14 @@ public class RobotContainer {
     endEffector.setAlgaeRPM(0);
     shoulder.setTargetAngle(shoulder.getCurrentAngle());
     if (visionsubsystem.getPose() != null) {
-      if (!hasRanAuto && visionsubsystem.getPose().getTranslation().getX() != 0) {
-        driveSubsystem.setPose(
-            new Pose2d(
-                visionsubsystem.getPose().getTranslation(),
-                AllianceFlipUtil.apply(Rotation2d.fromRadians(Math.PI))));
-      }
-      //   else {
-      //     driveSubsystem.setPose(
-      //         new Pose2d(visionsubsystem.getPose().getTranslation(),
-      // driveSubsystem.getRotation()));
-      //   }
+      //   if (!hasRanAuto && visionsubsystem.getPose().getTranslation().getX() != 0) {
+      driveSubsystem.setPose(visionsubsystem.getPose());
+      // }
+      //   //   else {
+      //   //     driveSubsystem.setPose(
+      //   //         new Pose2d(visionsubsystem.getPose().getTranslation(),
+      //   // driveSubsystem.getRotation()));
+      //   //   }
     }
   }
 }

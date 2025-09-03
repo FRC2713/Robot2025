@@ -22,4 +22,18 @@ public class DriveTesting {
                 driveTesting.cmd()));
     return routine;
   }
+
+  public static AutoRoutine getSLAMDunkRoutine(AutoFactory m_factory, Drivetrain driveSubsystem) {
+    AutoRoutine routine = m_factory.newRoutine("SLAMDunk");
+    AutoTrajectory driveTesting = routine.trajectory("SLAMDunkTest");
+
+    routine
+        .active()
+        .onTrue(
+            Commands.sequence(
+                new InstantCommand(() -> System.out.println("Drive Testing 1ft")),
+                driveTesting.resetOdometry(),
+                driveTesting.cmd()));
+    return routine;
+  }
 }
