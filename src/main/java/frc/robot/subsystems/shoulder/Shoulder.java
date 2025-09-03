@@ -41,9 +41,8 @@ public class Shoulder extends SubsystemBase {
   }
 
   public void periodic() {
-
-    if (ShoulderConstants.Gains.hasChanged(hashCode())) {
-      this.IO.setPID(ShoulderConstants.Gains);
+    if (ShoulderConstants.SlowGains.hasChanged(hashCode())) {
+      this.IO.setPID(ShoulderConstants.SlowGains);
     }
 
     IO.updateInputs(inputs);
