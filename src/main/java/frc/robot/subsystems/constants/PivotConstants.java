@@ -78,7 +78,7 @@ public class PivotConstants {
               .expo_kA(kExponential_kA));
   public static final LoggedTunableGains SlowGains = Gains.slowDown();
 
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(155.89);
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(0);
   public static final double humanOffsetDegs = -55;
 
   public static final int mech2dWidth = 10;
