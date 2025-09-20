@@ -96,8 +96,9 @@ public class VisionIOPoseEstimator implements VisionIO {
       }
     }
 
-    pose2d = null;
-    Logger.recordOutput("Odometry/hasPose", false);
+    // pose2d = null;
+    // Logger.recordOutput("Odometry/hasPose", false);
+    return;
     // TODO: Clean this up
     // if (lastTimestamp == time) {
     //   addingMeasurement = false;
@@ -122,50 +123,50 @@ public class VisionIOPoseEstimator implements VisionIO {
     // }
 
     // Jump protection
-    if ((pose2d
-                .getTranslation()
-                .getDistance(RobotContainer.driveSubsystem.getPose().getTranslation())
-            > VisionConstants.MAX_POSE_JUMP_METERS
-        && !allowJumps)) {
-      addingMeasurement = false;
-      Logger.recordOutput("Vision/Adding Measurement", false);
-      Logger.recordOutput("Vision/Reasoning", "Jump protection");
-      return;
-    }
+    // if ((pose2d
+    //             .getTranslation()
+    //             .getDistance(RobotContainer.driveSubsystem.getPose().getTranslation())
+    //         > VisionConstants.MAX_POSE_JUMP_METERS
+    //     && !allowJumps)) {
+    //   addingMeasurement = false;
+    //   Logger.recordOutput("Vision/Adding Measurement", false);
+    //   Logger.recordOutput("Vision/Reasoning", "Jump protection");
+    //   return;
+    // }
 
-    // If out of field
-    if (pose2d.getTranslation().getX() > FieldConstants.fieldLength
-        || pose2d.getTranslation().getY() > FieldConstants.fieldWidth) {
-      addingMeasurement = false;
-      Logger.recordOutput("Vision/Adding Measurement", false);
-      Logger.recordOutput("Vision/Reasoning", "Out of field");
-      return;
-    }
+    // // If out of field
+    // if (pose2d.getTranslation().getX() > FieldConstants.fieldLength
+    //     || pose2d.getTranslation().getY() > FieldConstants.fieldWidth) {
+    //   addingMeasurement = false;
+    //   Logger.recordOutput("Vision/Adding Measurement", false);
+    //   Logger.recordOutput("Vision/Reasoning", "Out of field");
+    //   return;
+    // }
 
-    if (pose2d.getTranslation().getX() != 0.0 || pose2d.getTranslation().getY() != 0.0) {
-      // addingMeasurement = true;
-      // Logger.recordOutput("Vision/Adding Measurement", true);
-      if (speed > VisionConstants.MAX_SPEED) {
-        Logger.recordOutput("Vision/Reasoning", "Moving more than max speed");
-        // TODO: All add vision measurements should occur in updatePoseEstimate
-        // RobotContainer.driveSubsystem.addVisionMeasurement(
-        //     pose2d, time, VisionConstants.POSE_ESTIMATOR_MAX_SPEED_STDEVS.toMatrix());
-        return;
-      }
-      if (DriverStation.isDisabled()) {
-        Logger.recordOutput("Vision/Reasoning", "Disabled!");
-        // RobotContainer.driveSubsystem.addVisionMeasurement(
-        //     pose2d, time, VisionConstants.POSE_ESTIMATOR_VISION_DISABLED.toMatrix());
-      }
-      Logger.recordOutput("Vision/Reasoning", "All good!");
-      // RobotContainer.driveSubsystem.addVisionMeasurement(
-      //     pose2d, time, VisionConstants.POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS.toMatrix());
-      return;
-    }
+    // if (pose2d.getTranslation().getX() != 0.0 || pose2d.getTranslation().getY() != 0.0) {
+    //   // addingMeasurement = true;
+    //   // Logger.recordOutput("Vision/Adding Measurement", true);
+    //   if (speed > VisionConstants.MAX_SPEED) {
+    //     Logger.recordOutput("Vision/Reasoning", "Moving more than max speed");
+    //     // TODO: All add vision measurements should occur in updatePoseEstimate
+    //     // RobotContainer.driveSubsystem.addVisionMeasurement(
+    //     //     pose2d, time, VisionConstants.POSE_ESTIMATOR_MAX_SPEED_STDEVS.toMatrix());
+    //     return;
+    //   }
+    //   if (DriverStation.isDisabled()) {
+    //     Logger.recordOutput("Vision/Reasoning", "Disabled!");
+    //     // RobotContainer.driveSubsystem.addVisionMeasurement(
+    //     //     pose2d, time, VisionConstants.POSE_ESTIMATOR_VISION_DISABLED.toMatrix());
+    //   }
+    //   Logger.recordOutput("Vision/Reasoning", "All good!");
+    //   // RobotContainer.driveSubsystem.addVisionMeasurement(
+    //   //     pose2d, time, VisionConstants.POSE_ESTIMATOR_VISION_MULTI_TAG_STDEVS.toMatrix());
+    //   return;
+    // }
 
-    addingMeasurement = false;
-    Logger.recordOutput("Vision/Adding Measurement", false);
-    Logger.recordOutput("Vision/Reasoning", "No pose data");
+    // addingMeasurement = false;
+    // Logger.recordOutput("Vision/Adding Measurement", false);
+    // Logger.recordOutput("Vision/Reasoning", "No pose data");
   }
 
   public Pose2d getPoseSLAMDunk() {
