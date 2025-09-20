@@ -78,7 +78,7 @@ public class MoveSSToTarget extends Command {
         if (scoreAfter) scoreCmd.initialize();
         else this.state = State.FINISHED;
       }
-      if (timer.hasElapsed(3)) {
+      if (timer.hasElapsed(1.5)) {
         movingCmd.end(true);
         this.state = State.POST_MOVE;
         if (scoreAfter) scoreCmd.initialize();
