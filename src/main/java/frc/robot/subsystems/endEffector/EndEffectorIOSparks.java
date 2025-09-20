@@ -88,8 +88,7 @@ public class EndEffectorIOSparks implements EndEffectorIO {
   }
 
   private boolean hasAlgae() {
-    return hasAlgaeDebounce.calculate(
-        algaeSensor.getVoltage() > AlgaeClawConstants.hasAlgaeVoltage);
+    return false;
   }
 
   @Override
