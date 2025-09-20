@@ -56,7 +56,7 @@ public class ElevatorConstants {
               .i(RHRUtil.modeDependentDouble(2.0, 0.0))
               .d(RHRUtil.modeDependentDouble(10, 0.01))
               // FF
-              .g(RHRUtil.modeDependentDouble(19, 0.0785))
+              .g(RHRUtil.modeDependentDouble(18.5, 0.0785))
               .v(RHRUtil.modeDependentDouble(100.0 / 9, 0))
               .s(RHRUtil.modeDependentDouble(0, 0))
               .v(RHRUtil.modeDependentDouble(0.6328, 0))
