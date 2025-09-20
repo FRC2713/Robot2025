@@ -10,10 +10,8 @@ import frc.robot.FieldConstants;
 import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.subsystems.constants.DriveConstants;
 import java.util.Optional;
-
-import org.littletonrobotics.junction.Logger;
-
 import lombok.Getter;
+import org.littletonrobotics.junction.Logger;
 
 public enum ScoreNode {
   // indexes start at right branch facing driver station and move clockwise, which means that
@@ -74,7 +72,7 @@ public enum ScoreNode {
 
     Transform2d robotOffset =
         new Transform2d(
-            yOffset() + AUTON_MODE_OFFSET,
+            yOffset(),
             DriveConstants.coralOffsetFromCenter
                 .getAsDouble(), // offset of scoring mechanism from center of robot
             new Rotation2d(Math.PI));
