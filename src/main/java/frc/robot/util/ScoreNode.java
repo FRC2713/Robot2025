@@ -67,12 +67,12 @@ public enum ScoreNode {
   public Pose2d getRobotAlignmentPose() {
     Optional<Alliance> alliance = DriverStation.getAlliance();
 
-    double AUTON_MODE_OFFSET = DriverStation.isAutonomous() ? Units.inchesToMeters(2) : 0;
+    double AUTON_MODE_OFFSET = DriverStation.isAutonomous() ? Units.inchesToMeters(.5) : 0;
     Logger.recordOutput("ScoreAssist/AUTON_MODE_OFFSET", AUTON_MODE_OFFSET);
 
     Transform2d robotOffset =
         new Transform2d(
-            yOffset(),
+            yOffset() + AUTON_MODE_OFFSET,
             DriveConstants.coralOffsetFromCenter
                 .getAsDouble(), // offset of scoring mechanism from center of robot
             new Rotation2d(Math.PI));
