@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.util.ScoreLevel;
@@ -19,6 +20,8 @@ public class MoveSSToTarget extends Command {
   private Command scoreCmd;
 
   private State state = State.INIT;
+
+  private Timer timer = new Timer();
 
   private enum State {
     INIT,
@@ -63,6 +66,7 @@ public class MoveSSToTarget extends Command {
     this.movingCmd.initialize();
     this.state = State.MOVING;
     this.scoreCmd = moveTarget.get().getScoreCommand().get();
+    timer.start();
   }
 
   public void execute() {
@@ -70,6 +74,12 @@ public class MoveSSToTarget extends Command {
       movingCmd.execute();
       if (movingCmd.isFinished()) {
         movingCmd.end(false);
+        this.state = State.POST_MOVE;
+        if (scoreAfter) scoreCmd.initialize();
+        else this.state = State.FINISHED;
+      }
+      if (timer.hasElapsed(1.5)) {
+        movingCmd.end(true);
         this.state = State.POST_MOVE;
         if (scoreAfter) scoreCmd.initialize();
         else this.state = State.FINISHED;
