@@ -58,10 +58,6 @@ import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.endEffector.EndEffectorIOSparks;
-import frc.robot.subsystems.pivot.Pivot;
-import frc.robot.subsystems.pivot.PivotIO;
-import frc.robot.subsystems.pivot.PivotIOKrakens;
-import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.shoulder.Shoulder;
 import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
@@ -81,7 +77,6 @@ public class RobotContainer {
   public static Drivetrain driveSubsystem;
   public static Elevator elevator;
   public static Shoulder shoulder;
-  public static Pivot pivot;
   public static Climber climber;
   public static EndEffector endEffector;
 
@@ -129,7 +124,6 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
         elevator = new Elevator(new ElevatorIOKrakens());
-        pivot = new Pivot(new PivotIOKrakens());
         shoulder = new Shoulder(new ShoulderIOKrakens());
         climber = new Climber(new ClimberIOSparks());
         endEffector = new EndEffector(new EndEffectorIOSparks());
@@ -143,7 +137,6 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        pivot = new Pivot(new PivotIOSim());
         elevator = new Elevator(new ElevatorIOSim());
         shoulder = new Shoulder(new ShoulderIOSim());
         climber = new Climber(new ClimberIOSim());
@@ -160,7 +153,6 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         elevator = new Elevator(new ElevatorIO() {});
-        pivot = new Pivot(new PivotIO() {});
         shoulder = new Shoulder(new ShoulderIO() {});
         climber = new Climber(new ClimberIO() {});
         endEffector = new EndEffector(new EndEffectorIO() {});
@@ -291,7 +283,6 @@ public class RobotContainer {
   public void disabledPeriodic() {
     // Safety
     elevator.setTargetHeight(elevator.getCurrentHeight());
-    pivot.setTargetAngle(pivot.getCurrentAngle());
     endEffector.setCoralRPM(0);
     endEffector.setAlgaeRPM(0);
     shoulder.setTargetAngle(shoulder.getCurrentAngle());

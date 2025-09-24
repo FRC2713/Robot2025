@@ -12,6 +12,8 @@ public class IntakeConstants {
   public static final int kRollerEncoderCANId = 44;
 
   // Intake pivot arm constants
+
+  //TODO: use something less confusing than "IP"
   public static final double kIPGearing = 36 * (48. / 16.);
 
   public static final int kIPStallCurrentLimit = 30; // amps

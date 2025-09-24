@@ -8,7 +8,6 @@ import frc.robot.SetpointConstants;
 import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveCmds;
 import frc.robot.commands.ElevatorCmds;
-import frc.robot.commands.PivotCmds;
 import frc.robot.commands.ShoulderCmds;
 import org.littletonrobotics.junction.Logger;
 
@@ -30,7 +29,6 @@ public class SetClimbingConfig extends SequentialCommandGroup {
         Commands.parallel(
             ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.CLIMB_PREP_HEIGHT),
             ShoulderCmds.setAngle(SetpointConstants.Shoulder.PREP_CLIMB_ANGLE_DEGS),
-            PivotCmds.setAngle(SetpointConstants.Pivot.PREP_CLIMB_ANGLE_DEGS)),
         // deploy the climber
         ClimberCmds.deploy(),
         Commands.waitSeconds(0.5),
@@ -39,7 +37,6 @@ public class SetClimbingConfig extends SequentialCommandGroup {
         Commands.sequence(
             ShoulderCmds.setAngle(SetpointConstants.Shoulder.CLIMB_ANGLE_DEGS),
             // ElevatorCmds.waitUntilAtTarget(),
-            PivotCmds.setAngleAndWait(SetpointConstants.Pivot.CLIMB_ANGLE_DEGS),
-            ElevatorCmds.setHeight(3)));
+            ElevatorCmds.setHeight(3))));
   }
 }

@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ElevatorCmds;
-import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
 import java.util.ArrayList;
@@ -30,11 +29,6 @@ public class SetDOFSOneAtATimeFactory {
 
   public SetDOFSOneAtATimeFactory addShoulderCommand(DoubleSupplier setpoint) {
     this.ordered.add(ShoulderCmds.setAngleAndWait(setpoint));
-    return this;
-  }
-
-  public SetDOFSOneAtATimeFactory addPivotCommand(DoubleSupplier setpoint) {
-    this.ordered.add(PivotCmds.setAngleAndWait(setpoint));
     return this;
   }
 
