@@ -41,21 +41,12 @@ public class Intake extends SubsystemBase {
 
   //Roller functions
 
-  public void setRollerRPM(double rpm) {
-    IO.setRollerRPM(rpm);
-  }
-
   public void setRollerCurrentLimit(int currentLimit) {
     IO.setRollerCurrentLimit(currentLimit);
   }
 
   public boolean hasCoral() {
     return inputs.hasCoral;
-  }
-
-  @AutoLogOutput(key = "Intake/rollerIsAtTarget")
-  public boolean rollerIsAtTarget() {
-    return this.IO.rollerIsAtTarget();
   }
 
   //Pivot functions

@@ -19,10 +19,16 @@ import frc.robot.util.PhoenixUtil;
 
 public class IntakeIOKrakens implements IntakeIO {
 
-  private final TalonFX motor;
-  private final CANcoder encoder;
-  private TalonFXConfiguration motorConfig;
-  private CANcoderConfiguration encoderConfig;
+  private final TalonFX intakeMotor;
+  private final CANcoder intakeEncoder;
+  private TalonFXConfiguration intakeMotorConfig;
+  private CANcoderConfiguration intakeEncoderConfig;
+
+  private final TalonFX rollerMotor;
+  private final CANcoder rollerEncoder;
+  private TalonFXConfiguration rollerMotorConfig;
+  private CANcoderConfiguration rollerEncoderConfig;
+
   private double targetDegrees;
 
   private final MotionMagicExpoTorqueCurrentFOC angleRequest = new MotionMagicExpoTorqueCurrentFOC(0);
@@ -32,77 +38,114 @@ public class IntakeIOKrakens implements IntakeIO {
     SmartDashboard.putBoolean("Intake has coral", false);
 
     //Intake pivot stuff
-    this.motor = new TalonFX(IntakeConstants.kCANId);
-    this.encoder = new CANcoder(IntakeConstants.kEncoderCANId);
-    motorConfig = createKrakenConfig();
-    encoderConfig = createCANcoderConfiguration();
-    PhoenixUtil.tryUntilOk(5, () -> this.encoder.getConfigurator().apply(encoderConfig, 0.25));
-    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motorConfig, 0.25));
+    this.intakeMotor = new TalonFX(IntakeConstants.kIntakePivotCANId);
+    this.intakeEncoder = new CANcoder(IntakeConstants.kIntakePivotEncoderCANId);
+    intakeMotorConfig = createIntakePivotKrakenConfig();
+    intakeEncoderConfig = createCANcoderConfiguration();
+    PhoenixUtil.tryUntilOk(5, () -> this.intakeEncoder.getConfigurator().apply(intakeEncoderConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> intakeMotor.getConfigurator().apply(intakeMotorConfig, 0.25));
     PhoenixUtil.tryUntilOk(
-        5, () -> motor.setPosition(encoder.getAbsolutePosition().getValueAsDouble(), 0.25));
+        5, () -> intakeMotor.setPosition(intakeEncoder.getAbsolutePosition().getValueAsDouble(), 0.25));
+    
+    //Roller stuff
+    this.rollerMotor = new TalonFX(IntakeConstants.kRollerCANId);
+    this.rollerEncoder = new CANcoder(IntakeConstants.kRollerEncoderCANId);
+    rollerMotorConfig = createRollerKrakenConfig();
+    rollerEncoderConfig = createCANcoderConfiguration();
+    PhoenixUtil.tryUntilOk(5, () -> this.rollerEncoder.getConfigurator().apply(rollerEncoderConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> rollerMotor.getConfigurator().apply(rollerMotorConfig, 0.25));
+    PhoenixUtil.tryUntilOk(
+        5, () -> rollerMotor.setPosition(rollerEncoder.getAbsolutePosition().getValueAsDouble(), 0.25));
   }
 
   @Override
   public void updateInputs(IntakeInputs inputs) {
 
     //Intake pivot updates
-    inputs.intakePivotVelocityDPS = Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble());
-    inputs.intakePivotVoltage = motor.getMotorVoltage().getValueAsDouble();
-    inputs.intakePivotAngleDegrees = Units.rotationsToDegrees(motor.getPosition().getValueAsDouble());
+    inputs.intakePivotVelocityDPS = Units.rotationsToDegrees(intakeMotor.getVelocity().getValueAsDouble());
+    inputs.intakePivotVoltage = intakeMotor.getMotorVoltage().getValueAsDouble();
+    inputs.intakePivotAngleDegrees = Units.rotationsToDegrees(intakeMotor.getPosition().getValueAsDouble());
     inputs.intakePivotAbsoluteAngleDegrees =
-        Units.rotationsToDegrees(encoder.getAbsolutePosition().getValueAsDouble());
+        Units.rotationsToDegrees(intakeEncoder.getAbsolutePosition().getValueAsDouble());
     inputs.commandedAngleDegs = targetDegrees;
 
-    //inputs.setpointVelocity = motor.getClosedLoopReference().getValueAsDouble();
+    inputs.rollerVelocityRPM = Units.rotationsToDegrees(rollerMotor.getVelocity().getValueAsDouble());
+    inputs.rollerOutputVoltage = rollerMotor.getMotorVoltage().getValueAsDouble();
+    inputs.rollerPositionDegs = Units.rotationsToDegrees(rollerMotor.getPosition().getValueAsDouble());
+    inputs.commandedRollerRPM = targetDegrees;
+
+    //inputs.setpointVelocity = intakeMotor.getClosedLoopReference().getValueAsDouble();
   }
 
   // roller functions
-  @Override
-  public void setRollerRPM(double rpm) {}
 
   @Override
-  public void setRollerVoltage(double volts) {}
+  public void setRollerVoltage(double volts) {
+    rollerMotor.setVoltage(volts);
+  }
 
   @Override
-  public void setRollerCurrentLimit(int currentLimit) {}
-
-  @Override
-  public boolean rollerIsAtTarget() {
-    return true;
+  public void setRollerCurrentLimit(int currentLimit) {
   }
 
   // intake pivot functions
   @Override
   public void setVoltage(double volts) {
-    motor.setVoltage(volts);
+    intakeMotor.setVoltage(volts);
   }
 
   @Override
   public void setTargetAngle(double degrees) {
     this.targetDegrees = degrees;
-    motor.setControl(angleRequest.withPosition(Units.degreesToRotations(degrees)));
+    intakeMotor.setControl(angleRequest.withPosition(Units.degreesToRotations(degrees)));
   }
 
   @Override
   public void setPID(LoggedTunableGains pid) {
-    motorConfig.Slot0 = pid.toTalonFX(GravityTypeValue.Arm_Cosine);
-    motorConfig.MotionMagic = pid.getMotionMagicConfig();
+    intakeMotorConfig.Slot0 = pid.toTalonFX(GravityTypeValue.Arm_Cosine);
+    intakeMotorConfig.MotionMagic = pid.getMotionMagicConfig();
 
-    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motorConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> intakeMotor.getConfigurator().apply(intakeMotorConfig, 0.25));
   }
-
-  @Override
-  public void configureSoftLimits(double minDeg, double maxDeg) {}
 
   @Override
   public boolean intakePivotIsAtTarget() {
     return true;
   }
 
-  public TalonFXConfiguration createKrakenConfig() {
+  public TalonFXConfiguration createRollerKrakenConfig() {
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    config.Feedback.FeedbackRemoteSensorID = this.encoder.getDeviceID();
+    config.Feedback.FeedbackRemoteSensorID = this.rollerEncoder.getDeviceID();
+    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    config.Feedback.SensorToMechanismRatio = 1.0;
+    config.Feedback.RotorToSensorRatio = IntakeConstants.kRollerGearing;
+    config.TorqueCurrent.PeakForwardTorqueCurrent = IntakeConstants.kRollerStallCurrentLimit;
+    config.TorqueCurrent.PeakReverseTorqueCurrent = -IntakeConstants.kRollerStallCurrentLimit;
+    config.CurrentLimits.StatorCurrentLimit = IntakeConstants.kRollerStatorCurrentLimit;
+    config.CurrentLimits.StatorCurrentLimitEnable = true;
+    config.MotorOutput.Inverted =
+        (IntakeConstants.kRollerInverted)
+            ? InvertedValue.CounterClockwise_Positive
+            : InvertedValue.Clockwise_Positive;
+
+    config.Slot0 = IntakeConstants.rollerGains.toTalonFX(GravityTypeValue.Arm_Cosine);
+    config.MotionMagic = IntakeConstants.rollerGains.getMotionMagicConfig();
+    config.ClosedLoopGeneral.ContinuousWrap = false;
+    config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+    config.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
+        Units.degreesToRotations(IntakeConstants.kRollerMaxAngle);
+    config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    config.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
+        Units.degreesToRotations(IntakeConstants.kRollerMinAngle);
+
+    return config;
+  }
+
+  public TalonFXConfiguration createIntakePivotKrakenConfig() {
+    var config = new TalonFXConfiguration();
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    config.Feedback.FeedbackRemoteSensorID = this.intakeEncoder.getDeviceID();
     config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     config.Feedback.SensorToMechanismRatio = 1.0;
     config.Feedback.RotorToSensorRatio = IntakeConstants.kIPGearing;
@@ -124,7 +167,6 @@ public class IntakeIOKrakens implements IntakeIO {
     config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     config.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
         Units.degreesToRotations(IntakeConstants.kIPMinAngle);
-
     return config;
   }
 

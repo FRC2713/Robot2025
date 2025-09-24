@@ -17,10 +17,6 @@ public class IntakeIOSim implements IntakeIO {
 
   public void setRollerCurrentLimit(int currentLimit) {}
 
-  public boolean isAtTarget() {
-    return true;
-  }
-
   // intake pivot functions
   public void setVoltage(double volts) {}
 
@@ -29,8 +25,6 @@ public class IntakeIOSim implements IntakeIO {
   public void setPID(LoggedTunableGains pid) {}
 
   public void setServoPos(double pos) {}
-
-  public void configureSoftLimits(double minDeg, double maxDeg) {}
 
   public boolean intakePivotIsAtTarget() {
     return true;

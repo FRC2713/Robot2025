@@ -33,15 +33,10 @@ public interface IntakeIO {
   public default void updateInputs(IntakeInputs inputs) {}
 
   // roller functions
-  public default void setRollerRPM(double rpm) {}
 
   public default void setRollerVoltage(double volts) {}
 
   public default void setRollerCurrentLimit(int currentLimit) {}
-
-  public default boolean rollerIsAtTarget() {
-    return true;
-  }
 
   // intake pivot functions
   public default void setVoltage(double volts) {}
