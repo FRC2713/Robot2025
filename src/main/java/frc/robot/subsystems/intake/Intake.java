@@ -23,10 +23,11 @@ public class Intake extends SubsystemBase {
     Logger.processInputs("Intake", inputs);
     IO.updateInputs(inputs);
 
+    @SuppressWarnings("unused")
     var hasCoral = hasCoral();
 
     /*
-    // Coppied & modified from EndEffector; uncomment if intake proves to move too quickly with coral
+    // Coppied & modified from EndEffector; uncomment if intake pivot proves to move too quickly with coral
     if (hasCoral && !hadCoral) {
       System.out.println("Coral detected; slowing down intake arm");
       RobotContainer.intake.setPID(IntakeConstants.SlowGains);
