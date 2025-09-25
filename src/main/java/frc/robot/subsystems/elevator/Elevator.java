@@ -1,10 +1,13 @@
 package frc.robot.subsystems.elevator;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.util.LoggedTunableGains;
@@ -12,63 +15,68 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
-  private ElevatorInputsAutoLogged inputs;
-  private ElevatorIO IO;
-  public final MechanismLigament2d mech2d =
-      new MechanismLigament2d(
-          "elevator",
-          ElevatorConstants.kInitialHeight,
-          90,
-          ElevatorConstants.mech2dWidth,
-          ElevatorConstants.mech2dColor);
+  private ElevatorFeedforward feedforward = ElevatorConstants.Gains.createElevatorFF();
+  private PIDController pid = ElevatorConstants.Gains.createPIDController();
+  private final DCMotor motor = DCMotor.getKrakenX60Foc(2);
+  private final ElevatorSim sim =
+      new ElevatorSim(
+          motor,
+          ElevatorConstants.kGearReduction,
+          ElevatorConstants.kCarriageMass,
+          ElevatorConstants.kDrumRadius,
+          ElevatorConstants.kMinHeight,
+          ElevatorConstants.kMaxHeight,
+          true,
+          ElevatorConstants.kInitialHeight);
+  public double setpoint = 0.0;
 
+  // 3d visualisation stuff, dw bout it
   public Pose3d pose = ElevatorConstants.kInitialPose;
   public Transform3d transform = new Transform3d();
 
-  public Elevator(ElevatorIO IO) {
-    this.inputs = new ElevatorInputsAutoLogged();
-    this.IO = IO;
-    this.IO.updateInputs(this.inputs);
-  }
+  public Elevator() {}
 
   @Override
   public void periodic() {
 
-    if (ElevatorConstants.Gains.hasChanged(hashCode())) {
-      this.IO.setPID(ElevatorConstants.SlowGains);
-    }
+    double pidOutput = pid.calculate(getCurrentHeight(), setpoint);
+    double feedforwardOutput =
+        feedforward.calculate(Units.metersToInches(sim.getVelocityMetersPerSecond()));
 
-    this.IO.updateInputs(this.inputs);
-    Logger.processInputs("Elevator", this.inputs);
+    Logger.recordOutput("TestElevator/PID output", pidOutput);
+    Logger.recordOutput("TestElevator/feedforward Output", feedforwardOutput);
 
-    this.transform =
-        new Transform3d(0, 0, Units.inchesToMeters(getCurrentHeight()), new Rotation3d());
+    double input = DriverStation.isEnabled() ? pidOutput + feedforwardOutput : 0;
 
-    this.pose = ElevatorConstants.kInitialPose.transformBy(this.transform);
+    sim.setInputVoltage(input);
+    sim.update(0.02);
+
+    Logger.recordOutput("TestElevator/volts", input);
+    Logger.recordOutput("TestElevator/setpoint", setpoint);
+    Logger.recordOutput("TestElevator/Currentheight", getCurrentHeight());
+    Logger.recordOutput(
+        "TestElevator/CurrentVelocity", Units.metersToInches(sim.getVelocityMetersPerSecond()));
   }
 
   public double getCurrentHeight() {
-    return (inputs.heightInchesLeft + inputs.heightInchesRight) / 2;
+    return Units.metersToInches(sim.getPositionMeters());
   }
 
   public void setTargetHeight(double height) {
-    this.IO.setTargetHeight(height);
+    setpoint = height;
   }
 
-  public void setVoltage(double volts1, double volts2) {
-    this.IO.setVoltage(volts1, volts2);
-  }
+  public void setVoltage(double volts1, double volts2) {}
 
   @AutoLogOutput(key = "Elevator/isAtTarget")
   public boolean isAtTarget() {
-    return this.IO.isAtTarget();
+    return Math.abs(getCurrentHeight() - setpoint) <= ElevatorConstants.AT_TARGET_GIVE_INCHES;
   }
 
-  public void updateMech2D() {
-    this.mech2d.setLength(Units.inchesToMeters(this.inputs.heightInchesLeft));
-  }
+  public void updateMech2D() {}
 
   public void setPID(LoggedTunableGains pid) {
-    this.IO.setPID(pid);
+    this.pid = pid.createPIDController();
+    feedforward = pid.createElevatorFF();
   }
 }

@@ -51,9 +51,6 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIOKrakens;
-import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
@@ -128,7 +125,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
-        elevator = new Elevator(new ElevatorIOKrakens());
+        elevator = new Elevator();
         pivot = new Pivot(new PivotIOKrakens());
         shoulder = new Shoulder(new ShoulderIOKrakens());
         climber = new Climber(new ClimberIOSparks());
@@ -144,7 +141,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
         pivot = new Pivot(new PivotIOSim());
-        elevator = new Elevator(new ElevatorIOSim());
+        elevator = new Elevator();
         shoulder = new Shoulder(new ShoulderIOSim());
         climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
@@ -159,7 +156,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        elevator = new Elevator(new ElevatorIO() {});
+        elevator = new Elevator();
         pivot = new Pivot(new PivotIO() {});
         shoulder = new Shoulder(new ShoulderIO() {});
         climber = new Climber(new ClimberIO() {});
