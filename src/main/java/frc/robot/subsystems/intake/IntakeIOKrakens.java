@@ -9,7 +9,6 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.constants.IntakeConstants;
@@ -31,50 +30,61 @@ public class IntakeIOKrakens implements IntakeIO {
 
   private double targetDegrees;
 
-  private final MotionMagicExpoTorqueCurrentFOC angleRequest = new MotionMagicExpoTorqueCurrentFOC(0);
+  private final MotionMagicExpoTorqueCurrentFOC angleRequest =
+      new MotionMagicExpoTorqueCurrentFOC(0);
 
   public IntakeIOKrakens() {
 
     SmartDashboard.putBoolean("Intake has coral", false);
 
-    //Intake pivot stuff
+    // Intake pivot stuff
     this.intakeMotor = new TalonFX(IntakeConstants.kIntakePivotCANId);
     this.intakeEncoder = new CANcoder(IntakeConstants.kIntakePivotEncoderCANId);
     intakeMotorConfig = createIntakePivotKrakenConfig();
     intakeEncoderConfig = createCANcoderConfiguration();
-    PhoenixUtil.tryUntilOk(5, () -> this.intakeEncoder.getConfigurator().apply(intakeEncoderConfig, 0.25));
+    PhoenixUtil.tryUntilOk(
+        5, () -> this.intakeEncoder.getConfigurator().apply(intakeEncoderConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> intakeMotor.getConfigurator().apply(intakeMotorConfig, 0.25));
     PhoenixUtil.tryUntilOk(
-        5, () -> intakeMotor.setPosition(intakeEncoder.getAbsolutePosition().getValueAsDouble(), 0.25));
-    
-    //Roller stuff
+        5,
+        () ->
+            intakeMotor.setPosition(intakeEncoder.getAbsolutePosition().getValueAsDouble(), 0.25));
+
+    // Roller stuff
     this.rollerMotor = new TalonFX(IntakeConstants.kRollerCANId);
     this.rollerEncoder = new CANcoder(IntakeConstants.kRollerEncoderCANId);
     rollerMotorConfig = createRollerKrakenConfig();
     rollerEncoderConfig = createCANcoderConfiguration();
-    PhoenixUtil.tryUntilOk(5, () -> this.rollerEncoder.getConfigurator().apply(rollerEncoderConfig, 0.25));
+    PhoenixUtil.tryUntilOk(
+        5, () -> this.rollerEncoder.getConfigurator().apply(rollerEncoderConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> rollerMotor.getConfigurator().apply(rollerMotorConfig, 0.25));
     PhoenixUtil.tryUntilOk(
-        5, () -> rollerMotor.setPosition(rollerEncoder.getAbsolutePosition().getValueAsDouble(), 0.25));
+        5,
+        () ->
+            rollerMotor.setPosition(rollerEncoder.getAbsolutePosition().getValueAsDouble(), 0.25));
   }
 
   @Override
   public void updateInputs(IntakeInputs inputs) {
 
-    //Intake pivot updates
-    inputs.intakePivotVelocityDPS = Units.rotationsToDegrees(intakeMotor.getVelocity().getValueAsDouble());
+    // Intake pivot updates
+    inputs.intakePivotVelocityDPS =
+        Units.rotationsToDegrees(intakeMotor.getVelocity().getValueAsDouble());
     inputs.intakePivotVoltage = intakeMotor.getMotorVoltage().getValueAsDouble();
-    inputs.intakePivotAngleDegrees = Units.rotationsToDegrees(intakeMotor.getPosition().getValueAsDouble());
+    inputs.intakePivotAngleDegrees =
+        Units.rotationsToDegrees(intakeMotor.getPosition().getValueAsDouble());
     inputs.intakePivotAbsoluteAngleDegrees =
         Units.rotationsToDegrees(intakeEncoder.getAbsolutePosition().getValueAsDouble());
     inputs.commandedAngleDegs = targetDegrees;
 
-    inputs.rollerVelocityRPM = Units.rotationsToDegrees(rollerMotor.getVelocity().getValueAsDouble());
+    inputs.rollerVelocityRPM =
+        Units.rotationsToDegrees(rollerMotor.getVelocity().getValueAsDouble());
     inputs.rollerOutputVoltage = rollerMotor.getMotorVoltage().getValueAsDouble();
-    inputs.rollerPositionDegs = Units.rotationsToDegrees(rollerMotor.getPosition().getValueAsDouble());
+    inputs.rollerPositionDegs =
+        Units.rotationsToDegrees(rollerMotor.getPosition().getValueAsDouble());
     inputs.commandedRollerRPM = targetDegrees;
 
-    //inputs.setpointVelocity = intakeMotor.getClosedLoopReference().getValueAsDouble();
+    // inputs.setpointVelocity = intakeMotor.getClosedLoopReference().getValueAsDouble();
   }
 
   // roller functions
@@ -85,8 +95,7 @@ public class IntakeIOKrakens implements IntakeIO {
   }
 
   @Override
-  public void setRollerCurrentLimit(int currentLimit) {
-  }
+  public void setRollerCurrentLimit(int currentLimit) {}
 
   // intake pivot functions
   @Override

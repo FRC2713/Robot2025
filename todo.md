@@ -4,6 +4,7 @@
 - Intake roler code (note: uses Krackens): kracken code done, sim unfinished
 - colllect coral off of ground & detect when collected: not started
 - Shoulder works same: non-issue (just don't change anything)
+- Delete Pivot: completed
 - Algae & coral rollers are the same motor & system now (note: also uses Krackens): not started
 - Re-tune set ponts & scoring routines: not started
 - Handoff logic (intake to claw): not started

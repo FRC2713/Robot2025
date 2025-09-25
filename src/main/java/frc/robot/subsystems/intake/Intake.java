@@ -2,7 +2,6 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableGains;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -35,11 +34,11 @@ public class Intake extends SubsystemBase {
       System.out.println("No Coral detected; Speeding up intake arm");
       RobotContainer.intake.setPID(IntakeConstants.Gains);
     }
-    
+
     hadCoral = hasCoral;*/
   }
 
-  //Roller functions
+  // Roller functions
 
   public void setRollerCurrentLimit(int currentLimit) {
     IO.setRollerCurrentLimit(currentLimit);
@@ -49,7 +48,7 @@ public class Intake extends SubsystemBase {
     return inputs.hasCoral;
   }
 
-  //Pivot functions
+  // Pivot functions
   public void setTargetAngle(double degrees) {
     this.IO.setTargetAngle(degrees);
   }
