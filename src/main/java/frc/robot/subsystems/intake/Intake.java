@@ -41,8 +41,12 @@ public class Intake extends SubsystemBase {
 
   // Roller functions
 
-  public void setRollerCurrentLimit(int currentLimit) {
-    IO.setRollerCurrentLimit(currentLimit);
+  public void enableLimitSwitch() {
+    IO.enableLimitSwitch();
+  }
+
+  public void setRollerVoltage(double volts) {
+    IO.setRollerVoltage(volts);
   }
 
   public boolean hasCoral() {

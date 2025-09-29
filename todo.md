@@ -1,6 +1,6 @@
 # Todo list
 
-- PID control of the intake arm: api done
+- PID control of the intake arm: api done, not tuned
 - Intake roler code (note: uses Krackens): kracken code done, sim unfinished
 - colllect coral off of ground & detect when collected: not started
 - Shoulder works same: non-issue (just don't change anything)

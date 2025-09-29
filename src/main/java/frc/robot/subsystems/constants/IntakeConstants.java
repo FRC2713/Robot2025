@@ -1,5 +1,6 @@
 package frc.robot.subsystems.constants;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.util.ControlGains;
 import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.RHRUtil;
@@ -13,7 +14,7 @@ public class IntakeConstants {
 
   // Intake pivot arm constants
 
-  //TODO: use something less confusing than "IP"
+  // TODO: use something less confusing than "IP"
   public static final double kIPGearing = 36 * (48. / 16.);
 
   public static final int kIPStallCurrentLimit = 30; // amps
@@ -23,6 +24,12 @@ public class IntakeConstants {
 
   public static final double kIPMaxAngle = (90);
   public static final double kIPMinAngle = (-10);
+
+  public static final double kIPLength = 42.0;
+  public static final double kIPMass = 1.0;
+
+  public static final double kIPInitialAngleDeg = 0.0;
+  public static final double kIPInitialAngleRad = Units.degreesToRadians(kIPInitialAngleDeg);
 
   public static final double IPkP = RHRUtil.modeDependentDouble(600., 10); // output/rotation
   public static final double IPkI = 0.0; // Integral of kP
@@ -61,7 +68,7 @@ public class IntakeConstants {
 
   // roller constants
 
-  //TODO: set roller constants to actual roller constants
+  // TODO: set roller constants to actual roller constants
   public static final double kRollerGearing = 36 * (48. / 16.);
 
   public static final int kRollerStallCurrentLimit = 30; // amps

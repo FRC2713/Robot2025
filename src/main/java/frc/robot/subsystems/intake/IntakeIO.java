@@ -36,7 +36,7 @@ public interface IntakeIO {
 
   public default void setRollerVoltage(double volts) {}
 
-  public default void setRollerCurrentLimit(int currentLimit) {}
+  public default void enableLimitSwitch() {}
 
   // intake pivot functions
   public default void setVoltage(double volts) {}

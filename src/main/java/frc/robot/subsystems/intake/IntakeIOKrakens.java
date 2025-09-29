@@ -95,7 +95,7 @@ public class IntakeIOKrakens implements IntakeIO {
   }
 
   @Override
-  public void setRollerCurrentLimit(int currentLimit) {}
+  public void enableLimitSwitch() {}
 
   // intake pivot functions
   @Override

@@ -58,6 +58,7 @@ import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.endEffector.EndEffectorIOSparks;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shoulder.Shoulder;
 import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
@@ -79,6 +80,7 @@ public class RobotContainer {
   public static Shoulder shoulder;
   public static Climber climber;
   public static EndEffector endEffector;
+  public static Intake intake;
 
   // Xbox Controllers
   public static DriverControls driverControls = new DriverControls();
