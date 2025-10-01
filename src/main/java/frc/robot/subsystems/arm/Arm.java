@@ -47,10 +47,6 @@ public class Arm extends SubsystemBase {
     return this.inputs.angleDegrees;
   }
 
-  public double getAbsoluteAngle() {
-    return this.inputs.absoluteAngleDegrees;
-  }
-
   public void setBus(double bus) {
     Logger.recordOutput("bus", bus);
     IO.setBus(bus);

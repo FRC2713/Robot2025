@@ -9,8 +9,7 @@ public interface ArmIO {
     public double velocityDPS = 0.0;
     public double voltage = 0.0;
     public double angleDegrees = 0.0;
-    public double absoluteAngleDegrees = 0.0;
-
+    public double targetAngle = 0.0;
     public double commandedAngleDegs = 0.0;
   }
 

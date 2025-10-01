@@ -36,6 +36,9 @@ import frc.robot.oi.DriverControls;
 import frc.robot.oi.OperatorControls;
 import frc.robot.scoreassist.ClimbAssist;
 import frc.robot.scoreassist.ScoreAssist;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmIO;
+import frc.robot.subsystems.arm.ArmIOSim;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
@@ -84,7 +87,7 @@ public class RobotContainer {
   public static Pivot pivot;
   public static Climber climber;
   public static EndEffector endEffector;
-
+  public static Arm arm;
   // Xbox Controllers
   public static DriverControls driverControls = new DriverControls();
   public static OperatorControls operatorControls = new OperatorControls();
@@ -148,6 +151,7 @@ public class RobotContainer {
         shoulder = new Shoulder(new ShoulderIOSim());
         climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
+        arm = new Arm(new ArmIOSim());
         break;
 
       default:
@@ -164,6 +168,7 @@ public class RobotContainer {
         shoulder = new Shoulder(new ShoulderIO() {});
         climber = new Climber(new ClimberIO() {});
         endEffector = new EndEffector(new EndEffectorIO() {});
+        arm = new Arm(new ArmIO() {});
         break;
     }
     visionsubsystem =
