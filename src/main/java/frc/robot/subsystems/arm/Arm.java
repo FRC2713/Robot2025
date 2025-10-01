@@ -1,17 +1,28 @@
 package frc.robot.subsystems.arm;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.constants.ArmConstants;
+import frc.robot.subsystems.constants.ShoulderConstants;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
   private final ArmInputsAutoLogged inputs;
   private final ArmIO IO;
+  public Pose3d pose = ShoulderConstants.kInitialPose;
+  public Transform3d transform = new Transform3d();
 
   public Arm(ArmIO IO) {
     this.inputs = new ArmInputsAutoLogged();
     IO.updateInputs(inputs);
     this.IO = IO;
   }
-  
+
   public void periodic() {
 
     if (ArmConstants.Gains.hasChanged(hashCode())) {
@@ -39,7 +50,7 @@ public class Arm extends SubsystemBase {
   public double getAbsoluteAngle() {
     return this.inputs.absoluteAngleDegrees;
   }
-  
+
   public void setBus(double bus) {
     Logger.recordOutput("bus", bus);
     IO.setBus(bus);
@@ -51,7 +62,7 @@ public class Arm extends SubsystemBase {
             0.0, 0.0, 0.0, new Rotation3d(0, Units.degreesToRadians(inputs.angleDegrees), 0));
 
     this.pose =
-             ArmConstants.kInitialPose
+        ArmConstants.kInitialPose
             .transformBy(RobotContainer.elevator.transform)
             .transformBy(this.transform);
   }
