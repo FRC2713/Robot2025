@@ -27,7 +27,6 @@ public interface IntakeIO {
 
     // Coral detection
     public boolean hasCoral = false;
-    public double sensorDistance = 0.0;
   }
 
   public default void updateInputs(IntakeInputs inputs) {}

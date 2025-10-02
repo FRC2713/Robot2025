@@ -10,18 +10,22 @@ import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
   private final IntakeIO IO;
-  private final IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
+  private final IntakeInputsAutoLogged inputs;
 
   @AutoLogOutput(key = "Intake/hadCoral")
   private boolean hadCoral = false;
 
   public Intake(IntakeIO IO) {
+    this.inputs = new IntakeInputsAutoLogged();
+    IO.updateInputs(inputs);
     this.IO = IO;
   }
 
   public void periodic() {
-    Logger.processInputs("Intake", inputs);
+
     IO.updateInputs(inputs);
+    Logger.processInputs("Intake", inputs);
+    Logger.recordOutput("doesThisWork", 42);
 
     @SuppressWarnings("unused")
     var hasCoral = hasCoral();

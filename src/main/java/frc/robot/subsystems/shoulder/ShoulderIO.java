@@ -18,7 +18,6 @@ public interface ShoulderIO {
   }
 
   public default void updateInputs(ShoulderInputs inputs) {}
-  ;
 
   public default void setVoltage(double volts) {}
   ;

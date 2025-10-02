@@ -65,7 +65,7 @@ public class IntakeConstants {
               .expo_kV(kIPExponential_kV)
               .expo_kA(kIPExponential_kA));
   public static final LoggedTunableGains IPSlowGains = IPGains.slowDown();
-  
+
   public static final double kIPTargetGiveDegs = 3;
 
   // roller constants
@@ -118,4 +118,5 @@ public class IntakeConstants {
               .expo_kV(kRollerExponential_kV)
               .expo_kA(kRollerExponential_kA));
   public static final LoggedTunableGains RollerSlowGains = rollerGains.slowDown();
+  public static double kRollerMOI = 0.001;
 }

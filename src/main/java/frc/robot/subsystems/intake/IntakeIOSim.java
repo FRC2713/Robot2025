@@ -3,17 +3,18 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.constants.IntakeConstants;
-import frc.robot.subsystems.constants.ShoulderConstants;
 import frc.robot.util.LoggedTunableGains;
 
 public class IntakeIOSim implements IntakeIO {
 
-  private final DCMotor rollerMotor = DCMotor.getKrakenX60Foc(1);
+  private static final DCMotor rollerMotor = DCMotor.getKrakenX60Foc(1);
 
   private PIDController IPPid = IntakeConstants.IPGains.createPIDController();
   private PIDController rollerPid = IntakeConstants.rollerGains.createPIDController();
@@ -29,16 +30,25 @@ public class IntakeIOSim implements IntakeIO {
           true,
           IntakeConstants.kIPInitialAngleRad);
 
+  private static final DCMotorSim rollerSim =
+      new DCMotorSim(
+          LinearSystemId.createDCMotorSystem(
+              rollerMotor, IntakeConstants.kRollerMOI, IntakeConstants.kRollerGearing),
+          rollerMotor);
+
   private ArmFeedforward IPFeedForward = IntakeConstants.IPGains.createArmFF();
   private double IPTargetAngleDeg = IntakeConstants.kIPInitialAngleDeg;
+
+  private double commandedRollerVolts;
 
   public IntakeIOSim() {
     SmartDashboard.putBoolean("Intake has coral", false);
   }
 
   public void updateInputs(IntakeInputs inputs) {
-    //Intake pivot updates
-    double pidOutput = IPPid.calculate(IPSim.getAngleRads(), Units.degreesToRadians(IPTargetAngleDeg));
+    // Intake pivot updates
+    double pidOutput =
+        IPPid.calculate(IPSim.getAngleRads(), Units.degreesToRadians(IPTargetAngleDeg));
     double feedforwardOutput =
         IPFeedForward.calculate(IPSim.getAngleRads(), IPSim.getVelocityRadPerSec());
     double output = DriverStation.isEnabled() ? pidOutput + feedforwardOutput : 0;
@@ -51,11 +61,23 @@ public class IntakeIOSim implements IntakeIO {
     inputs.intakePivotVoltage = output;
 
     inputs.commandedAngleDegs = IPTargetAngleDeg;
+
+    // Roller updates
+    rollerSim.setInputVoltage(commandedRollerVolts);
+    rollerSim.update(0.02);
+
+    inputs.rollerCurrentAmps = rollerSim.getCurrentDrawAmps();
+    inputs.rollerVelocityRPM = rollerSim.getAngularVelocityRPM();
+    inputs.commandedRollerRPM = commandedRollerVolts;
+    inputs.rollerPositionDegs = Units.radiansToDegrees(rollerSim.getAngularPositionRad());
+    inputs.rollerCurrentLimit = 0;
   }
 
   // roller functions
 
-  public void setRollerVoltage(double volts) {}
+  public void setRollerVoltage(double volts) {
+    this.commandedRollerVolts = volts;
+  }
 
   public void enableLimitSwitch() {}
 

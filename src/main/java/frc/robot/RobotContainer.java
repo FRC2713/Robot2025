@@ -59,6 +59,9 @@ import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.endEffector.EndEffectorIOSparks;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOKrakens;
+import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shoulder.Shoulder;
 import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
@@ -129,6 +132,7 @@ public class RobotContainer {
         shoulder = new Shoulder(new ShoulderIOKrakens());
         climber = new Climber(new ClimberIOSparks());
         endEffector = new EndEffector(new EndEffectorIOSparks());
+        intake = new Intake(new IntakeIOKrakens());
         break;
 
       case SIM:
@@ -143,6 +147,7 @@ public class RobotContainer {
         shoulder = new Shoulder(new ShoulderIOSim());
         climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
+        intake = new Intake(new IntakeIOSim());
         break;
 
       default:
@@ -158,6 +163,7 @@ public class RobotContainer {
         shoulder = new Shoulder(new ShoulderIO() {});
         climber = new Climber(new ClimberIO() {});
         endEffector = new EndEffector(new EndEffectorIO() {});
+        intake = new Intake(new IntakeIO() {});
         break;
     }
     visionsubsystem =
