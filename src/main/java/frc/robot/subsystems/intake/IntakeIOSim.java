@@ -17,7 +17,6 @@ public class IntakeIOSim implements IntakeIO {
   private static final DCMotor rollerMotor = DCMotor.getKrakenX60Foc(1);
 
   private PIDController IPPid = IntakeConstants.IPGains.createPIDController();
-  private PIDController rollerPid = IntakeConstants.rollerGains.createPIDController();
 
   private static final SingleJointedArmSim IPSim =
       new SingleJointedArmSim(

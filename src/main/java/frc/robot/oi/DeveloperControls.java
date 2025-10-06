@@ -27,7 +27,7 @@ public class DeveloperControls {
   public void configureButtonBindings() {
     devCommandXboxController.a().onTrue(SuperStructure.ALGAE_GRAB_GROUND.get());
     devCommandXboxController.b().onTrue(SuperStructure.ALGAE_GRAB_L2.get());
-    devCommandXboxController.y().onTrue(SuperStructure.ALGAE_GRAB_L3.get());
+    devCommandXboxController.y().onTrue(SuperStructure.INTAKE_PIVOT_ANGLE.get());
     devCommandXboxController
         .rightBumper()
         .onTrue(

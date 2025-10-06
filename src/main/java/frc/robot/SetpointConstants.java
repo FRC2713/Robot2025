@@ -157,6 +157,11 @@ public class SetpointConstants {
         new LoggedTunableNumber("Auto/L4 Post-Score Delay", 0.4);
   }
 
+  public class Intake {
+    public static final LoggedTunableNumber ROLLER_SPEED =
+        new LoggedTunableNumber("Intake/Test speed", 42.0);
+  }
+
   public class Drive {
     public static final LoggedTunableNumber INCH_SPEED =
         new LoggedTunableNumber("Drive/Inch Speed", 0.1);

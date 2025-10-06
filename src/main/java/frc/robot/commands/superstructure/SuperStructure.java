@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ElevatorCmds;
+import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
 import java.util.function.Supplier;
@@ -99,8 +100,6 @@ public class SuperStructure {
               SetpointConstants.Elevator.L4_HEIGHT_IN,
               SetpointConstants.Shoulder.L4_ANGLE_DEG);
 
-  public static Supplier<Command> CLIMBING_CONF = () -> new SetClimbingConfig("CLIMBING_CONF");
-
   public static Supplier<Command> BARGE_PREP_FORWARDS =
       () ->
           Commands.sequence(
@@ -160,9 +159,7 @@ public class SuperStructure {
               new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_SS_L2")),
               ElevatorCmds.setHeightAndWait(
                   SetpointConstants.Elevator.ALGAE_L2_IN), // runs the elevator first
-              Commands.parallel(
-                  EndEffector.ALGAE_GRAB.get(),
-                  ShoulderCmds.setAngleAndWait(110)));
+              Commands.parallel(EndEffector.ALGAE_GRAB.get(), ShoulderCmds.setAngleAndWait(110)));
 
   public static Supplier<Command> ALGAE_COLLECT_L2 =
       () ->
@@ -228,4 +225,13 @@ public class SuperStructure {
               .addShoulderCommand(() -> -104)
               .addElevatorCommand(SetpointConstants.Elevator.PROCESSOR_HEIGHT_IN)
               .create();
+
+  public static Supplier<Command> INTAKE_ROLLER_RUN =
+      () -> Commands.sequence(IntakeCmds.setVolts(SetpointConstants.Intake.ROLLER_SPEED));
+
+  public static Supplier<Command> INTAKE_ROLLER_STOP =
+      () -> Commands.sequence(IntakeCmds.setVolts(0));
+
+  public static Supplier<Command> INTAKE_PIVOT_ANGLE =
+      () -> Commands.sequence(IntakeCmds.setAngle(42));
 }

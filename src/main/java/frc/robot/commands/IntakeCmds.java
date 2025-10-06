@@ -10,9 +10,13 @@ import java.util.function.DoubleSupplier;
 
 public class IntakeCmds {
   // rollers
-  public static Command setSpeed(DoubleSupplier targetVolts) {
+  public static Command setVolts(DoubleSupplier targetVolts) {
     return new InstantCommand(
         () -> RobotContainer.intake.setRollerVoltage(targetVolts.getAsDouble()));
+  }
+
+  public static Command setVolts(double targetVolts) {
+    return new InstantCommand(() -> RobotContainer.intake.setRollerVoltage(targetVolts));
   }
 
   public static Command enableLimitSwitch(BooleanSupplier setEnable) {

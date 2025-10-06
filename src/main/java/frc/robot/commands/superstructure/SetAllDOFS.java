@@ -50,13 +50,6 @@ public class SetAllDOFS extends ParallelCommandGroup {
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
       DoubleSupplier shoulderTarget) {
-    this(
-        ssName,
-        eeName,
-        () -> false,
-        () -> 0,
-        algaeSpeed,
-        elevatorTarget,
-        shoulderTarget);
+    this(ssName, eeName, () -> false, () -> 0, algaeSpeed, elevatorTarget, shoulderTarget);
   }
 }

@@ -36,10 +36,6 @@ import frc.robot.oi.DriverControls;
 import frc.robot.oi.OperatorControls;
 import frc.robot.scoreassist.ClimbAssist;
 import frc.robot.scoreassist.ScoreAssist;
-import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.ClimberIO;
-import frc.robot.subsystems.climber.ClimberIOSim;
-import frc.robot.subsystems.climber.ClimberIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
@@ -81,7 +77,6 @@ public class RobotContainer {
   public static Drivetrain driveSubsystem;
   public static Elevator elevator;
   public static Shoulder shoulder;
-  public static Climber climber;
   public static EndEffector endEffector;
   public static Intake intake;
 
@@ -130,7 +125,6 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIOKrakens());
         shoulder = new Shoulder(new ShoulderIOKrakens());
-        climber = new Climber(new ClimberIOSparks());
         endEffector = new EndEffector(new EndEffectorIOSparks());
         intake = new Intake(new IntakeIOKrakens());
         break;
@@ -145,7 +139,6 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         elevator = new Elevator(new ElevatorIOSim());
         shoulder = new Shoulder(new ShoulderIOSim());
-        climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
         intake = new Intake(new IntakeIOSim());
         break;
@@ -161,7 +154,6 @@ public class RobotContainer {
                 new ModuleIO() {});
         elevator = new Elevator(new ElevatorIO() {});
         shoulder = new Shoulder(new ShoulderIO() {});
-        climber = new Climber(new ClimberIO() {});
         endEffector = new EndEffector(new EndEffectorIO() {});
         intake = new Intake(new IntakeIO() {});
         break;

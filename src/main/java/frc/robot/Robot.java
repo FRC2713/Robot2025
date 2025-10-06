@@ -130,9 +130,7 @@ public class Robot extends LoggedRobot {
     // Record the pose of each subsystem
     // order matters here.
     Pose3d[] componentPoses = {
-      RobotContainer.elevator.pose,
-      RobotContainer.shoulder.pose,
-      RobotContainer.climber.pose
+      RobotContainer.elevator.pose, RobotContainer.shoulder.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
 
