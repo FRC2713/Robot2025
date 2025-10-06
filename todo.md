@@ -8,7 +8,7 @@
 - Algae & coral rollers are the same motor & system now (note: also uses Krackens): new people reprogramming arm (?)
 - Re-tune set ponts & scoring routines: not started
 - Handoff logic (intake to claw): not started
-- Remove climber: not started
+- Remove climber: completed
 
 - Change variables with IP (Intake Pivot) acronym to something that makes more sense: not started (maybe won't be done)
 
