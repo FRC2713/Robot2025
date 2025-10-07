@@ -41,7 +41,7 @@ public class ArmConstants {
   public static final double kMaxAngularVelocity = 5; // RPM
 
   public static final double kP = RHRUtil.modeDependentDouble(600., 10); // output/rotation
-  public static final double kI = 0.0; // Integral of kP
+  public static final double kI = RHRUtil.modeDependentDouble(0, 0.06); // Integral of kP
   public static final double kD = RHRUtil.modeDependentDouble(80., 0); // output/error in velocity
 
   public static final double kG = RHRUtil.modeDependentDouble(8., 0.381);
@@ -58,7 +58,7 @@ public class ArmConstants {
 
   public static final LoggedTunableGains Gains =
       new LoggedTunableGains(
-          "Shoulder",
+          "Arm",
           new ControlGains()
               // PID
               .p(kP)
@@ -76,7 +76,7 @@ public class ArmConstants {
               .expo_kA(kExponential_kA));
   public static final LoggedTunableGains SlowGains = Gains.slowDown();
 
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(233.125);
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(0);
 
   public static final int mech2dWidth = 10;
   public static final Color8Bit mech2dColor = new Color8Bit(0, 255, 0);

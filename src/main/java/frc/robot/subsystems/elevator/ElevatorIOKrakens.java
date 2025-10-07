@@ -18,7 +18,7 @@ public class ElevatorIOKrakens implements ElevatorIO {
   private final MotionMagicExpoTorqueCurrentFOC heightRequest =
       new MotionMagicExpoTorqueCurrentFOC(0);
 
-  public double lastHeight = ElevatorConstants.kInitialHeight;
+  public double lastHeight = 5.;
 
   public ElevatorIOKrakens() {
     left = new TalonFX(ElevatorConstants.kLeftCANId);

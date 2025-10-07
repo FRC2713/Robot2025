@@ -27,7 +27,11 @@ public class ArmIOSim implements ArmIO {
           ArmConstants.kInitialAngleRad);
 
   public ArmIOSim() {
-    pid.enableContinuousInput(0, 2 * Math.PI);
+    // pid.enableContinuousInput(0, 2 * Math.PI);
+  }
+
+  public void setTargetAngle(double degrees) {
+    this.targetAngleDeg = degrees;
   }
 
   @Override
