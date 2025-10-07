@@ -41,6 +41,7 @@ public class ElevatorIOKrakens implements ElevatorIO {
             right.setPosition(
                 ElevatorConstants.kInitialHeight * ElevatorConstants.kRotationsToHeightConversion,
                 0.25));
+    setTargetHeight(5.);
   }
 
   public TalonFXConfiguration createKrakenConfig(boolean inverted) {

@@ -40,14 +40,14 @@ public class ArmConstants {
   public static final int kStatorCurrentLimit = 100; // also amps
   public static final double kMaxAngularVelocity = 5; // RPM
 
-  public static final double kP = RHRUtil.modeDependentDouble(600., 10); // output/rotation
+  public static final double kP = RHRUtil.modeDependentDouble(0., 10); // output/rotation
   public static final double kI = RHRUtil.modeDependentDouble(0, 0.06); // Integral of kP
-  public static final double kD = RHRUtil.modeDependentDouble(80., 0); // output/error in velocity
+  public static final double kD = RHRUtil.modeDependentDouble(0., 0); // output/error in velocity
 
-  public static final double kG = RHRUtil.modeDependentDouble(8., 0.381);
-  public static final double kV = RHRUtil.modeDependentDouble(13, 0); // kV * rev/s = volts
-  public static final double kA = RHRUtil.modeDependentDouble(0.11, 0);
-  public static final double kS = RHRUtil.modeDependentDouble(1., 0.); // Volts
+  public static final double kG = RHRUtil.modeDependentDouble(5., 0.381);
+  public static final double kV = RHRUtil.modeDependentDouble(0, 0); // kV * rev/s = volts
+  public static final double kA = RHRUtil.modeDependentDouble(0, 0);
+  public static final double kS = RHRUtil.modeDependentDouble(0., 0.); // Volts
 
   // Theorectical Max: ...
   public static final double kTrapezoidalMaxVelocity = 1.;
@@ -76,7 +76,7 @@ public class ArmConstants {
               .expo_kA(kExponential_kA));
   public static final LoggedTunableGains SlowGains = Gains.slowDown();
 
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(0);
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(274.57);
 
   public static final int mech2dWidth = 10;
   public static final Color8Bit mech2dColor = new Color8Bit(0, 255, 0);
