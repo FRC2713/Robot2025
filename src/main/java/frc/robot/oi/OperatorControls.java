@@ -1,11 +1,8 @@
 package frc.robot.oi;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
-import frc.robot.SetpointConstants;
 import frc.robot.commands.superstructure.SuperStructure;
 
 public class OperatorControls {
@@ -16,9 +13,9 @@ public class OperatorControls {
 
   public void configureTriggers() {
     /*climbPrepTrigger.onTrue(
-        Commands.sequence(
-            Commands.runOnce(() -> SmartDashboard.putBoolean("Disable ReefAlign", true)),
-            SuperStructure.CLIMBING_CONF.get()));*/
+    Commands.sequence(
+        Commands.runOnce(() -> SmartDashboard.putBoolean("Disable ReefAlign", true)),
+        SuperStructure.CLIMBING_CONF.get()));*/
   }
 
   public void configureButtonBindings() {

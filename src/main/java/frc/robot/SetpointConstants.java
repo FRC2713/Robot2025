@@ -160,6 +160,8 @@ public class SetpointConstants {
   public class Intake {
     public static final LoggedTunableNumber ROLLER_SPEED =
         new LoggedTunableNumber("Intake/Test speed", 42.0);
+    public static final LoggedTunableNumber CORAL_HOLD_SPEED =
+        new LoggedTunableNumber("Intake/Coral hold speed", 0.0);
   }
 
   public class Drive {

@@ -25,20 +25,21 @@ public class IntakeConstants {
   public static final double kIPMaxAngle = (90);
   public static final double kIPMinAngle = (-10);
 
-  public static final double kIPLength = 42.0;
-  public static final double kIPMass = 1.0;
+  public static final double kIPLength = Units.inchesToMeters(11);
+  public static final double kIPMass = Units.lbsToKilograms(10);
 
-  public static final double kIPInitialAngleDeg = 0.0;
+  public static final double kIPInitialAngleDeg = -10.0;
   public static final double kIPInitialAngleRad = Units.degreesToRadians(kIPInitialAngleDeg);
 
-  public static final double IPkP = RHRUtil.modeDependentDouble(600., 10); // output/rotation
+  public static final double IPkP = RHRUtil.modeDependentDouble(100., 100.); // output/rotation
   public static final double IPkI = 0.0; // Integral of kP
-  public static final double IPkD = RHRUtil.modeDependentDouble(80., 0); // output/error in velocity
+  public static final double IPkD =
+      RHRUtil.modeDependentDouble(0., 0.); // output/error in velocity
 
-  public static final double IPkG = RHRUtil.modeDependentDouble(8., 0.381);
-  public static final double IPkV = RHRUtil.modeDependentDouble(13, 0); // kV * rev/s = volts
-  public static final double IPkA = RHRUtil.modeDependentDouble(0.11, 0);
-  public static final double IPkS = RHRUtil.modeDependentDouble(1., 0.); // Volts
+  public static final double IPkG = RHRUtil.modeDependentDouble(0.074, 0.074);
+  public static final double IPkV = RHRUtil.modeDependentDouble(0, 0); // kV * rev/s = voltvs
+  public static final double IPkA = RHRUtil.modeDependentDouble(0., 0.);
+  public static final double IPkS = RHRUtil.modeDependentDouble(0., 0.); // Volts
 
   public static final double kIPTrapezoidalMaxVelocity = 1.;
   public static final double kIPTrapezoidalMaxAcceleration = 4;
@@ -96,27 +97,6 @@ public class IntakeConstants {
   public static final double kRollerTrapezoidalMaxJerk = 10;
   public static final double kRollerExponential_kV = 13;
   public static final double kRollerExponential_kA = 0.8;
-
-  public static final LoggedTunableGains rollerGains =
-      new LoggedTunableGains(
-          "intake",
-          new ControlGains()
-              // PID
-              .p(RollerkP)
-              .i(RollerkI)
-              .d(RollerkD)
-              // FF
-              .g(RollerkG)
-              .s(RollerkS)
-              .v(RollerkV)
-              .a(RollerkA)
-              // Motion Magic
-              .trapezoidal(
-                  kRollerTrapezoidalMaxVelocity,
-                  kRollerTrapezoidalMaxAcceleration,
-                  kRollerTrapezoidalMaxJerk)
-              .expo_kV(kRollerExponential_kV)
-              .expo_kA(kRollerExponential_kA));
-  public static final LoggedTunableGains RollerSlowGains = rollerGains.slowDown();
+  public static final double kRollerGrabSpeed = 42;
   public static double kRollerMOI = 0.001;
 }

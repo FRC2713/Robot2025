@@ -9,6 +9,7 @@ import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
+import frc.robot.subsystems.constants.IntakeConstants;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -232,6 +233,10 @@ public class SuperStructure {
   public static Supplier<Command> INTAKE_ROLLER_STOP =
       () -> Commands.sequence(IntakeCmds.setVolts(0));
 
-  public static Supplier<Command> INTAKE_PIVOT_ANGLE =
+  public static Supplier<Command> INTAKE_PIVOT_RAISE =
       () -> Commands.sequence(IntakeCmds.setAngle(42));
+  public static Supplier<Command> INTAKE_PIVOT_LOWER =
+      () -> Commands.sequence(IntakeCmds.setAngle(IntakeConstants.kIPInitialAngleDeg));
+  public static Supplier<Command> CORAL_GRAB_GROUND =
+      () -> Commands.sequence(IntakeCmds.setVolts(IntakeConstants.kRollerGrabSpeed));
 }

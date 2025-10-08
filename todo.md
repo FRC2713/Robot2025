@@ -19,11 +19,11 @@
   - Second command called handoffPrep, holds coral, brings intake up to handoff position: not started
   - Handoff command- runs rollers in reverse to spit coral into claw: not started
 
-- Claw (on arm)
-  - Claw also needs a handoffPrep & handoff command
-  - Claw also has sensor to detect stuff
+- Hand (on arm)
+  - Hand also needs a handoffPrep & handoff command
+  - Hand also has sensor to detect stuff
   - Uses X60
-  - new people working on arm (?)
+  - Group 2 working on it
 
 - Handoff command
   - Do first (at the same time):

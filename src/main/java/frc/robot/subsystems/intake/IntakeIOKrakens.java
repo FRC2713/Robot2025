@@ -18,15 +18,13 @@ import frc.robot.util.PhoenixUtil;
 
 public class IntakeIOKrakens implements IntakeIO {
 
-  private final TalonFX intakeMotor;
-  private final CANcoder intakeEncoder;
-  private TalonFXConfiguration intakeMotorConfig;
-  private CANcoderConfiguration intakeEncoderConfig;
+  private final TalonFX pivotMotor;
+  private final CANcoder pivotEncoder;
+  private TalonFXConfiguration pivotMotorConfig;
+  private CANcoderConfiguration pivotEncoderConfig;
 
   private final TalonFX rollerMotor;
-  private final CANcoder rollerEncoder;
   private TalonFXConfiguration rollerMotorConfig;
-  private CANcoderConfiguration rollerEncoderConfig;
 
   private double targetDegrees;
 
@@ -38,30 +36,22 @@ public class IntakeIOKrakens implements IntakeIO {
     SmartDashboard.putBoolean("Intake has coral", false);
 
     // Intake pivot stuff
-    this.intakeMotor = new TalonFX(IntakeConstants.kIntakePivotCANId);
-    this.intakeEncoder = new CANcoder(IntakeConstants.kIntakePivotEncoderCANId);
-    intakeMotorConfig = createIntakePivotKrakenConfig();
-    intakeEncoderConfig = createCANcoderConfiguration();
+    this.pivotMotor = new TalonFX(IntakeConstants.kIntakePivotCANId);
+    this.pivotEncoder = new CANcoder(IntakeConstants.kIntakePivotEncoderCANId);
+    pivotMotorConfig = createIntakePivotKrakenConfig();
+    pivotEncoderConfig = createCANcoderConfiguration();
     PhoenixUtil.tryUntilOk(
-        5, () -> this.intakeEncoder.getConfigurator().apply(intakeEncoderConfig, 0.25));
-    PhoenixUtil.tryUntilOk(5, () -> intakeMotor.getConfigurator().apply(intakeMotorConfig, 0.25));
+        5, () -> this.pivotEncoder.getConfigurator().apply(pivotEncoderConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> pivotMotor.getConfigurator().apply(pivotMotorConfig, 0.25));
     PhoenixUtil.tryUntilOk(
         5,
-        () ->
-            intakeMotor.setPosition(intakeEncoder.getAbsolutePosition().getValueAsDouble(), 0.25));
+        () -> pivotMotor.setPosition(pivotEncoder.getAbsolutePosition().getValueAsDouble(), 0.25));
 
     // Roller stuff
     this.rollerMotor = new TalonFX(IntakeConstants.kRollerCANId);
-    this.rollerEncoder = new CANcoder(IntakeConstants.kRollerEncoderCANId);
     rollerMotorConfig = createRollerKrakenConfig();
-    rollerEncoderConfig = createCANcoderConfiguration();
-    PhoenixUtil.tryUntilOk(
-        5, () -> this.rollerEncoder.getConfigurator().apply(rollerEncoderConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> rollerMotor.getConfigurator().apply(rollerMotorConfig, 0.25));
-    PhoenixUtil.tryUntilOk(
-        5,
-        () ->
-            rollerMotor.setPosition(rollerEncoder.getAbsolutePosition().getValueAsDouble(), 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> rollerMotor.setPosition(0.0, 0.25));
   }
 
   @Override
@@ -69,12 +59,12 @@ public class IntakeIOKrakens implements IntakeIO {
 
     // Intake pivot updates
     inputs.intakePivotVelocityDPS =
-        Units.rotationsToDegrees(intakeMotor.getVelocity().getValueAsDouble());
-    inputs.intakePivotVoltage = intakeMotor.getMotorVoltage().getValueAsDouble();
+        Units.rotationsToDegrees(pivotMotor.getVelocity().getValueAsDouble());
+    inputs.intakePivotVoltage = pivotMotor.getMotorVoltage().getValueAsDouble();
     inputs.intakePivotAngleDegrees =
-        Units.rotationsToDegrees(intakeMotor.getPosition().getValueAsDouble());
+        Units.rotationsToDegrees(pivotMotor.getPosition().getValueAsDouble());
     inputs.intakePivotAbsoluteAngleDegrees =
-        Units.rotationsToDegrees(intakeEncoder.getAbsolutePosition().getValueAsDouble());
+        Units.rotationsToDegrees(pivotEncoder.getAbsolutePosition().getValueAsDouble());
     inputs.commandedAngleDegs = targetDegrees;
 
     inputs.rollerVelocityRPM =
@@ -84,7 +74,7 @@ public class IntakeIOKrakens implements IntakeIO {
         Units.rotationsToDegrees(rollerMotor.getPosition().getValueAsDouble());
     inputs.commandedRollerRPM = targetDegrees;
 
-    // inputs.setpointVelocity = intakeMotor.getClosedLoopReference().getValueAsDouble();
+    // inputs.setpointVelocity = pivotMotor.getClosedLoopReference().getValueAsDouble();
   }
 
   // roller functions
@@ -100,21 +90,21 @@ public class IntakeIOKrakens implements IntakeIO {
   // intake pivot functions
   @Override
   public void setVoltage(double volts) {
-    intakeMotor.setVoltage(volts);
+    pivotMotor.setVoltage(volts);
   }
 
   @Override
   public void setTargetAngle(double degrees) {
     this.targetDegrees = degrees;
-    intakeMotor.setControl(angleRequest.withPosition(Units.degreesToRotations(degrees)));
+    pivotMotor.setControl(angleRequest.withPosition(Units.degreesToRotations(degrees)));
   }
 
   @Override
   public void setPID(LoggedTunableGains pid) {
-    intakeMotorConfig.Slot0 = pid.toTalonFX(GravityTypeValue.Arm_Cosine);
-    intakeMotorConfig.MotionMagic = pid.getMotionMagicConfig();
+    pivotMotorConfig.Slot0 = pid.toTalonFX(GravityTypeValue.Arm_Cosine);
+    pivotMotorConfig.MotionMagic = pid.getMotionMagicConfig();
 
-    PhoenixUtil.tryUntilOk(5, () -> intakeMotor.getConfigurator().apply(intakeMotorConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> pivotMotor.getConfigurator().apply(pivotMotorConfig, 0.25));
   }
 
   @Override
@@ -125,8 +115,6 @@ public class IntakeIOKrakens implements IntakeIO {
   public TalonFXConfiguration createRollerKrakenConfig() {
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    config.Feedback.FeedbackRemoteSensorID = this.rollerEncoder.getDeviceID();
-    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     config.Feedback.SensorToMechanismRatio = 1.0;
     config.Feedback.RotorToSensorRatio = IntakeConstants.kRollerGearing;
     config.TorqueCurrent.PeakForwardTorqueCurrent = IntakeConstants.kRollerStallCurrentLimit;
@@ -137,24 +125,13 @@ public class IntakeIOKrakens implements IntakeIO {
         (IntakeConstants.kRollerInverted)
             ? InvertedValue.CounterClockwise_Positive
             : InvertedValue.Clockwise_Positive;
-
-    config.Slot0 = IntakeConstants.rollerGains.toTalonFX(GravityTypeValue.Arm_Cosine);
-    config.MotionMagic = IntakeConstants.rollerGains.getMotionMagicConfig();
-    config.ClosedLoopGeneral.ContinuousWrap = false;
-    config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    config.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
-        Units.degreesToRotations(IntakeConstants.kRollerMaxAngle);
-    config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-    config.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
-        Units.degreesToRotations(IntakeConstants.kRollerMinAngle);
-
     return config;
   }
 
   public TalonFXConfiguration createIntakePivotKrakenConfig() {
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    config.Feedback.FeedbackRemoteSensorID = this.intakeEncoder.getDeviceID();
+    config.Feedback.FeedbackRemoteSensorID = this.pivotEncoder.getDeviceID();
     config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     config.Feedback.SensorToMechanismRatio = 1.0;
     config.Feedback.RotorToSensorRatio = IntakeConstants.kIPGearing;
