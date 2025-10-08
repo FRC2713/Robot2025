@@ -116,7 +116,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("AlgaeClaw/SS/Source Intake Speed", 2000);
 
     public static final LoggedTunableNumber ALGAE_GRAB_SPEED =
-        new LoggedTunableNumber("AlgaeClaw/SS/Algae Grab Speed", 6000);
+        new LoggedTunableNumber("AlgaeClaw/SS/Algae Grab Speed", -6000);
 
     public static final DoubleSupplier PROCESSOR_SCORE_SPEED =
         new LoggedTunableNumber("AlgaeClaw/SS/Proc Score Speed", -6000);

@@ -36,6 +36,10 @@ import frc.robot.oi.DriverControls;
 import frc.robot.oi.OperatorControls;
 import frc.robot.scoreassist.ClimbAssist;
 import frc.robot.scoreassist.ScoreAssist;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmIO;
+import frc.robot.subsystems.arm.ArmIOKrakens;
+import frc.robot.subsystems.arm.ArmIOSim;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
@@ -60,8 +64,6 @@ import frc.robot.subsystems.intake.IntakeIOKrakens;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shoulder.Shoulder;
 import frc.robot.subsystems.shoulder.ShoulderIO;
-import frc.robot.subsystems.shoulder.ShoulderIOKrakens;
-import frc.robot.subsystems.shoulder.ShoulderIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOLimelights;
 import frc.robot.subsystems.vision.VisionIOOdometry;
@@ -80,6 +82,7 @@ public class RobotContainer {
   public static EndEffector endEffector;
   public static Intake intake;
 
+  public static Arm arm;
   // Xbox Controllers
   public static DriverControls driverControls = new DriverControls();
   public static OperatorControls operatorControls = new OperatorControls();
@@ -124,9 +127,10 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
         elevator = new Elevator(new ElevatorIOKrakens());
-        shoulder = new Shoulder(new ShoulderIOKrakens());
         endEffector = new EndEffector(new EndEffectorIOSparks());
         intake = new Intake(new IntakeIOKrakens());
+        endEffector = new EndEffector(new EndEffectorIOSparks());
+        arm = new Arm(new ArmIOKrakens());
         break;
 
       case SIM:
@@ -138,9 +142,9 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
         elevator = new Elevator(new ElevatorIOSim());
-        shoulder = new Shoulder(new ShoulderIOSim());
-        endEffector = new EndEffector(new EndEffectorIOSim());
         intake = new Intake(new IntakeIOSim());
+        endEffector = new EndEffector(new EndEffectorIOSim());
+        arm = new Arm(new ArmIOSim());
         break;
 
       default:
@@ -156,6 +160,7 @@ public class RobotContainer {
         shoulder = new Shoulder(new ShoulderIO() {});
         endEffector = new EndEffector(new EndEffectorIO() {});
         intake = new Intake(new IntakeIO() {});
+        arm = new Arm(new ArmIO() {});
         break;
     }
     visionsubsystem =
@@ -283,6 +288,7 @@ public class RobotContainer {
   public void disabledPeriodic() {
     // Safety
     elevator.setTargetHeight(elevator.getCurrentHeight());
+    arm.setTargetAngle(arm.getCurrentAngle());
     endEffector.setCoralRPM(0);
     endEffector.setAlgaeRPM(0);
     shoulder.setTargetAngle(shoulder.getCurrentAngle());
