@@ -3,6 +3,7 @@ package frc.robot.commands.superstructure;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.AlgaeClawCmds;
+import frc.robot.commands.ArmCmds;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
@@ -29,8 +30,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
       DoubleSupplier coralSpeed,
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
-      DoubleSupplier shoulderTarget,
-      DoubleSupplier wristTarget) {
+      DoubleSupplier armTarget) {
     this.addCommands(
         new InstantCommand(() -> Logger.recordOutput("Active SS", ssName)),
         new InstantCommand(() -> Logger.recordOutput("Active EE", eeName)),
@@ -38,8 +38,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
         RollerCmds.setSpeed(coralSpeed),
         AlgaeClawCmds.setSpeed(algaeSpeed),
         ElevatorCmds.setHeightAndWait(elevatorTarget),
-        PivotCmds.setAngleAndWait(wristTarget),
-        ShoulderCmds.setAngleAndWait(shoulderTarget));
+        ArmCmds.setAngleAndWait(armTarget));
   }
 
   /***
