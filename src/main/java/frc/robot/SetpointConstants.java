@@ -100,61 +100,6 @@ public class SetpointConstants {
         new LoggedTunableNumber("Shoulder/SS/Algae L2 Angle", -250);
   }
 
-  public class Pivot {
-
-    public static final LoggedTunableNumber STARTING_ANGLE =
-        new LoggedTunableNumber("Pivot/SS/Starting Angle", 35);
-
-    public static final LoggedTunableNumber ALGAE_STARTING_ANGLE =
-        new LoggedTunableNumber("Pivot/SS/Starting Angle With Algae", 35);
-
-    public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/Source Intake Angle", 35);
-
-    public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_BLOCKED_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/Source Intake Blocked Angle", 27.13);
-
-    public static final LoggedTunableNumber L1_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/L1 Angle", 0);
-
-    public static final LoggedTunableNumber L2_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/L2 Angle", 35);
-
-    public static final LoggedTunableNumber L3_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/L3 Angle", 35);
-
-    public static final LoggedTunableNumber L4_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/L4 Angle", 55);
-
-    public static final LoggedTunableNumber BARGE_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/Barge Angle", 55);
-
-    public static final LoggedTunableNumber BARGE_ANGLE_DEG_BACKWARDS =
-        new LoggedTunableNumber("Pivot/SS/Barge Angle Backwards", 20 + 90);
-
-    public static final LoggedTunableNumber PREP_CLIMB_ANGLE_DEGS =
-        new LoggedTunableNumber("Pivot/SS/Prep Climb Angle", 30);
-
-    public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
-        new LoggedTunableNumber("Pivot/SS/Proc Score Angle", 0);
-
-    public static final LoggedTunableNumber CLIMB_ANGLE_DEGS =
-        new LoggedTunableNumber("Pivot/SS/Climb Angle", -111);
-
-    public static final LoggedTunableNumber SAFE_ANGLE_DEGS =
-        new LoggedTunableNumber("Pivot/SS/Safe Angle", 8);
-
-    public static final LoggedTunableNumber ALGAE_GROUND_DEG =
-        new LoggedTunableNumber("Pivot/SS/Ground Algae Angle", -38.4765625);
-
-    public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber(
-            "Pivot/SS/Algae L3 Angle", 190); // pre-125-field: 190, day-one-dcmp: 117
-
-    public static final LoggedTunableNumber ALGAE_L2_DEG =
-        new LoggedTunableNumber("Pivot/SS/Algae L2 Angle", 190);
-  }
-
   public class Roller {
     public static final LoggedTunableNumber L1_CORAL_SCORE_SPEED =
         new LoggedTunableNumber("Roller/SS/L1 Score Speed", 3000);
@@ -210,6 +155,13 @@ public class SetpointConstants {
 
     public static final LoggedTunableNumber L4_POST_SCORE_DELAY =
         new LoggedTunableNumber("Auto/L4 Post-Score Delay", 0.4);
+  }
+
+  public class Intake {
+    public static final LoggedTunableNumber ROLLER_SPEED =
+        new LoggedTunableNumber("Intake/Test speed", 42.0);
+    public static final LoggedTunableNumber CORAL_HOLD_SPEED =
+        new LoggedTunableNumber("Intake/Coral hold speed", 0.0);
   }
 
   public class Drive {

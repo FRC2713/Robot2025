@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ArmCmds;
 import frc.robot.commands.ElevatorCmds;
-import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
 import java.util.function.BooleanSupplier;
@@ -21,7 +20,6 @@ public class SetAllDOFS extends ParallelCommandGroup {
    * @param algaeSpeed
    * @param elevatorTarget
    * @param shoulderTarget
-   * @param wristTarget
    */
   public SetAllDOFS(
       String ssName,
@@ -46,23 +44,13 @@ public class SetAllDOFS extends ParallelCommandGroup {
    * @param algaeSpeed
    * @param elevatorTarget
    * @param shoulderTarget
-   * @param wristTarget
    */
   public SetAllDOFS(
       String ssName,
       String eeName,
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
-      DoubleSupplier shoulderTarget,
-      DoubleSupplier wristTarget) {
-    this(
-        ssName,
-        eeName,
-        () -> false,
-        () -> 0,
-        algaeSpeed,
-        elevatorTarget,
-        shoulderTarget,
-        wristTarget);
+      DoubleSupplier shoulderTarget) {
+    this(ssName, eeName, () -> false, () -> 0, algaeSpeed, elevatorTarget, shoulderTarget);
   }
 }

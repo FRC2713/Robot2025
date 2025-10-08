@@ -40,10 +40,6 @@ import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIOKrakens;
 import frc.robot.subsystems.arm.ArmIOSim;
-import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.ClimberIO;
-import frc.robot.subsystems.climber.ClimberIOSim;
-import frc.robot.subsystems.climber.ClimberIOSparks;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
 import frc.robot.subsystems.constants.VisionConstants;
@@ -62,8 +58,10 @@ import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.endEffector.EndEffectorIOSparks;
-import frc.robot.subsystems.pivot.Pivot;
-import frc.robot.subsystems.pivot.PivotIO;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOKrakens;
+import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shoulder.Shoulder;
 import frc.robot.subsystems.shoulder.ShoulderIO;
 import frc.robot.subsystems.vision.Vision;
@@ -81,9 +79,9 @@ public class RobotContainer {
   public static Drivetrain driveSubsystem;
   public static Elevator elevator;
   public static Shoulder shoulder;
-  public static Pivot pivot;
-  public static Climber climber;
   public static EndEffector endEffector;
+  public static Intake intake;
+
   public static Arm arm;
   // Xbox Controllers
   public static DriverControls driverControls = new DriverControls();
@@ -129,11 +127,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
         elevator = new Elevator(new ElevatorIOKrakens());
-        // pivot = new Pivot(new PivotIOKrakens());
-        // shoulder = new Shoulder(new ShoulderIOKrakens());
-        pivot = new Pivot(new PivotIO() {});
-        shoulder = new Shoulder(new ShoulderIO() {});
-        climber = new Climber(new ClimberIOSparks());
+        endEffector = new EndEffector(new EndEffectorIOSparks());
+        intake = new Intake(new IntakeIOKrakens());
         endEffector = new EndEffector(new EndEffectorIOSparks());
         arm = new Arm(new ArmIOKrakens());
         break;
@@ -146,12 +141,8 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        // pivot = new Pivot(new PivotIOSim());
         elevator = new Elevator(new ElevatorIOSim());
-        // shoulder = new Shoulder(new ShoulderIOSim());
-        pivot = new Pivot(new PivotIO() {});
-        shoulder = new Shoulder(new ShoulderIO() {});
-        climber = new Climber(new ClimberIOSim());
+        intake = new Intake(new IntakeIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
         arm = new Arm(new ArmIOSim());
         break;
@@ -166,10 +157,9 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         elevator = new Elevator(new ElevatorIO() {});
-        pivot = new Pivot(new PivotIO() {});
         shoulder = new Shoulder(new ShoulderIO() {});
-        climber = new Climber(new ClimberIO() {});
         endEffector = new EndEffector(new EndEffectorIO() {});
+        intake = new Intake(new IntakeIO() {});
         arm = new Arm(new ArmIO() {});
         break;
     }
@@ -297,8 +287,7 @@ public class RobotContainer {
 
   public void disabledPeriodic() {
     // Safety
-    // elevator.setTargetHeight(elevator.getCurrentHeight());
-    pivot.setTargetAngle(pivot.getCurrentAngle());
+    elevator.setTargetHeight(elevator.getCurrentHeight());
     arm.setTargetAngle(arm.getCurrentAngle());
     endEffector.setCoralRPM(0);
     endEffector.setAlgaeRPM(0);

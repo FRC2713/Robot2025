@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
-import frc.robot.commands.ArmCmds;
+import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 
@@ -26,9 +26,12 @@ public class DeveloperControls {
   }
 
   public void configureButtonBindings() {
-    devCommandXboxController.a().onTrue(ArmCmds.setAngle(-110));
-    devCommandXboxController.b().onTrue(ArmCmds.setAngle(-90));
-    devCommandXboxController.y().onTrue(SuperStructure.ALGAE_GRAB_L3.get());
+    devCommandXboxController
+        .a()
+        .whileTrue(SuperStructure.CORAL_GRAB_GROUND.get())
+        .onFalse(IntakeCmds.setVolts(0.0));
+    devCommandXboxController.b().onTrue(SuperStructure.INTAKE_PIVOT_LOWER.get());
+    devCommandXboxController.y().onTrue(SuperStructure.INTAKE_PIVOT_RAISE.get());
     devCommandXboxController
         .rightBumper()
         .onTrue(

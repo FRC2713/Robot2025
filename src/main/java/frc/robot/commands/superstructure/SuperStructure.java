@@ -6,9 +6,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ElevatorCmds;
-import frc.robot.commands.PivotCmds;
+import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
+import frc.robot.subsystems.constants.IntakeConstants;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -23,8 +24,7 @@ public class SuperStructure {
               () -> 0, // not actually coral-ing
               () -> 0, // not actually algae-ing
               SetpointConstants.Elevator.STARTING_HEIGHT,
-              SetpointConstants.Shoulder.STARTING_ANGLE,
-              SetpointConstants.Pivot.STARTING_ANGLE);
+              SetpointConstants.Shoulder.STARTING_ANGLE);
 
   public static Supplier<Command> SOURCE_CORAL_INTAKE =
       () ->
@@ -36,8 +36,7 @@ public class SuperStructure {
                   () ->
                       0, // SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED, // not actually algae-ing
                   SetpointConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN,
-                  SetpointConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG,
-                  SetpointConstants.Pivot.SOURCE_CORAL_INTAKE_ANGLE_DEG)
+                  SetpointConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG)
               .andThen(RollerCmds.waitUntilCoral(2.0));
 
   public static Supplier<Command> SOURCE_CORAL_INTAKE_BLOCKED =
@@ -50,8 +49,7 @@ public class SuperStructure {
                   () ->
                       0, // SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED, // not actually algae-ing
                   SetpointConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN,
-                  SetpointConstants.Shoulder.SOURCE_CORAL_INTAKE_BLOCKED_ANGLE_DEG,
-                  SetpointConstants.Pivot.SOURCE_CORAL_INTAKE_BLOCKED_ANGLE_DEG)
+                  SetpointConstants.Shoulder.SOURCE_CORAL_INTAKE_BLOCKED_ANGLE_DEG)
               .andThen(RollerCmds.waitUntilCoral(2.0));
   ;
 
@@ -62,8 +60,7 @@ public class SuperStructure {
               "ALGAE_GRAB",
               SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
               SetpointConstants.Elevator.L1_HEIGHT_IN,
-              SetpointConstants.Shoulder.L1_ANGLE_DEG,
-              SetpointConstants.Pivot.L1_ANGLE_DEG);
+              SetpointConstants.Shoulder.L1_ANGLE_DEG);
 
   // TODO: We don't necessarily need to start the algae claw here
   public static Supplier<Command> L2 =
@@ -73,8 +70,7 @@ public class SuperStructure {
               "ALGAE_GRAB",
               SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
               SetpointConstants.Elevator.L2_HEIGHT_IN,
-              SetpointConstants.Shoulder.L2_ANGLE_DEG,
-              SetpointConstants.Pivot.L2_ANGLE_DEG);
+              SetpointConstants.Shoulder.L2_ANGLE_DEG);
 
   public static Supplier<Command> L3 =
       () ->
@@ -83,8 +79,7 @@ public class SuperStructure {
               "ALGAE_GRAB",
               SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
               SetpointConstants.Elevator.L3_HEIGHT_IN,
-              SetpointConstants.Shoulder.L3_ANGLE_DEG,
-              SetpointConstants.Pivot.L3_ANGLE_DEG);
+              SetpointConstants.Shoulder.L3_ANGLE_DEG);
 
   // TODO: if this intersects with the reef, might need to do pivot last
   public static Supplier<Command> L4_PREP =
@@ -94,8 +89,7 @@ public class SuperStructure {
               "STOP_ROLLERS",
               () -> 0, // stop algae claw
               SetpointConstants.Elevator.L4_PREP_HEIGHT_IN,
-              SetpointConstants.Shoulder.L4_PREP_ANGLE_DEG,
-              SetpointConstants.Pivot.L4_ANGLE_DEG);
+              SetpointConstants.Shoulder.L4_PREP_ANGLE_DEG);
 
   // TODO: if this intersects with the reef, might need to do pivot last
   public static Supplier<Command> L4 =
@@ -105,10 +99,7 @@ public class SuperStructure {
               "STOP_ROLLERS",
               () -> 0, // stop algae claw
               SetpointConstants.Elevator.L4_HEIGHT_IN,
-              SetpointConstants.Shoulder.L4_ANGLE_DEG,
-              SetpointConstants.Pivot.L4_ANGLE_DEG);
-
-  public static Supplier<Command> CLIMBING_CONF = () -> new SetClimbingConfig("CLIMBING_CONF");
+              SetpointConstants.Shoulder.L4_ANGLE_DEG);
 
   public static Supplier<Command> BARGE_PREP_FORWARDS =
       () ->
@@ -116,9 +107,7 @@ public class SuperStructure {
               new InstantCommand(() -> Logger.recordOutput("Active SS", "BARGE_FORWARDS")),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED),
               ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.BARGE_HEIGHT_IN),
-              PivotCmds.setAngle(90),
-              ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES),
-              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.BARGE_ANGLE_DEG));
+              ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES));
 
   public static Supplier<Command> BARGE_PREP_FORWARDS_AUTO =
       () ->
@@ -126,9 +115,7 @@ public class SuperStructure {
               new InstantCommand(() -> Logger.recordOutput("Active SS", "BARGE_FORWARDS_AUTO")),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED),
               ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.BARGE_HEIGHT_IN),
-              PivotCmds.setAngle(90),
-              ShoulderCmds.setAngleAndWait(90),
-              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.BARGE_ANGLE_DEG));
+              ShoulderCmds.setAngleAndWait(90));
 
   public static Supplier<Command> BARGE_PREP_BACKWARDS =
       () ->
@@ -136,10 +123,8 @@ public class SuperStructure {
               new InstantCommand(() -> Logger.recordOutput("Active SS", "BARGE_BACKWARDS")),
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED),
               ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.BARGE_HEIGHT_IN),
-              PivotCmds.setAngle(90),
               ShoulderCmds.setAngleAndWait(
-                  SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES_BACKWARDS),
-              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.BARGE_ANGLE_DEG_BACKWARDS));
+                  SetpointConstants.Shoulder.BARGE_ANGLE_DEGREES_BACKWARDS));
 
   // TODO: cleanup these algae commands using SetAllDOFS or SetDOFSOneAtATime
   // TODO: use the LoggedTunableNumbers created in SetpointConstants instead of hard-coded values
@@ -150,15 +135,12 @@ public class SuperStructure {
           Commands.sequence(
               new InstantCommand(
                   () -> Logger.recordOutput("Active SS", "STARTING_CONF_WITH_ALGAE")),
-              PivotCmds.setAngleAndWait(
-                  SetpointConstants.Pivot.ALGAE_STARTING_ANGLE), // runs the pivot first
               new SetAllDOFS(
                   "STARTING_CONF_WITH_ALGAE",
                   "ALGAE_HOLD",
                   SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
                   SetpointConstants.Elevator.STARTING_HEIGHT,
-                  SetpointConstants.Shoulder.ALGAE_STARTING_ANGLE,
-                  SetpointConstants.Pivot.ALGAE_STARTING_ANGLE));
+                  SetpointConstants.Shoulder.ALGAE_STARTING_ANGLE));
 
   public static Supplier<Command> ALGAE_GRAB_L2 =
       () ->
@@ -168,7 +150,6 @@ public class SuperStructure {
                   SetpointConstants.Elevator.ALGAE_L2_IN), // runs the elevator first
               Commands.parallel(
                   ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_L2_DEG),
-                  PivotCmds.setAngleAndWait(SetpointConstants.Pivot.ALGAE_L2_DEG),
                   EndEffector.ALGAE_GRAB.get()),
               AlgaeClawCmds.waitUntilAlgae(),
               EndEffector.ALGAE_HOLD.get());
@@ -179,11 +160,7 @@ public class SuperStructure {
               new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_SS_L2")),
               ElevatorCmds.setHeightAndWait(
                   SetpointConstants.Elevator.ALGAE_L2_IN), // runs the elevator first
-              Commands.parallel(
-                  EndEffector.ALGAE_GRAB.get(),
-                  Commands.sequence(
-                      ShoulderCmds.setAngleAndWait(110),
-                      PivotCmds.setAngleAndWait(SetpointConstants.Pivot.ALGAE_L2_DEG))));
+              Commands.parallel(EndEffector.ALGAE_GRAB.get(), ShoulderCmds.setAngleAndWait(110)));
 
   public static Supplier<Command> ALGAE_COLLECT_L2 =
       () ->
@@ -202,7 +179,6 @@ public class SuperStructure {
                   SetpointConstants.Elevator.ALGAE_L3_IN), // runs the elevator first
               Commands.parallel(
                   ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_L3_DEG),
-                  PivotCmds.setAngleAndWait(SetpointConstants.Pivot.ALGAE_L3_DEG),
                   EndEffector.ALGAE_GRAB.get()),
               AlgaeClawCmds.waitUntilAlgae(),
               EndEffector.ALGAE_HOLD.get());
@@ -224,7 +200,6 @@ public class SuperStructure {
                   SetpointConstants.Elevator.ALGAE_GROUND_IN), // runs the elevator first
               AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED),
               ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_GROUND_DEG),
-              PivotCmds.setAngleAndWait(SetpointConstants.Pivot.ALGAE_GROUND_DEG),
               EndEffector.ALGAE_GRAB.get(),
               AlgaeClawCmds.waitUntilAlgae(),
               SuperStructure.STARTING_CONF_WITH_ALGAE.get(),
@@ -234,7 +209,6 @@ public class SuperStructure {
       () ->
           new SetDOFSOneAtATimeFactory("ALGAE_SAFE_RETRACT", "ALGAE_HOLD")
               .addAlgaeSpeedCommand(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED)
-              .addPivotCommand(SetpointConstants.Pivot.SAFE_ANGLE_DEGS)
               .create();
 
   public static Supplier<Command> PROCESSOR_PREP =
@@ -242,7 +216,6 @@ public class SuperStructure {
           new SetDOFSOneAtATimeFactory("PROCESSOR_PREP", "ALGAE_HOLD")
               .addAlgaeSpeedCommand(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED)
               .addShoulderCommand(SetpointConstants.Shoulder.PROCESSOR_SCORE_ANGLE_DEG)
-              .addPivotCommand(SetpointConstants.Pivot.PROCESSOR_SCORE_ANGLE_DEG)
               .addElevatorCommand(SetpointConstants.Elevator.PROCESSOR_HEIGHT_IN)
               .create();
 
@@ -251,7 +224,19 @@ public class SuperStructure {
           new SetDOFSOneAtATimeFactory("PROCESSOR_PREP_BACKWARDS", "ALGAE_HOLD")
               .addAlgaeSpeedCommand(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED)
               .addShoulderCommand(() -> -104)
-              .addPivotCommand(() -> 180)
               .addElevatorCommand(SetpointConstants.Elevator.PROCESSOR_HEIGHT_IN)
               .create();
+
+  public static Supplier<Command> INTAKE_ROLLER_RUN =
+      () -> Commands.sequence(IntakeCmds.setVolts(SetpointConstants.Intake.ROLLER_SPEED));
+
+  public static Supplier<Command> INTAKE_ROLLER_STOP =
+      () -> Commands.sequence(IntakeCmds.setVolts(0));
+
+  public static Supplier<Command> INTAKE_PIVOT_RAISE =
+      () -> Commands.sequence(IntakeCmds.setAngle(42));
+  public static Supplier<Command> INTAKE_PIVOT_LOWER =
+      () -> Commands.sequence(IntakeCmds.setAngle(IntakeConstants.kIPInitialAngleDeg));
+  public static Supplier<Command> CORAL_GRAB_GROUND =
+      () -> Commands.sequence(IntakeCmds.setVolts(IntakeConstants.kRollerGrabSpeed));
 }
