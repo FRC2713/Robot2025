@@ -26,9 +26,9 @@ public class DeveloperControls {
   }
 
   public void configureButtonBindings() {
-    devCommandXboxController.a().onTrue(ArmCmds.setAngle(-110));
-    devCommandXboxController.b().onTrue(ArmCmds.setAngle(-90));
-    devCommandXboxController.y().onTrue(SuperStructure.ALGAE_GRAB_L3.get());
+    devCommandXboxController.a().onTrue(ArmCmds.setAngle(-90));
+    devCommandXboxController.b().onTrue(ArmCmds.setAngle(-20));
+    devCommandXboxController.y().onTrue(ArmCmds.setAngle(90));
     devCommandXboxController
         .rightBumper()
         .onTrue(

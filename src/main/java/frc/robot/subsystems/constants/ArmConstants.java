@@ -42,12 +42,12 @@ public class ArmConstants {
 
   public static final double kP = RHRUtil.modeDependentDouble(400., 10); // output/rotation
   public static final double kI = RHRUtil.modeDependentDouble(0, 0.06); // Integral of kP
-  public static final double kD = RHRUtil.modeDependentDouble(40., 0); // output/error in velocity
+  public static final double kD = RHRUtil.modeDependentDouble(65., 0); // output/error in velocity
 
-  public static final double kG = RHRUtil.modeDependentDouble(6.5., 0.381);
+  public static final double kG = RHRUtil.modeDependentDouble(6.5, 0.381);
   public static final double kV = RHRUtil.modeDependentDouble(0, 0); // kV * rev/s = volts
   public static final double kA = RHRUtil.modeDependentDouble(0, 0);
-  public static final double kS = RHRUtil.modeDependentDouble(2.5., 0.); // Volts
+  public static final double kS = RHRUtil.modeDependentDouble(2.5, 0.); // Volts
 
   // Theorectical Max: ...
   public static final double kTrapezoidalMaxVelocity = 16.;
