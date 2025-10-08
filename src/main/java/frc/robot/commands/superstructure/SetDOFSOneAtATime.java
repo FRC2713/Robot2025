@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ElevatorCmds;
-import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
 import java.util.List;
@@ -41,8 +40,7 @@ public class SetDOFSOneAtATime extends SequentialCommandGroup {
         RollerCmds.setSpeed(coralSpeed),
         AlgaeClawCmds.setSpeed(algaeSpeed),
         ElevatorCmds.setHeightAndWait(elevatorTarget),
-        ShoulderCmds.setAngleAndWait(shoulderTarget),
-        PivotCmds.setAngleAndWait(wristTarget));
+        ShoulderCmds.setAngleAndWait(shoulderTarget));
   }
 
   /***
