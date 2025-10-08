@@ -40,19 +40,19 @@ public class ArmConstants {
   public static final int kStatorCurrentLimit = 100; // also amps
   public static final double kMaxAngularVelocity = 5; // RPM
 
-  public static final double kP = RHRUtil.modeDependentDouble(0., 10); // output/rotation
+  public static final double kP = RHRUtil.modeDependentDouble(400., 10); // output/rotation
   public static final double kI = RHRUtil.modeDependentDouble(0, 0.06); // Integral of kP
-  public static final double kD = RHRUtil.modeDependentDouble(0., 0); // output/error in velocity
+  public static final double kD = RHRUtil.modeDependentDouble(40., 0); // output/error in velocity
 
-  public static final double kG = RHRUtil.modeDependentDouble(5., 0.381);
+  public static final double kG = RHRUtil.modeDependentDouble(6.5., 0.381);
   public static final double kV = RHRUtil.modeDependentDouble(0, 0); // kV * rev/s = volts
   public static final double kA = RHRUtil.modeDependentDouble(0, 0);
-  public static final double kS = RHRUtil.modeDependentDouble(0., 0.); // Volts
+  public static final double kS = RHRUtil.modeDependentDouble(2.5., 0.); // Volts
 
   // Theorectical Max: ...
-  public static final double kTrapezoidalMaxVelocity = 1.;
-  public static final double kTrapezoidalMaxAcceleration = 4;
-  public static final double kTrapezoidalMaxJerk = 10;
+  public static final double kTrapezoidalMaxVelocity = 16.;
+  public static final double kTrapezoidalMaxAcceleration = 5;
+  public static final double kTrapezoidalMaxJerk = 0;
   public static final double kExponential_kV = 13;
   public static final double kExponential_kA = 0.8;
 
