@@ -81,7 +81,6 @@ public class RobotContainer {
   public static Shoulder shoulder;
   public static EndEffector endEffector;
   public static Intake intake;
-
   public static Arm arm;
   // Xbox Controllers
   public static DriverControls driverControls = new DriverControls();

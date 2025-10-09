@@ -46,7 +46,7 @@ public interface HandIO {
     return true;
   }
 
-  public default void setCoralCurrentLimit(int currentLimit) {}
+  public default void handSetCoralCurrentLimit(int currentLimit) {}
 
-  public default void setAlgaeCurrentLimit(int algaeCurrentLimit) {}
+  public default void handSetAlgaeCurrentLimit(int algaeCurrentLimit) {}
 }

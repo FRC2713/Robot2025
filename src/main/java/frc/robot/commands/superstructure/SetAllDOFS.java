@@ -6,7 +6,6 @@ import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ArmCmds;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.RollerCmds;
-import frc.robot.commands.ShoulderCmds;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
@@ -19,7 +18,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
    * @param coralSpeed
    * @param algaeSpeed
    * @param elevatorTarget
-   * @param shoulderTarget
+   * @param armTarget
    */
   public SetAllDOFS(
       String ssName,
@@ -36,7 +35,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
         RollerCmds.setSpeed(coralSpeed),
         AlgaeClawCmds.setSpeed(algaeSpeed),
         ElevatorCmds.setHeightAndWait(elevatorTarget),
-        ArmCmds.setAngleAndWait(armTarget));
+        ArmCmds.armSetAngleAndWait(armTarget));
   }
 
   /***

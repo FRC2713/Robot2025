@@ -33,8 +33,7 @@ public class IntakeConstants {
 
   public static final double IPkP = RHRUtil.modeDependentDouble(100., 100.); // output/rotation
   public static final double IPkI = 0.0; // Integral of kP
-  public static final double IPkD =
-      RHRUtil.modeDependentDouble(0., 0.); // output/error in velocity
+  public static final double IPkD = RHRUtil.modeDependentDouble(0., 0.); // output/error in velocity
 
   public static final double IPkG = RHRUtil.modeDependentDouble(0.074, 0.074);
   public static final double IPkV = RHRUtil.modeDependentDouble(0, 0); // kV * rev/s = voltvs
