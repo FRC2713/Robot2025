@@ -38,7 +38,7 @@ import frc.robot.scoreassist.ClimbAssist;
 import frc.robot.scoreassist.ScoreAssist;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
-import frc.robot.subsystems.arm.ArmIOKrakens;
+import frc.robot.subsystems.arm.ArmIOKrakensLaserCan;
 import frc.robot.subsystems.arm.ArmIOSim;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
@@ -135,7 +135,7 @@ public class RobotContainer {
         shoulder = new Shoulder(new ShoulderIO() {});
         climber = new Climber(new ClimberIOSparks());
         endEffector = new EndEffector(new EndEffectorIOSparks());
-        arm = new Arm(new ArmIOKrakens());
+        arm = new Arm(new ArmIOKrakensLaserCan());
         break;
 
       case SIM:
