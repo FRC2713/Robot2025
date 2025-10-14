@@ -1,18 +1,11 @@
 package frc.robot.subsystems.arm;
 
-import frc.robot.util.LoggedTunableGains;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ArmIO {
-  @AutoLog
-  public static class ArmInputs {
-    public double velocityDPS = 0.0;
-    public double voltage = 0.0;
-    public double angleDegrees = 0.0;
-    public double absoluteAngleDegrees = 0.0;
-    public double setpointVelocity = 0.0;
+public interface HandIO {
 
-    public double commandedAngleDegs = 0.0;
+  @AutoLog
+  public static class EndEffectorInputs { // PascalCase
     public double tubeOutputVoltage = 0.0;
     public double tubeCurrentAmps = 0.0;
     public double tubeVelocityRPM = 0.0;
@@ -30,38 +23,22 @@ public interface ArmIO {
     public int algaeCurrentLimit = 0;
   }
 
+  public default void updateInputs(EndEffectorInputs inputs) {}
+  ;
+
+  public default void setAlgaeRPM(double rpm) {}
+  ;
+
   public default void setAlgaeVoltage(double volts) {}
   ;
 
   public default void setCoralRPM(double rpm) {}
   ;
 
-  public default void handSetEnableLimitSwitch(boolean enabled) {}
+  public default void setEnableLimitSwitch(boolean enabled) {}
   ;
 
-  public default boolean handIsCoralAtTarget() {
-    return true;
-  }
-
-  public default void updateInputs(ArmInputs inputs) {}
-  ;
-
-  public default void setAlgaeRPM(double rpm) {}
-  ;
-
-  public default void setVoltage(double volts) {}
-  ;
-
-  public default void setTargetAngle(double degrees) {}
-  ;
-
-  public default void setPID(LoggedTunableGains pid) {}
-  ;
-
-  public default void setBus(double bus) {}
-  ;
-
-  public default boolean isAtTarget() {
+  public default boolean isCoralAtTarget() {
     return true;
   }
 

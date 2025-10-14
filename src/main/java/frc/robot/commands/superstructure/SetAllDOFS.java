@@ -3,10 +3,9 @@ package frc.robot.commands.superstructure;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.AlgaeClawCmds;
+import frc.robot.commands.ArmCmds;
 import frc.robot.commands.ElevatorCmds;
-import frc.robot.commands.PivotCmds;
 import frc.robot.commands.RollerCmds;
-import frc.robot.commands.ShoulderCmds;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
@@ -19,8 +18,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
    * @param coralSpeed
    * @param algaeSpeed
    * @param elevatorTarget
-   * @param shoulderTarget
-   * @param wristTarget
+   * @param armTarget
    */
   public SetAllDOFS(
       String ssName,
@@ -29,8 +27,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
       DoubleSupplier coralSpeed,
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
-      DoubleSupplier shoulderTarget,
-      DoubleSupplier wristTarget) {
+      DoubleSupplier armTarget) {
     this.addCommands(
         new InstantCommand(() -> Logger.recordOutput("Active SS", ssName)),
         new InstantCommand(() -> Logger.recordOutput("Active EE", eeName)),
@@ -38,8 +35,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
         RollerCmds.setSpeed(coralSpeed),
         AlgaeClawCmds.setSpeed(algaeSpeed),
         ElevatorCmds.setHeightAndWait(elevatorTarget),
-        PivotCmds.setAngleAndWait(wristTarget),
-        ShoulderCmds.setAngleAndWait(shoulderTarget));
+        ArmCmds.armSetAngleAndWait(armTarget));
   }
 
   /***
@@ -47,23 +43,13 @@ public class SetAllDOFS extends ParallelCommandGroup {
    * @param algaeSpeed
    * @param elevatorTarget
    * @param shoulderTarget
-   * @param wristTarget
    */
   public SetAllDOFS(
       String ssName,
       String eeName,
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
-      DoubleSupplier shoulderTarget,
-      DoubleSupplier wristTarget) {
-    this(
-        ssName,
-        eeName,
-        () -> false,
-        () -> 0,
-        algaeSpeed,
-        elevatorTarget,
-        shoulderTarget,
-        wristTarget);
+      DoubleSupplier shoulderTarget) {
+    this(ssName, eeName, () -> false, () -> 0, algaeSpeed, elevatorTarget, shoulderTarget);
   }
 }

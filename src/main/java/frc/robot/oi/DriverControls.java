@@ -10,10 +10,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
-import frc.robot.commands.ClimberCmds;
 import frc.robot.commands.DriveAtLongitude;
 import frc.robot.commands.DriveCmds;
-import frc.robot.commands.climber.Climb;
 import frc.robot.commands.scoreassist.ScoreAssistCmds;
 import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
@@ -105,11 +103,6 @@ public class DriverControls {
                 EndEffector.STOP_ROLLERS.get()));
 
     driver.b().onTrue(SuperStructure.ALGAE_GRAB_GROUND.get());
-    // Climber
-    driver
-        .leftTrigger(0.1)
-        .whileTrue(new Climb(() -> -1 * driver.getLeftTriggerAxis()))
-        .onFalse(ClimberCmds.setVoltage(() -> 0));
 
     // Manual Score
     driver

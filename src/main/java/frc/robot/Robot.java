@@ -129,12 +129,7 @@ public class Robot extends LoggedRobot {
     // TODO: need to update assets with DCMP-version of end effector
     // Record the pose of each subsystem
     // order matters here.
-    Pose3d[] componentPoses = {
-      RobotContainer.elevator.pose,
-      RobotContainer.shoulder.pose,
-      RobotContainer.pivot.pose,
-      RobotContainer.climber.pose
-    };
+    Pose3d[] componentPoses = {RobotContainer.elevator.pose, RobotContainer.shoulder.pose};
     Logger.recordOutput("componentPoses", componentPoses);
 
     var disableReefAlign = SmartDashboard.getBoolean("Disable ReefAlign", false);
