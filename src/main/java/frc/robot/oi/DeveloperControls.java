@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ArmCmds;
-import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 
@@ -27,9 +26,9 @@ public class DeveloperControls {
   }
 
   public void configureButtonBindings() {
-    devCommandXboxController.a().onTrue(ArmCmds.setAngle(-90));
-    devCommandXboxController.b().onTrue(ArmCmds.setAngle(-20));
-    devCommandXboxController.y().onTrue(ArmCmds.setAngle(90));
+    devCommandXboxController.a().onTrue(ArmCmds.armSetAngle(-90));
+    devCommandXboxController.b().onTrue(ArmCmds.armSetAngle(-20));
+    devCommandXboxController.y().onTrue(ArmCmds.armSetAngle(90));
     devCommandXboxController
         .rightBumper()
         .onTrue(

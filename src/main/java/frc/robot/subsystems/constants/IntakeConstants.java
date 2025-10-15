@@ -1,5 +1,8 @@
 package frc.robot.subsystems.constants;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.ControlGains;
 import frc.robot.util.LoggedTunableGains;
@@ -40,6 +43,10 @@ public class IntakeConstants {
   public static final double IPkA = RHRUtil.modeDependentDouble(0., 0.);
   public static final double IPkS = RHRUtil.modeDependentDouble(0., 0.); // Volts
 
+  public static final Pose3d kInitialPose =
+      new Pose3d(
+          new Translation3d(Units.inchesToMeters(11.75), 0, Units.inchesToMeters(9.25)),
+          new Rotation3d());
   public static final double kIPTrapezoidalMaxVelocity = 1.;
   public static final double kIPTrapezoidalMaxAcceleration = 4;
   public static final double kIPTrapezoidalMaxJerk = 10;

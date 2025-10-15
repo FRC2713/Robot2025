@@ -8,14 +8,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.subsystems.constants.ArmConstants;
-import frc.robot.subsystems.constants.ShoulderConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
   private final ArmInputsAutoLogged inputs;
   private final ArmIO IO;
-  public Pose3d pose = ShoulderConstants.kInitialPose;
+  public Pose3d pose = ArmConstants.kInitialPose;
   public Transform3d transform = new Transform3d();
 
   public Arm(ArmIO IO) {

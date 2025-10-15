@@ -1,6 +1,11 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.constants.IntakeConstants;
 import frc.robot.util.LoggedTunableGains;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -11,6 +16,8 @@ import org.littletonrobotics.junction.Logger;
 public class Intake extends SubsystemBase {
   private final IntakeIO IO;
   private final IntakeInputsAutoLogged inputs;
+  public Pose3d pose = IntakeConstants.kInitialPose;
+  public Transform3d transform = new Transform3d();
 
   @AutoLogOutput(key = "Intake/hadCoral")
   private boolean hadCoral = false;
@@ -26,6 +33,7 @@ public class Intake extends SubsystemBase {
     IO.updateInputs(inputs);
     Logger.processInputs("Intake", inputs);
     Logger.recordOutput("doesThisWork", 42);
+    updateTransform();
 
     @SuppressWarnings("unused")
     var hasCoral = hasCoral();
@@ -77,5 +85,16 @@ public class Intake extends SubsystemBase {
   @AutoLogOutput(key = "Intake/intakePivotIsAtTarget")
   public boolean intakePivotIsAtTarget() {
     return this.IO.intakePivotIsAtTarget();
+  }
+
+  private void updateTransform() {
+    this.transform =
+        new Transform3d(
+            0.0,
+            0.0,
+            0.0,
+            new Rotation3d(0, Units.degreesToRadians(inputs.intakePivotAngleDegrees), 0));
+
+    this.pose = IntakeConstants.kInitialPose.transformBy(this.transform);
   }
 }

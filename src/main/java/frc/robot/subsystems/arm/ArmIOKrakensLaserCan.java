@@ -1,5 +1,6 @@
 package frc.robot.subsystems.arm;
 
+import au.grapplerobotics.LaserCan;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
@@ -13,7 +14,6 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.ArmConstants;
 import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.PhoenixUtil;
-import au.grapplerobotics.LaserCan;
 
 public class ArmIOKrakensLaserCan implements ArmIO {
   private final TalonFX motor;
@@ -73,14 +73,14 @@ public class ArmIOKrakensLaserCan implements ArmIO {
     return config;
   }
 
-     public void robotInit() {
-        lc = new LaserCan(0);
-     }
+  public void robotInit() {
+    lc = new LaserCan(0);
+  }
 
-     public void Periodic() {
-       LaserCan.Measurement measurement = lc.getMeasurement();
-       //UpdateInputs
-       }
+  public void Periodic() {
+    LaserCan.Measurement measurement = lc.getMeasurement();
+    // UpdateInputs
+  }
 
   @Override
   public void setVoltage(double volts) {

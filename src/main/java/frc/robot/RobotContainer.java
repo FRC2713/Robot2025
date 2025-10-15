@@ -64,6 +64,7 @@ import frc.robot.subsystems.intake.IntakeIOKrakens;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shoulder.Shoulder;
 import frc.robot.subsystems.shoulder.ShoulderIO;
+import frc.robot.subsystems.shoulder.ShoulderIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOLimelights;
 import frc.robot.subsystems.vision.VisionIOOdometry;
@@ -144,6 +145,8 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
         arm = new Arm(new ArmIOSim());
+        shoulder = new Shoulder(new ShoulderIOSim());
+
         break;
 
       default:
