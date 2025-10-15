@@ -60,6 +60,7 @@ public class ArmIOSim implements ArmIO {
     handSim.setInputVoltage(inputs.handVoltage);
     ;
 
+    inputs.handRPM = handSim.getAngularVelocityRPM();
     inputs.angleDegrees = Units.radiansToDegrees(armSim.getAngleRads());
     inputs.velocityDPS = Units.radiansToDegrees(armSim.getVelocityRadPerSec());
     inputs.armVoltage = armOutput;
