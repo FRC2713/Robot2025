@@ -83,7 +83,7 @@ public class ArmIOKrakensLaserCan implements ArmIO {
   }
 
   @Override
-  public void setVoltage(double volts) {
+  public void armSetVoltage(double volts) {
     motor.setVoltage(volts);
   }
 
@@ -96,7 +96,7 @@ public class ArmIOKrakensLaserCan implements ArmIO {
   @Override
   public void updateInputs(ArmInputs inputs) {
     inputs.velocityDPS = Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble());
-    inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
+    inputs.armVoltage = motor.getMotorVoltage().getValueAsDouble();
     inputs.angleDegrees = Units.rotationsToDegrees(motor.getPosition().getValueAsDouble());
     inputs.absoluteAngleDegrees =
         Units.rotationsToDegrees(encoder.getAbsolutePosition().getValueAsDouble());

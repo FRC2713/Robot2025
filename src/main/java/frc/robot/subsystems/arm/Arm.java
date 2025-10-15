@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
-import frc.robot.SetpointConstants;
 import frc.robot.subsystems.constants.ArmConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -52,28 +51,8 @@ public class Arm extends SubsystemBase {
     IO.setBus(bus);
   }
 
-  public void setCoralRPM(double rpm) {
-    IO.setCoralRPM(rpm);
-  }
-
-  public void setAlgaeRPM(double rpm) {
-    if (rpm < 0) {
-      IO.setAlgaeRPM(rpm);
-    } else if (handHasAlgae()) {
-      IO.setAlgaeRPM(SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED.getAsDouble());
-    } else {
-      IO.setAlgaeRPM(rpm);
-    }
-  }
-
-  @AutoLogOutput(key = "Arm/isCoralAtTarget")
-  public boolean handIsCoralAtTarget() {
-    return this.IO.handIsCoralAtTarget();
-  }
-
-  @AutoLogOutput(key = "Arm/isAlgaeAtTarget")
-  public boolean handIsAlgaeAtTarget() {
-    return this.IO.isAlgaeAtTarget();
+  public void handSetVoltage(double voltage) {
+    IO.handSetVoltage(voltage);
   }
 
   // figure this out when we know how to differentiate
@@ -88,14 +67,6 @@ public class Arm extends SubsystemBase {
 
   public void handSetEnableLimitSwitch(boolean setEnable) {
     IO.handSetEnableLimitSwitch(setEnable);
-  }
-
-  public void handSetCoralCurrentLimit(int currentLimit) {
-    IO.handSetCoralCurrentLimit(currentLimit);
-  }
-
-  public void handSetAlgaeCurrentLimit(int algaeCurrentLimit) {
-    IO.handSetAlgaeCurrentLimit(algaeCurrentLimit);
   }
 
   private void updateTransform() {
