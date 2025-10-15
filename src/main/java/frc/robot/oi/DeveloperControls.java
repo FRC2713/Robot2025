@@ -26,7 +26,7 @@ public class DeveloperControls {
   }
 
   public void configureButtonBindings() {
-    devCommandXboxController.a().onTrue(ArmCmds.armSetAngle(-90));
+    devCommandXboxController.a().onTrue(ArmCmds.handSetVoltage(15));
     devCommandXboxController.b().onTrue(ArmCmds.armSetAngle(-20));
     devCommandXboxController.y().onTrue(ArmCmds.armSetAngle(90));
     devCommandXboxController

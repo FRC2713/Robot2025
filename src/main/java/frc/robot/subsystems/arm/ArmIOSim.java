@@ -3,10 +3,13 @@ package frc.robot.subsystems.arm;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.subsystems.constants.ArmConstants;
+import frc.robot.subsystems.constants.RollerConstants;
 
 public class ArmIOSim implements ArmIO {
 
@@ -15,7 +18,7 @@ public class ArmIOSim implements ArmIO {
   private ArmFeedforward feedforward = ArmConstants.Gains.createArmFF();
   private double targetAngleDeg = Units.radiansToDegrees(ArmConstants.kInitialAngleRad);
 
-  private static final SingleJointedArmSim sim =
+  private static final SingleJointedArmSim armSim =
       new SingleJointedArmSim(
           DCMotor.getKrakenX60Foc(1),
           ArmConstants.kGearing,
@@ -25,6 +28,13 @@ public class ArmIOSim implements ArmIO {
           Units.degreesToRadians(ArmConstants.kMaxAngle),
           true,
           ArmConstants.kInitialAngleRad);
+
+  private final DCMotor handMotor = DCMotor.getKrakenX60Foc(1);
+  private final DCMotorSim handSim =
+      new DCMotorSim(
+          LinearSystemId.createDCMotorSystem(
+              handMotor, RollerConstants.kMOI, RollerConstants.kGearing),
+          handMotor);
 
   public ArmIOSim() {
     // pid.enableContinuousInput(0, 2 * Math.PI);
@@ -36,17 +46,23 @@ public class ArmIOSim implements ArmIO {
 
   @Override
   public void updateInputs(ArmInputs inputs) {
-    double pidOutput = pid.calculate(sim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
+    double armPidOutput =
+        pid.calculate(armSim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
     double feedforwardOutput =
-        feedforward.calculate(sim.getAngleRads(), sim.getVelocityRadPerSec());
-    double output = DriverStation.isEnabled() ? pidOutput + feedforwardOutput : 0;
+        feedforward.calculate(armSim.getAngleRads(), armSim.getVelocityRadPerSec());
+    double armOutput = DriverStation.isEnabled() ? armPidOutput + feedforwardOutput : 0;
+    ;
 
-    sim.setInputVoltage(output);
-    sim.update(0.02);
+    armSim.setInputVoltage(armOutput);
+    armSim.update(0.02);
 
-    inputs.angleDegrees = Units.radiansToDegrees(sim.getAngleRads());
-    inputs.velocityDPS = Units.radiansToDegrees(sim.getVelocityRadPerSec());
-    inputs.voltage = output;
+    handSim.update(0.02);
+    handSim.setInputVoltage(inputs.handVoltage);
+    ;
+
+    inputs.angleDegrees = Units.radiansToDegrees(armSim.getAngleRads());
+    inputs.velocityDPS = Units.radiansToDegrees(armSim.getVelocityRadPerSec());
+    inputs.armVoltage = armOutput;
 
     inputs.commandedAngleDegs = targetAngleDeg;
   }

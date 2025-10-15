@@ -27,15 +27,7 @@ public class ArmCmds {
   }
 
   public static Command armSetAngleAndWait(DoubleSupplier targetAngle) {
-    return Commands.sequence(armSetAngle(targetAngle), handWaitUntilAtTarget());
-  }
-
-  public static Command handSetSpeed(DoubleSupplier targetRPM) {
-    return new InstantCommand(() -> RobotContainer.arm.setCoralRPM(targetRPM.getAsDouble()));
-  }
-
-  public static Command handWaitUntilAtTarget() {
-    return new WaitUntilCommand(() -> RobotContainer.arm.handIsCoralAtTarget());
+    return Commands.sequence(armSetAngle(targetAngle));
   }
 
   public static Command handWaitUntilCoral() {
@@ -67,29 +59,8 @@ public class ArmCmds {
         () -> RobotContainer.arm.handSetEnableLimitSwitch(setEnable.getAsBoolean()));
   }
 
-  public static Command handSetSpeedAndWait(DoubleSupplier targetRPM) {
-    return Commands.sequence(handSetSpeed(targetRPM), handWaitUntilAtTarget());
-  }
-
-  public static Command setSpeedAndWaitForNoCoral(DoubleSupplier targetRPM) {
-    return Commands.sequence(
-        handSetEnableLimitSwitch(false),
-        handSetSpeed(targetRPM),
-        handWaitUntilNoCoral(0.5),
-        handSetEnableLimitSwitch(true));
-  }
-
-  // todo: finish labling with hand and arms
-  public static Command driveUntilLimitSet(DoubleSupplier targetRPM) {
-    return Commands.sequence(
-        handSetSpeed(targetRPM), handWaitUntilCoral(), handSetSpeed(() -> 0.0));
-  }
-
-  public static Command score(DoubleSupplier targetRpm) {
-    return Commands.sequence(handSetEnableLimitSwitch(false), handSetSpeed(targetRpm));
-  }
-
-  public static Command intake(DoubleSupplier targetRpm) {
-    return Commands.sequence(handSetEnableLimitSwitch(true), handSetSpeed(targetRpm));
+  // all that works with hand
+  public static Command handSetVoltage(int voltage) {
+    return new InstantCommand(() -> RobotContainer.arm.handSetVoltage(voltage));
   }
 }
