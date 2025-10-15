@@ -59,8 +59,19 @@ public class ArmCmds {
         () -> RobotContainer.arm.handSetEnableLimitSwitch(setEnable.getAsBoolean()));
   }
 
-  // all that works with hand
   public static Command handSetVoltage(int voltage) {
     return new InstantCommand(() -> RobotContainer.arm.handSetVoltage(voltage));
+  }
+
+  /**
+   * Runs the hand motor at a constant voltage. The motor will be stopped when the command ends.
+   *
+   * @param voltage The voltage to apply to the motor.
+   */
+  public static Command handHoldVoltage(double voltage) {
+    return Commands.runEnd(
+        () -> RobotContainer.arm.handSetVoltage(voltage),
+        () -> RobotContainer.arm.handSetVoltage(0),
+        RobotContainer.arm);
   }
 }
