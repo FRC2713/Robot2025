@@ -98,6 +98,14 @@ public class ElevatorIOKrakens implements ElevatorIO {
     return (getLeftHeight() + getRightHeight()) / 2.0;
   }
 
+  public void setSoftMinHeight(double height) {
+    leftConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = height;
+    rightConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = height;
+
+    PhoenixUtil.tryUntilOk(5, () -> left.getConfigurator().apply(leftConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> right.getConfigurator().apply(rightConfig, 0.25));
+  }
+
   @Override
   public void setVoltage(double volts1, double volts2) {
     left.setVoltage(volts1);

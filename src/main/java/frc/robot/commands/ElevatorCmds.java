@@ -27,6 +27,14 @@ public class ElevatorCmds {
     return new InstantCommand(() -> RobotContainer.elevator.setTargetHeight(h.getAsDouble()));
   }
 
+  public static Command setSoftMinHeight(DoubleSupplier h) {
+    return new InstantCommand(() -> RobotContainer.elevator.setSoftMinHeight(h.getAsDouble()));
+  }
+
+  public static Command setSoftMinHeight(double h) {
+    return setSoftMinHeight(() -> h);
+  }
+
   public static Command waitUntilAtTarget() {
     return new WaitUntilCommand(() -> RobotContainer.elevator.isAtTarget());
   }

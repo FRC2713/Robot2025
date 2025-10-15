@@ -59,6 +59,10 @@ public class Elevator extends SubsystemBase {
     this.IO.setVoltage(volts1, volts2);
   }
 
+  public void setSoftMinHeight(double height) {
+    this.IO.setSoftMinHeight(height);
+  }
+
   @AutoLogOutput(key = "Elevator/isAtTarget")
   public boolean isAtTarget() {
     return this.IO.isAtTarget();

@@ -26,6 +26,8 @@ public class ElevatorIOSim implements ElevatorIO {
           ElevatorConstants.kInitialHeight);
   public double setpoint = 0.0;
 
+  private double minHeight = ElevatorConstants.kMinHeight;
+
   @Override
   public void updateInputs(ElevatorInputs inputs) {
     double pidOutput = pid.calculate(Units.metersToInches(sim.getPositionMeters()), setpoint);
@@ -53,7 +55,11 @@ public class ElevatorIOSim implements ElevatorIO {
 
   @Override
   public void setTargetHeight(double heightInches) {
-    setpoint = heightInches;
+    setpoint = (heightInches >= this.minHeight) ? heightInches : this.minHeight;
+  }
+
+  public void setSoftMinHeight(double height) {
+    this.minHeight = height;
   }
 
   @Override

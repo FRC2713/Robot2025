@@ -9,6 +9,7 @@ import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
+import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.constants.IntakeConstants;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -81,7 +82,6 @@ public class SuperStructure {
               SetpointConstants.Elevator.L3_HEIGHT_IN,
               SetpointConstants.Shoulder.L3_ANGLE_DEG);
 
-  // TODO: if this intersects with the reef, might need to do pivot last
   public static Supplier<Command> L4_PREP =
       () ->
           new SetAllDOFS(
@@ -91,7 +91,6 @@ public class SuperStructure {
               SetpointConstants.Elevator.L4_PREP_HEIGHT_IN,
               SetpointConstants.Shoulder.L4_PREP_ANGLE_DEG);
 
-  // TODO: if this intersects with the reef, might need to do pivot last
   public static Supplier<Command> L4 =
       () ->
           new SetAllDOFS(
@@ -234,7 +233,11 @@ public class SuperStructure {
       () -> Commands.sequence(IntakeCmds.setVolts(0));
 
   public static Supplier<Command> INTAKE_PIVOT_RAISE =
-      () -> Commands.sequence(IntakeCmds.setAngle(42));
+      () -> Commands.sequence(
+        ElevatorCmds.setSoftMinHeight(ElevatorConstants.kMinIntakeUpHeight),
+        //TODO: change to a value based on real measurements, and set it in IntakeConstants rather than here
+        IntakeCmds.setAngle(42)
+        );
   public static Supplier<Command> INTAKE_PIVOT_LOWER =
       () -> Commands.sequence(IntakeCmds.setAngle(IntakeConstants.kIPInitialAngleDeg));
   public static Supplier<Command> CORAL_GRAB_GROUND =

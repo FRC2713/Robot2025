@@ -35,6 +35,8 @@ public interface ElevatorIO {
   public default void setTargetHeight(double heightInches) {}
   ;
 
+  public default void setSoftMinHeight(double height) {}
+
   public default void setPID(LoggedTunableGains slot0pid) {}
 
   public default void changeSlot(int slot) {}
