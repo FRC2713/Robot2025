@@ -63,10 +63,4 @@ public class ArmCmds {
     return new InstantCommand(() -> RobotContainer.arm.handSetVoltage(voltage));
   }
 
-  public static Command handHoldVoltage(double voltage) {
-    return Commands.runEnd(
-        () -> RobotContainer.arm.handSetVoltage(voltage),
-        () -> RobotContainer.arm.handSetVoltage(0),
-        RobotContainer.arm);
-  }
 }

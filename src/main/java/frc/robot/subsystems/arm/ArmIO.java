@@ -31,6 +31,7 @@ public interface ArmIO {
   ;
 
   public default void handSetVoltage(double volts) {}
+    
   ;
 
   public default void setTargetAngle(double degrees) {}
