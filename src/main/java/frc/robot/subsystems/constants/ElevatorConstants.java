@@ -30,7 +30,7 @@ public class ElevatorConstants {
 
   public static final double kMinHeight = 0.0; // inches
   public static final double kMaxHeight = 26.0; // inches
-  public static final double kMinIntakeUpHeight = 5.0; //inches
+  public static final double kMinIntakeUpHeight = 5.0; // inches
   public static final double kInitialHeight = 0;
 
   public static double toInches(double rotations) {

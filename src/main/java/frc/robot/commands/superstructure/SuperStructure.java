@@ -3,6 +3,7 @@ package frc.robot.commands.superstructure;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ElevatorCmds;
@@ -233,11 +234,16 @@ public class SuperStructure {
       () -> Commands.sequence(IntakeCmds.setVolts(0));
 
   public static Supplier<Command> INTAKE_PIVOT_RAISE =
-      () -> Commands.sequence(
-        ElevatorCmds.setSoftMinHeight(ElevatorConstants.kMinIntakeUpHeight),
-        //TODO: change to a value based on real measurements, and set it in IntakeConstants rather than here
-        IntakeCmds.setAngle(42)
-        );
+      () ->
+          Commands.sequence(
+              ElevatorCmds.setSoftMinHeight(ElevatorConstants.kMinIntakeUpHeight),
+              ElevatorCmds.setHeight(
+                  RobotContainer.elevator.getCurrentHeight() >= 5
+                      ? RobotContainer.elevator.getCurrentHeight()
+                      : 5),
+              // TODO: change to a value based on real measurements, and set it in IntakeConstants
+              // rather than here
+              IntakeCmds.setAngle(42));
   public static Supplier<Command> INTAKE_PIVOT_LOWER =
       () -> Commands.sequence(IntakeCmds.setAngle(IntakeConstants.kIPInitialAngleDeg));
   public static Supplier<Command> CORAL_GRAB_GROUND =
