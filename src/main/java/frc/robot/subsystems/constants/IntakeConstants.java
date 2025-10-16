@@ -9,8 +9,8 @@ import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.RHRUtil;
 
 public class IntakeConstants {
-  public static final int kIntakePivotCANId = 41;
-  public static final int kIntakePivotEncoderCANId = 42;
+  public static final int kIntakePivotCANId = 50;
+  //   public static final int kIntakePivotEncoderCANId = 51;
 
   public static final int kRollerCANId = 43;
   public static final int kRollerEncoderCANId = 44;
@@ -18,30 +18,30 @@ public class IntakeConstants {
   // Intake pivot arm constants
 
   // TODO: use something less confusing than "IP"
-  public static final double kIPGearing = 36 * (48. / 16.);
+  public static final double kIPGearing = ((50. / 8.) * (50. / 18.) * (40. / 10.));
 
   public static final int kIPStallCurrentLimit = 30; // amps
   public static final int kIPStatorCurrentLimit = 100; // also amps
 
   public static final boolean kIPInverted = false;
 
-  public static final double kIPMaxAngle = (90);
-  public static final double kIPMinAngle = (-10);
+  public static final double kIPMaxAngle = (190);
+  public static final double kIPMinAngle = (50);
 
   public static final double kIPLength = Units.inchesToMeters(11);
   public static final double kIPMass = Units.lbsToKilograms(10);
 
-  public static final double kIPInitialAngleDeg = -10.0;
+  public static final double kIPInitialAngleDeg = 70.0;
   public static final double kIPInitialAngleRad = Units.degreesToRadians(kIPInitialAngleDeg);
 
-  public static final double IPkP = RHRUtil.modeDependentDouble(100., 100.); // output/rotation
+  public static final double IPkP = RHRUtil.modeDependentDouble(60, 100.); // output/rotation
   public static final double IPkI = 0.0; // Integral of kP
   public static final double IPkD = RHRUtil.modeDependentDouble(0., 0.); // output/error in velocity
 
-  public static final double IPkG = RHRUtil.modeDependentDouble(0.074, 0.074);
+  public static final double IPkG = RHRUtil.modeDependentDouble(1, 0.074);
   public static final double IPkV = RHRUtil.modeDependentDouble(0, 0); // kV * rev/s = voltvs
   public static final double IPkA = RHRUtil.modeDependentDouble(0., 0.);
-  public static final double IPkS = RHRUtil.modeDependentDouble(0., 0.); // Volts
+  public static final double IPkS = RHRUtil.modeDependentDouble(1.7, 0.); // Volts
 
   public static final Pose3d kInitialPose =
       new Pose3d(

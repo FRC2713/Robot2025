@@ -38,7 +38,7 @@ import frc.robot.scoreassist.ClimbAssist;
 import frc.robot.scoreassist.ScoreAssist;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
-import frc.robot.subsystems.arm.ArmIOKrakensLaserCan;
+import frc.robot.subsystems.arm.ArmIOKrakens;
 import frc.robot.subsystems.arm.ArmIOSim;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.DriveConstants.OTFConstants;
@@ -57,7 +57,6 @@ import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
-import frc.robot.subsystems.endEffector.EndEffectorIOSparks;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOKrakens;
@@ -127,10 +126,12 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
         elevator = new Elevator(new ElevatorIOKrakens());
-        endEffector = new EndEffector(new EndEffectorIOSparks());
         intake = new Intake(new IntakeIOKrakens());
-        endEffector = new EndEffector(new EndEffectorIOSparks());
-        arm = new Arm(new ArmIOKrakensLaserCan());
+        arm = new Arm(new ArmIOKrakens());
+
+        shoulder = new Shoulder(new ShoulderIO() {});
+
+        endEffector = new EndEffector(new EndEffectorIO() {});
         break;
 
       case SIM:
@@ -291,6 +292,7 @@ public class RobotContainer {
     // Safety
     elevator.setTargetHeight(elevator.getCurrentHeight());
     arm.setTargetAngle(arm.getCurrentAngle());
+    intake.setTargetAngle(intake.getCurrentAngle());
     endEffector.setCoralRPM(0);
     endEffector.setAlgaeRPM(0);
     shoulder.setTargetAngle(shoulder.getCurrentAngle());

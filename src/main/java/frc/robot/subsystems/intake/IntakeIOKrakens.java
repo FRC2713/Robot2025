@@ -1,27 +1,23 @@
 package frc.robot.subsystems.intake;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.constants.IntakeConstants;
-import frc.robot.subsystems.constants.ShoulderConstants;
 import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.PhoenixUtil;
 
 public class IntakeIOKrakens implements IntakeIO {
 
   private final TalonFX pivotMotor;
-  private final CANcoder pivotEncoder;
+  // private final CANcoder pivotEncoder;
   private TalonFXConfiguration pivotMotorConfig;
-  private CANcoderConfiguration pivotEncoderConfig;
+  // private CANcoderConfiguration pivotEncoderConfig;
 
   private final TalonFX rollerMotor;
   private TalonFXConfiguration rollerMotorConfig;
@@ -37,15 +33,17 @@ public class IntakeIOKrakens implements IntakeIO {
 
     // Intake pivot stuff
     this.pivotMotor = new TalonFX(IntakeConstants.kIntakePivotCANId);
-    this.pivotEncoder = new CANcoder(IntakeConstants.kIntakePivotEncoderCANId);
+    // this.pivotEncoder = new CANcoder(IntakeConstants.kIntakePivotEncoderCANId);
     pivotMotorConfig = createIntakePivotKrakenConfig();
-    pivotEncoderConfig = createCANcoderConfiguration();
-    PhoenixUtil.tryUntilOk(
-        5, () -> this.pivotEncoder.getConfigurator().apply(pivotEncoderConfig, 0.25));
+    // pivotEncoderConfig = createCANcoderConfiguration();
+    // PhoenixUtil.tryUntilOk(
+    //     5, () -> this.pivotEncoder.getConfigurator().apply(pivotEncoderConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> pivotMotor.getConfigurator().apply(pivotMotorConfig, 0.25));
     PhoenixUtil.tryUntilOk(
         5,
-        () -> pivotMotor.setPosition(pivotEncoder.getAbsolutePosition().getValueAsDouble(), 0.25));
+        () ->
+            pivotMotor.setPosition(
+                Units.degreesToRotations(IntakeConstants.kIPInitialAngleDeg), 0.25));
 
     // Roller stuff
     this.rollerMotor = new TalonFX(IntakeConstants.kRollerCANId);
@@ -63,8 +61,8 @@ public class IntakeIOKrakens implements IntakeIO {
     inputs.intakePivotVoltage = pivotMotor.getMotorVoltage().getValueAsDouble();
     inputs.intakePivotAngleDegrees =
         Units.rotationsToDegrees(pivotMotor.getPosition().getValueAsDouble());
-    inputs.intakePivotAbsoluteAngleDegrees =
-        Units.rotationsToDegrees(pivotEncoder.getAbsolutePosition().getValueAsDouble());
+    // inputs.intakePivotAbsoluteAngleDegrees =
+    //     Units.rotationsToDegrees(pivotEncoder.getAbsolutePosition().getValueAsDouble());
     inputs.commandedAngleDegs = targetDegrees;
 
     inputs.rollerVelocityRPM =
@@ -131,10 +129,10 @@ public class IntakeIOKrakens implements IntakeIO {
   public TalonFXConfiguration createIntakePivotKrakenConfig() {
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    config.Feedback.FeedbackRemoteSensorID = this.pivotEncoder.getDeviceID();
-    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-    config.Feedback.SensorToMechanismRatio = 1.0;
-    config.Feedback.RotorToSensorRatio = IntakeConstants.kIPGearing;
+    // config.Feedback.FeedbackRemoteSensorID = this.pivotEncoder.getDeviceID();
+    // config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    config.Feedback.SensorToMechanismRatio = IntakeConstants.kIPGearing;
+    config.Feedback.RotorToSensorRatio = 1.0;
     config.TorqueCurrent.PeakForwardTorqueCurrent = IntakeConstants.kIPStallCurrentLimit;
     config.TorqueCurrent.PeakReverseTorqueCurrent = -IntakeConstants.kIPStallCurrentLimit;
     config.CurrentLimits.StatorCurrentLimit = IntakeConstants.kIPStatorCurrentLimit;
@@ -156,11 +154,11 @@ public class IntakeIOKrakens implements IntakeIO {
     return config;
   }
 
-  public static CANcoderConfiguration createCANcoderConfiguration() {
-    var config = new CANcoderConfiguration();
-    config.MagnetSensor.MagnetOffset = ShoulderConstants.kAbsoluteEncoderOffset;
-    config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1 / 3;
+  // public static CANcoderConfiguration createCANcoderConfiguration() {
+  //   var config = new CANcoderConfiguration();
+  //   config.MagnetSensor.MagnetOffset = ShoulderConstants.kAbsoluteEncoderOffset;
+  //   config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1 / 3;
 
-    return config;
-  }
+  //   return config;
+  // }
 }

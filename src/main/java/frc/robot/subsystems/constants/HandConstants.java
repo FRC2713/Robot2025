@@ -7,7 +7,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import frc.robot.util.ControlGains;
 
 public class HandConstants {
-  public static final int kCANId = 4;
+  public static final int kCANId = 99;
 
   public static final double kMOI = 0.001;
   public static final double kGearing = 17.0 / 35.0;

@@ -38,6 +38,10 @@ public class Intake extends SubsystemBase {
     @SuppressWarnings("unused")
     var hasCoral = hasCoral();
 
+    if (IntakeConstants.IPGains.hasChanged(hashCode())) {
+      this.IO.setPID(IntakeConstants.IPGains);
+    }
+
     /*
     // Coppied & modified from EndEffector; uncomment if intake pivot proves to move too quickly with coral
     if (hasCoral && !hadCoral) {
@@ -78,9 +82,9 @@ public class Intake extends SubsystemBase {
     return this.inputs.intakePivotAngleDegrees;
   }
 
-  public double getAbsoluteAngle() {
-    return this.inputs.intakePivotAbsoluteAngleDegrees;
-  }
+  // public double getAbsoluteAngle() {
+  //   return this.inputs.intakePivotAbsoluteAngleDegrees;
+  // }
 
   @AutoLogOutput(key = "Intake/intakePivotIsAtTarget")
   public boolean intakePivotIsAtTarget() {
