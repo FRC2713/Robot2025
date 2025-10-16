@@ -24,7 +24,7 @@ public class ArmIOKrakens implements ArmIO {
   private CANcoderConfiguration encoderConfig;
 
   public ArmIOKrakens() {
-    this.motor = new TalonFX(ArmConstants.kCANId);
+    this.motor = new TalonFX(ArmConstants.kArmCANId);
     this.encoder = new CANcoder(ArmConstants.kEncoderCANId);
     motorConfig = createKrakenConfig();
     encoderConfig = createCANcoderConfiguration();
