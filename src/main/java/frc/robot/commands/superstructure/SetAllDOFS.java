@@ -2,10 +2,14 @@ package frc.robot.commands.superstructure;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.RobotContainer;
+import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ArmCmds;
 import frc.robot.commands.ElevatorCmds;
+import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.RollerCmds;
+import frc.robot.subsystems.constants.ElevatorConstants;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
@@ -27,15 +31,29 @@ public class SetAllDOFS extends ParallelCommandGroup {
       DoubleSupplier coralSpeed,
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
-      DoubleSupplier armTarget) {
+      DoubleSupplier armTarget,
+      DoubleSupplier pivotTargetAngle) {
     this.addCommands(
         new InstantCommand(() -> Logger.recordOutput("Active SS", ssName)),
         new InstantCommand(() -> Logger.recordOutput("Active EE", eeName)),
         RollerCmds.setEnableLimitSwitch(intakingCoral),
         RollerCmds.setSpeed(coralSpeed),
         AlgaeClawCmds.setSpeed(algaeSpeed),
-        ElevatorCmds.setHeightAndWait(elevatorTarget),
-        ArmCmds.armSetAngleAndWait(armTarget));
+        new InstantCommand(
+            () -> {
+              if (pivotTargetAngle.getAsDouble()
+                  >= SetpointConstants.Intake.MAX_NO_COLLISION_ANGLE.getAsDouble()) {
+                ElevatorCmds.setSoftMinHeight(ElevatorConstants.kMinIntakeUpHeight);
+              }
+              ElevatorCmds.setHeightAndWait(
+                  (RobotContainer.elevator.getCurrentHeight()
+                          >= ElevatorConstants.kMinIntakeUpHeight)
+                      ? elevatorTarget.getAsDouble()
+                      : ElevatorConstants.kMinIntakeUpHeight);
+            }),
+        ElevatorCmds.setSoftMinHeight(ElevatorConstants.kMinIntakeUpHeight),
+        ArmCmds.armSetAngleAndWait(armTarget),
+        IntakeCmds.setAngleAndWait(pivotTargetAngle));
   }
 
   /***
@@ -49,7 +67,16 @@ public class SetAllDOFS extends ParallelCommandGroup {
       String eeName,
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
-      DoubleSupplier shoulderTarget) {
-    this(ssName, eeName, () -> false, () -> 0, algaeSpeed, elevatorTarget, shoulderTarget);
+      DoubleSupplier shoulderTarget,
+      DoubleSupplier pivotTargetAngle) {
+    this(
+        ssName,
+        eeName,
+        () -> false,
+        () -> 0,
+        algaeSpeed,
+        elevatorTarget,
+        shoulderTarget,
+        pivotTargetAngle);
   }
 }

@@ -17,7 +17,7 @@ public class ArmIOSim implements ArmIO {
 
   private ArmFeedforward feedforward = ArmConstants.Gains.createArmFF();
   private double targetAngleDeg = Units.radiansToDegrees(ArmConstants.kInitialAngleRad);
-
+  private double handCurrentVoltage = 0;
   private static final SingleJointedArmSim armSim =
       new SingleJointedArmSim(
           DCMotor.getKrakenX60Foc(1),
@@ -45,6 +45,11 @@ public class ArmIOSim implements ArmIO {
   }
 
   @Override
+  public void handSetVoltage(double volts) {
+    this.handCurrentVoltage = volts;
+  }
+
+  @Override
   public void updateInputs(ArmInputs inputs) {
     double armPidOutput =
         pid.calculate(armSim.getAngleRads(), Units.degreesToRadians(targetAngleDeg));
@@ -57,7 +62,8 @@ public class ArmIOSim implements ArmIO {
     armSim.update(0.02);
 
     handSim.update(0.02);
-    handSim.setInputVoltage(inputs.handVoltage);
+    inputs.handVoltage = handCurrentVoltage;
+    handSim.setInputVoltage(handCurrentVoltage);
     ;
 
     inputs.handRPM = handSim.getAngularVelocityRPM();

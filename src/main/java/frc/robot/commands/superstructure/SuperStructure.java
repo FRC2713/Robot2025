@@ -26,7 +26,8 @@ public class SuperStructure {
               () -> 0, // not actually coral-ing
               () -> 0, // not actually algae-ing
               SetpointConstants.Elevator.STARTING_HEIGHT,
-              SetpointConstants.Shoulder.STARTING_ANGLE);
+              SetpointConstants.Shoulder.STARTING_ANGLE,
+              SetpointConstants.Intake.PIVOT_DOWN_ANGLE);
 
   public static Supplier<Command> SOURCE_CORAL_INTAKE =
       () ->
@@ -38,7 +39,8 @@ public class SuperStructure {
                   () ->
                       0, // SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED, // not actually algae-ing
                   SetpointConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN,
-                  SetpointConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG)
+                  SetpointConstants.Shoulder.SOURCE_CORAL_INTAKE_ANGLE_DEG,
+                  SetpointConstants.Intake.PIVOT_DOWN_ANGLE)
               .andThen(RollerCmds.waitUntilCoral(2.0));
 
   public static Supplier<Command> SOURCE_CORAL_INTAKE_BLOCKED =
@@ -51,7 +53,8 @@ public class SuperStructure {
                   () ->
                       0, // SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED, // not actually algae-ing
                   SetpointConstants.Elevator.SOURCE_CORAL_INTAKE_HEIGHT_IN,
-                  SetpointConstants.Shoulder.SOURCE_CORAL_INTAKE_BLOCKED_ANGLE_DEG)
+                  SetpointConstants.Shoulder.SOURCE_CORAL_INTAKE_BLOCKED_ANGLE_DEG,
+                  SetpointConstants.Intake.PIVOT_DOWN_ANGLE)
               .andThen(RollerCmds.waitUntilCoral(2.0));
   ;
 
@@ -62,9 +65,10 @@ public class SuperStructure {
               "ALGAE_GRAB",
               SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
               SetpointConstants.Elevator.L1_HEIGHT_IN,
-              SetpointConstants.Shoulder.L1_ANGLE_DEG);
+              SetpointConstants.Shoulder.L1_ANGLE_DEG,
+              SetpointConstants.Intake.PIVOT_DOWN_ANGLE);
 
-  // TODO: We don't necessarily need to start the algae claw here
+  // TODO: Replace intake angle with something other than () -> -10
   public static Supplier<Command> L2 =
       () ->
           new SetAllDOFS(
@@ -72,7 +76,8 @@ public class SuperStructure {
               "ALGAE_GRAB",
               SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
               SetpointConstants.Elevator.L2_HEIGHT_IN,
-              SetpointConstants.Shoulder.L2_ANGLE_DEG);
+              SetpointConstants.Shoulder.L2_ANGLE_DEG,
+              () -> -10);
 
   public static Supplier<Command> L3 =
       () ->
@@ -81,7 +86,8 @@ public class SuperStructure {
               "ALGAE_GRAB",
               SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
               SetpointConstants.Elevator.L3_HEIGHT_IN,
-              SetpointConstants.Shoulder.L3_ANGLE_DEG);
+              SetpointConstants.Shoulder.L3_ANGLE_DEG,
+              () -> -10);
 
   public static Supplier<Command> L4_PREP =
       () ->
@@ -90,7 +96,8 @@ public class SuperStructure {
               "STOP_ROLLERS",
               () -> 0, // stop algae claw
               SetpointConstants.Elevator.L4_PREP_HEIGHT_IN,
-              SetpointConstants.Shoulder.L4_PREP_ANGLE_DEG);
+              SetpointConstants.Shoulder.L4_PREP_ANGLE_DEG,
+              () -> -10);
 
   public static Supplier<Command> L4 =
       () ->
@@ -99,7 +106,8 @@ public class SuperStructure {
               "STOP_ROLLERS",
               () -> 0, // stop algae claw
               SetpointConstants.Elevator.L4_HEIGHT_IN,
-              SetpointConstants.Shoulder.L4_ANGLE_DEG);
+              SetpointConstants.Shoulder.L4_ANGLE_DEG,
+              () -> -10);
 
   public static Supplier<Command> BARGE_PREP_FORWARDS =
       () ->
@@ -140,7 +148,8 @@ public class SuperStructure {
                   "ALGAE_HOLD",
                   SetpointConstants.AlgaeClaw.ALGAE_HOLD_SPEED,
                   SetpointConstants.Elevator.STARTING_HEIGHT,
-                  SetpointConstants.Shoulder.ALGAE_STARTING_ANGLE));
+                  SetpointConstants.Shoulder.ALGAE_STARTING_ANGLE,
+                  () -> -10));
 
   public static Supplier<Command> ALGAE_GRAB_L2 =
       () ->
@@ -237,15 +246,20 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               ElevatorCmds.setSoftMinHeight(ElevatorConstants.kMinIntakeUpHeight),
-              ElevatorCmds.setHeight(
-                  RobotContainer.elevator.getCurrentHeight() >= 5
-                      ? RobotContainer.elevator.getCurrentHeight()
-                      : 5),
+              new InstantCommand(
+                  () -> {
+                    if (RobotContainer.elevator.getCurrentHeight() >= 5) {
+                      ElevatorCmds.setHeight(ElevatorConstants.kMinIntakeUpHeight);
+                    }
+                  }),
               // TODO: change to a value based on real measurements, and set it in IntakeConstants
               // rather than here
-              IntakeCmds.setAngle(42));
+              IntakeCmds.setAngle(SetpointConstants.Intake.PIVOT_UP_ANGLE));
   public static Supplier<Command> INTAKE_PIVOT_LOWER =
-      () -> Commands.sequence(IntakeCmds.setAngle(IntakeConstants.kIPInitialAngleDeg));
+      () ->
+          Commands.sequence(
+              IntakeCmds.setAngle(IntakeConstants.kIPInitialAngleDeg),
+              IntakeCmds.setAngle(SetpointConstants.Intake.PIVOT_DOWN_ANGLE));
   public static Supplier<Command> CORAL_GRAB_GROUND =
       () -> Commands.sequence(IntakeCmds.setVolts(IntakeConstants.kRollerGrabSpeed));
 }

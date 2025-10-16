@@ -162,6 +162,13 @@ public class SetpointConstants {
         new LoggedTunableNumber("Intake/Test speed", 42.0);
     public static final LoggedTunableNumber CORAL_HOLD_SPEED =
         new LoggedTunableNumber("Intake/Coral hold speed", 0.0);
+    public static final LoggedTunableNumber PIVOT_UP_ANGLE =
+        new LoggedTunableNumber("Intake/Pivot up angle", 42.0);
+    public static final LoggedTunableNumber PIVOT_DOWN_ANGLE =
+        new LoggedTunableNumber("Intake/Pivot down angle", -10.0);
+    // TODO: Replace with number based on data from robot
+    public static final LoggedTunableNumber MAX_NO_COLLISION_ANGLE =
+        new LoggedTunableNumber("Intake/Max angle to not collide with elevator", 0);
   }
 
   public class Drive {
