@@ -49,6 +49,7 @@ public class ArmIOKrakensLaserCan implements ArmIO {
         5, () -> armMotor.setPosition(encoder.getAbsolutePosition().getValueAsDouble(), 0.25));
   }
 
+  //todo torque limits
   public TalonFXConfiguration handCreateKrakenConfig() {
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
