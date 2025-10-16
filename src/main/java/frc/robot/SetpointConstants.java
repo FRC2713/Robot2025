@@ -100,6 +100,7 @@ public class SetpointConstants {
         new LoggedTunableNumber("Shoulder/SS/Algae L2 Angle", -250);
   }
 
+
   public class Roller {
     public static final LoggedTunableNumber L1_CORAL_SCORE_SPEED =
         new LoggedTunableNumber("Roller/SS/L1 Score Speed", 3000);
@@ -162,10 +163,15 @@ public class SetpointConstants {
         new LoggedTunableNumber("Intake/Test speed", 42.0);
     public static final LoggedTunableNumber CORAL_HOLD_SPEED =
         new LoggedTunableNumber("Intake/Coral hold speed", 0.0);
+    public static final LoggedTunableNumber PIVOT_UP_ANGLE = 
+        new LoggedTunableNumber("Intake/Pivot up angle", 42.0);
+    public static final LoggedTunableNumber PIVOT_DOWN_ANGLE = 
+        new LoggedTunableNumber("Intake/Pivot down angle", -10.0);
   }
 
   public class Drive {
     public static final LoggedTunableNumber INCH_SPEED =
         new LoggedTunableNumber("Drive/Inch Speed", 0.1);
   }
+
 }

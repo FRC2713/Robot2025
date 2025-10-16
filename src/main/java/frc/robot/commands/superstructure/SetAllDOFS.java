@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ArmCmds;
 import frc.robot.commands.ElevatorCmds;
+import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.RollerCmds;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -27,7 +28,8 @@ public class SetAllDOFS extends ParallelCommandGroup {
       DoubleSupplier coralSpeed,
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
-      DoubleSupplier armTarget) {
+      DoubleSupplier armTarget,
+      DoubleSupplier pivotTargetAngle) {
     this.addCommands(
         new InstantCommand(() -> Logger.recordOutput("Active SS", ssName)),
         new InstantCommand(() -> Logger.recordOutput("Active EE", eeName)),
@@ -36,6 +38,7 @@ public class SetAllDOFS extends ParallelCommandGroup {
         AlgaeClawCmds.setSpeed(algaeSpeed),
         ElevatorCmds.setHeightAndWait(elevatorTarget),
         ArmCmds.armSetAngleAndWait(armTarget));
+        IntakeCmds.setAngleAndWait(pivotTargetAngle);
   }
 
   /***
@@ -49,7 +52,8 @@ public class SetAllDOFS extends ParallelCommandGroup {
       String eeName,
       DoubleSupplier algaeSpeed,
       DoubleSupplier elevatorTarget,
-      DoubleSupplier shoulderTarget) {
-    this(ssName, eeName, () -> false, () -> 0, algaeSpeed, elevatorTarget, shoulderTarget);
+      DoubleSupplier shoulderTarget,
+      DoubleSupplier pivotTargetAngle) {
+    this(ssName, eeName, () -> false, () -> 0, algaeSpeed, elevatorTarget, shoulderTarget, pivotTargetAngle);
   }
 }
