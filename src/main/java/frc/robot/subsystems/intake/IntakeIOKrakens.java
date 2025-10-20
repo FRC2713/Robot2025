@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import au.grapplerobotics.LaserCan;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
@@ -15,7 +16,6 @@ import frc.robot.subsystems.constants.IntakeConstants;
 import frc.robot.subsystems.constants.ShoulderConstants;
 import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.PhoenixUtil;
-import au.grapplerobotics.LaserCan;
 
 public class IntakeIOKrakens implements IntakeIO {
 
