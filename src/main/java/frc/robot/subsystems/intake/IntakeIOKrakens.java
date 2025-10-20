@@ -15,8 +15,11 @@ import frc.robot.subsystems.constants.IntakeConstants;
 import frc.robot.subsystems.constants.ShoulderConstants;
 import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.PhoenixUtil;
+import au.grapplerobotics.LaserCan;
 
 public class IntakeIOKrakens implements IntakeIO {
+
+  private LaserCan laserCan;
 
   private final TalonFX pivotMotor;
   private final CANcoder pivotEncoder;
@@ -77,7 +80,7 @@ public class IntakeIOKrakens implements IntakeIO {
         Units.rotationsToDegrees(rollerMotor.getPosition().getValueAsDouble());
     inputs.commandedRollerRPM = targetDegrees;
 
-    // inputs.setpointVelocity = pivotMotor.getClosedLoopReference().getValueAsDouble();
+    inputs.hasObject = hasObject();
   }
 
   // roller functions
@@ -88,7 +91,9 @@ public class IntakeIOKrakens implements IntakeIO {
   }
 
   @Override
-  public void enableLimitSwitch() {}
+  public boolean hasObject() {
+    return laserCan.getMeasurement().distance_mm <= IntakeConstants.kLaserDistance;
+  }
 
   // intake pivot functions
   @Override

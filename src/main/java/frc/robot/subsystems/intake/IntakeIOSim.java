@@ -70,6 +70,8 @@ public class IntakeIOSim implements IntakeIO {
     inputs.commandedRollerRPM = commandedRollerVolts;
     inputs.rollerPositionDegs = Units.radiansToDegrees(rollerSim.getAngularPositionRad());
     inputs.rollerCurrentLimit = 0;
+
+    inputs.hasObject = hasObject();
   }
 
   // roller functions
@@ -78,7 +80,9 @@ public class IntakeIOSim implements IntakeIO {
     this.commandedRollerVolts = volts;
   }
 
-  public void enableLimitSwitch() {}
+  public boolean hasObject() {
+    return false;
+  }
 
   // intake pivot functions
   public void setVoltage(double volts) {

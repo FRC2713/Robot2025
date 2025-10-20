@@ -36,7 +36,7 @@ public class Intake extends SubsystemBase {
     updateTransform();
 
     @SuppressWarnings("unused")
-    var hasCoral = hasCoral();
+    var hasCoral = hasObject();
 
     /*
     // Coppied & modified from EndEffector; uncomment if intake pivot proves to move too quickly with coral
@@ -53,16 +53,12 @@ public class Intake extends SubsystemBase {
 
   // Roller functions
 
-  public void enableLimitSwitch() {
-    IO.enableLimitSwitch();
+  public boolean hasObject() {
+    return inputs.hasObject;
   }
 
   public void setRollerVoltage(double volts) {
     IO.setRollerVoltage(volts);
-  }
-
-  public boolean hasCoral() {
-    return inputs.hasCoral;
   }
 
   // Pivot functions

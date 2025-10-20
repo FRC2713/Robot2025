@@ -1,5 +1,6 @@
 package frc.robot.subsystems.constants;
 
+import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -105,4 +106,7 @@ public class IntakeConstants {
   public static final double kRollerExponential_kA = 0.8;
   public static final double kRollerGrabSpeed = 42;
   public static double kRollerMOI = 0.001;
+
+  //distance from the laser, in milimeters.
+  public static int kLaserDistance = 0;
 }

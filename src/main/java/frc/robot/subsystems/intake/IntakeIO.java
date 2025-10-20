@@ -25,8 +25,8 @@ public interface IntakeIO {
     public double rollerPositionDegs = 0.0;
     public int rollerCurrentLimit = 0;
 
-    // Coral detection
-    public boolean hasCoral = false;
+    // Coral/algae detection
+    public boolean hasObject = false;
   }
 
   public default void updateInputs(IntakeInputs inputs) {}
@@ -35,7 +35,9 @@ public interface IntakeIO {
 
   public default void setRollerVoltage(double volts) {}
 
-  public default void enableLimitSwitch() {}
+  public default boolean hasObject() {
+    return false;
+  }
 
   // intake pivot functions
   public default void setVoltage(double volts) {}

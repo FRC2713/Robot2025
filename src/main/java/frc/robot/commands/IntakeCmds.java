@@ -24,8 +24,8 @@ public class IntakeCmds {
         () -> RobotContainer.endEffector.setEnableLimitSwitch(setEnable.getAsBoolean()));
   }
 
-  public static Command hasCoral() {
-    return new InstantCommand(() -> RobotContainer.intake.hasCoral());
+  public static Command hasObject() {
+    return new InstantCommand(() -> RobotContainer.intake.hasObject());
   }
 
   // intake pivot
