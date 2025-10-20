@@ -24,6 +24,10 @@ public class IntakeCmds {
         () -> RobotContainer.endEffector.setEnableLimitSwitch(setEnable.getAsBoolean()));
   }
 
+  public static Command hasCoral() {
+    return new InstantCommand(() -> RobotContainer.intake.hasCoral());
+  }
+
   // intake pivot
   public static Command setAngle(double targetAngle) {
     return new InstantCommand(() -> RobotContainer.intake.setTargetAngle(targetAngle));

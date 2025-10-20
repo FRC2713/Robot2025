@@ -9,6 +9,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.constants.IntakeConstants;
@@ -38,6 +39,7 @@ public class IntakeIOKrakens implements IntakeIO {
     // Intake pivot stuff
     this.pivotMotor = new TalonFX(IntakeConstants.kIntakePivotCANId);
     this.pivotEncoder = new CANcoder(IntakeConstants.kIntakePivotEncoderCANId);
+
     pivotMotorConfig = createIntakePivotKrakenConfig();
     pivotEncoderConfig = createCANcoderConfiguration();
     PhoenixUtil.tryUntilOk(
@@ -52,6 +54,8 @@ public class IntakeIOKrakens implements IntakeIO {
     rollerMotorConfig = createRollerKrakenConfig();
     PhoenixUtil.tryUntilOk(5, () -> rollerMotor.getConfigurator().apply(rollerMotorConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> rollerMotor.setPosition(0.0, 0.25));
+
+    SmartDashboard.putNumber("intake velocity", this.rollerMotor.getVelocity().getValueAsDouble());
   }
 
   @Override
