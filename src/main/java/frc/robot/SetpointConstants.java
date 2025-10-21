@@ -46,58 +46,57 @@ public class SetpointConstants {
         new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 0.8);
   }
 
-  public class Shoulder {
+  public class Arm {
 
     public static final LoggedTunableNumber STARTING_ANGLE =
-        new LoggedTunableNumber("Shoulder/SS/Starting Angle", -90);
+        new LoggedTunableNumber("Arm/SS/Starting Angle", -90);
 
     public static final LoggedTunableNumber ALGAE_STARTING_ANGLE =
-        new LoggedTunableNumber("Shoulder/SS/Starting Angle With Algae", -90);
+        new LoggedTunableNumber("Arm/SS/Starting Angle With Algae", -90);
 
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Source Intake Angle", -80);
+        new LoggedTunableNumber("Arm/SS/Source Intake Angle", -80);
 
     public static final LoggedTunableNumber SOURCE_CORAL_INTAKE_BLOCKED_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Source Intake Blocked Angle", -67);
+        new LoggedTunableNumber("Arm/SS/Source Intake Blocked Angle", -67);
 
     public static final LoggedTunableNumber L1_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L1 Angle", -135);
+        new LoggedTunableNumber("Arm/SS/L1 Angle", -135);
 
     public static final LoggedTunableNumber L2_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L2 Angle", -150);
+        new LoggedTunableNumber("Arm/SS/L2 Angle", -150);
 
     public static final LoggedTunableNumber L3_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L3 Angle", -155);
+        new LoggedTunableNumber("Arm/SS/L3 Angle", -155);
 
     public static final LoggedTunableNumber L4_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L4 Angle", 132);
+        new LoggedTunableNumber("Arm/SS/L4 Angle", 132);
     public static final LoggedTunableNumber L4_PREP_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/L4 Prep Angle", 90);
+        new LoggedTunableNumber("Arm/SS/L4 Prep Angle", 90);
 
     public static final LoggedTunableNumber PREP_CLIMB_ANGLE_DEGS =
-        new LoggedTunableNumber("Shoulder/SS/Prep Climb Angle", -170);
+        new LoggedTunableNumber("Arm/SS/Prep Climb Angle", -170);
 
     public static final LoggedTunableNumber CLIMB_ANGLE_DEGS =
-        new LoggedTunableNumber("Shoulder/SS/Climb Angle", -147);
+        new LoggedTunableNumber("Arm/SS/Climb Angle", -147);
 
     public static final LoggedTunableNumber PROCESSOR_SCORE_ANGLE_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Proc Score Angle", -76.2890625);
+        new LoggedTunableNumber("Arm/SS/Proc Score Angle", -76.2890625);
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEGREES =
-        new LoggedTunableNumber("Shoulder/SS/Barge Angle", -270);
+        new LoggedTunableNumber("Arm/SS/Barge Angle", -270);
 
     public static final LoggedTunableNumber BARGE_ANGLE_DEGREES_BACKWARDS =
-        new LoggedTunableNumber(
-            "Shoulder/SS/Barge Backwards Angle", BARGE_ANGLE_DEGREES.get() + 360);
+        new LoggedTunableNumber("Arm/SS/Barge Backwards Angle", BARGE_ANGLE_DEGREES.get() + 360);
 
     public static final LoggedTunableNumber ALGAE_GROUND_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Ground Algae Angle", -76.2890625);
+        new LoggedTunableNumber("Arm/SS/Ground Algae Angle", -76.2890625);
 
     public static final LoggedTunableNumber ALGAE_L3_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Algae L3 Angle", -180); // didnt change
+        new LoggedTunableNumber("Arm/SS/Algae L3 Angle", -180); // didnt change
 
     public static final LoggedTunableNumber ALGAE_L2_DEG =
-        new LoggedTunableNumber("Shoulder/SS/Algae L2 Angle", -250);
+        new LoggedTunableNumber("Arm/SS/Algae L2 Angle", -250);
   }
 
   public class Roller {

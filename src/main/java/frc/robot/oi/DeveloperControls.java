@@ -6,9 +6,8 @@ package frc.robot.oi;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.RobotContainer;
 import frc.robot.commands.ArmCmds;
+import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.superstructure.EndEffector;
 import frc.robot.commands.superstructure.SuperStructure;
 
@@ -19,15 +18,17 @@ import frc.robot.commands.superstructure.SuperStructure;
 public class DeveloperControls {
   private final CommandXboxController devCommandXboxController = new CommandXboxController(2);
 
-  private Trigger hasAlgaeTrigger = new Trigger(() -> RobotContainer.endEffector.hasAlgae());
+  // private Trigger hasAlgaeTrigger = new Trigger(() -> RobotContainer.endEffector.hasAlgae());
 
   public void configureTriggers() {
-    hasAlgaeTrigger.onTrue(EndEffector.ALGAE_HOLD.get());
+    // hasAlgaeTrigger.onTrue(EndEffector.ALGAE_HOLD.get());
   }
 
   public void configureButtonBindings() {
     devCommandXboxController.a().whileTrue(ArmCmds.handSetVoltage(15));
-    devCommandXboxController.b().onTrue(ArmCmds.armSetAngle(-20));
+    devCommandXboxController
+        .b()
+        .onTrue(Commands.parallel(ArmCmds.armSetAngle(-20), IntakeCmds.setAngle(-20)));
     devCommandXboxController.y().onTrue(ArmCmds.armSetAngle(90));
     devCommandXboxController
         .rightBumper()

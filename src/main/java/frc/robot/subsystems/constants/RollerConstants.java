@@ -17,6 +17,5 @@ public class RollerConstants {
   public static final double kMaxVelocity = 6000; // rpm
   public static final double kMaxAcceleration = 1000; // rpm / sec
 
-
   public static final double AT_TARGET_GIVE_RPM = 150;
 }

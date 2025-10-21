@@ -55,7 +55,8 @@ import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOKrakens;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.endEffector.EndEffector;
-// import frc.robot.subsystems.endEffector.EndEffectorIOSparks;
+import frc.robot.subsystems.endEffector.EndEffectorIOFake;
+import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOKrakens;
@@ -125,7 +126,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
         elevator = new Elevator(new ElevatorIOKrakens());
-        // endEffector = new EndEffector(new EndEffectorIOSparks());
+        endEffector = new EndEffector(new EndEffectorIOFake());
         intake = new Intake(new IntakeIOKrakens());
         // endEffector = new EndEffector(new EndEffectorIOSparks());
         arm = new Arm(new ArmIOKrakensLaserCan());
@@ -141,7 +142,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         elevator = new Elevator(new ElevatorIOSim());
         intake = new Intake(new IntakeIOSim());
-        // endEffector = new EndEffector(new EndEffectorIOSim());
+        endEffector = new EndEffector(new EndEffectorIOSim());
         arm = new Arm(new ArmIOSim());
         shoulder = new Shoulder(new ShoulderIOSim());
 

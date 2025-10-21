@@ -27,14 +27,12 @@ public class ArmIOKrakensLaserCan implements ArmIO {
   private TalonFXConfiguration armMotorConfig;
   private TalonFXConfiguration handMotorConfig;
 
-
   private CANcoderConfiguration encoderConfig;
   private LaserCan lc;
 
   public ArmIOKrakensLaserCan() {
     this.armMotor = new TalonFX(ArmConstants.kArmCANId);
     this.handMotor = new TalonFX(ArmConstants.kHandCANId);
-
 
     this.encoder = new CANcoder(ArmConstants.kEncoderCANId);
     armMotorConfig = armCreateKrakenConfig();
@@ -49,7 +47,7 @@ public class ArmIOKrakensLaserCan implements ArmIO {
         5, () -> armMotor.setPosition(encoder.getAbsolutePosition().getValueAsDouble(), 0.25));
   }
 
-  //todo torque limits
+  // todo torque limits
   public TalonFXConfiguration handCreateKrakenConfig() {
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -65,7 +63,6 @@ public class ArmIOKrakensLaserCan implements ArmIO {
             : InvertedValue.Clockwise_Positive;
     return config;
   }
-
 
   public TalonFXConfiguration armCreateKrakenConfig() {
     var config = new TalonFXConfiguration();
@@ -123,7 +120,6 @@ public class ArmIOKrakensLaserCan implements ArmIO {
     handMotor.setVoltage(volts);
   }
 
-
   @Override
   public void setTargetAngle(double degrees) {
     this.targetDegrees = degrees;
@@ -138,8 +134,6 @@ public class ArmIOKrakensLaserCan implements ArmIO {
     inputs.absoluteAngleDegrees =
         Units.rotationsToDegrees(encoder.getAbsolutePosition().getValueAsDouble());
     inputs.commandedAngleDegs = targetDegrees;
-
-    
 
     inputs.setpointVelocity = armMotor.getClosedLoopReference().getValueAsDouble();
   }
@@ -160,7 +154,8 @@ public class ArmIOKrakensLaserCan implements ArmIO {
   @Override
   public boolean isAtTarget() {
     return Math.abs(
-            Units.rotationsToDegrees(armMotor.getPosition().getValueAsDouble()) - this.targetDegrees)
+            Units.rotationsToDegrees(armMotor.getPosition().getValueAsDouble())
+                - this.targetDegrees)
         < ArmConstants.AT_TARGET_GIVE_DEGS;
   }
 }
