@@ -27,6 +27,7 @@ public interface IntakeIO {
 
     // Coral detection
     public boolean hasCoral = false;
+    public double laserCanDist = 0.0;
   }
 
   public default void updateInputs(IntakeInputs inputs) {}

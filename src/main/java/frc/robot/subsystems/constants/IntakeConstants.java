@@ -11,9 +11,9 @@ import frc.robot.util.RHRUtil;
 public class IntakeConstants {
   public static final int kIntakePivotCANId = 50;
   //   public static final int kIntakePivotEncoderCANId = 51;
+  public static final int kIntakeLaserCANId = 53;
 
-  public static final int kRollerCANId = 43;
-  public static final int kRollerEncoderCANId = 44;
+  public static final int kRollerCANId = 15;
 
   // Intake pivot arm constants
 
@@ -34,23 +34,24 @@ public class IntakeConstants {
   public static final double kIPInitialAngleDeg = 70.0;
   public static final double kIPInitialAngleRad = Units.degreesToRadians(kIPInitialAngleDeg);
 
-  public static final double IPkP = RHRUtil.modeDependentDouble(60, 100.); // output/rotation
+  public static final double IPkP = RHRUtil.modeDependentDouble(200, 100.); // output/rotation
   public static final double IPkI = 0.0; // Integral of kP
-  public static final double IPkD = RHRUtil.modeDependentDouble(0., 0.); // output/error in velocity
+  public static final double IPkD =
+      RHRUtil.modeDependentDouble(15., 0.); // output/error in velocity
 
   public static final double IPkG = RHRUtil.modeDependentDouble(1, 0.074);
   public static final double IPkV = RHRUtil.modeDependentDouble(0, 0); // kV * rev/s = voltvs
   public static final double IPkA = RHRUtil.modeDependentDouble(0., 0.);
-  public static final double IPkS = RHRUtil.modeDependentDouble(1.7, 0.); // Volts
+  public static final double IPkS = RHRUtil.modeDependentDouble(1, 0.); // Volts
 
   public static final Pose3d kInitialPose =
       new Pose3d(
           new Translation3d(Units.inchesToMeters(11.75), 0, Units.inchesToMeters(9.25)),
           new Rotation3d());
-  public static final double kIPTrapezoidalMaxVelocity = 1.;
+  public static final double kIPTrapezoidalMaxVelocity = 0.7;
   public static final double kIPTrapezoidalMaxAcceleration = 4;
   public static final double kIPTrapezoidalMaxJerk = 10;
-  public static final double kIPExponential_kV = 13;
+  public static final double kIPExponential_kV = 7;
   public static final double kIPExponential_kA = 0.8;
 
   public static final LoggedTunableGains IPGains =
@@ -104,5 +105,8 @@ public class IntakeConstants {
   public static final double kRollerExponential_kV = 13;
   public static final double kRollerExponential_kA = 0.8;
   public static final double kRollerGrabSpeed = 42;
+
+  public static final double AT_TARGET_GIVE_DEGS = 10;
   public static double kRollerMOI = 0.001;
+  public static double kLaserDistance = 15.;
 }

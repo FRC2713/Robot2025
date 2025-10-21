@@ -10,9 +10,11 @@ import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.RHRUtil;
 
 public class ArmConstants {
-  public static final int kCANId = 17;
-  public static final int kEncoderCANId = 18;
-  public static final boolean kInverted = false;
+  public static final int ArmCANId = 17;
+  public static final int HandCANId = 51;
+  public static final int ArmEncoderCANId = 18;
+  public static final boolean kArmInverted = false;
+  public static final boolean kHandInverted = false;
 
   public static final double kGearing = 36 * (48. / 16.);
   public static final double kLength = Units.inchesToMeters(18);

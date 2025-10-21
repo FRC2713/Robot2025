@@ -3,13 +3,14 @@ package frc.robot.commands.superstructure;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
+import frc.robot.commands.ArmCmds;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
-import frc.robot.subsystems.constants.IntakeConstants;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -17,14 +18,10 @@ public class SuperStructure {
 
   public static Supplier<Command> STARTING_CONF =
       () ->
-          new SetAllDOFS(
-              "STARTING_CONFG",
-              "STOP_ROLLERS",
-              () -> true, // ready for coral-ing
-              () -> 0, // not actually coral-ing
-              () -> 0, // not actually algae-ing
-              SetpointConstants.Elevator.STARTING_HEIGHT,
-              SetpointConstants.Shoulder.STARTING_ANGLE);
+          new SequentialCommandGroup(
+              IntakeCmds.setVolts(0),
+              ArmCmds.handSetVoltage(0),
+              IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE));
 
   public static Supplier<Command> SOURCE_CORAL_INTAKE =
       () ->
@@ -227,16 +224,17 @@ public class SuperStructure {
               .addElevatorCommand(SetpointConstants.Elevator.PROCESSOR_HEIGHT_IN)
               .create();
 
-  public static Supplier<Command> INTAKE_ROLLER_RUN =
-      () -> Commands.sequence(IntakeCmds.setVolts(SetpointConstants.Intake.ROLLER_SPEED));
+  public static Supplier<Command> PRE_DISABLE_CHECK =
+      () ->
+          new SequentialCommandGroup(
+              ArmCmds.armSetAngleAndWait(-90),
+              IntakeCmds.setAngleAndWait(185),
+              ElevatorCmds.setHeightAndWait(0),
+              IntakeCmds.setAngleAndWait(70));
 
-  public static Supplier<Command> INTAKE_ROLLER_STOP =
-      () -> Commands.sequence(IntakeCmds.setVolts(0));
-
-  public static Supplier<Command> INTAKE_PIVOT_RAISE =
-      () -> Commands.sequence(IntakeCmds.setAngle(42));
-  public static Supplier<Command> INTAKE_PIVOT_LOWER =
-      () -> Commands.sequence(IntakeCmds.setAngle(IntakeConstants.kIPInitialAngleDeg));
   public static Supplier<Command> CORAL_GRAB_GROUND =
-      () -> Commands.sequence(IntakeCmds.setVolts(IntakeConstants.kRollerGrabSpeed));
+      () ->
+          Commands.sequence(
+              IntakeCmds.setAngle(185),
+              IntakeCmds.setVoltsUntilCoral(SetpointConstants.Intake.INTAKE_GRAB_SPEED));
 }

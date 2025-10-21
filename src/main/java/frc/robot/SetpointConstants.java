@@ -162,6 +162,13 @@ public class SetpointConstants {
         new LoggedTunableNumber("Intake/Test speed", 42.0);
     public static final LoggedTunableNumber CORAL_HOLD_SPEED =
         new LoggedTunableNumber("Intake/Coral hold speed", 0.0);
+
+    public static final LoggedTunableNumber INTAKE_HANDOFF_ANGLE =
+        new LoggedTunableNumber("Intake/Pivot handoff angle", 70.0);
+    public static final LoggedTunableNumber INTAKE_GRAB_SPEED =
+        new LoggedTunableNumber("Intake/Ground grab speed", 10.0);
+    public static final LoggedTunableNumber INTAKE_GRAB_ANGLE =
+        new LoggedTunableNumber("Intake/Ground grab speed", 185.);
   }
 
   public class Drive {

@@ -26,8 +26,8 @@ public class ArmIOKrakensLaserCan implements ArmIO {
   private LaserCan lc;
 
   public ArmIOKrakensLaserCan() {
-    this.motor = new TalonFX(ArmConstants.kCANId);
-    this.encoder = new CANcoder(ArmConstants.kEncoderCANId);
+    this.motor = new TalonFX(ArmConstants.ArmCANId);
+    this.encoder = new CANcoder(ArmConstants.ArmEncoderCANId);
     motorConfig = createKrakenConfig();
     encoderConfig = createCANcoderConfiguration();
     PhoenixUtil.tryUntilOk(5, () -> this.encoder.getConfigurator().apply(encoderConfig, 0.25));
@@ -48,7 +48,7 @@ public class ArmIOKrakensLaserCan implements ArmIO {
     config.CurrentLimits.StatorCurrentLimit = ArmConstants.kStatorCurrentLimit;
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.MotorOutput.Inverted =
-        (ArmConstants.kInverted)
+        (ArmConstants.kArmInverted)
             ? InvertedValue.CounterClockwise_Positive
             : InvertedValue.Clockwise_Positive;
 
@@ -83,7 +83,7 @@ public class ArmIOKrakensLaserCan implements ArmIO {
   }
 
   @Override
-  public void armSetVoltage(double volts) {
+  public void handSetVoltage(double volts) {
     motor.setVoltage(volts);
   }
 

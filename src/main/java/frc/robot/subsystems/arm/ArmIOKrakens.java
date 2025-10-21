@@ -15,26 +15,49 @@ import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.PhoenixUtil;
 
 public class ArmIOKrakens implements ArmIO {
-  private final TalonFX motor;
+  private final TalonFX armMotor;
+  private final TalonFX handMotor;
   private final CANcoder encoder;
   private double targetDegrees;
   private final MotionMagicExpoTorqueCurrentFOC angleRequest =
       new MotionMagicExpoTorqueCurrentFOC(0);
-  private TalonFXConfiguration motorConfig;
+  private TalonFXConfiguration armMotorConfig;
   private CANcoderConfiguration encoderConfig;
 
   public ArmIOKrakens() {
-    this.motor = new TalonFX(ArmConstants.kCANId);
-    this.encoder = new CANcoder(ArmConstants.kEncoderCANId);
-    motorConfig = createKrakenConfig();
+    this.armMotor = new TalonFX(ArmConstants.ArmCANId);
+    this.encoder = new CANcoder(ArmConstants.ArmEncoderCANId);
+    this.handMotor = new TalonFX(ArmConstants.HandCANId);
+    armMotorConfig = createArmKrakenConfig();
     encoderConfig = createCANcoderConfiguration();
+    var handMotorConfig = createHandKrakenConfig();
     PhoenixUtil.tryUntilOk(5, () -> this.encoder.getConfigurator().apply(encoderConfig, 0.25));
-    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motorConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> armMotor.getConfigurator().apply(armMotorConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> handMotor.getConfigurator().apply(handMotorConfig, 0.25));
     PhoenixUtil.tryUntilOk(
-        5, () -> motor.setPosition(encoder.getAbsolutePosition().getValueAsDouble(), 0.25));
+        5, () -> armMotor.setPosition(encoder.getAbsolutePosition().getValueAsDouble(), 0.25));
   }
 
-  public TalonFXConfiguration createKrakenConfig() {
+  public TalonFXConfiguration createHandKrakenConfig() {
+    var config = new TalonFXConfiguration();
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    config.Feedback.SensorToMechanismRatio = 1.0;
+    // config.Feedback.RotorToSensorRatio = ArmConstants.kGearing;
+    // config.TorqueCurrent.PeakForwardTorqueCurrent = ArmConstants.kStallCurrentLimit;
+    // config.TorqueCurrent.PeakReverseTorqueCurrent = -ArmConstants.kStallCurrentLimit;
+    // config.CurrentLimits.StatorCurrentLimit = ArmConstants.kStatorCurrentLimit;
+    // config.CurrentLimits.StatorCurrentLimitEnable = true;
+    config.MotorOutput.Inverted =
+        (ArmConstants.kHandInverted)
+            ? InvertedValue.CounterClockwise_Positive
+            : InvertedValue.Clockwise_Positive;
+
+    config.ClosedLoopGeneral.ContinuousWrap = true;
+
+    return config;
+  }
+
+  public TalonFXConfiguration createArmKrakenConfig() {
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     config.Feedback.FeedbackRemoteSensorID = this.encoder.getDeviceID();
@@ -46,7 +69,7 @@ public class ArmIOKrakens implements ArmIO {
     config.CurrentLimits.StatorCurrentLimit = ArmConstants.kStatorCurrentLimit;
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.MotorOutput.Inverted =
-        (ArmConstants.kInverted)
+        (ArmConstants.kArmInverted)
             ? InvertedValue.CounterClockwise_Positive
             : InvertedValue.Clockwise_Positive;
 
@@ -72,45 +95,48 @@ public class ArmIOKrakens implements ArmIO {
   }
 
   @Override
-  public void armSetVoltage(double volts) {
-    motor.setVoltage(volts);
+  public void handSetVoltage(double volts) {
+    handMotor.setVoltage(volts);
   }
 
   @Override
   public void setTargetAngle(double degrees) {
     this.targetDegrees = degrees;
-    motor.setControl(angleRequest.withPosition(Units.degreesToRotations(degrees)));
+    armMotor.setControl(angleRequest.withPosition(Units.degreesToRotations(degrees)));
   }
 
   @Override
   public void updateInputs(ArmInputs inputs) {
-    inputs.velocityDPS = Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble());
-    inputs.armVoltage = motor.getMotorVoltage().getValueAsDouble();
-    inputs.angleDegrees = Units.rotationsToDegrees(motor.getPosition().getValueAsDouble());
+    inputs.velocityDPS = Units.rotationsToDegrees(armMotor.getVelocity().getValueAsDouble());
+    inputs.armVoltage = armMotor.getMotorVoltage().getValueAsDouble();
+    inputs.angleDegrees = Units.rotationsToDegrees(armMotor.getPosition().getValueAsDouble());
     inputs.absoluteAngleDegrees =
         Units.rotationsToDegrees(encoder.getAbsolutePosition().getValueAsDouble());
     inputs.commandedAngleDegs = targetDegrees;
 
-    inputs.setpointVelocity = motor.getClosedLoopReference().getValueAsDouble();
+    inputs.setpointVelocity = armMotor.getClosedLoopReference().getValueAsDouble();
+
+    inputs.handVoltage = handMotor.getMotorVoltage().getValueAsDouble();
   }
 
   @Override
   public void setPID(LoggedTunableGains pid) {
-    motorConfig.Slot0 = pid.toTalonFX(GravityTypeValue.Arm_Cosine);
-    motorConfig.MotionMagic = pid.getMotionMagicConfig();
+    armMotorConfig.Slot0 = pid.toTalonFX(GravityTypeValue.Arm_Cosine);
+    armMotorConfig.MotionMagic = pid.getMotionMagicConfig();
 
-    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motorConfig, 0.25));
+    PhoenixUtil.tryUntilOk(5, () -> armMotor.getConfigurator().apply(armMotorConfig, 0.25));
   }
 
   @Override
   public void setBus(double bus) {
-    motor.set(bus);
+    armMotor.set(bus);
   }
 
   @Override
   public boolean isAtTarget() {
     return Math.abs(
-            Units.rotationsToDegrees(motor.getPosition().getValueAsDouble()) - this.targetDegrees)
+            Units.rotationsToDegrees(armMotor.getPosition().getValueAsDouble())
+                - this.targetDegrees)
         < ArmConstants.AT_TARGET_GIVE_DEGS;
   }
 }

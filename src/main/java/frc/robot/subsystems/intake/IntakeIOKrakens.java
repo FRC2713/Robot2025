@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import au.grapplerobotics.LaserCan;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -13,6 +14,7 @@ import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.PhoenixUtil;
 
 public class IntakeIOKrakens implements IntakeIO {
+  private LaserCan laserCan;
 
   private final TalonFX pivotMotor;
   // private final CANcoder pivotEncoder;
@@ -50,6 +52,8 @@ public class IntakeIOKrakens implements IntakeIO {
     rollerMotorConfig = createRollerKrakenConfig();
     PhoenixUtil.tryUntilOk(5, () -> rollerMotor.getConfigurator().apply(rollerMotorConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> rollerMotor.setPosition(0.0, 0.25));
+
+    laserCan = new LaserCan(IntakeConstants.kIntakeLaserCANId);
   }
 
   @Override
@@ -71,6 +75,9 @@ public class IntakeIOKrakens implements IntakeIO {
     inputs.rollerPositionDegs =
         Units.rotationsToDegrees(rollerMotor.getPosition().getValueAsDouble());
     inputs.commandedRollerRPM = targetDegrees;
+
+    inputs.hasCoral = hasCoral();
+    inputs.laserCanDist = laserCan.getMeasurement().distance_mm;
 
     // inputs.setpointVelocity = pivotMotor.getClosedLoopReference().getValueAsDouble();
   }
@@ -107,7 +114,10 @@ public class IntakeIOKrakens implements IntakeIO {
 
   @Override
   public boolean intakePivotIsAtTarget() {
-    return true;
+    return Math.abs(
+            Units.rotationsToDegrees(pivotMotor.getPosition().getValueAsDouble())
+                - this.targetDegrees)
+        < IntakeConstants.AT_TARGET_GIVE_DEGS;
   }
 
   public TalonFXConfiguration createRollerKrakenConfig() {
@@ -154,6 +164,9 @@ public class IntakeIOKrakens implements IntakeIO {
     return config;
   }
 
+  public boolean hasCoral() {
+    return laserCan.getMeasurement().distance_mm <= IntakeConstants.kLaserDistance;
+  }
   // public static CANcoderConfiguration createCANcoderConfiguration() {
   //   var config = new CANcoderConfiguration();
   //   config.MagnetSensor.MagnetOffset = ShoulderConstants.kAbsoluteEncoderOffset;

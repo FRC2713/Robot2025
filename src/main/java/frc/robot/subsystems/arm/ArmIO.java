@@ -27,9 +27,6 @@ public interface ArmIO {
   public default void updateInputs(ArmInputs inputs) {}
   ;
 
-  public default void armSetVoltage(double volts) {}
-  ;
-
   public default void handSetVoltage(double volts) {}
   ;
 

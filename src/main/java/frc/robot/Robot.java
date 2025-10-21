@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import au.grapplerobotics.CanBridge;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.net.PortForwarder;
@@ -20,8 +21,13 @@ import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.ArmCmds;
+import frc.robot.commands.ElevatorCmds;
+import frc.robot.commands.IntakeCmds;
 import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.SourceAlign;
+import frc.robot.subsystems.constants.IntakeConstants;
 import frc.robot.util.LocalADStarAK;
 import frc.robot.util.ReefTracker;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -43,6 +49,9 @@ public class Robot extends LoggedRobot {
   private boolean hadDisabledReefAlign = false;
 
   public Robot() {
+    // Grapple Robotics (LaserCAN)
+    CanBridge.runTCP();
+
     PortForwarder.add(5810, "localhost", 4173);
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -176,6 +185,12 @@ public class Robot extends LoggedRobot {
       autonomousCommand.cancel();
     }
     RobotContainer.driverControls.setToNormalDrive();
+    new SequentialCommandGroup(
+            IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
+            ElevatorCmds.setHeightAndWait(17),
+            IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
+            ArmCmds.armSetAngle(-90))
+        .schedule();
   }
 
   /** This function is called periodically during operator control. */

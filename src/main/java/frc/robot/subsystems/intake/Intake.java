@@ -32,7 +32,6 @@ public class Intake extends SubsystemBase {
 
     IO.updateInputs(inputs);
     Logger.processInputs("Intake", inputs);
-    Logger.recordOutput("doesThisWork", 42);
     updateTransform();
 
     @SuppressWarnings("unused")
