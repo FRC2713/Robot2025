@@ -187,7 +187,7 @@ public class Robot extends LoggedRobot {
     RobotContainer.driverControls.setToNormalDrive();
     new SequentialCommandGroup(
             IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
-            ElevatorCmds.setHeightAndWait(17),
+            ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
             IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
             ArmCmds.armSetAngle(-90))
         .schedule();

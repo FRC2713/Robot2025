@@ -71,10 +71,13 @@ import frc.robot.subsystems.vision.VisionIOPoseEstimator;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.RHRHolonomicDriveController;
+import frc.robot.util.ScoreLevel;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
+
+  public static ScoreLevel scoreLevel = ScoreLevel.ONE;
   // Subsystems
   public static Drivetrain driveSubsystem;
   public static Elevator elevator;

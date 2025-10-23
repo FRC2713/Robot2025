@@ -27,7 +27,7 @@ public class ArmCmds {
   }
 
   public static Command armSetAngleAndWait(DoubleSupplier targetAngle) {
-    return Commands.sequence(armSetAngle(targetAngle));
+    return Commands.sequence(armSetAngle(targetAngle), armWaitUntilAtTarget());
   }
 
   public static Command handWaitUntilCoral() {

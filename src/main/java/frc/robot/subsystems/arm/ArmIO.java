@@ -19,6 +19,7 @@ public interface ArmIO {
     public boolean hasAlgae = false;
     public boolean hasCoral = false;
     public int currentLimit = 0;
+    public double laserCanDist;
   }
 
   public default void handSetEnableLimitSwitch(boolean enabled) {}

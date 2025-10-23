@@ -1,5 +1,6 @@
 package frc.robot.subsystems.arm;
 
+import au.grapplerobotics.LaserCan;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
@@ -11,10 +12,13 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.ArmConstants;
+import frc.robot.subsystems.constants.IntakeConstants;
 import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.PhoenixUtil;
 
 public class ArmIOKrakens implements ArmIO {
+  private LaserCan laserCan;
+
   private final TalonFX armMotor;
   private final TalonFX handMotor;
   private final CANcoder encoder;
@@ -31,6 +35,7 @@ public class ArmIOKrakens implements ArmIO {
     armMotorConfig = createArmKrakenConfig();
     encoderConfig = createCANcoderConfiguration();
     var handMotorConfig = createHandKrakenConfig();
+    laserCan = new LaserCan(ArmConstants.kHandLaserCANId);
     PhoenixUtil.tryUntilOk(5, () -> this.encoder.getConfigurator().apply(encoderConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> armMotor.getConfigurator().apply(armMotorConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> handMotor.getConfigurator().apply(handMotorConfig, 0.25));
@@ -117,6 +122,8 @@ public class ArmIOKrakens implements ArmIO {
     inputs.setpointVelocity = armMotor.getClosedLoopReference().getValueAsDouble();
 
     inputs.handVoltage = handMotor.getMotorVoltage().getValueAsDouble();
+    inputs.hasCoral = hasCoral();
+    inputs.laserCanDist = laserCan.getMeasurement().distance_mm;
   }
 
   @Override
@@ -138,5 +145,9 @@ public class ArmIOKrakens implements ArmIO {
             Units.rotationsToDegrees(armMotor.getPosition().getValueAsDouble())
                 - this.targetDegrees)
         < ArmConstants.AT_TARGET_GIVE_DEGS;
+  }
+
+  public boolean hasCoral() {
+    return laserCan.getMeasurement().distance_mm <= IntakeConstants.kLaserDistance;
   }
 }

@@ -26,12 +26,13 @@ public class DeveloperControls {
   }
 
   public void configureButtonBindings() {
+
     // devCommandXboxController.a().onTrue(ArmCmds.handSetVoltage(15));
     // devCommandXboxController.b().onTrue(ArmCmds.armSetAngle(-20));
     // devCommandXboxController.y().onTrue(ArmCmds.armSetAngle(90));
-    devCommandXboxController.a().onTrue(IntakeCmds.setAngle(80));
-    devCommandXboxController.b().onTrue(IntakeCmds.setAngle(100));
-    devCommandXboxController.y().onTrue(IntakeCmds.setAngle(130));
+    devCommandXboxController.a().onTrue(SuperStructure.L1.get());
+    // devCommandXboxController.b().onTrue(IntakeCmds.setAngle(100));
+    devCommandXboxController.y().onTrue(SuperStructure.L3.get());
     devCommandXboxController
         .leftBumper()
         .whileTrue(SuperStructure.CORAL_GRAB_GROUND.get())

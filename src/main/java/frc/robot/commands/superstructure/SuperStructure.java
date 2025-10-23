@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.AlgaeClawCmds;
 import frc.robot.commands.ArmCmds;
@@ -11,6 +13,7 @@ import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
+import frc.robot.util.ScoreLevel;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -21,7 +24,9 @@ public class SuperStructure {
           new SequentialCommandGroup(
               IntakeCmds.setVolts(0),
               ArmCmds.handSetVoltage(0),
-              IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE));
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
+              IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
+              ArmCmds.armSetAngle(-90));
 
   public static Supplier<Command> SOURCE_CORAL_INTAKE =
       () ->
@@ -52,12 +57,9 @@ public class SuperStructure {
 
   public static Supplier<Command> L1 =
       () ->
-          new SetAllDOFS(
-              "L1",
-              "ALGAE_GRAB",
-              SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
-              SetpointConstants.Elevator.L1_HEIGHT_IN,
-              SetpointConstants.Shoulder.L1_ANGLE_DEG);
+          Commands.sequence(
+              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.ONE),
+              IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_L1_ANGLE));
 
   // TODO: We don't necessarily need to start the algae claw here
   public static Supplier<Command> L2 =
@@ -71,12 +73,14 @@ public class SuperStructure {
 
   public static Supplier<Command> L3 =
       () ->
-          new SetAllDOFS(
-              "L3",
-              "ALGAE_GRAB",
-              SetpointConstants.AlgaeClaw.ALGAE_GRAB_SPEED,
-              SetpointConstants.Elevator.L3_HEIGHT_IN,
-              SetpointConstants.Shoulder.L3_ANGLE_DEG);
+          Commands.sequence(
+              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.THREE),
+              IntakeCmds.setVolts(-10),
+              ArmCmds.handSetVoltage(-10),
+              ArmCmds.handWaitUntilCoral(2),
+              ArmCmds.handSetVoltage(-2),
+              ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L3_ANGLE_DEG),
+              ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN));
 
   // TODO: if this intersects with the reef, might need to do pivot last
   public static Supplier<Command> L4_PREP =
@@ -91,12 +95,14 @@ public class SuperStructure {
   // TODO: if this intersects with the reef, might need to do pivot last
   public static Supplier<Command> L4 =
       () ->
-          new SetAllDOFS(
-              "L4",
-              "STOP_ROLLERS",
-              () -> 0, // stop algae claw
-              SetpointConstants.Elevator.L4_HEIGHT_IN,
-              SetpointConstants.Shoulder.L4_ANGLE_DEG);
+          Commands.sequence(
+              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.FOUR),
+              IntakeCmds.setVolts(-10),
+              ArmCmds.handSetVoltage(-10),
+              ArmCmds.handWaitUntilCoral(2),
+              ArmCmds.handSetVoltage(-2),
+              ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG),
+              ElevatorCmds.setHeight(SetpointConstants.Elevator.L4_HEIGHT_IN));
 
   public static Supplier<Command> BARGE_PREP_FORWARDS =
       () ->
@@ -235,6 +241,12 @@ public class SuperStructure {
   public static Supplier<Command> CORAL_GRAB_GROUND =
       () ->
           Commands.sequence(
-              IntakeCmds.setAngle(185),
-              IntakeCmds.setVoltsUntilCoral(SetpointConstants.Intake.INTAKE_GRAB_SPEED));
+              //
+              // ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
+              //   ArmCmds.armSetAngleAndWait(-90),
+              IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_GRAB_ANGLE),
+              IntakeCmds.setVoltsUntilCoral(SetpointConstants.Intake.INTAKE_GRAB_SPEED),
+              IntakeCmds.setVolts(2),
+              new WaitCommand(0.1),
+              IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE));
 }

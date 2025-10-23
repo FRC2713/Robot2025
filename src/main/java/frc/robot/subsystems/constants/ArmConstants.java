@@ -14,7 +14,8 @@ public class ArmConstants {
   public static final int HandCANId = 51;
   public static final int ArmEncoderCANId = 18;
   public static final boolean kArmInverted = false;
-  public static final boolean kHandInverted = false;
+  public static final boolean kHandInverted = true;
+  public static final int kHandLaserCANId = 54;
 
   public static final double kGearing = 36 * (48. / 16.);
   public static final double kLength = Units.inchesToMeters(18);

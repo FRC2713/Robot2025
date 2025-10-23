@@ -165,7 +165,8 @@ public class IntakeIOKrakens implements IntakeIO {
   }
 
   public boolean hasCoral() {
-    return laserCan.getMeasurement().distance_mm <= IntakeConstants.kLaserDistance;
+    return (laserCan.getMeasurement().distance_mm != 0)
+        && (laserCan.getMeasurement().distance_mm <= IntakeConstants.kLaserDistance);
   }
   // public static CANcoderConfiguration createCANcoderConfiguration() {
   //   var config = new CANcoderConfiguration();
