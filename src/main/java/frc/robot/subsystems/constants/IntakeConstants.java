@@ -25,8 +25,8 @@ public class IntakeConstants {
 
   public static final boolean kIPInverted = false;
 
-  public static final double kIPMaxAngle = (190);
-  public static final double kIPMinAngle = (50);
+  public static final double kIPMaxAngle = 210.;
+  public static final double kIPMinAngle = 50.;
 
   public static final double kIPLength = Units.inchesToMeters(11);
   public static final double kIPMass = Units.lbsToKilograms(10);
@@ -108,5 +108,5 @@ public class IntakeConstants {
 
   public static final double AT_TARGET_GIVE_DEGS = 10;
   public static double kRollerMOI = 0.001;
-  public static double kLaserDistance = 15.;
+  public static double kMinLaserDistance = 400.;
 }

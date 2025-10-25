@@ -12,7 +12,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.constants.ArmConstants;
-import frc.robot.subsystems.constants.IntakeConstants;
 import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.PhoenixUtil;
 
@@ -123,6 +122,7 @@ public class ArmIOKrakens implements ArmIO {
 
     inputs.handVoltage = handMotor.getMotorVoltage().getValueAsDouble();
     inputs.hasCoral = hasCoral();
+    inputs.hasAlgae = hasAlgae();
     inputs.laserCanDist = laserCan.getMeasurement().distance_mm;
   }
 
@@ -148,6 +148,10 @@ public class ArmIOKrakens implements ArmIO {
   }
 
   public boolean hasCoral() {
-    return laserCan.getMeasurement().distance_mm <= IntakeConstants.kLaserDistance;
+    return laserCan.getMeasurement().distance_mm <= ArmConstants.kLaserDistance;
+  }
+
+  public boolean hasAlgae() {
+    return laserCan.getMeasurement().distance_mm <= 30;
   }
 }

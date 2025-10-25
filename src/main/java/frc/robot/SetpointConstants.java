@@ -46,16 +46,20 @@ public class SetpointConstants {
         new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 0.8);
 
     public static final LoggedTunableNumber ELEVATOR_HANDOFF_HEIGHT =
-        new LoggedTunableNumber("Intake/Eleavtor handoff height", 16.0);
+        new LoggedTunableNumber("Intake/Eleavtor handoff height", 17.0);
   }
 
   public class Arm {
     public static final LoggedTunableNumber L3_ANGLE_DEG =
         new LoggedTunableNumber("Arm/SS/L3 Angle", 40);
     public static final LoggedTunableNumber L4_ANGLE_DEG =
-        new LoggedTunableNumber("Arm/SS/L4 Angle", 40);
+        new LoggedTunableNumber("Arm/SS/L4 Angle", 45);
     public static final LoggedTunableNumber L4_ANGLE_DEG_SCORE =
         new LoggedTunableNumber("Arm/SS/L4 Angle Score", 28);
+    public static final LoggedTunableNumber L3_ALGAE_INTAKE =
+        new LoggedTunableNumber("Arm/SS/L3 Aglae Intake", 40);
+    public static final LoggedTunableNumber L2_ALGAE_INTAKE =
+        new LoggedTunableNumber("Arm/SS/L2 Aglae Intake", 0);
   }
 
   public class Shoulder {
@@ -182,7 +186,7 @@ public class SetpointConstants {
     public static final LoggedTunableNumber INTAKE_GRAB_SPEED =
         new LoggedTunableNumber("Intake/Intake grab speed", 10.0);
     public static final LoggedTunableNumber INTAKE_GRAB_ANGLE =
-        new LoggedTunableNumber("Intake/Intake grab angle", 185.);
+        new LoggedTunableNumber("Intake/Intake grab angle", 207.5);
   }
 
   public class Drive {

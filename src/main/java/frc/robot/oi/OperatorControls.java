@@ -27,5 +27,7 @@ public class OperatorControls {
     operator.rightBumper().onTrue(SuperStructure.L4.get());
 
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.get());
+    operator.start().onTrue(SuperStructure.UNFOLD.get());
+    operator.back().onTrue(SuperStructure.FOLD.get());
   }
 }

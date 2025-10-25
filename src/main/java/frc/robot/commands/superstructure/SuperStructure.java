@@ -13,6 +13,7 @@ import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.RollerCmds;
 import frc.robot.commands.ShoulderCmds;
+import frc.robot.subsystems.constants.IntakeConstants;
 import frc.robot.util.ScoreLevel;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -79,6 +80,7 @@ public class SuperStructure {
               ArmCmds.handSetVoltage(-10),
               ArmCmds.handWaitUntilCoral(2),
               ArmCmds.handSetVoltage(-2),
+              IntakeCmds.setVolts(0.),
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L3_ANGLE_DEG),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN));
 
@@ -101,6 +103,7 @@ public class SuperStructure {
               ArmCmds.handSetVoltage(-10),
               ArmCmds.handWaitUntilCoral(2),
               ArmCmds.handSetVoltage(-2),
+              IntakeCmds.setVolts(0.),
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L4_HEIGHT_IN));
 
@@ -148,14 +151,10 @@ public class SuperStructure {
   public static Supplier<Command> ALGAE_GRAB_L2 =
       () ->
           Commands.sequence(
-              new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_GRAB_L2")),
-              ElevatorCmds.setHeightAndWait(
-                  SetpointConstants.Elevator.ALGAE_L2_IN), // runs the elevator first
-              Commands.parallel(
-                  ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_L2_DEG),
-                  EndEffector.ALGAE_GRAB.get()),
-              AlgaeClawCmds.waitUntilAlgae(),
-              EndEffector.ALGAE_HOLD.get());
+              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.THREE),
+              ArmCmds.handSetVoltage(-10),
+              ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L2_ALGAE_INTAKE),
+              ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN));
 
   public static Supplier<Command> ALGAE_SS_L2 =
       () ->
@@ -177,14 +176,12 @@ public class SuperStructure {
   public static Supplier<Command> ALGAE_GRAB_L3 =
       () ->
           Commands.sequence(
-              new InstantCommand(() -> Logger.recordOutput("Active SS", "ALGAE_GRAB_L3")),
-              ElevatorCmds.setHeightAndWait(
-                  SetpointConstants.Elevator.ALGAE_L3_IN), // runs the elevator first
-              Commands.parallel(
-                  ShoulderCmds.setAngleAndWait(SetpointConstants.Shoulder.ALGAE_L3_DEG),
-                  EndEffector.ALGAE_GRAB.get()),
-              AlgaeClawCmds.waitUntilAlgae(),
-              EndEffector.ALGAE_HOLD.get());
+              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.THREE),
+              ArmCmds.handSetVoltage(-10),
+              ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L3_ALGAE_INTAKE),
+              ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN),
+              ArmCmds.handWaitUntilAlgae(30),
+              ArmCmds.handSetVoltage(-5));
 
   public static Supplier<Command> ALGAE_COLLECT_L3 =
       () ->
@@ -242,11 +239,29 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               //
-              // ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
-              //   ArmCmds.armSetAngleAndWait(-90),
-              IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_GRAB_ANGLE),
-              IntakeCmds.setVoltsUntilCoral(SetpointConstants.Intake.INTAKE_GRAB_SPEED),
-              IntakeCmds.setVolts(2),
-              new WaitCommand(0.1),
-              IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE));
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
+              Commands.parallel(
+                  ArmCmds.armSetAngleAndWait(-90),
+                  Commands.sequence(
+                      IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_GRAB_ANGLE),
+                      IntakeCmds.setVoltsUntilCoral(SetpointConstants.Intake.INTAKE_GRAB_SPEED),
+                      IntakeCmds.setVolts(2),
+                      new WaitCommand(0.1),
+                      IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE))));
+
+  public static Supplier<Command> UNFOLD =
+      () ->
+          Commands.sequence(
+              IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
+              IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
+              ArmCmds.armSetAngle(-90));
+
+  public static Supplier<Command> FOLD =
+      () ->
+          Commands.sequence(
+              IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
+              ArmCmds.armSetAngleAndWait(-90),
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.STARTING_HEIGHT),
+              IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE));
 }

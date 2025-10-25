@@ -140,6 +140,14 @@ public class DriverControls {
         .whileTrue(SuperStructure.CORAL_GRAB_GROUND.get())
         .onFalse(SuperStructure.STARTING_CONF.get());
     driver.povDown().onTrue(SuperStructure.PRE_DISABLE_CHECK.get());
+    driver
+        .rightTrigger(.25)
+        .onTrue(SuperStructure.ALGAE_GRAB_L2.get())
+        .onFalse(ArmCmds.handSetVoltage(2));
+    driver
+        .leftTrigger(.25)
+        .onTrue(SuperStructure.ALGAE_GRAB_L3.get())
+        .onFalse(ArmCmds.handSetVoltage(2));
 
     var commands = new HashMap<ScoreLevel, Command>();
     commands.put(ScoreLevel.ONE, Commands.sequence(IntakeCmds.setVolts(-10)));
@@ -149,8 +157,9 @@ public class DriverControls {
         ScoreLevel.FOUR,
         Commands.sequence(
             ElevatorCmds.setHeight(24),
-            ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE),
-            ArmCmds.handSetVoltage(2)));
+            Commands.parallel(
+                ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE),
+                ArmCmds.handSetVoltage(2))));
 
     driver.rightBumper().onTrue(Commands.select(commands, () -> RobotContainer.scoreLevel));
 

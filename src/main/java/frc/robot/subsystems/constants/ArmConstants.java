@@ -85,4 +85,6 @@ public class ArmConstants {
   public static final Color8Bit mech2dColor = new Color8Bit(0, 255, 0);
 
   public static final double AT_TARGET_GIVE_DEGS = 3;
+
+  public static double kLaserDistance = 15.;
 }

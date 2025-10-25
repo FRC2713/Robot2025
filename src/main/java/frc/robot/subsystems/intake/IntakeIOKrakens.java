@@ -14,7 +14,7 @@ import frc.robot.util.LoggedTunableGains;
 import frc.robot.util.PhoenixUtil;
 
 public class IntakeIOKrakens implements IntakeIO {
-  private LaserCan laserCan;
+  private RHRLaserCan laserCan;
 
   private final TalonFX pivotMotor;
   // private final CANcoder pivotEncoder;
@@ -52,8 +52,7 @@ public class IntakeIOKrakens implements IntakeIO {
     rollerMotorConfig = createRollerKrakenConfig();
     PhoenixUtil.tryUntilOk(5, () -> rollerMotor.getConfigurator().apply(rollerMotorConfig, 0.25));
     PhoenixUtil.tryUntilOk(5, () -> rollerMotor.setPosition(0.0, 0.25));
-
-    laserCan = new LaserCan(IntakeConstants.kIntakeLaserCANId);
+    laserCan = new RHRLaserCan(IntakeConstants.kIntakeLaserCANId);
   }
 
   @Override
@@ -76,8 +75,12 @@ public class IntakeIOKrakens implements IntakeIO {
         Units.rotationsToDegrees(rollerMotor.getPosition().getValueAsDouble());
     inputs.commandedRollerRPM = targetDegrees;
 
+    var newMeasurement = laserCan.getMeasurementSafe();
+    if (newMeasurement.isPresent()){
+      inputs.laserCanDist = newMeasurement.get().distance_mm;
+    }
+
     inputs.hasCoral = hasCoral();
-    inputs.laserCanDist = laserCan.getMeasurement().distance_mm;
 
     // inputs.setpointVelocity = pivotMotor.getClosedLoopReference().getValueAsDouble();
   }
@@ -165,8 +168,14 @@ public class IntakeIOKrakens implements IntakeIO {
   }
 
   public boolean hasCoral() {
-    return (laserCan.getMeasurement().distance_mm != 0)
-        && (laserCan.getMeasurement().distance_mm <= IntakeConstants.kLaserDistance);
+    double measuredDistance = laserCan.getMeasurement().distance_mm;
+    if (measuredDistance <= 0) {
+      return false;
+    }
+    if (measuredDistance <= IntakeConstants.kMinLaserDistance) {
+      return true;
+    }
+    return false;
   }
   // public static CANcoderConfiguration createCANcoderConfiguration() {
   //   var config = new CANcoderConfiguration();

@@ -44,6 +44,12 @@ public class ArmCmds {
         new WaitUntilCommand(() -> RobotContainer.arm.handHasCoral()));
   }
 
+  public static Command handWaitUntilAlgae(double timeout) {
+    return Commands.race(
+        Commands.waitSeconds(timeout),
+        new WaitUntilCommand(() -> RobotContainer.arm.handHasAlgae()));
+  }
+
   public static Command handWaitUntilNoCoral(double timeout) {
     return Commands.race(
         Commands.waitSeconds(timeout),

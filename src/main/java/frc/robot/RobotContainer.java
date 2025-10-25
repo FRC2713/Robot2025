@@ -28,6 +28,7 @@ import frc.robot.commands.DriveCmds;
 // import frc.robot.commands.autos.CenterAutoBarge;
 import frc.robot.commands.autos.CenterAutoOnePiece;
 import frc.robot.commands.autos.DriveTesting;
+import frc.robot.commands.autos.RiverRage;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
 import frc.robot.commands.autos.ScoreLotsOfCoralFlipped;
 import frc.robot.generated.TunerConstants;
@@ -245,6 +246,9 @@ public class RobotContainer {
             ScoreLotsOfCoralFlipped.getRoutine(choreoAutoFactory, driveSubsystem)); // tODO: rename
     autoChooser.addRoutine(
         "Drive Testing", () -> DriveTesting.getRoutine(choreoAutoFactory, driveSubsystem));
+
+    autoChooser.addRoutine(
+        "River Rage", () -> RiverRage.getRoutine(choreoAutoFactory, driveSubsystem));
 
     // Uncomment for swerve drive characterization
     // autoChooser.addCmd(

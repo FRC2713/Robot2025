@@ -21,13 +21,8 @@ import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.ArmCmds;
-import frc.robot.commands.ElevatorCmds;
-import frc.robot.commands.IntakeCmds;
 import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.SourceAlign;
-import frc.robot.subsystems.constants.IntakeConstants;
 import frc.robot.util.LocalADStarAK;
 import frc.robot.util.ReefTracker;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -185,12 +180,12 @@ public class Robot extends LoggedRobot {
       autonomousCommand.cancel();
     }
     RobotContainer.driverControls.setToNormalDrive();
-    new SequentialCommandGroup(
-            IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
-            ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
-            IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
-            ArmCmds.armSetAngle(-90))
-        .schedule();
+    // new SequentialCommandGroup(
+    //         IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
+    //         ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
+    //         IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
+    //         ArmCmds.armSetAngle(-90))
+    //     .schedule();
   }
 
   /** This function is called periodically during operator control. */

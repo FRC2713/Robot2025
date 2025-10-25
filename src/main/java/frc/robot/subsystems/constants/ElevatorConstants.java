@@ -73,5 +73,5 @@ public class ElevatorConstants {
   public static final double mech2dWidth = Units.inchesToMeters(1);
   public static final Color8Bit mech2dColor = new Color8Bit(255, 0, 0);
 
-  public static final double AT_TARGET_GIVE_INCHES = 3.0;
+  public static final double AT_TARGET_GIVE_INCHES = 2.0;
 }
