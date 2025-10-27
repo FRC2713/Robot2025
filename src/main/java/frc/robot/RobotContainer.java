@@ -27,6 +27,7 @@ import frc.robot.commands.DriveCmds;
 // See line 232 for why this is commented out -Owen
 // import frc.robot.commands.autos.CenterAutoBarge;
 import frc.robot.commands.autos.CenterAutoOnePiece;
+import frc.robot.commands.autos.CenterAutoRebuild;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.RiverRage;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
@@ -237,6 +238,11 @@ public class RobotContainer {
     // Note: commented out since it was causing errors that I didn't have time to look into -Owen
     /*autoChooser.addRoutine(
     "Centre - Barge", () -> CenterAutoBarge.getRoutine(choreoAutoFactory, driveSubsystem));*/
+
+    autoChooser.addRoutine(
+        "Center - Rebuild Test Auto",
+        () -> CenterAutoRebuild.getRoutine(choreoAutoFactory, driveSubsystem));
+
     autoChooser.addRoutine(
         "Right - Score Lots Of Coral",
         () -> ScoreLotsOfCoral.getRoutine(choreoAutoFactory, driveSubsystem));

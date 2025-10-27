@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
-import frc.robot.commands.scoreassist.ScoreAssistCmds;
+import frc.robot.commands.ArmCmds;
+import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
-import frc.robot.util.ScoreLoc.ScoreLocations;
 
 public class CenterAutoRebuild {
   /**
@@ -58,13 +58,20 @@ public class CenterAutoRebuild {
                 Commands.parallel(SuperStructure.L4_PREP.get(), startToReefGTraj.cmd()),
                 Commands.print("Shoulder in position & trajectory started")));
 
+    var command =
+        Commands.sequence(
+            ElevatorCmds.setHeight(24),
+            Commands.parallel(
+                ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE),
+                ArmCmds.handSetVoltage(2)));
     // When at the reef, score
     startToReefGTraj
         .done()
         .onTrue(
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
-                ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.G_FOUR),
+                // ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.G_FOUR),
+                command,
                 // 2) Wait to make sure coral is outtathere
                 Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
                 // 3) Begin driving to source
