@@ -1,6 +1,5 @@
 package frc.robot.subsystems.intake;
 
-import au.grapplerobotics.LaserCan;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -76,7 +75,7 @@ public class IntakeIOKrakens implements IntakeIO {
     inputs.commandedRollerRPM = targetDegrees;
 
     var newMeasurement = laserCan.getMeasurementSafe();
-    if (newMeasurement.isPresent()){
+    if (newMeasurement.isPresent()) {
       inputs.laserCanDist = newMeasurement.get().distance_mm;
     }
 
