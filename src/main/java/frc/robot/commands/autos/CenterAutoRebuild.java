@@ -38,7 +38,7 @@ public class CenterAutoRebuild {
         .active()
         .onTrue(
             Commands.sequence(
-                new InstantCommand(() -> System.out.println("CenterPineTree started")),
+                new InstantCommand(() -> System.out.println("RebuildCenter started")),
                 RHRUtil.resetRotationIfReal(startToReefGTraj.getInitialPose().get()),
                 // If pose estimation is really off, reset based on the trajectory
                 new InstantCommand(
