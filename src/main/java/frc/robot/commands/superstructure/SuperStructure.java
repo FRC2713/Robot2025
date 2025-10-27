@@ -25,18 +25,20 @@ public class SuperStructure {
           new SequentialCommandGroup(
               IntakeCmds.setVolts(0),
               ArmCmds.handSetVoltage(0),
-              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
+              ElevatorCmds.setHeightAndWait(
+                  SetpointConstants.Elevator.ELEVATOR_CORAL_HANDOFF_HEIGHT),
               IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
               ArmCmds.armSetAngle(-90));
 
-              public static Supplier<Command> ALGAE_CONF =
-              () ->
-                  new SequentialCommandGroup(
-                      IntakeCmds.setVolts(0),
-                      ArmCmds.handSetVoltage(0),
-                      ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_HANDOFF_HEIGHT),
-                      IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
-                      ArmCmds.armSetAngle(-90));
+  public static Supplier<Command> ALGAE_CONF =
+      () ->
+          new SequentialCommandGroup(
+              IntakeCmds.setVolts(0),
+              ArmCmds.handSetVoltage(0),
+              ElevatorCmds.setHeightAndWait(
+                  SetpointConstants.Elevator.ELEVATOR_ALGAE_HANDOFF_HEIGHT),
+              IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
+              ArmCmds.armSetAngle(-90));
 
   public static Supplier<Command> SOURCE_CORAL_INTAKE =
       () ->
@@ -93,7 +95,13 @@ public class SuperStructure {
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L3_ANGLE_DEG),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN));
 
-              public static Supplier<Command> ALGAE_SCORE =
+  public static Supplier<Command> AGLAE_PROCESSOR =
+      () ->
+          Commands.sequence(
+              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.ONE),
+              IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_PROCESSOR_ANGLE));
+
+  public static Supplier<Command> ALGAE_SCORE =
       () ->
           Commands.sequence(
               new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.FOUR),
@@ -173,7 +181,7 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.THREE),
-              ArmCmds.handSetVoltage(-10),
+              ArmCmds.handSetVoltage(-3),
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L2_ALGAE_INTAKE),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN));
 
@@ -198,7 +206,7 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.THREE),
-              ArmCmds.handSetVoltage(-10),
+              ArmCmds.handSetVoltage(-3),
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L3_ALGAE_INTAKE),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN),
               ArmCmds.handWaitUntilAlgae(30),
@@ -260,7 +268,8 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               //
-              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
+              ElevatorCmds.setHeightAndWait(
+                  SetpointConstants.Elevator.ELEVATOR_CORAL_HANDOFF_HEIGHT),
               Commands.parallel(
                   ArmCmds.armSetAngleAndWait(-90),
                   Commands.sequence(
@@ -274,7 +283,8 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               //
-              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_HANDOFF_HEIGHT),
+              ElevatorCmds.setHeightAndWait(
+                  SetpointConstants.Elevator.ELEVATOR_ALGAE_HANDOFF_HEIGHT),
               Commands.parallel(
                   ArmCmds.armSetAngleAndWait(-90),
                   Commands.sequence(
@@ -288,7 +298,8 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
-              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
+              ElevatorCmds.setHeightAndWait(
+                  SetpointConstants.Elevator.ELEVATOR_CORAL_HANDOFF_HEIGHT),
               IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
               ArmCmds.armSetAngle(-90));
 

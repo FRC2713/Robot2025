@@ -19,7 +19,7 @@ public class SetpointConstants {
 
     public static final LoggedTunableNumber L3_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L3 Height", 0);
-        //CHANGE VALUE
+    // CHANGE VALUE
     public static final LoggedTunableNumber BARGE_HEIGHT_SCORE =
         new LoggedTunableNumber("Elevator/SS/L3 Height", 0);
 
@@ -48,11 +48,11 @@ public class SetpointConstants {
     public static final LoggedTunableNumber ALGAE_L2_IN =
         new LoggedTunableNumber("Elevator/SS/Algae L2 Height", 0.8);
 
-    public static final LoggedTunableNumber ELEVATOR_HANDOFF_HEIGHT =
+    public static final LoggedTunableNumber ELEVATOR_CORAL_HANDOFF_HEIGHT =
         new LoggedTunableNumber("Intake/Eleavtor handoff height", 17.0);
     // CHANGE VALUE
-    public static final LoggedTunableNumber ALGAE_HANDOFF_HEIGHT =
-        new LoggedTunableNumber("Intake/Eleavtor handoff height", 17.0);
+    public static final LoggedTunableNumber ELEVATOR_ALGAE_HANDOFF_HEIGHT =
+        new LoggedTunableNumber("Intake/Eleavtor handoff height", 25.0);
   }
 
   public class Arm {
@@ -191,17 +191,20 @@ public class SetpointConstants {
         new LoggedTunableNumber("Intake/Pivot handoff angle", 70.0);
     public static final LoggedTunableNumber INTAKE_L1_ANGLE =
         new LoggedTunableNumber("Intake/Intake L1 angle", 100.0);
+    // CHANGE VALUE
+    public static final LoggedTunableNumber INTAKE_PROCESSOR_ANGLE =
+        new LoggedTunableNumber("Intake/Intake L1 angle", 150.0);
     public static final LoggedTunableNumber INTAKE_GRAB_SPEED =
         new LoggedTunableNumber("Intake/Intake grab speed", 10.0);
     // CHANGE VALUE
     public static final LoggedTunableNumber ALGAE_GRAB_SPEED =
-        new LoggedTunableNumber("Intake/Intake grab speed", 10.0);
+        new LoggedTunableNumber("Intake/Intake grab speed", 4.0);
 
     public static final LoggedTunableNumber INTAKE_GRAB_ANGLE =
         new LoggedTunableNumber("Intake/Intake grab angle", 207.5);
     // CHANGE VALUE
     public static final LoggedTunableNumber ALGAE_GRAB_ANGLE =
-        new LoggedTunableNumber("Intake/Intake grab angle", 207.5);
+        new LoggedTunableNumber("Intake/Intake grab angle", 150.0);
   }
 
   public class Drive {
