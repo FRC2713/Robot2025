@@ -1,7 +1,7 @@
 name: Branch Status Report
 on:
   schedule:
-    - cron: '0 13 0 * *'  # 8 AM EST daily
+    - cron: '0 13 * * *'  # 8 AM EST daily (1 PM UTC)
   workflow_dispatch:  # Manual trigger button
 
 jobs:
