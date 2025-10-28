@@ -1,6 +1,5 @@
 package frc.robot.util;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.superstructure.EndEffector;
@@ -9,21 +8,14 @@ import java.util.function.Supplier;
 import lombok.Getter;
 
 public enum ScoreLevel {
-  ONE(Commands::none, SuperStructure.L1, EndEffector.CORAL_SCORE),
-  TWO(SuperStructure.L2, SuperStructure.L2, EndEffector.CORAL_SCORE),
+  ONE(Commands::none, SuperStructure.L1, SuperStructure.L1_SCORE),
+  TWO(Commands::none, Commands::none, EndEffector.CORAL_SCORE),
   ALGAE_TWO(
       SuperStructure.ALGAE_GRAB_L2, SuperStructure.ALGAE_GRAB_L2, SuperStructure.ALGAE_COLLECT_L2),
-  THREE(SuperStructure.L3, SuperStructure.L3, EndEffector.CORAL_SCORE),
+  THREE(SuperStructure.L3, SuperStructure.L3, SuperStructure.L3_SCORE),
   ALGAE_THREE(
       SuperStructure.ALGAE_GRAB_L3, SuperStructure.ALGAE_GRAB_L3, SuperStructure.ALGAE_COLLECT_L3),
-  FOUR(
-      SuperStructure.L4_PREP,
-      SuperStructure.L4,
-      () ->
-          Commands.either(
-              EndEffector.CORAL_SCORE.get().beforeStarting(Commands.waitSeconds(0.3)),
-              EndEffector.CORAL_SCORE.get().beforeStarting(Commands.waitSeconds(0.1)),
-              DriverStation::isAutonomous));
+  FOUR(SuperStructure.L4, SuperStructure.L4, SuperStructure.L4_SCORE);
 
   @Getter private Supplier<Command> prepCommand;
   @Getter private Supplier<Command> ssCommand;

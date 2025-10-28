@@ -29,14 +29,14 @@ public class SuperStructure {
               IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
               ArmCmds.armSetAngle(-90));
 
-              public static Supplier<Command> ALGAE_CONF =
-              () ->
-                  new SequentialCommandGroup(
-                      IntakeCmds.setVolts(0),
-                      ArmCmds.handSetVoltage(0),
-                      ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_HANDOFF_HEIGHT),
-                      IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
-                      ArmCmds.armSetAngle(-90));
+  public static Supplier<Command> ALGAE_CONF =
+      () ->
+          new SequentialCommandGroup(
+              IntakeCmds.setVolts(0),
+              ArmCmds.handSetVoltage(0),
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ALGAE_HANDOFF_HEIGHT),
+              IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
+              ArmCmds.armSetAngle(-90));
 
   public static Supplier<Command> SOURCE_CORAL_INTAKE =
       () ->
@@ -71,6 +71,8 @@ public class SuperStructure {
               new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.ONE),
               IntakeCmds.setAngleAndWait(SetpointConstants.Intake.INTAKE_L1_ANGLE));
 
+  public static Supplier<Command> L1_SCORE = () -> Commands.sequence(IntakeCmds.setVolts(-10));
+
   // TODO: We don't necessarily need to start the algae claw here
   public static Supplier<Command> L2 =
       () ->
@@ -93,7 +95,10 @@ public class SuperStructure {
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L3_ANGLE_DEG),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN));
 
-              public static Supplier<Command> ALGAE_SCORE =
+  public static Supplier<Command> L3_SCORE =
+      () -> Commands.sequence(ArmCmds.armSetAngle(13), ArmCmds.handSetVoltage(2));
+
+  public static Supplier<Command> ALGAE_SCORE =
       () ->
           Commands.sequence(
               new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.FOUR),
@@ -118,15 +123,36 @@ public class SuperStructure {
   // TODO: if this intersects with the reef, might need to do pivot last
   public static Supplier<Command> L4 =
       () ->
+          Commands.either(
+              Commands.sequence(
+                  new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.FOUR),
+                  IntakeCmds.setVolts(-10),
+                  ArmCmds.handSetVoltage(-10),
+                  ArmCmds.handWaitUntilCoral(2),
+                  ArmCmds.handSetVoltage(-2),
+                  IntakeCmds.setVolts(0.),
+                  ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG),
+                  ElevatorCmds.setHeight(SetpointConstants.Elevator.L4_HEIGHT_IN)),
+              Commands.sequence(
+                  new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.FOUR),
+                  IntakeCmds.setVolts(-10),
+                  ArmCmds.handSetVoltage(-10),
+                  ArmCmds.handWaitUntilCoral(2),
+                  ArmCmds.handSetVoltage(-2),
+                  IntakeCmds.setVolts(0.),
+                  ArmCmds.armSetAngleAndWait(() -> SetpointConstants.Arm.L4_ANGLE_DEG.get() + 360.),
+                  ElevatorCmds.setHeight(SetpointConstants.Elevator.L4_HEIGHT_IN)),
+              () -> {
+                return RobotContainer.scoreAssist.getCurrentNodeTarget().isFrontFacingReef();
+              });
+
+  public static Supplier<Command> L4_SCORE =
+      () ->
           Commands.sequence(
-              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.FOUR),
-              IntakeCmds.setVolts(-10),
-              ArmCmds.handSetVoltage(-10),
-              ArmCmds.handWaitUntilCoral(2),
-              ArmCmds.handSetVoltage(-2),
-              IntakeCmds.setVolts(0.),
-              ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG),
-              ElevatorCmds.setHeight(SetpointConstants.Elevator.L4_HEIGHT_IN));
+              ElevatorCmds.setHeight(24),
+              Commands.parallel(
+                  ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE),
+                  ArmCmds.handSetVoltage(2)));
 
   public static Supplier<Command> BARGE_PREP_FORWARDS =
       () ->

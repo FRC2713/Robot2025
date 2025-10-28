@@ -19,7 +19,7 @@ public class SetpointConstants {
 
     public static final LoggedTunableNumber L3_HEIGHT_IN =
         new LoggedTunableNumber("Elevator/SS/L3 Height", 0);
-        //CHANGE VALUE
+    // CHANGE VALUE
     public static final LoggedTunableNumber BARGE_HEIGHT_SCORE =
         new LoggedTunableNumber("Elevator/SS/L3 Height", 0);
 

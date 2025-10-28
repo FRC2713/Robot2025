@@ -13,6 +13,7 @@ import frc.robot.commands.ArmCmds;
 import frc.robot.commands.DriveCmds;
 import frc.robot.commands.ElevatorCmds;
 import frc.robot.commands.IntakeCmds;
+import frc.robot.commands.scoreassist.ScoreAssistCmds;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.SourceAlign;
@@ -85,10 +86,10 @@ public class DriverControls {
     //     .onFalse(EndEffector.STOP_ROLLERS.get());
 
     // // Score Contextually w Score Assist
-    // driver
-    //     .rightBumper()
-    //     .onTrue(ScoreAssistCmds.executeReefTrackerScore())
-    //     .onFalse(ScoreAssistCmds.stop());
+    driver
+        .rightBumper()
+        .onTrue(ScoreAssistCmds.executeReefTrackerScore())
+        .onFalse(ScoreAssistCmds.stop());
 
     // // Enable/disable sourcealign
     // driver
@@ -140,13 +141,11 @@ public class DriverControls {
         .whileTrue(SuperStructure.CORAL_GRAB_GROUND.get())
         .onFalse(SuperStructure.STARTING_CONF.get());
     driver.povDown().onTrue(SuperStructure.PRE_DISABLE_CHECK.get());
-    driver.rightTrigger(.25)
-    .onTrue(ArmCmds.handSetVoltage(2));
+    driver.rightTrigger(.25).onTrue(ArmCmds.handSetVoltage(2));
     driver
         .leftTrigger(.25)
         .onTrue(SuperStructure.ALGAE_INTAKE.get())
         .onFalse(SuperStructure.ALGAE_CONF.get());
-
 
     var commands = new HashMap<ScoreLevel, Command>();
     commands.put(ScoreLevel.ONE, Commands.sequence(IntakeCmds.setVolts(-10)));
@@ -160,7 +159,7 @@ public class DriverControls {
                 ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE),
                 ArmCmds.handSetVoltage(2))));
 
-    driver.rightBumper().onTrue(Commands.select(commands, () -> RobotContainer.scoreLevel));
+    // driver.rightBumper().onTrue(Commands.select(commands, () -> RobotContainer.scoreLevel));
 
     // Intake coral if another coral is blocking station
     // driver

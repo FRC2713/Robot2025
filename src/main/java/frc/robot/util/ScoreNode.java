@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
 import frc.robot.FieldConstants.ReefLevel;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.constants.DriveConstants;
 import java.util.Optional;
 import lombok.Getter;
@@ -77,10 +78,45 @@ public enum ScoreNode {
                 .getAsDouble(), // offset of scoring mechanism from center of robot
             new Rotation2d(Math.PI));
     Pose2d alignmentPose = pose.transformBy(robotOffset);
+
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-      return AllianceFlipUtil.flip(alignmentPose);
+      alignmentPose = AllianceFlipUtil.flip(alignmentPose);
     }
+
+    // Calculate the flipped angle (adds/subtracts 180 degrees)
+    // The Rotation2d.plus() handles normalization automatically.
+    Rotation2d flippedTargetAngle = alignmentPose.getRotation().plus(Rotation2d.fromDegrees(180));
+    var currentAngle = RobotContainer.driveSubsystem.getPose().getRotation();
+    // --- Calculate the Differences ---
+    // difference1 will be between -180 and 180 degrees (shortest path)
+    Rotation2d difference1 = alignmentPose.getRotation().minus(currentAngle);
+    double angleToTarget = difference1.getDegrees();
+
+    // difference2 will also be between -180 and 180 degrees (shortest path)
+    Rotation2d difference2 = flippedTargetAngle.minus(currentAngle);
+    double angleToFlippedTarget = difference2.getDegrees();
+
+    // --- Compare the absolute differences to find the closest ---
+    if (Math.abs(angleToTarget) < Math.abs(angleToFlippedTarget)) {
+      // System.out.println("The original target angle is closer.");
+      // The angle you should turn is 'angleToTarget'
+      // You would use 'targetAngle' as your final setpoint
+    } else {
+      // System.out.println("The flipped target angle is closer.");
+      alignmentPose =
+          new Pose2d(
+              alignmentPose.getTranslation(), alignmentPose.getRotation().minus(Rotation2d.kPi));
+      // The angle you should turn is 'angleToFlippedTarget'
+      // You would use 'flippedTargetAngle' as your final setpoint
+    }
+
     return alignmentPose;
+  }
+
+  public boolean isFrontFacingReef() {
+    var transform =
+        new Transform2d(
+            FieldConstants.Reef.center.getX(), FieldConstants.Reef.center.getY(), new Rotation2d());
   }
 
   public Pose2d getPathScorePose() {

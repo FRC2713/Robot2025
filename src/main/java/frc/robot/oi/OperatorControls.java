@@ -22,19 +22,13 @@ public class OperatorControls {
   public void configureButtonBindings() {
 
     // Operator Controls
-    operator.a()
-    .onTrue(SuperStructure.ALGAE_GRAB_L2.get())
-    .onFalse(ArmCmds.handSetVoltage(-1));
-    operator.b()
-        .onTrue(SuperStructure.ALGAE_GRAB_L3.get())
-        .onFalse(ArmCmds.handSetVoltage(-1));
-    operator.y()
-    .onTrue(SuperStructure.ALGAE_SCORE.get())
-    .onFalse(ArmCmds.handSetVoltage(-1));
+    operator.a().onTrue(SuperStructure.ALGAE_GRAB_L2.get()).onFalse(ArmCmds.handSetVoltage(-1));
+    operator.b().onTrue(SuperStructure.ALGAE_GRAB_L3.get()).onFalse(ArmCmds.handSetVoltage(-1));
+    operator.y().onTrue(SuperStructure.ALGAE_SCORE.get()).onFalse(ArmCmds.handSetVoltage(-1));
     operator.rightBumper().onTrue(SuperStructure.L4.get());
 
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.get());
-    operator.start().onTrue(SuperStructure.UNFOLD.get());
-    operator.back().onTrue(SuperStructure.FOLD.get());
+    operator.povUp().onTrue(SuperStructure.UNFOLD.get());
+    operator.povDown().onTrue(SuperStructure.FOLD.get());
   }
 }
