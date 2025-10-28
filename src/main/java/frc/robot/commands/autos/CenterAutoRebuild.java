@@ -30,6 +30,7 @@ public class CenterAutoRebuild {
     // StartRoReefE starts square to the starting line, Start2RoReefE starts pre-aligned to the EF
     // reef face
     AutoTrajectory startToReefGTraj = routine.trajectory("RebuildCenter");
+    AutoTrajectory reefBackupTraj = routine.trajectory("RebuildBackup");
     // AutoTrajectory reefGToSource = routine.trajectory("PineTreePrepSource");
     // AutoTrajectory sourceToReefC = routine.trajectory("SourceToReefC");
     // AutoTrajectory reefCToSource = routine.trajectory("ReefCToSource");
@@ -73,7 +74,8 @@ public class CenterAutoRebuild {
                 // ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.G_FOUR),
                 command,
                 // 2) Wait to make sure coral is outtathere
-                Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble())));
+                Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+                reefBackupTraj.cmd()));
 
     return routine;
   }
