@@ -1,0 +1,90 @@
+name: Branch Status Report
+on:
+  schedule:
+    - cron: '0 13 0 * *'  # 8 AM EST daily
+  workflow_dispatch:  # Manual trigger button
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Get all branches
+      
+      - name: Generate Branch Report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branches = await github.rest.repos.listBranches({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            
+            let report = '# 🤖 Branch Status Report\n\n';
+            report += `*Last updated: ${new Date().toLocaleString('en-US', {timeZone: 'America/New_York'})} EST*\n\n`;
+            report += '| Branch | Last Push | Last Commit | Build Status | Owner | What |\n';
+            report += '|--------|-----------|-------------|--------------|-------|------|\n';
+            
+            for (const branch of branches.data) {
+              // Only report on feature branches
+              if (branch.name === 'main' || branch.name === 'dev') continue;
+              
+              // Get last commit
+              const commit = await github.rest.repos.getCommit({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: branch.name
+              });
+              
+              const lastPush = new Date(commit.data.commit.author.date).toLocaleDateString();
+              const commitMsg = commit.data.commit.message.split('\n')[0].substring(0, 50);
+              
+              // Get build status
+              const runs = await github.rest.actions.listWorkflowRunsForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                branch: branch.name,
+                per_page: 1
+              });
+              
+              let status = '⚪ No build';
+              if (runs.data.workflow_runs.length > 0) {
+                const run = runs.data.workflow_runs[0];
+                if (run.status === 'completed') {
+                  status = run.conclusion === 'success' ? '✅ Pass' : '❌ Fail';
+                } else {
+                  status = '🟡 Running';
+                }
+              }
+              
+              report += `| \`${branch.name}\` | ${lastPush} | ${commitMsg} | ${status} | _(fill in)_ | _(fill in)_ |\n`;
+            }
+            
+            report += '\n---\n';
+            report += '**Instructions:** Team members, edit this issue to fill in Owner and What columns!\n';
+            
+            // Update or create issue
+            const issueNumber = 1;  // Change this to your pinned issue number
+            
+            try {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: report
+              });
+              console.log('Updated issue #' + issueNumber);
+            } catch (error) {
+              // If issue doesn't exist, create it
+              const newIssue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '📊 Branch Status Board',
+                body: report,
+                labels: ['status-board']
+              });
+              console.log('Created new issue #' + newIssue.data.number);
+              console.log('Pin this issue and update issueNumber in the workflow to: ' + newIssue.data.number);
+            }
