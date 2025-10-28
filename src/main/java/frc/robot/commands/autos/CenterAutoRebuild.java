@@ -73,9 +73,7 @@ public class CenterAutoRebuild {
                 // ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.G_FOUR),
                 command,
                 // 2) Wait to make sure coral is outtathere
-                Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
-                // 3) Begin driving to source
-                Commands.parallel(SuperStructure.SOURCE_CORAL_INTAKE.get())));
+                Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble())));
 
     return routine;
   }
