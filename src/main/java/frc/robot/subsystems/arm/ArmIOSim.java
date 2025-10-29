@@ -65,6 +65,8 @@ public class ArmIOSim implements ArmIO {
     inputs.velocityDPS = Units.radiansToDegrees(armSim.getVelocityRadPerSec());
     inputs.armVoltage = armOutput;
 
+    inputs.hasAlgae = true; // Keep true for sim auto testing
+
     inputs.commandedAngleDegs = targetAngleDeg;
   }
 }
