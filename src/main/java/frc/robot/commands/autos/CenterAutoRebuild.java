@@ -31,10 +31,7 @@ public class CenterAutoRebuild {
     // reef face
     AutoTrajectory startToReefGTraj = routine.trajectory("RebuildCenter");
     AutoTrajectory reefBackupTraj = routine.trajectory("RebuildBackup");
-    // AutoTrajectory reefGToSource = routine.trajectory("PineTreePrepSource");
-    // AutoTrajectory sourceToReefC = routine.trajectory("SourceToReefC");
-    // AutoTrajectory reefCToSource = routine.trajectory("ReefCToSource");
-
+    AutoTrajectory reefAlignCenter = routine.trajectory("RebuildCenterReef");
     routine
         .active()
         .onTrue(
@@ -74,7 +71,11 @@ public class CenterAutoRebuild {
                 // ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.G_FOUR),
                 command,
                 // 2) Wait to make sure coral is outtathere
-                Commands.waitSeconds(SetpointConstants.Auto.L4_POST_SCORE_DELAY.getAsDouble()),
+                Commands.waitSeconds(0.6), //Value can ba changed if coral is missing or robot is stalling
+                reefAlignCenter.cmd(),
+                // Algae
+                SuperStructure.ALGAE_GRAB_L2.get(),
+                Commands.waitSeconds(2), //Can be set to zero if the algae is being picked up in time
                 reefBackupTraj.cmd()));
 
     return routine;

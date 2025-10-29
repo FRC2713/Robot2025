@@ -152,9 +152,12 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.THREE),
-              ArmCmds.handSetVoltage(-10),
-              ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L2_ALGAE_INTAKE),
-              ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN));
+              ElevatorCmds.setHeight(SetpointConstants.Elevator.L2_HEIGHT_IN),
+              Commands.parallel(
+                  ArmCmds.handSetVoltage(-10),
+                  ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L2_ALGAE_INTAKE)),
+              ArmCmds.handWaitUntilAlgae(30),
+              ArmCmds.handSetVoltage(-5));
 
   public static Supplier<Command> ALGAE_SS_L2 =
       () ->
@@ -177,9 +180,10 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.THREE),
-              ArmCmds.handSetVoltage(-10),
-              ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L3_ALGAE_INTAKE),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN),
+              Commands.parallel(
+                  ArmCmds.handSetVoltage(-10),
+                  ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L3_ALGAE_INTAKE)),
               ArmCmds.handWaitUntilAlgae(30),
               ArmCmds.handSetVoltage(-5));
 
