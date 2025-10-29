@@ -117,6 +117,8 @@ public enum ScoreNode {
     var transform =
         new Transform2d(
             FieldConstants.Reef.center.getX(), FieldConstants.Reef.center.getY(), new Rotation2d());
+
+    return false;
   }
 
   public Pose2d getPathScorePose() {

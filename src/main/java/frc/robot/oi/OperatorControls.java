@@ -27,8 +27,9 @@ public class OperatorControls {
     operator.y().onTrue(SuperStructure.ALGAE_SCORE.get()).onFalse(ArmCmds.handSetVoltage(-1));
     operator.rightBumper().onTrue(SuperStructure.L4.get());
 
+    operator.start().onTrue(SuperStructure.UNFOLD.get());
+    operator.back().onTrue(SuperStructure.FOLD.get());
+
     operator.leftBumper().onTrue(SuperStructure.STARTING_CONF.get());
-    operator.povUp().onTrue(SuperStructure.UNFOLD.get());
-    operator.povDown().onTrue(SuperStructure.FOLD.get());
   }
 }

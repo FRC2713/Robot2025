@@ -141,7 +141,8 @@ public class DriverControls {
         .whileTrue(SuperStructure.CORAL_GRAB_GROUND.get())
         .onFalse(SuperStructure.STARTING_CONF.get());
     driver.povDown().onTrue(SuperStructure.PRE_DISABLE_CHECK.get());
-    driver.rightTrigger(.25).onTrue(ArmCmds.handSetVoltage(2));
+    driver.rightTrigger(.25)
+    .onTrue(ArmCmds.handSetVoltage(8));
     driver
         .leftTrigger(.25)
         .onTrue(SuperStructure.ALGAE_INTAKE.get())

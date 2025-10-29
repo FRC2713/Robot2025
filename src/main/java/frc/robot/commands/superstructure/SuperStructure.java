@@ -198,10 +198,10 @@ public class SuperStructure {
   public static Supplier<Command> ALGAE_GRAB_L2 =
       () ->
           Commands.sequence(
-              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.THREE),
-              ArmCmds.handSetVoltage(-10),
+              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.TWO),
+              ArmCmds.handSetVoltage(-4),
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L2_ALGAE_INTAKE),
-              ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN));
+              ElevatorCmds.setHeight(SetpointConstants.Elevator.L2_HEIGHT_IN));
 
   public static Supplier<Command> ALGAE_SS_L2 =
       () ->
@@ -321,6 +321,8 @@ public class SuperStructure {
   public static Supplier<Command> FOLD =
       () ->
           Commands.sequence(
+              ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
+              ArmCmds.handSetVoltage(0),
               IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
               ArmCmds.armSetAngleAndWait(-90),
               ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.STARTING_HEIGHT),
