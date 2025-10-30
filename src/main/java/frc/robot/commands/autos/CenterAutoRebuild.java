@@ -71,11 +71,13 @@ public class CenterAutoRebuild {
                 // ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.G_FOUR),
                 command,
                 // 2) Wait to make sure coral is outtathere
-                Commands.waitSeconds(0.6), //Value can ba changed if coral is missing or robot is stalling
+                Commands.waitSeconds(
+                    0.6), // Value can ba changed if coral is missing or robot is stalling
                 reefAlignCenter.cmd(),
                 // Algae
                 SuperStructure.ALGAE_GRAB_L2.get(),
-                Commands.waitSeconds(2), //Can be set to zero if the algae is being picked up in time
+                Commands.waitSeconds(
+                    2), // Can be set to zero if the algae is being picked up in time
                 reefBackupTraj.cmd()));
 
     return routine;
