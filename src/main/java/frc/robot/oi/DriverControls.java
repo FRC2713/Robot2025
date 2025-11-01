@@ -162,13 +162,16 @@ public class DriverControls {
     var commands = new HashMap<ScoreLevel, Command>();
     commands.put(ScoreLevel.ONE, Commands.sequence(IntakeCmds.setVolts(-5)));
     commands.put(
-        ScoreLevel.THREE, Commands.sequence(ArmCmds.armSetAngle(() -> ArmCmds.reflectArm(13)), ArmCmds.handSetVoltage(2)));
+        ScoreLevel.THREE,
+        Commands.sequence(
+            ArmCmds.armSetAngle(() -> ArmCmds.reflectArm(13)), ArmCmds.handSetVoltage(2)));
     commands.put(
         ScoreLevel.FOUR,
         Commands.sequence(
             ElevatorCmds.setHeight(24),
             Commands.parallel(
-                ArmCmds.armSetAngleAndWait(() -> ArmCmds.reflectArm(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE.get())),
+                ArmCmds.armSetAngleAndWait(
+                    () -> ArmCmds.reflectArm(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE.get())),
                 ArmCmds.handSetVoltage(2))));
 
     driver.rightBumper().onTrue(Commands.select(commands, () -> RobotContainer.scoreLevel));
