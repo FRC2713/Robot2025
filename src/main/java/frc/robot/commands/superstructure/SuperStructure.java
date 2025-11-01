@@ -89,7 +89,7 @@ public class SuperStructure {
               IntakeCmds.setVolts(-10),
               ArmCmds.handSetVoltage(-10),
               ArmCmds.handWaitUntilCoral(2),
-              ArmCmds.handSetVoltage(-2),
+              ArmCmds.handSetVoltage(0),
               IntakeCmds.setVolts(0.));
 
   public static Supplier<Command> L3 =
