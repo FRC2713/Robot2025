@@ -110,6 +110,19 @@ public class SuperStructure {
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.BARGE_ANGLE_SCORE),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.BARGE_HEIGHT_SCORE));
 
+  public static Supplier<Command> ALGAE_SCORE_FLIPPED =
+      () ->
+          Commands.sequence(
+              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.FOUR),
+              //   IntakeCmds.setVolts(-10),
+              //   ArmCmds.handSetVoltage(-10),
+              //   ArmCmds.handWaitUntilAlgae(2),
+              //   ArmCmds.handSetVoltage(-3),
+              //   IntakeCmds.setVolts(0.),
+              ArmCmds.armSetAngleAndWait(
+                  () -> ArmCmds.reflectArm(SetpointConstants.Arm.BARGE_ANGLE_SCORE.get())),
+              ElevatorCmds.setHeight(SetpointConstants.Elevator.BARGE_HEIGHT_SCORE));
+
   // TODO: if this intersects with the reef, might need to do pivot last
   public static Supplier<Command> L4_PREP =
       () ->

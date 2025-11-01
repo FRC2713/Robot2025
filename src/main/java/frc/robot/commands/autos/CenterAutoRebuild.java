@@ -7,6 +7,12 @@ package frc.robot.commands.autos;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
@@ -72,24 +78,39 @@ public class CenterAutoRebuild {
                 // 2) Wait to make sure coral is outtathere
                 Commands.waitSeconds(
                     0.6), // Value can ba changed if coral is missing or robot is stalling
-                reefAlignCenter.cmd(),
+                Commands.parallel(
+                    SuperStructure.ALGAE_GRAB_L2_FLIPPED.get(), reefAlignCenter.cmd()),
                 // Algae
-                SuperStructure.ALGAE_GRAB_L2_FLIPPED.get(),
                 Commands.waitSeconds(
                     2), // Can be set to zero if the algae is being picked up in time
                 Commands.parallel(
                     reefBackupTraj.cmd(),
-                    Commands.sequence(Commands.waitSeconds(0.5), SuperStructure.ALGAE_SCORE.get()),
-                    ArmCmds.handSetVoltage(8),
-                    Commands.waitSeconds(0.5),
+                    Commands.sequence(
+                        Commands.waitSeconds(0.5), SuperStructure.ALGAE_SCORE_FLIPPED.get()),
+                    ArmCmds.handSetVoltage(8)),
+                Commands.waitSeconds(1),
 
-                    // Reset for teleop
-                    IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
-                    ElevatorCmds.setHeightAndWait(
-                        SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
-                    IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
-                    ArmCmds.armSetAngle(-90))));
+                // Reset for teleop
+                IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
+                ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
+                IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
+                ArmCmds.armSetAngle(-90)));
 
     return routine;
+
+
+    // delet
+    // Vector<N3> robot_xdir = new Vector<N3>();
+    // Pose3d robotPose3d = new Pose3d();
+    // Pose3d reefPose3d = new Pose3d();
+
+    // Translation3d t = robotPose3d.minus(reefPose3d).getTranslation();
+    
+    // Vector<N3> pointing = new Vector<N3>(t.getX(), t.getY(), t.getZ());
+
+    
+
+
+    // robot_xdir.dot(robotPose3d.minus(reefPose3d).getTranslation());
   }
 }

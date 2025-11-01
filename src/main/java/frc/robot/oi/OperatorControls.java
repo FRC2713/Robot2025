@@ -22,8 +22,8 @@ public class OperatorControls {
   public void configureButtonBindings() {
 
     // Operator Controls
-    operator.a().onTrue(SuperStructure.ALGAE_GRAB_L2.get()).onFalse(ArmCmds.handSetVoltage(-1));
-    operator.b().onTrue(SuperStructure.ALGAE_GRAB_L3.get()).onFalse(ArmCmds.handSetVoltage(-1));
+    operator.a().onTrue(SuperStructure.ALGAE_GRAB_L2.get());
+    operator.b().onTrue(SuperStructure.ALGAE_GRAB_L3.get());
     operator.y().onTrue(SuperStructure.ALGAE_SCORE.get()).onFalse(ArmCmds.handSetVoltage(-1));
     operator.rightBumper().onTrue(SuperStructure.L4.get());
 
