@@ -11,7 +11,7 @@ public class DriveTesting {
 
   public static AutoRoutine getRoutine(AutoFactory m_factory, Drivetrain driveSubsystem) {
     AutoRoutine routine = m_factory.newRoutine("DriveTesting");
-    AutoTrajectory driveTesting = routine.trajectory("DriveTesting");
+    AutoTrajectory driveTesting = routine.trajectory("DriveStraight");
 
     routine
         .active()
