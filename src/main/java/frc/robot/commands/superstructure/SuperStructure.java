@@ -256,7 +256,7 @@ public class SuperStructure {
               IntakeCmds.setAngleAndWait(IntakeConstants.kIPSafeAngle),
               ArmCmds.handSetVoltage(-8),
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L3_ALGAE_INTAKE),
-              ElevatorCmds.setHeight(() -> SetpointConstants.Elevator.L3_HEIGHT_IN.get() + 3),
+              ElevatorCmds.setHeight(() -> SetpointConstants.Elevator.L3_HEIGHT_IN.get() + 1),
               ArmCmds.handWaitUntilAlgae(30),
               ArmCmds.handSetVoltage(-5));
 
