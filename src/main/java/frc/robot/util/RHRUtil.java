@@ -96,17 +96,18 @@ public class RHRUtil {
   }
 
   public static boolean shouldFlipSuperStructure() {
-    Translation2d reefPose = AllianceFlipUtil.apply(FieldConstants.Reef.center);
+    // Translation2d reefPose = AllianceFlipUtil.apply(FieldConstants.Reef.center);
 
-    Translation2d t = RobotContainer.driveSubsystem.getPose().getTranslation().minus(reefPose);
+    // Translation2d t = RobotContainer.driveSubsystem.getPose().getTranslation().minus(reefPose);
 
-    Vector<N3> pointing = VecBuilder.fill(t.getX(), t.getY(), 0);
+    // Vector<N3> pointing = VecBuilder.fill(t.getX(), t.getY(), 0);
 
-    var robotPose = RobotContainer.driveSubsystem.getPose();
-    Vector<N3> robot_xdir =
-        VecBuilder.fill(robotPose.getRotation().getCos(), robotPose.getRotation().getSin(), 0);
+    // var robotPose = RobotContainer.driveSubsystem.getPose();
+    // Vector<N3> robot_xdir =
+    //     VecBuilder.fill(robotPose.getRotation().getCos(), robotPose.getRotation().getSin(), 0);
 
-    // pointing.div(pointing.norm())
-    return Math.signum(robot_xdir.dot(pointing)) == 1;
+    // // pointing.div(pointing.norm())
+    // return Math.signum(robot_xdir.dot(pointing)) == 1;
+    return false;
   }
 }
