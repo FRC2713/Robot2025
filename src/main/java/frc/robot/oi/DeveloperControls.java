@@ -31,7 +31,9 @@ public class DeveloperControls {
     // devCommandXboxController.a().onTrue(ArmCmds.handSetVoltage(15));
     // devCommandXboxController.b().onTrue(ArmCmds.armSetAngle(-20));
     // devCommandXboxController.y().onTrue(ArmCmds.armSetAngle(90));
-    devCommandXboxController.a().onTrue(IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_GRAB_ANGLE));
+    devCommandXboxController
+        .a()
+        .onTrue(IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_GRAB_ANGLE));
     // devCommandXboxController.b().onTrue(IntakeCmds.setAngle(100));
     devCommandXboxController.y().onTrue(IntakeCmds.setAngle(80));
     devCommandXboxController
