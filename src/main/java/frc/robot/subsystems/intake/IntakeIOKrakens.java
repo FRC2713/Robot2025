@@ -167,13 +167,18 @@ public class IntakeIOKrakens implements IntakeIO {
   }
 
   public boolean hasCoral() {
-    double measuredDistance = laserCan.getMeasurement().distance_mm;
+    var measurement = laserCan.getMeasurement();
+    if (measurement == null) {
+      return false;
+    }
+    double measuredDistance = measurement.distance_mm;
     if (measuredDistance <= 0) {
       return false;
     }
     if (measuredDistance <= IntakeConstants.kMinLaserDistance) {
       return true;
     }
+  
     return false;
   }
   // public static CANcoderConfiguration createCANcoderConfiguration() {
