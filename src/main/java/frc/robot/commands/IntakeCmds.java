@@ -18,8 +18,9 @@ public class IntakeCmds {
   public static Command setVoltsUntilCoral(DoubleSupplier targetVolts) {
     return Commands.sequence(
         new InstantCommand(() -> RobotContainer.intake.setRollerVoltage(targetVolts.getAsDouble())),
-        new WaitUntilCommand(RobotContainer.intake::hasCoral),
-        new InstantCommand(() -> RobotContainer.intake.setRollerVoltage(0)));
+        new WaitUntilCommand(RobotContainer.intake::hasCoral)
+        //new InstantCommand(() -> RobotContainer.intake.setRollerVoltage(0))
+        );
   }
 
   public static Command setVolts(double targetVolts) {
