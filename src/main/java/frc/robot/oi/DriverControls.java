@@ -146,14 +146,11 @@ public class DriverControls {
                     ArmCmds.armSetAngleAndWait(
                         () -> ArmCmds.reflectArm(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE.get())),
                     () -> RobotContainer.isFLIPPED),
-                ArmCmds.handSetVoltage(2)
-                ),
+                ArmCmds.handSetVoltage(2)),
             Commands.parallel(
                 ArmCmds.armSetAngleAndWait(90),
-                ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT)
-                )
-                )
-                );
+                ElevatorCmds.setHeightAndWait(
+                    SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT))));
 
     driver.rightBumper().onTrue(Commands.select(commands, () -> RobotContainer.scoreLevel));
   }

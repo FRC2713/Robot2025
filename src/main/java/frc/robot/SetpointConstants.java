@@ -194,13 +194,13 @@ public class SetpointConstants {
     public static final LoggedTunableNumber INTAKE_GRAB_SPEED =
         new LoggedTunableNumber("Intake/Intake grab speed", 10.0);
 
-        public static final LoggedTunableNumber ALGAE_GRAB_SPEED =
+    public static final LoggedTunableNumber ALGAE_GRAB_SPEED =
         new LoggedTunableNumber("Intake/Intake grab speed", 2.0);
 
     public static final LoggedTunableNumber INTAKE_GRAB_ANGLE =
         new LoggedTunableNumber("Intake/Intake grab angle", 208.5);
 
-        public static final LoggedTunableNumber ALGAE_GRAB_ANGLE =
+    public static final LoggedTunableNumber ALGAE_GRAB_ANGLE =
         new LoggedTunableNumber("Intake/Intake grab angle", 150.0);
   }
 
