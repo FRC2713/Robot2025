@@ -167,7 +167,6 @@ public class DriverControls {
             Commands.either(
                 ArmCmds.armSetAngle(13),
                 ArmCmds.armSetAngle(() -> ArmCmds.reflectArm(13)),
-
                 () -> RobotContainer.isFLIPPED),
             ArmCmds.handSetVoltage(2)));
     commands.put(

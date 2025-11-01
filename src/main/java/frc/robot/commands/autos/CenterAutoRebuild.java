@@ -80,9 +80,8 @@ public class CenterAutoRebuild {
                 Commands.parallel(
                     reefBackupTraj.cmd(),
                     Commands.sequence(
-                        Commands.waitSeconds(0.5), SuperStructure.ALGAE_SCORE_FLIPPED.get())
-                    ),
-                    ArmCmds.handSetVoltage(8),
+                        Commands.waitSeconds(0.5), SuperStructure.ALGAE_SCORE_FLIPPED.get())),
+                ArmCmds.handSetVoltage(8),
                 Commands.waitSeconds(1),
 
                 // Reset for teleop
