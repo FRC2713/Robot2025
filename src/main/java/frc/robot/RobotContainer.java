@@ -28,6 +28,7 @@ import frc.robot.commands.DriveCmds;
 // import frc.robot.commands.autos.CenterAutoBarge;
 import frc.robot.commands.autos.CenterAutoOnePiece;
 import frc.robot.commands.autos.CenterAutoRebuild;
+import frc.robot.commands.autos.CenterAutoRebuildFlipped;
 import frc.robot.commands.autos.DriveTesting;
 import frc.robot.commands.autos.RiverRage;
 import frc.robot.commands.autos.ScoreLotsOfCoral;
@@ -242,6 +243,10 @@ public class RobotContainer {
     autoChooser.addRoutine(
         "Center - Rebuild Test Auto",
         () -> CenterAutoRebuild.getRoutine(choreoAutoFactory, driveSubsystem));
+
+    autoChooser.addRoutine(
+        "Center - FLIPPED Rebuild Test Auto",
+        () -> CenterAutoRebuildFlipped.getRoutine(choreoAutoFactory, driveSubsystem));
 
     autoChooser.addRoutine(
         "Right - Score Lots Of Coral",

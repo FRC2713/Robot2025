@@ -59,7 +59,7 @@ public class SetpointConstants {
     public static final LoggedTunableNumber L3_ANGLE_DEG =
         new LoggedTunableNumber("Arm/SS/L3 Angle", 40);
     public static final LoggedTunableNumber BARGE_ANGLE_SCORE =
-        new LoggedTunableNumber("Arm/SS/Barge Angle", 75);
+        new LoggedTunableNumber("Arm/SS/Barge Angle", 105);
     public static final LoggedTunableNumber L4_ANGLE_DEG =
         new LoggedTunableNumber("Arm/SS/L4 Angle", 45);
     public static final LoggedTunableNumber L4_ANGLE_DEG_SCORE =

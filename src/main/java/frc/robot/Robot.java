@@ -180,12 +180,6 @@ public class Robot extends LoggedRobot {
       autonomousCommand.cancel();
     }
     RobotContainer.driverControls.setToNormalDrive();
-    // new SequentialCommandGroup(
-    //         IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
-    //         ElevatorCmds.setHeightAndWait(SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
-    //         IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
-    //         ArmCmds.armSetAngle(-90))
-    //     .schedule();
   }
 
   /** This function is called periodically during operator control. */

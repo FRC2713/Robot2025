@@ -13,13 +13,11 @@ import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
 import frc.robot.commands.ArmCmds;
 import frc.robot.commands.ElevatorCmds;
-import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.superstructure.SuperStructure;
-import frc.robot.subsystems.constants.IntakeConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.RHRUtil;
 
-public class CenterAutoRebuild {
+public class CenterAutoRebuildFlipped {
   /**
    * @param factory
    * @param driveSubsystem
@@ -31,10 +29,12 @@ public class CenterAutoRebuild {
     // Load the routine's trajectories
     // StartRoReefE starts square to the starting line, Start2RoReefE starts pre-aligned to the EF
     // reef face
-    AutoTrajectory startToReefGTraj = routine.trajectory("RebuildCenter");
-    AutoTrajectory reefAlignCenter = routine.trajectory("RebuildCenterReef");
-    AutoTrajectory reefBackupTraj = routine.trajectory("RebuildBackup");
-
+    AutoTrajectory startToReefGTraj =
+        RHRUtil.flipHorizontal(routine.trajectory("RebuildCenter"), routine);
+    AutoTrajectory reefBackupTraj =
+        RHRUtil.flipHorizontal(routine.trajectory("RebuildBackup"), routine);
+    AutoTrajectory reefAlignCenter =
+        RHRUtil.flipHorizontal(routine.trajectory("RebuildCenterReef"), routine);
     routine
         .active()
         .onTrue(
@@ -56,9 +56,7 @@ public class CenterAutoRebuild {
                             startToReefGTraj.getInitialPose().get());
                       }
                     }),
-                Commands.sequence(
-                    Commands.sequence(SuperStructure.UNFOLD.get(), SuperStructure.L4.get()),
-                    startToReefGTraj.cmd()),
+                Commands.parallel(SuperStructure.L4_PREP.get(), startToReefGTraj.cmd()),
                 Commands.print("Shoulder in position & trajectory started")));
 
     var command =
@@ -74,7 +72,7 @@ public class CenterAutoRebuild {
             Commands.sequence(
                 // 1) Finish off trajectory with score assist, which also moves the SS and scores
                 // ScoreAssistCmds.executeCoralScoreInAuto(ScoreLocations.G_FOUR),
-                SuperStructure.L4_SCORE.get(),
+                command,
                 // 2) Wait to make sure coral is outtathere
                 Commands.waitSeconds(
                     0.6), // Value can ba changed if coral is missing or robot is stalling
@@ -83,18 +81,7 @@ public class CenterAutoRebuild {
                 SuperStructure.ALGAE_GRAB_L2.get(),
                 Commands.waitSeconds(
                     2), // Can be set to zero if the algae is being picked up in time
-                Commands.parallel(
-                    reefBackupTraj.cmd(),
-                    Commands.sequence(Commands.waitSeconds(0.5), SuperStructure.ALGAE_SCORE.get()),
-                    ArmCmds.handSetVoltage(8),
-                    Commands.waitSeconds(0.5),
-
-                    // Reset for teleop
-                    IntakeCmds.setAngleAndWait(IntakeConstants.kIPMaxAngle - 5),
-                    ElevatorCmds.setHeightAndWait(
-                        SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT),
-                    IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_HANDOFF_ANGLE),
-                    ArmCmds.armSetAngle(-90))));
+                reefBackupTraj.cmd()));
 
     return routine;
   }
