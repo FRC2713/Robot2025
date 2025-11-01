@@ -36,7 +36,7 @@ public class ArmIOSim implements ArmIO {
               handMotor, RollerConstants.kMOI, RollerConstants.kGearing),
           handMotor);
 
-          private double handVolts = 0.0;
+  private double handVolts = 0.0;
 
   public ArmIOSim() {
     // pid.enableContinuousInput(0, 2 * Math.PI);
@@ -53,14 +53,12 @@ public class ArmIOSim implements ArmIO {
     double feedforwardOutput =
         feedforward.calculate(armSim.getAngleRads(), armSim.getVelocityRadPerSec());
     double armOutput = DriverStation.isEnabled() ? armPidOutput + feedforwardOutput : 0;
-    
 
     armSim.setInputVoltage(armOutput);
     armSim.update(0.02);
 
     handSim.update(0.02);
     handSim.setInputVoltage(inputs.handVoltage);
-    
 
     inputs.handRPM = handSim.getAngularVelocityRPM();
     inputs.handVoltage = handVolts;

@@ -102,11 +102,11 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.FOUR),
-            //   IntakeCmds.setVolts(-10),
-            //   ArmCmds.handSetVoltage(-10),
-            //   ArmCmds.handWaitUntilAlgae(2),
+              //   IntakeCmds.setVolts(-10),
+              //   ArmCmds.handSetVoltage(-10),
+              //   ArmCmds.handWaitUntilAlgae(2),
               ArmCmds.handSetVoltage(-3),
-            //   IntakeCmds.setVolts(0.),
+              //   IntakeCmds.setVolts(0.),
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.BARGE_ANGLE_SCORE),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.BARGE_HEIGHT_SCORE));
 
@@ -133,12 +133,34 @@ public class SuperStructure {
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L4_HEIGHT_IN));
 
+  public static Supplier<Command> L4_FLIPPED =
+      () ->
+          Commands.sequence(
+              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.FOUR),
+              IntakeCmds.setVolts(-10),
+              ArmCmds.handSetVoltage(-10),
+              ArmCmds.handWaitUntilCoral(2),
+              ArmCmds.handSetVoltage(-2),
+              IntakeCmds.setVolts(0.),
+              ArmCmds.armSetAngleAndWait(
+                  () -> ArmCmds.reflectArm(SetpointConstants.Arm.L4_ANGLE_DEG.get())),
+              ElevatorCmds.setHeight(SetpointConstants.Elevator.L4_HEIGHT_IN));
+
   public static Supplier<Command> L4_SCORE =
       () ->
           Commands.sequence(
               ElevatorCmds.setHeight(24),
               Commands.parallel(
                   ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE),
+                  ArmCmds.handSetVoltage(2)));
+
+  public static Supplier<Command> L4_SCORE_FLIPPED =
+      () ->
+          Commands.sequence(
+              ElevatorCmds.setHeight(24),
+              Commands.parallel(
+                  ArmCmds.armSetAngleAndWait(
+                      () -> ArmCmds.reflectArm(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE.get())),
                   ArmCmds.handSetVoltage(2)));
 
   public static Supplier<Command> BARGE_PREP_FORWARDS =
@@ -188,6 +210,15 @@ public class SuperStructure {
               new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.TWO),
               ArmCmds.handSetVoltage(-8),
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L2_ALGAE_INTAKE),
+              ElevatorCmds.setHeight(SetpointConstants.Elevator.L2_HEIGHT_IN));
+
+  public static Supplier<Command> ALGAE_GRAB_L2_FLIPPED =
+      () ->
+          Commands.sequence(
+              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.TWO),
+              ArmCmds.handSetVoltage(-8),
+              ArmCmds.armSetAngleAndWait(
+                  () -> ArmCmds.reflectArm(SetpointConstants.Arm.L2_ALGAE_INTAKE.get())),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L2_HEIGHT_IN));
 
   public static Supplier<Command> ALGAE_SS_L2 =

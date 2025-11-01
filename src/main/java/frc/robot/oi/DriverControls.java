@@ -140,14 +140,14 @@ public class DriverControls {
         .whileTrue(SuperStructure.CORAL_GRAB_GROUND.get())
         .onFalse(SuperStructure.STARTING_CONF.get());
     driver.povDown().onTrue(SuperStructure.PRE_DISABLE_CHECK.get());
-    driver.rightTrigger(.25).onTrue(ArmCmds.handSetVoltage(8));
+    driver.rightTrigger(.25).onTrue(ArmCmds.handSetVoltage(12));
     // driver
     //     .leftTrigger(.25)
     //     .onTrue(SuperStructure.ALGAE_INTAKE.get())
     //     .onFalse(SuperStructure.ALGAE_CONF.get());
 
     var commands = new HashMap<ScoreLevel, Command>();
-    commands.put(ScoreLevel.ONE, Commands.sequence(IntakeCmds.setVolts(-10)));
+    commands.put(ScoreLevel.ONE, Commands.sequence(IntakeCmds.setVolts(-5)));
     commands.put(
         ScoreLevel.THREE, Commands.sequence(ArmCmds.armSetAngle(13), ArmCmds.handSetVoltage(2)));
     commands.put(

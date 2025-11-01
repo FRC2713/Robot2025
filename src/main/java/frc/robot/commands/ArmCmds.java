@@ -9,6 +9,9 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class ArmCmds {
+  public static double reflectArm(double armAngle) {
+    return -90 - Math.abs(90 + armAngle);
+  }
 
   public static Command armSetAngle(double targetAngle) {
     return armSetAngle(() -> targetAngle);
