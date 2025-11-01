@@ -96,6 +96,7 @@ public class RHRUtil {
   }
 
   public static boolean shouldFlipSuperStructure() {
+
     Translation2d reefPose = AllianceFlipUtil.apply(FieldConstants.Reef.center);
 
     Translation2d t = RobotContainer.driveSubsystem.getPose().getTranslation().minus(reefPose);
@@ -107,7 +108,12 @@ public class RHRUtil {
         VecBuilder.fill(robotPose.getRotation().getCos(), robotPose.getRotation().getSin(), 0);
 
     // pointing.div(pointing.norm())
-    return Math.signum(robot_xdir.dot(pointing)) == 1;
+    var doflip = Math.signum(robot_xdir.dot(pointing)) == 1;
+
+    RobotContainer.isFLIPPED = doflip;
+
+    return doflip;
+
     // return false;
   }
 }

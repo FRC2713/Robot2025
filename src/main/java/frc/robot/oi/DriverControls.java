@@ -164,14 +164,23 @@ public class DriverControls {
     commands.put(
         ScoreLevel.THREE,
         Commands.sequence(
-            ArmCmds.armSetAngle(() -> ArmCmds.reflectArm(13)), ArmCmds.handSetVoltage(2)));
+          Commands.either(  
+            ArmCmds.armSetAngle(13),
+        ArmCmds.armSetAngle(() -> ArmCmds.reflectArm(13)),
+        () -> RobotContainer.isFLIPPED
+    ), ArmCmds.handSetVoltage(2)));
     commands.put(
         ScoreLevel.FOUR,
         Commands.sequence(
             ElevatorCmds.setHeight(24),
             Commands.parallel(
+                Commands.either(
                 ArmCmds.armSetAngleAndWait(
                     () -> ArmCmds.reflectArm(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE.get())),
+                    ArmCmds.armSetAngleAndWait(
+                        SetpointConstants.Arm.L4_ANGLE_DEG_SCORE
+                        ), () -> RobotContainer.isFLIPPED)
+                    ,
                 ArmCmds.handSetVoltage(2))));
 
     driver.rightBumper().onTrue(Commands.select(commands, () -> RobotContainer.scoreLevel));

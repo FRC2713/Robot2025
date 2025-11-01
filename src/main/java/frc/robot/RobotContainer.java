@@ -116,6 +116,7 @@ public class RobotContainer {
   public static boolean autoScorePathing = false;
 
   public static LoggedTunableNumber autoWait = new LoggedTunableNumber("auto wait", 0);
+  public static boolean isFLIPPED;
 
   // private Trigger climbPrepTrigger = new
   // Trigger(ScoreAssistOld.getInstance()::shouldClimbPrep);
