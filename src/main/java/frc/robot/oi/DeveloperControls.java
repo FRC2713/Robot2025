@@ -7,6 +7,7 @@ package frc.robot.oi;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
+import frc.robot.SetpointConstants;
 import frc.robot.commands.ArmCmds;
 import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.superstructure.EndEffector;
@@ -30,9 +31,9 @@ public class DeveloperControls {
     // devCommandXboxController.a().onTrue(ArmCmds.handSetVoltage(15));
     // devCommandXboxController.b().onTrue(ArmCmds.armSetAngle(-20));
     // devCommandXboxController.y().onTrue(ArmCmds.armSetAngle(90));
-    devCommandXboxController.a().onTrue(SuperStructure.L1.get());
+    devCommandXboxController.a().onTrue(IntakeCmds.setAngle(SetpointConstants.Intake.INTAKE_GRAB_ANGLE));
     // devCommandXboxController.b().onTrue(IntakeCmds.setAngle(100));
-    devCommandXboxController.y().onTrue(SuperStructure.L3.get());
+    devCommandXboxController.y().onTrue(IntakeCmds.setAngle(80));
     devCommandXboxController
         .leftBumper()
         .whileTrue(SuperStructure.CORAL_GRAB_GROUND.get())
