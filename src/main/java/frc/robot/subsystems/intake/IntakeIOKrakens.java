@@ -178,7 +178,7 @@ public class IntakeIOKrakens implements IntakeIO {
     if (measuredDistance <= IntakeConstants.kMinLaserDistance) {
       return true;
     }
-  
+
     return false;
   }
   // public static CANcoderConfiguration createCANcoderConfiguration() {

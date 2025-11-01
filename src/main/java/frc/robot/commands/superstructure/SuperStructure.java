@@ -234,6 +234,7 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.TWO),
+              IntakeCmds.setAngleAndWait(110),
               ArmCmds.handSetVoltage(-8),
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L2_ALGAE_INTAKE),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L2_HEIGHT_IN));
@@ -268,6 +269,7 @@ public class SuperStructure {
       () ->
           Commands.sequence(
               new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.THREE),
+              IntakeCmds.setAngleAndWait(110),
               ArmCmds.handSetVoltage(-8),
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L3_ALGAE_INTAKE),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN),
