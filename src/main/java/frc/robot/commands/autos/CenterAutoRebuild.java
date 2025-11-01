@@ -7,12 +7,6 @@ package frc.robot.commands.autos;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
@@ -97,20 +91,5 @@ public class CenterAutoRebuild {
                 ArmCmds.armSetAngle(-90)));
 
     return routine;
-
-
-    // delet
-    // Vector<N3> robot_xdir = new Vector<N3>();
-    // Pose3d robotPose3d = new Pose3d();
-    // Pose3d reefPose3d = new Pose3d();
-
-    // Translation3d t = robotPose3d.minus(reefPose3d).getTranslation();
-    
-    // Vector<N3> pointing = new Vector<N3>(t.getX(), t.getY(), t.getZ());
-
-    
-
-
-    // robot_xdir.dot(robotPose3d.minus(reefPose3d).getTranslation());
   }
 }

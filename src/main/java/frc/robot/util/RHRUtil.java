@@ -4,9 +4,13 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
@@ -89,5 +93,20 @@ public class RHRUtil {
         new Trajectory<SwerveSample>(
             trajectory.name(), flippedStates, trajectory.splits(), trajectory.events());
     return routine.trajectory(newtraj);
+  }
+
+  public static boolean shouldFlipSuperStructure() {
+    Translation2d reefPose = AllianceFlipUtil.apply(FieldConstants.Reef.center);
+
+    Translation2d t = RobotContainer.driveSubsystem.getPose().getTranslation().minus(reefPose);
+
+    Vector<N3> pointing = VecBuilder.fill(t.getX(), t.getY(), 0);
+
+    var robotPose = RobotContainer.driveSubsystem.getPose();
+    Vector<N3> robot_xdir =
+        VecBuilder.fill(robotPose.getRotation().getCos(), robotPose.getRotation().getSin(), 0);
+
+    // pointing.div(pointing.norm())
+    return Math.signum(robot_xdir.dot(pointing)) == 1;
   }
 }

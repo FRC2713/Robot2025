@@ -95,6 +95,19 @@ public class SuperStructure {
               ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L3_ANGLE_DEG),
               ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN));
 
+  public static Supplier<Command> L3_FLIPPED =
+      () ->
+          Commands.sequence(
+              new InstantCommand(() -> RobotContainer.scoreLevel = ScoreLevel.THREE),
+              IntakeCmds.setVolts(-10),
+              ArmCmds.handSetVoltage(-10),
+              ArmCmds.handWaitUntilCoral(2),
+              ArmCmds.handSetVoltage(-2),
+              IntakeCmds.setVolts(0.),
+              ArmCmds.armSetAngleAndWait(
+                  () -> ArmCmds.reflectArm(SetpointConstants.Arm.L3_ANGLE_DEG.get())),
+              ElevatorCmds.setHeight(SetpointConstants.Elevator.L3_HEIGHT_IN));
+
   public static Supplier<Command> L3_SCORE =
       () -> Commands.sequence(ArmCmds.armSetAngle(13), ArmCmds.handSetVoltage(2));
 

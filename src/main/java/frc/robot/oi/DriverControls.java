@@ -16,6 +16,7 @@ import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.SourceAlign;
+import frc.robot.util.RHRUtil;
 import frc.robot.util.ReefTracker;
 import frc.robot.util.ScoreAssistMessage.GoalType;
 import frc.robot.util.ScoreLevel;
@@ -132,9 +133,21 @@ public class DriverControls {
 
     driver.a().onTrue(SuperStructure.L1.get());
     // devCommandXboxController.b().onTrue(IntakeCmds.setAngle(100));
-    driver.b().onTrue(SuperStructure.L3.get());
+    driver
+        .b()
+        .onTrue(
+            Commands.either(
+                SuperStructure.L3.get(),
+                SuperStructure.L3_FLIPPED.get(),
+                RHRUtil::shouldFlipSuperStructure));
 
-    driver.y().onTrue(SuperStructure.L4.get());
+    driver
+        .y()
+        .onTrue(
+            Commands.either(
+                SuperStructure.L4.get(),
+                SuperStructure.L4_FLIPPED.get(),
+                RHRUtil::shouldFlipSuperStructure));
     driver
         .leftBumper()
         .whileTrue(SuperStructure.CORAL_GRAB_GROUND.get())
