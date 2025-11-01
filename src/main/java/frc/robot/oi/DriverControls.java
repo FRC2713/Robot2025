@@ -79,38 +79,6 @@ public class DriverControls {
                         RobotContainer.driveSubsystem))
                 .ignoringDisable(true));
 
-    // // Intake Coral
-    // driver
-    //     .leftBumper()
-    //     .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.get())
-    //     .onFalse(EndEffector.STOP_ROLLERS.get());
-
-    // // Score Contextually w Score Assist
-    // driver
-    //     .rightBumper()
-    //     .onTrue(ScoreAssistCmds.executeReefTrackerScore())
-    //     .onFalse(ScoreAssistCmds.stop());
-
-    // // Enable/disable sourcealign
-    // driver
-    //     .a()
-    //     .onTrue(
-    //         Commands.parallel(
-    //             Commands.runOnce(() -> RobotContainer.disableSourceAlign = false),
-    //             SuperStructure.SOURCE_CORAL_INTAKE.get()))
-    //     .onFalse(
-    //         Commands.parallel(
-    //             Commands.runOnce(() -> RobotContainer.disableSourceAlign = true),
-    //             EndEffector.STOP_ROLLERS.get()));
-
-    // driver.b().onTrue(SuperStructure.ALGAE_GRAB_GROUND.get());
-
-    // // Manual Score
-    // driver
-    //     .rightTrigger(0.2)
-    //     .whileTrue(ScoreAssistCmds.contextualManualScore())
-    //     .onFalse(SuperStructure.SOURCE_CORAL_INTAKE.get());
-
     // POV Precision Driving
     driver
         .povLeft()
@@ -132,7 +100,6 @@ public class DriverControls {
         .onFalse(this.setToNormalDriveCmd());
 
     driver.a().onTrue(SuperStructure.L1.get());
-    // devCommandXboxController.b().onTrue(IntakeCmds.setAngle(100));
     driver
         .b()
         .onTrue(
@@ -182,66 +149,6 @@ public class DriverControls {
                 ArmCmds.handSetVoltage(2))));
 
     driver.rightBumper().onTrue(Commands.select(commands, () -> RobotContainer.scoreLevel));
-
-    // Intake coral if another coral is blocking station
-    // driver
-    //     .povDown()
-    //     .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE_BLOCKED.get())
-    //     .onFalse(EndEffector.STOP_ROLLERS.get());
-    // ;
-
-    // driver
-    //     .y()
-    //     .whileTrue(AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.BARGE_SCORE_SPEED))
-    //     .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
-
-    // driver
-    //     .x()
-    //     .onTrue(
-    //         DriveCmds.changeDefaultDriveCommand(
-    //             RobotContainer.driveSubsystem,
-    //             DriveCmds.stopWithX(RobotContainer.driveSubsystem),
-    //             "Stop With X"))
-    //     .onFalse(this.setToNormalDriveCmd());
-
-    // POV/x heading controller
-    // driver
-    //     .povLeft()
-    //     .onTrue(
-    //         DriveCmds.changeDefaultDriveCommand(
-    //             RobotContainer.driveSubsystem,
-    //             DriveCmds.joystickDriveAtAngle(
-    //                 RobotContainer.driveSubsystem,
-    //                 () -> -driver.getLeftY(),
-    //                 () -> -driver.getLeftX(),
-    //                 () -> Rotation2d.fromDegrees(0)),
-    //             "Heading Controller"))
-    //     .onFalse(this.setToNormalDriveCmd());
-    // driver
-    //     .povRight()
-    //     .onTrue(
-    //         DriveCmds.changeDefaultDriveCommand(
-    //             RobotContainer.driveSubsystem,
-    //             DriveCmds.joystickDriveAtAngle(
-    //                 RobotContainer.driveSubsystem,
-    //                 () -> -driver.getLeftY(),
-    //                 () -> -driver.getLeftX(),
-    //                 () -> Rotation2d.fromDegrees(180)),
-    //             "Heading Controller"))
-    //     .onFalse(this.setToNormalDriveCmd());
-    // driver
-    //     .x()
-    //     .onTrue(
-    //         DriveCmds.changeDefaultDriveCommand(
-    //             RobotContainer.driveSubsystem,
-    //             DriveCmds.joystickDriveAtAngle(
-    //                 RobotContainer.driveSubsystem,
-    //                 () -> -driver.getLeftY(),
-    //                 () -> -driver.getLeftX(),
-    //                 () ->
-    // Rotation2d.fromDegrees(RobotContainer.driveSubsystem.getAngleToReef())),
-    //             "Heading Controller"))
-    //     .onFalse(this.setToNormalDriveCmd());
   }
 
   public double getLeftY() {

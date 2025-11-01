@@ -25,8 +25,9 @@ public class IntakeConstants {
 
   public static final boolean kIPInverted = false;
 
-  public static final double kIPMaxAngle = 210.;
-  public static final double kIPMinAngle = 50.;
+  public static final double kIPMaxAngle = 210.0;
+  public static final double kIPMinAngle = 70.0;
+  public static final double kIPSafeAngle = 110.0;
 
   public static final double kIPLength = Units.inchesToMeters(11);
   public static final double kIPMass = Units.lbsToKilograms(10);

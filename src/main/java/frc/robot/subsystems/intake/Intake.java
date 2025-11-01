@@ -96,7 +96,7 @@ public class Intake extends SubsystemBase {
             0.0,
             0.0,
             0.0,
-            new Rotation3d(0, Units.degreesToRadians(inputs.intakePivotAngleDegrees), 0));
+            new Rotation3d(Units.degreesToRadians(inputs.intakePivotAngleDegrees), 0, 0));
 
     this.pose = IntakeConstants.kInitialPose.transformBy(this.transform);
   }

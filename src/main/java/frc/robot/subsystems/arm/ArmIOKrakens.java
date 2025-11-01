@@ -148,10 +148,18 @@ public class ArmIOKrakens implements ArmIO {
   }
 
   public boolean hasCoral() {
-    return laserCan.getMeasurement().distance_mm <= ArmConstants.kLaserDistance;
+    var measurement = laserCan.getMeasurement();
+    if (measurement == null) {
+      return false;
+    }
+    return measurement.distance_mm <= ArmConstants.kLaserDistance;
   }
 
   public boolean hasAlgae() {
-    return laserCan.getMeasurement().distance_mm <= 30;
+    var measurement = laserCan.getMeasurement();
+    if (measurement == null) {
+      return false;
+    }
+    return measurement.distance_mm <= 30;
   }
 }
