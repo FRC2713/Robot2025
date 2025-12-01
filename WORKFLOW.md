@@ -67,12 +67,10 @@ Push early and often! This backs up your work and shows your build status on Git
 - **Description**: What changed and why
 - **Testing**: How you tested it (sim, robot)
 
-## Crunch Time (Competition Week)
-
-When we're close to competition:
-1. Test everything on the robot before merging to `main`
-2. **Communicate more** - announce what you're working on
-3. Keep commits small. Easier to fix if something breaks
+## Workflow when going to competitions
+1. Open a competition specific branch following the pattern `event-{eventName}`, for example `event-botb`
+   - This ensures that we push on every deploy
+2. When we're back from competition, merge changes into `dev` and `main`
 
 ## Common Commands Cheat Sheet
 ```bash
