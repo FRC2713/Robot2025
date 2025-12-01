@@ -76,7 +76,7 @@ public class ShoulderConstants {
               .expo_kA(kExponential_kA));
   public static final LoggedTunableGains SlowGains = Gains.slowDown();
 
-  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(233.125);
+  public static final double kAbsoluteEncoderOffset = Units.degreesToRotations(0);
 
   public static final int mech2dWidth = 10;
   public static final Color8Bit mech2dColor = new Color8Bit(0, 255, 0);

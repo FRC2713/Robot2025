@@ -9,19 +9,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
 import frc.robot.SetpointConstants;
-import frc.robot.commands.AlgaeClawCmds;
-import frc.robot.commands.ClimberCmds;
-import frc.robot.commands.DriveAtLongitude;
+import frc.robot.commands.ArmCmds;
 import frc.robot.commands.DriveCmds;
-import frc.robot.commands.climber.Climb;
-import frc.robot.commands.scoreassist.ScoreAssistCmds;
-import frc.robot.commands.superstructure.EndEffector;
+import frc.robot.commands.ElevatorCmds;
+import frc.robot.commands.IntakeCmds;
 import frc.robot.commands.superstructure.SuperStructure;
 import frc.robot.scoreassist.ReefAlign;
 import frc.robot.scoreassist.SourceAlign;
-import frc.robot.subsystems.constants.ScoreAssistConstants;
+import frc.robot.util.RHRUtil;
 import frc.robot.util.ReefTracker;
 import frc.robot.util.ScoreAssistMessage.GoalType;
+import frc.robot.util.ScoreLevel;
+import java.util.HashMap;
 
 public class DriverControls {
   private final CommandXboxController driver = new CommandXboxController(0);
@@ -35,17 +34,17 @@ public class DriverControls {
       new Trigger(() -> ReefTracker.getInstance().getGoalTypeOrCoral() == GoalType.BARGE);
 
   public void configureTriggers() {
-    reefAlignTrigger.onTrue(this.setToReefAlignCmd()).onFalse(this.setToNormalDriveCmd());
-    sourceAlignTrigger.onTrue(this.setToSourceAlignCmd()).onFalse(this.setToNormalDriveCmd());
+    // reefAlignTrigger.onTrue(this.setToReefAlignCmd()).onFalse(this.setToNormalDriveCmd());
+    // sourceAlignTrigger.onTrue(this.setToSourceAlignCmd()).onFalse(this.setToNormalDriveCmd());
 
-    prepBargeTrigger.onTrue(
-        Commands.parallel(
-            EndEffector.ALGAE_HOLD.get(),
-            Commands.either(
-                SuperStructure.BARGE_PREP_BACKWARDS.get(),
-                SuperStructure.BARGE_PREP_FORWARDS.get(),
-                () -> DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX))));
-    prepProcessorTrigger.onTrue(SuperStructure.PROCESSOR_PREP.get());
+    // prepBargeTrigger.onTrue(
+    //     Commands.parallel(
+    //         EndEffector.ALGAE_HOLD.get(),
+    //         Commands.either(
+    //             SuperStructure.BARGE_PREP_BACKWARDS.get(),
+    //             SuperStructure.BARGE_PREP_FORWARDS.get(),
+    //             () -> DriveAtLongitude.doBackwards(ScoreAssistConstants.bargeAlignmentX))));
+    // prepProcessorTrigger.onTrue(SuperStructure.PROCESSOR_PREP.get());
   }
 
   public void configureButtonBindings() {
@@ -80,43 +79,6 @@ public class DriverControls {
                         RobotContainer.driveSubsystem))
                 .ignoringDisable(true));
 
-    // Intake Coral
-    driver
-        .leftBumper()
-        .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE.get())
-        .onFalse(EndEffector.STOP_ROLLERS.get());
-
-    // Score Contextually w Score Assist
-    driver
-        .rightBumper()
-        .onTrue(ScoreAssistCmds.executeReefTrackerScore())
-        .onFalse(ScoreAssistCmds.stop());
-
-    // Enable/disable sourcealign
-    driver
-        .a()
-        .onTrue(
-            Commands.parallel(
-                Commands.runOnce(() -> RobotContainer.disableSourceAlign = false),
-                SuperStructure.SOURCE_CORAL_INTAKE.get()))
-        .onFalse(
-            Commands.parallel(
-                Commands.runOnce(() -> RobotContainer.disableSourceAlign = true),
-                EndEffector.STOP_ROLLERS.get()));
-
-    driver.b().onTrue(SuperStructure.ALGAE_GRAB_GROUND.get());
-    // Climber
-    driver
-        .leftTrigger(0.1)
-        .whileTrue(new Climb(() -> -1 * driver.getLeftTriggerAxis()))
-        .onFalse(ClimberCmds.setVoltage(() -> 0));
-
-    // Manual Score
-    driver
-        .rightTrigger(0.2)
-        .whileTrue(ScoreAssistCmds.contextualManualScore())
-        .onFalse(SuperStructure.SOURCE_CORAL_INTAKE.get());
-
     // POV Precision Driving
     driver
         .povLeft()
@@ -137,65 +99,60 @@ public class DriverControls {
                 "Inch Right"))
         .onFalse(this.setToNormalDriveCmd());
 
-    // Intake coral if another coral is blocking station
+    driver.a().onTrue(SuperStructure.L1.get());
     driver
-        .povDown()
-        .whileTrue(SuperStructure.SOURCE_CORAL_INTAKE_BLOCKED.get())
-        .onFalse(EndEffector.STOP_ROLLERS.get());
-    ;
+        .b()
+        .onTrue(
+            Commands.either(
+                SuperStructure.L3.get(),
+                SuperStructure.L3_FLIPPED.get(),
+                RHRUtil::shouldFlipSuperStructure));
 
     driver
         .y()
-        .whileTrue(AlgaeClawCmds.setSpeed(SetpointConstants.AlgaeClaw.BARGE_SCORE_SPEED))
-        .onFalse(AlgaeClawCmds.setSpeed(() -> 0));
-
-    driver
-        .x()
         .onTrue(
-            DriveCmds.changeDefaultDriveCommand(
-                RobotContainer.driveSubsystem,
-                DriveCmds.stopWithX(RobotContainer.driveSubsystem),
-                "Stop With X"))
-        .onFalse(this.setToNormalDriveCmd());
+            Commands.either(
+                SuperStructure.L4.get(),
+                SuperStructure.L4_FLIPPED.get(),
+                RHRUtil::shouldFlipSuperStructure));
+    driver
+        .leftBumper()
+        .whileTrue(SuperStructure.CORAL_GRAB_GROUND.get())
+        .onFalse(SuperStructure.STARTING_CONF.get());
+    driver.povDown().onTrue(SuperStructure.PRE_DISABLE_CHECK.get());
+    driver.rightTrigger(.25).onTrue(ArmCmds.handSetVoltage(12));
+    // driver
+    //     .leftTrigger(.25)
+    //     .onTrue(SuperStructure.ALGAE_INTAKE.get())
+    //     .onFalse(SuperStructure.ALGAE_CONF.get());
 
-    // POV/x heading controller
-    // driver
-    //     .povLeft()
-    //     .onTrue(
-    //         DriveCmds.changeDefaultDriveCommand(
-    //             RobotContainer.driveSubsystem,
-    //             DriveCmds.joystickDriveAtAngle(
-    //                 RobotContainer.driveSubsystem,
-    //                 () -> -driver.getLeftY(),
-    //                 () -> -driver.getLeftX(),
-    //                 () -> Rotation2d.fromDegrees(0)),
-    //             "Heading Controller"))
-    //     .onFalse(this.setToNormalDriveCmd());
-    // driver
-    //     .povRight()
-    //     .onTrue(
-    //         DriveCmds.changeDefaultDriveCommand(
-    //             RobotContainer.driveSubsystem,
-    //             DriveCmds.joystickDriveAtAngle(
-    //                 RobotContainer.driveSubsystem,
-    //                 () -> -driver.getLeftY(),
-    //                 () -> -driver.getLeftX(),
-    //                 () -> Rotation2d.fromDegrees(180)),
-    //             "Heading Controller"))
-    //     .onFalse(this.setToNormalDriveCmd());
-    // driver
-    //     .x()
-    //     .onTrue(
-    //         DriveCmds.changeDefaultDriveCommand(
-    //             RobotContainer.driveSubsystem,
-    //             DriveCmds.joystickDriveAtAngle(
-    //                 RobotContainer.driveSubsystem,
-    //                 () -> -driver.getLeftY(),
-    //                 () -> -driver.getLeftX(),
-    //                 () ->
-    // Rotation2d.fromDegrees(RobotContainer.driveSubsystem.getAngleToReef())),
-    //             "Heading Controller"))
-    //     .onFalse(this.setToNormalDriveCmd());
+    var commands = new HashMap<ScoreLevel, Command>();
+    commands.put(ScoreLevel.ONE, Commands.sequence(IntakeCmds.setVolts(-5)));
+    commands.put(
+        ScoreLevel.THREE,
+        Commands.sequence(
+            Commands.either(
+                ArmCmds.armSetAngle(13),
+                ArmCmds.armSetAngle(() -> ArmCmds.reflectArm(13)),
+                () -> RobotContainer.isFLIPPED),
+            ArmCmds.handSetVoltage(2)));
+    commands.put(
+        ScoreLevel.FOUR,
+        Commands.sequence(
+            ElevatorCmds.setHeight(24),
+            Commands.parallel(
+                Commands.either(
+                    ArmCmds.armSetAngleAndWait(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE),
+                    ArmCmds.armSetAngleAndWait(
+                        () -> ArmCmds.reflectArm(SetpointConstants.Arm.L4_ANGLE_DEG_SCORE.get())),
+                    () -> RobotContainer.isFLIPPED),
+                ArmCmds.handSetVoltage(2)),
+            Commands.parallel(
+                ArmCmds.armSetAngleAndWait(90),
+                ElevatorCmds.setHeightAndWait(
+                    SetpointConstants.Elevator.ELEVATOR_HANDOFF_HEIGHT))));
+
+    driver.rightBumper().onTrue(Commands.select(commands, () -> RobotContainer.scoreLevel));
   }
 
   public double getLeftY() {

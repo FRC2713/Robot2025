@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import au.grapplerobotics.CanBridge;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.net.PortForwarder;
@@ -43,6 +44,9 @@ public class Robot extends LoggedRobot {
   private boolean hadDisabledReefAlign = false;
 
   public Robot() {
+    // Grapple Robotics (LaserCAN)
+    CanBridge.runTCP();
+
     PortForwarder.add(5810, "localhost", 4173);
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -130,10 +134,7 @@ public class Robot extends LoggedRobot {
     // Record the pose of each subsystem
     // order matters here.
     Pose3d[] componentPoses = {
-      RobotContainer.elevator.pose,
-      RobotContainer.shoulder.pose,
-      RobotContainer.pivot.pose,
-      RobotContainer.climber.pose
+      RobotContainer.elevator.pose, RobotContainer.arm.pose, RobotContainer.intake.pose
     };
     Logger.recordOutput("componentPoses", componentPoses);
 

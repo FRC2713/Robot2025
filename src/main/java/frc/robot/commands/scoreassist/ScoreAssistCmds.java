@@ -14,6 +14,7 @@ import frc.robot.scoreassist.ScoreAssist.ScoreDrivingMode;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ReefTracker;
 import frc.robot.util.ScoreAssistMessage;
+import frc.robot.util.ScoreLevel;
 import frc.robot.util.ScoreLoc;
 import java.util.HashMap;
 
@@ -81,23 +82,31 @@ public class ScoreAssistCmds {
 
   /** This drives to target, moves the SS when ready, and runs the rollers when ready */
   public static Command executeCoralScore() {
+
+    var commands = new HashMap<ScoreLevel, Command>();
+    commands.put(ScoreLevel.ONE, SuperStructure.L1.get());
+    commands.put(ScoreLevel.THREE, SuperStructure.L3.get());
+    commands.put(ScoreLevel.FOUR, SuperStructure.L4.get());
+
     return Commands.sequence(
             Commands.runOnce(() -> contextualScore = ScoreAssistMessage.GoalType.CORAL),
             Commands.parallel(
                 start(), // 1) activate score assist
-                Commands.either(
-                    Commands.sequence(
-                        // Commands.deadline(
-                        executePath(),
-                        // executePrep()
-                        //     .beforeStarting(
-                        //         Commands.waitSeconds(
-                        //             1))), // 2a) path-find close to target (with manual
-                        // override)
-                        executeDrive() // 2b) drive to target
-                        ),
-                    Commands.parallel(executeDrive(), executePrep()),
-                    RobotContainer.scoreAssist::isAtPathTargetPose)), // 3) execute prep
+                Commands.sequence(
+                    // Commands.select(commands, RobotContainer.scoreAssist::getCurrentLevelTarget),
+                    Commands.either(
+                        Commands.sequence(
+                            // Commands.deadline(
+                            executePath(),
+                            // executePrep()
+                            //     .beforeStarting(
+                            //         Commands.waitSeconds(
+                            //             1))), // 2a) path-find close to target (with manual
+                            // override)
+                            executeDrive() // 2b) drive to target
+                            ),
+                        Commands.parallel(executeDrive(), executePrep()),
+                        RobotContainer.scoreAssist::isAtPathTargetPose))), // 3) execute prep
             stop(),
             executeSS())
         .finallyDo(() -> RobotContainer.scoreAssist.mode = ScoreDrivingMode.INACTIVE);
