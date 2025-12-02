@@ -1,0 +1,54 @@
+name: Weekly Dev to Main PR
+
+on:
+  schedule:
+    # Runs every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Allows manual trigger
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Close previous auto-generated PRs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Find and close PRs from dev to main created by github-actions bot
+          gh pr list \
+            --base main \
+            --head dev \
+            --author "github-actions[bot]" \
+            --state open \
+            --json number \
+            --jq '.[].number' | while read pr_number; do
+              if [ -n "$pr_number" ]; then
+                echo "Closing PR #$pr_number"
+                gh pr close "$pr_number" --comment "Closing to create a new weekly PR"
+              fi
+            done
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ github.token }}
+          branch: dev
+          base: main
+          title: 'Weekly: Merge dev into main'
+          body: |
+            This is an automated weekly PR to merge changes from `dev` into `main`.
+            
+            Please review the changes and merge when ready.
+            
+            ---
+            *This PR was automatically created by GitHub Actions*
+          labels: automated
