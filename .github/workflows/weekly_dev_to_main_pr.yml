@@ -16,19 +16,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Close previous auto-generated PRs
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Find and close PRs from dev to main created by github-actions bot
+          # Find and close PRs from dev to main created by this action
           gh pr list \
             --base main \
             --head dev \
-            --author "github-actions[bot]" \
             --state open \
+            --label "automated-weekly-pr" \
             --json number \
             --jq '.[].number' | while read pr_number; do
               if [ -n "$pr_number" ]; then
@@ -38,17 +36,22 @@ jobs:
             done
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ github.token }}
-          branch: dev
-          base: main
-          title: 'Weekly: Merge dev into main'
-          body: |
-            This is an automated weekly PR to merge changes from `dev` into `main`.
-            
-            Please review the changes and merge when ready.
-            
-            ---
-            *This PR was automatically created by GitHub Actions*
-          labels: automated
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Check if dev and main are different
+          if ! git diff --quiet origin/main...origin/dev; then
+            gh pr create \
+              --base main \
+              --head dev \
+              --title "Weekly: Merge dev into main" \
+              --body "This is an automated weekly PR to merge changes from \`dev\` into \`main\`.
+
+          Please review the changes and merge when ready.
+
+          ---
+          *This PR was automatically created by GitHub Actions*" \
+              --label "automated-weekly-pr" || echo "PR might already exist"
+          else
+            echo "No changes between dev and main, skipping PR creation"
+          fi
