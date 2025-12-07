@@ -16,17 +16,24 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch branches
+        run: |
+          git fetch origin main
+          git fetch origin dev
 
       - name: Close previous auto-generated PRs
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Find and close PRs from dev to main created by this action
+          # Find open PRs from dev to main with our specific title
           gh pr list \
             --base main \
             --head dev \
             --state open \
-            --label "automated-weekly-pr" \
+            --search "Weekly: Merge dev into main in:title" \
             --json number \
             --jq '.[].number' | while read pr_number; do
               if [ -n "$pr_number" ]; then
@@ -50,8 +57,7 @@ jobs:
           Please review the changes and merge when ready.
 
           ---
-          *This PR was automatically created by GitHub Actions*" \
-              --label "automated-weekly-pr" || echo "PR might already exist"
+          *This PR was automatically created by GitHub Actions*" || echo "PR might already exist"
           else
             echo "No changes between dev and main, skipping PR creation"
           fi
