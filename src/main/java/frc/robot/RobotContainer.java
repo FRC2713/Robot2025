@@ -17,7 +17,6 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -316,11 +315,8 @@ public class RobotContainer {
     endEffector.setAlgaeRPM(0);
     shoulder.setTargetAngle(shoulder.getCurrentAngle());
     if (visionsubsystem.getPose() != null) {
-      if (!hasRanAuto && visionsubsystem.getPose().getTranslation().getX() != 0) {
-        driveSubsystem.setPose(
-            new Pose2d(
-                visionsubsystem.getPose().getTranslation(),
-                AllianceFlipUtil.apply(Rotation2d.fromRadians(Math.PI))));
+      if (visionsubsystem.getPose().getTranslation().getX() != 0) {
+        driveSubsystem.setPose(visionsubsystem.getPose());
       }
       //   else {
       //     driveSubsystem.setPose(

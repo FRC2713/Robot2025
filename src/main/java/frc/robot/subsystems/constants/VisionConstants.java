@@ -13,7 +13,7 @@ import frc.robot.util.LimelightInfo;
 
 public class VisionConstants {
   // public static double CAMERA_TO_TAG_MAX_DIST_INCHES = 120;
-  public static double MAX_POSE_JUMP_METERS = 3; // Units.feetToMeters(5);
+  public static double MAX_POSE_JUMP_METERS = 2; // Units.feetToMeters(5);
   public static double MAX_SPEED = 0.02;
 
   public record PoseEstimatorErrorStDevs(double translationalStDev, double rotationalStDev) {
@@ -28,7 +28,7 @@ public class VisionConstants {
   }
 
   // its probably bad OOD to have this but ¯\_(ツ)_/¯
-  public static final VisionOptions ACTIVE_VISION_OPTION = VisionOptions.SLAMDUNK_MEGATAG2_MERGED;
+  public static final VisionOptions ACTIVE_VISION_OPTION = VisionOptions.SLAMDUNK;
 
   public static PoseEstimatorErrorStDevs POSE_ESTIMATOR_STATE_STDEVS =
       new PoseEstimatorErrorStDevs(1.0, Units.degreesToRadians(1));
